@@ -4,7 +4,7 @@
 #' @param file Path of an output file to append the output to
 #' @param sep  The separator given to cat
 #' @export
-printr <- function(..., file = "/dev/null", sep = "") {
+printr <- function(..., file = nullfile(), sep = "") {
   sink(file = file, split = TRUE, append = TRUE, type = "output")
   cat(..., "\n", sep = sep)
   sink()
