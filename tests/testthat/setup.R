@@ -30,7 +30,7 @@ conns <- lapply(conn_list, get_driver) |>
   unlist()
 
 if (length(conns[names(conns) != "SQLite"]) == 0) {
-  warning("No useful drivers (other than SQLite) were found!")
+  message("No useful drivers (other than SQLite) were found!")
 }
 
 {
