@@ -1,0 +1,61 @@
+#' Get the current schema of a DB connection
+#'
+#' @param .x A DBIConnection or lazy_query object
+#' @return The current schema name, but defaults to "prod" instead of "public"
+#' @examples
+#' conn <- get_connection()
+#'
+#' get_schema(conn)
+#' get_schema(get_table(conn, 'prod.basis_samples'))
+#'
+#' close_connection(conn)
+#' @export
+get_schema <- function(.x) { # nocov start
+
+  if (inherits(.x, "PqConnection")) {
+    # Get schema from connection object
+    schema <- DBI::dbGetQuery(.x, "SELECT CURRENT_SCHEMA()")$current_schema
+
+  } else if (inherits(.x, "SQLiteConnection")) {
+    return(NULL)
+  } else if (inherits(.x, "tbl_dbi")) {
+    # Get schema from a DBI object (e.g. lazy query)
+    schema <- stringr::str_extract_all(dbplyr::remote_query(.x), '(?<=FROM \")[^"]*')[[1]]
+    if (length(unique(schema)) > 1) {
+      # Not sure if this is even possible due to dbplyr limitations
+      warning("Multiple different schemas detected. You might need to handle these (more) manually:\n",
+              paste(unique(schema), collapse = ", "))
+    } else {
+      schema <- unique(schema)
+    }
+  } else {
+    stop("Could not detect object type")
+  }
+
+  if (schema == "public") schema <- "prod"
+
+  return(schema)
+} # nocov end
+
+#' Test if a schema exists in given connection
+#' @param schema A character string giving the schema name
+#' @template conn
+#'
+#' @examples
+#'
+#' conn <- get_connection()
+#' schema_exists(conn, "test")
+#'
+#' @export
+
+schema_exists <- function(conn, schema_name){
+
+  checkmate::assert_class(conn, "DBIConnection")
+  checkmate::assert_character(schema_name)
+
+  objs <- DBI::dbListObjects(conn)
+  matches <- sapply(objs$table, \(.x) slot(.x, "name")) |>
+    (\(.x) names(.x) == "schema" & .x == schema_name)()
+
+  return(any(matches))
+}
