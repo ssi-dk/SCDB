@@ -16,8 +16,8 @@ test_that("id() works", { for (conn in conns){
 test_that("close_connection() works", { for (conn in conns) {
   # Identify driver of conn within conn_list
   conn_drv <- sapply(conns, \(.x) identical(.x, conn)) |>
-    (\(.x) `[`(conn_list, .x))() |>
-    unlist()
+    names() |>
+    (\(.) purrr::pluck(conn_list, .))()
 
   conn2 <- get_driver(conn_drv)
 
