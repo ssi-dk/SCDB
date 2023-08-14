@@ -19,9 +19,11 @@ get_driver <- function(x){
 
   drv <- getExportedValue(parts[1], parts[2])
 
-  suppressWarnings(  # We expect a warning if no tables are found
-    get_connection(drv = drv())
-  )
+  tryCatch(suppressWarnings(  # We expect a warning if no tables are found
+            get_connection(drv = drv())),
+           error = function(e) {
+             NULL # Return NULL, if we cannot connect
+           })
 }
 
 conns <- lapply(conn_list, get_driver) |>
