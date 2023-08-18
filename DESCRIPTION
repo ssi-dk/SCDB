@@ -23,7 +23,6 @@ Imports:
     checkmate,
     DBI,
     dplyr,
-    formattable,
     glue,
     magrittr,
     methods,
