@@ -8,11 +8,13 @@ db_timestamp <- function(timestamp, conn) {
 }
 
 #' @rdname db_timestamp
+#' @export
 db_timestamp.default <- function(timestamp, conn) {
   return(dbplyr::translate_sql(as.POSIXct(!!timestamp), con = conn))
 }
 
 #' @rdname db_timestamp
+#' @export
 db_timestamp.SQLiteConnection <- function(timestamp, conn) {
   if (is.na(timestamp)) {
     dbplyr::translate_sql(NA_character_, con = conn)
