@@ -94,9 +94,8 @@ get_tables <- function(conn, pattern = NULL) {
   # purrr::map fails if .x is empty, avoid by returning early
   if (nrow(objs) == 0) return(data.frame(schema = character(), table = character()))
 
-  tables <- purrr::map(
-    # For each top-level object (except tables)...
-    objs$table, \(.x) {
+  tables <- objs$table |> # For each top-level object (except tables)...
+    purrr::map(\(.x) {
       if (names(.x@name) == "table") {
         return(data.frame(schema = NA_character_, table = .x@name["table"]))
       }
@@ -114,11 +113,11 @@ get_tables <- function(conn, pattern = NULL) {
 
   # Skip PostgreSQL metadata tables
   if (inherits(conn, "PqConnection")) {
-    tables <- dplyr::filter(tables, dplyr::case_when(
-      is.na(schema) ~ TRUE,
-      .data$schema == "information_schema" ~ FALSE,
-      grepl("^pg_.*", .data$schema) ~ FALSE,
-      TRUE ~ TRUE))
+    tables <- dplyr::filter(tables,
+                            dplyr::case_when(is.na(schema) ~ TRUE,
+                                             .data$schema == "information_schema" ~ FALSE,
+                                             grepl("^pg_.*", .data$schema) ~ FALSE,
+                                             TRUE ~ TRUE))
   }
 
   # Subset if pattern is given

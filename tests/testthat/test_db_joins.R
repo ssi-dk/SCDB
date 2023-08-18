@@ -1,4 +1,4 @@
-test_that("*_join() works", { for (conn in conns){
+test_that("*_join() works", { for (conn in conns) { # nolint: brace_linter
 
   # Define two test datasets
   x <- get_table(conn, "__mtcars") |>

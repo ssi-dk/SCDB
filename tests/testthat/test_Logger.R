@@ -1,4 +1,4 @@
-test_that("Logger works", { for (conn in conns){
+test_that("Logger works", { for (conn in conns) { # nolint: brace_linter
 
   # Logger only handles tables updates with timestamps
   db_tablestring <- "test.mg_logger"
@@ -68,7 +68,11 @@ test_that("Logger works", { for (conn in conns){
 
   # Test db logging
   if (DBI::dbExistsTable(conn, id("test.mg_logs", conn))) DBI::dbRemoveTable(conn, id("test.mg_logs", conn))
-  logger <- Logger$new(db_tablestring = db_tablestring, ts = ts, log_table_id = "test.mg_logs", log_conn = conn, warn = FALSE)
+  logger <- Logger$new(db_tablestring = db_tablestring,
+                       ts = ts,
+                       log_table_id = "test.mg_logs",
+                       log_conn = conn,
+                       warn = FALSE)
   log_table_id <- dplyr::tbl(conn, id("test.mg_logs", conn))
   expect_null(logger$log_path)
   expect_equal(logger$log_tbl, log_table_id)

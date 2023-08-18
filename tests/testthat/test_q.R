@@ -1,4 +1,4 @@
-test_that("close_connection() works", { for (conn in conns){
+test_that("close_connection() works", { for (conn in conns) { # nolint: brace_linter
 
   # Do cleanup here also
   purrr::walk(c("test.mtcars", "__mtcars", "__mtcars_historical",

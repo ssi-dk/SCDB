@@ -39,7 +39,7 @@ is.historical <- function(.data) { # nolint: object_name_linter
   # Check arguments
   assert_data_like(.data)
 
-  return(all(c("checksum", "from_ts", "until_ts") %in% colnames(.data)))
+  return(any(c("checksum", "from_ts", "until_ts") %in% colnames(.data)))
 }
 
 
@@ -58,12 +58,12 @@ is.historical <- function(.data) { # nolint: object_name_linter
 #' @param add   `AssertCollection` to add assertions to
 #' @export
 assert_data_like <- function(.data, ..., add = NULL) {
-  checkmate::assert(
+  checkmate::assert( # nolint start: indentation_linter
     checkmate::check_class(.data, "tbl_dbi", ...),
     checkmate::check_data_frame(.data, ...),
     checkmate::check_data_table(.data, ...),
     checkmate::check_tibble(.data, ...),
-    add = add)
+    add = add) # nolint end
 }
 
 
@@ -73,11 +73,11 @@ assert_data_like <- function(.data, ..., add = NULL) {
 #' @param add       `AssertCollection` to add assertions to
 #' @export
 assert_timestamp_like <- function(timestamp, ..., add = NULL) {
-  checkmate::assert(
+  checkmate::assert( # nolint start: indentation_linter
     checkmate::check_posixct(timestamp, ...),
     checkmate::check_character(timestamp, ...),
     checkmate::check_date(timestamp, ...),
-    add = add)
+    add = add) # nolint end
 }
 
 
@@ -87,11 +87,11 @@ assert_timestamp_like <- function(timestamp, ..., add = NULL) {
 #' @param add      `AssertCollection` to add assertions to
 #' @export
 assert_dbtable_like <- function(db_table, ..., add = NULL) {
-  checkmate::assert(
+  checkmate::assert( # nolint start: indentation_linter
     checkmate::check_character(db_table, pattern = r"{^\w*.\w*$}", ...),
     checkmate::check_class(db_table, "Id", ...),
     checkmate::check_class(db_table, "tbl_dbi", ...),
-    add = add)
+    add = add) # nolint end
 }
 
 
@@ -101,8 +101,8 @@ assert_dbtable_like <- function(db_table, ..., add = NULL) {
 #' @param add `AssertCollection` to add assertions to
 #' @export
 assert_id_like <- function(id, ..., add = NULL) {
-  checkmate::assert(
+  checkmate::assert( # nolint start: indentation_linter
     checkmate::check_character(id, ...),
     checkmate::check_class(id, "Id", ...),
-    add = add)
+    add = add) # nolint end
 }

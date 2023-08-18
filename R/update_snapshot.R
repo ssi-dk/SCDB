@@ -18,7 +18,7 @@
 #' @seealso filter_keys
 #' @importFrom rlang .data
 #' @export
-update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, message = NULL, tic = Sys.time(),
+update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, message = NULL, tic = Sys.time(), # nolint: cyclocomp_linter
                             log_path = getOption("mg.log_path"), log_table_id = getOption("mg.log_table_id"),
                             enforce_chronological_order = TRUE) {
 
@@ -76,9 +76,8 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     logger$log_error("Table does not seem like a historical table", tic = tic) # Use input time in log
   }
 
-  if (!setequal(colnames(.data), colnames(
-    dplyr::select(db_table, !c("checksum", "from_ts", "until_ts")))
-  )) {
+  if (!setequal(colnames(.data),
+                colnames(dplyr::select(db_table, !c("checksum", "from_ts", "until_ts"))))) {
     logger$log_to_db(success = FALSE, end_time = !!db_timestamp(tic, conn))
     logger$log_error("Columns do not match!\n",
                      "Table columns:\n",
@@ -124,15 +123,14 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   db_table <- filter_keys(db_table, filters)
 
   # Determine the next timestamp in the data (can be NA if none is found)
-  next_timestamp <- min(
-    db_table |>
-      dplyr::filter(.data$from_ts  > timestamp) |>
-      dplyr::summarize(next_timestamp = min(.data$from_ts, na.rm = TRUE)) |>
-      dplyr::pull("next_timestamp"),
-    db_table |>
-      dplyr::filter(.data$until_ts > timestamp) |>
-      dplyr::summarize(next_timestamp = min(.data$until_ts, na.rm = TRUE)) |>
-      dplyr::pull("next_timestamp")) |>
+  next_timestamp <- min(db_table |>
+                          dplyr::filter(.data$from_ts  > timestamp) |>
+                          dplyr::summarize(next_timestamp = min(.data$from_ts, na.rm = TRUE)) |>
+                          dplyr::pull("next_timestamp"),
+                        db_table |>
+                          dplyr::filter(.data$until_ts > timestamp) |>
+                          dplyr::summarize(next_timestamp = min(.data$until_ts, na.rm = TRUE)) |>
+                          dplyr::pull("next_timestamp")) |>
     strftime()
 
   # Consider only records valid at timestamp (and apply the filter if present)
@@ -203,11 +201,10 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   nrow_redundant <- nrow(redundant_rows)
 
   if (nrow_redundant > 0) {
-    dplyr::rows_delete(
-      dplyr::tbl(conn, db_table_id),
-      redundant_rows,
-      by = c("checksum", "from_ts"),
-      in_place = TRUE, unmatched = "ignore")
+    dplyr::rows_delete(dplyr::tbl(conn, db_table_id),
+                       redundant_rows,
+                       by = c("checksum", "from_ts"),
+                       in_place = TRUE, unmatched = "ignore")
     logger$log_info("Doubly updated records removed:", nrow_redundant)
   }
 

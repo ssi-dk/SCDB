@@ -10,7 +10,7 @@ get_driver <- function(x) {
                                 "Received: ", x)
   parts <- strsplit(x, "::")[[1]]
 
-  if (!exists("pkgs")) pkgs <<- installed.packages()[,"Package"]
+  if (!exists("pkgs")) pkgs <<- installed.packages()[, "Package"]
 
   # Skip unavailable packages
   if (!parts[1] %in% pkgs) {
@@ -19,8 +19,7 @@ get_driver <- function(x) {
 
   drv <- getExportedValue(parts[1], parts[2])
 
-  tryCatch(suppressWarnings(  # We expect a warning if no tables are found
-            get_connection(drv = drv())),
+  tryCatch(suppressWarnings(get_connection(drv = drv())),  # We expect a warning if no tables are found
            error = function(e) {
              NULL # Return NULL, if we cannot connect
            })
@@ -33,45 +32,44 @@ if (length(conns[names(conns) != "SQLite"]) == 0) {
   message("No useful drivers (other than SQLite) were found!")
 }
 
-{
-  cat("#####\n",
-      "Following drivers will be tested:\n",
-      sprintf("  %s (%s)\n", conn_list[names(conns)], names(conns)),
-      sep = ""
-  )
-  unavailable_drv <- conn_list[which(!names(conn_list) %in% names(conns))]
-  if (length(unavailable_drv) > 0) {
-    cat("\nFollowing drivers were not found and will NOT be tested:\n",
+
+cat("#####\n",
+    "Following drivers will be tested:\n",
+    sprintf("  %s (%s)\n", conn_list[names(conns)], names(conns)),
+    sep = "")
+
+unavailable_drv <- conn_list[which(!names(conn_list) %in% names(conns))]
+if (length(unavailable_drv) > 0) {
+  cat("\nFollowing drivers were not found and will NOT be tested:\n",
       sprintf("  %s (%s)\n", conn_list[names(unavailable_drv)], names(unavailable_drv)),
-      sep = ""
-  )
-  }
-  cat("#####\n")
+      sep = "")
 }
+cat("#####\n")
+
 
 # Start with some clean up
 for (conn in conns) {
-if (!inherits(conn, "SQLiteConnection") && !schema_exists(conn, "test")){
-  stop("Tests require the schema 'test' to exist in all available connections (except SQLite)")
-}
+  if (!inherits(conn, "SQLiteConnection") && !schema_exists(conn, "test")) {
+    stop("Tests require the schema 'test' to exist in all available connections (except SQLite)")
+  }
 
-purrr::walk(c("test.mtcars", "__mtcars",
-              "test.mg_logs", "test.mg_tmp1", "test.mg_tmp2", "test.mg_tmp3",
-              "test.mg_t0", "test.mg_t1", "test.mg_t2"),
-            ~ if (DBI::dbExistsTable(conn, id(., conn))) DBI::dbRemoveTable(conn, id(., conn)))
+  purrr::walk(c("test.mtcars", "__mtcars",
+                "test.mg_logs", "test.mg_tmp1", "test.mg_tmp2", "test.mg_tmp3",
+                "test.mg_t0", "test.mg_t1", "test.mg_t2"),
+              ~ if (DBI::dbExistsTable(conn, id(., conn))) DBI::dbRemoveTable(conn, id(., conn)))
 
 
-# Copy mtcars to conn
-dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
-               name = id("test.mtcars", conn), temporary = FALSE, overwrite = TRUE)
-dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
-               name = id("__mtcars", conn),    temporary = FALSE, overwrite = TRUE)
+  # Copy mtcars to conn
+  dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
+                 name = id("test.mtcars", conn), temporary = FALSE, overwrite = TRUE)
+  dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
+                 name = id("__mtcars", conn),    temporary = FALSE, overwrite = TRUE)
 
-dplyr::copy_to(conn,
-               mtcars |>
-                 dplyr::mutate(name = rownames(mtcars)) |>
-                 digest_to_checksum() |>
-                 dplyr::mutate(from_ts = as.POSIXct("2020-01-01 09:00:00"),
-                               until_ts = as.POSIXct(NA)),
-               name = id("__mtcars_historical", conn),    temporary = FALSE, overwrite = TRUE)
+  dplyr::copy_to(conn,
+                 mtcars |>
+                   dplyr::mutate(name = rownames(mtcars)) |>
+                   digest_to_checksum() |>
+                   dplyr::mutate(from_ts = as.POSIXct("2020-01-01 09:00:00"),
+                                 until_ts = as.POSIXct(NA)),
+                 name = id("__mtcars_historical", conn),    temporary = FALSE, overwrite = TRUE)
 }

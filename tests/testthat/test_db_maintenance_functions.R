@@ -1,4 +1,4 @@
-test_that("update_snapshot() works", { for (conn in conns){
+test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_linter
 
   if (DBI::dbExistsTable(conn, id("test.mg_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.mg_tmp1", conn))
   if (DBI::dbExistsTable(conn, id("test.mg_logs", conn))) DBI::dbRemoveTable(conn, id("test.mg_logs", conn))
@@ -24,19 +24,22 @@ test_that("update_snapshot() works", { for (conn in conns){
     purrr::keep(~ endsWith(., ".log")) |>
     purrr::walk(~ unlink(file.path(log_path, .)))
 
-  utils::capture.output(update_snapshot(.data, conn, db_table, timestamp, log_path = log_path, log_table_id = log_table_id))
+  utils::capture.output(update_snapshot(.data, conn, db_table, timestamp,
+                                        log_path = log_path, log_table_id = log_table_id))
 
   expect_identical(slice_time(target, "2022-10-01 09:00:00") |>
                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
-                     dplyr::collect() |> dplyr::arrange(wt, qsec),
+                     dplyr::collect() |>
+                     dplyr::arrange(wt, qsec),
                    mtcars |> dplyr::arrange(wt, qsec) |> tibble::tibble())
   expect_equal(nrow(slice_time(target, "2022-10-01 09:00:00")),
                nrow(mtcars))
 
   expect_identical(slice_time(target, "2022-10-03 09:00:00") |>
-                    dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
-                    dplyr::collect() |> dplyr::arrange(wt, qsec),
-                  .data |> collect() |> dplyr::arrange(wt, qsec))
+                     dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
+                     dplyr::collect() |>
+                     dplyr::arrange(wt, qsec),
+                   .data |> collect() |> dplyr::arrange(wt, qsec))
   expect_equal(nrow(slice_time(target, "2022-10-03 09:00:00")),
                nrow(mtcars))
 
@@ -54,20 +57,22 @@ test_that("update_snapshot() works", { for (conn in conns){
     dplyr::mutate(hp = dplyr::if_else(hp > 100, hp - 10, hp)) %>%
     dplyr::copy_to(conn, ., overwrite = TRUE)
 
-  capture.output(utils::capture.output(update_snapshot(.data, conn, "test.mg_tmp1", "2022-10-03 09:00:00",
-                        log_path = NULL, log_table_id = log_table_id)))
+  utils::capture.output(update_snapshot(.data, conn, "test.mg_tmp1", "2022-10-03 09:00:00",
+                                        log_path = NULL, log_table_id = log_table_id))
 
   # Even though we insert twice on the same date, we expect the data to be minimal (compacted)
   expect_identical(slice_time(target, "2022-10-01 09:00:00") |>
                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
-                     dplyr::collect() |> dplyr::arrange(wt, qsec),
+                     dplyr::collect() |>
+                     dplyr::arrange(wt, qsec),
                    mtcars |> dplyr::arrange(wt, qsec) |> tibble::tibble())
   expect_equal(nrow(slice_time(target, "2022-10-01 09:00:00")),
                nrow(mtcars))
 
   expect_identical(slice_time(target, "2022-10-03 09:00:00") |>
                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
-                     dplyr::collect() |> dplyr::arrange(wt, qsec),
+                     dplyr::collect() |>
+                     dplyr::arrange(wt, qsec),
                    .data |> collect() |> dplyr::arrange(wt, qsec))
   expect_equal(nrow(slice_time(target, "2022-10-03 09:00:00")),
                nrow(mtcars))
@@ -92,14 +97,16 @@ test_that("update_snapshot() works", { for (conn in conns){
 
   expect_identical(slice_time(target, "2022-10-01 09:00:00") |>
                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
-                     dplyr::collect() |> dplyr::arrange(wt, qsec),
+                     dplyr::collect() |>
+                     dplyr::arrange(wt, qsec),
                    mtcars |> dplyr::arrange(wt, qsec) |> tibble::tibble())
   expect_equal(nrow(slice_time(target, "2022-10-01 09:00:00")),
                nrow(mtcars))
 
   expect_identical(slice_time(target, "2022-10-02 09:00:00") |>
                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
-                     dplyr::collect() |> dplyr::arrange(wt, qsec),
+                     dplyr::collect() |>
+                     dplyr::arrange(wt, qsec),
                    .data |> collect() |> dplyr::arrange(wt, qsec))
   expect_equal(nrow(slice_time(target, "2022-10-02 09:00:00")),
                nrow(mtcars))
@@ -117,15 +124,18 @@ test_that("update_snapshot() works", { for (conn in conns){
   t1 <- copy_to(conn, t1, id("test.mg_t1", conn), overwrite = TRUE, temporary = FALSE)
   t2 <- copy_to(conn, t2, id("test.mg_t2", conn), overwrite = TRUE, temporary = FALSE)
 
-  utils::capture.output(update_snapshot(t0, conn, "test.mg_tmp1", "2022-01-01", log_path = NULL, log_table_id = log_table_id))
+  utils::capture.output(update_snapshot(t0, conn, "test.mg_tmp1", "2022-01-01",
+                                        log_path = NULL, log_table_id = log_table_id))
   expect_identical(dplyr::collect(t0) |> dplyr::arrange(col1),
                    dplyr::collect(get_table(conn, "test.mg_tmp1")) |> dplyr::arrange(col1))
 
-  utils::capture.output(update_snapshot(t1, conn, "test.mg_tmp1", "2022-02-01", log_path = NULL, log_table_id = log_table_id))
+  utils::capture.output(update_snapshot(t1, conn, "test.mg_tmp1", "2022-02-01",
+                                        log_path = NULL, log_table_id = log_table_id))
   expect_identical(dplyr::collect(t1) |> dplyr::arrange(col1),
                    dplyr::collect(get_table(conn, "test.mg_tmp1")) |> dplyr::arrange(col1))
 
-  utils::capture.output(update_snapshot(t2, conn, "test.mg_tmp1", "2022-02-01", log_path = NULL, log_table_id = log_table_id))
+  utils::capture.output(update_snapshot(t2, conn, "test.mg_tmp1", "2022-02-01",
+                                        log_path = NULL, log_table_id = log_table_id))
   expect_identical(dplyr::collect(t2) |> dplyr::arrange(col1),
                    dplyr::collect(get_table(conn, "test.mg_tmp1")) |> dplyr::arrange(col1))
 
@@ -149,16 +159,19 @@ test_that("update_snapshot() works", { for (conn in conns){
 
 
   # Check non-chronological insertion
-  utils::capture.output(update_snapshot(t0, conn, "test.mg_tmp1", "2022-01-01", log_path = NULL, log_table_id = log_table_id))
+  utils::capture.output(update_snapshot(t0, conn, "test.mg_tmp1", "2022-01-01",
+                                        log_path = NULL, log_table_id = log_table_id))
   expect_identical(dplyr::collect(t0) |> dplyr::arrange(col1),
                    dplyr::collect(get_table(conn, "test.mg_tmp1")) |> dplyr::arrange(col1))
 
-  utils::capture.output(update_snapshot(t2, conn, "test.mg_tmp1", "2022-03-01", log_path = NULL, log_table_id = log_table_id))
+  utils::capture.output(update_snapshot(t2, conn, "test.mg_tmp1", "2022-03-01",
+                                        log_path = NULL, log_table_id = log_table_id))
   expect_identical(dplyr::collect(t2) |> dplyr::arrange(col1),
                    dplyr::collect(get_table(conn, "test.mg_tmp1")) |> dplyr::arrange(col1))
 
-  utils::capture.output(update_snapshot(t1, conn, "test.mg_tmp1", "2022-02-01", log_path = NULL, log_table_id = log_table_id,
-                                 enforce_chronological_order = FALSE))
+  utils::capture.output(update_snapshot(t1, conn, "test.mg_tmp1", "2022-02-01",
+                                        log_path = NULL, log_table_id = log_table_id,
+                                        enforce_chronological_order = FALSE))
   expect_identical(dplyr::collect(t1) |> dplyr::arrange(col1),
                    dplyr::collect(get_table(conn, "test.mg_tmp1", slice_ts = "2022-02-01")) |> arrange(col1))
 
@@ -181,7 +194,7 @@ test_that("update_snapshot() works", { for (conn in conns){
 }})
 
 
-test_that("filter_keys() works", { for (conn in conns){
+test_that("filter_keys() works", { for (conn in conns) { # nolint: brace_linter
 
   x <- get_table(conn, "__mtcars")
 

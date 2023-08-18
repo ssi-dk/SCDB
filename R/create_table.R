@@ -31,8 +31,9 @@ create_table <- function(.data, conn = NULL, db_table_id = NULL, temporary = TRU
     db_table_id <- deparse(substitute(.data))
   }
 
-  stopifnot("checksum/from_ts/until_ts column(s) already exist(s) in .data!" != any(
-    c("checksum", "from_ts", "in_ts") %in% colnames(.data)))
+  if (is.historical(.data)) {
+    stop("checksum/from_ts/until_ts column(s) already exist(s) in .data!")
+  }
 
   # Add "metadata" columns to .data
   .data <- .data |>
@@ -59,9 +60,9 @@ create_table <- function(.data, conn = NULL, db_table_id = NULL, temporary = TRU
 
 # TODO: some development comments
 #' @importFrom methods setGeneric
-methods::setGeneric("getTableSignature", # TODO: Why camelCase here?
-           function(.data, conn = NULL) standardGeneric("getTableSignature"),
-           signature = "conn")
+methods::setGeneric("getTableSignature",
+                    function(.data, conn = NULL) standardGeneric("getTableSignature"),
+                    signature = "conn")
 
 #'
 methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {

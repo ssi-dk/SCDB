@@ -4,7 +4,7 @@ test_that("%notin% works", {
 })
 
 
-test_that("nrow() works", { for (conn in conns){
+test_that("nrow() works", { for (conn in conns) { # nolint: brace_linter
   x <- get_table(conn, "__mtcars")
 
   expect_equal(nrow(x), dplyr::pull(dplyr::count(x)))

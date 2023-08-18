@@ -1,4 +1,4 @@
-test_that("get_tables() works", { for(conn in conns){
+test_that("get_tables() works", { for (conn in conns) { # nolint: brace_linter
 
   tables <- get_tables(conn)
   expect_s3_class(tables, "data.frame")
@@ -21,7 +21,7 @@ test_that("get_tables() works", { for(conn in conns){
 }})
 
 
-test_that("table_exists() works", { for (conn in conns){
+test_that("table_exists() works", { for (conn in conns) { # nolint: brace_linter
   expect_true(table_exists(conn, "__mtcars"))
   expect_false(table_exists(conn, "__mctars"))
 
@@ -36,7 +36,7 @@ test_that("table_exists() works", { for (conn in conns){
 }})
 
 
-test_that("get_table() works", { for (conn in conns){
+test_that("get_table() works", { for (conn in conns) { # nolint: brace_linter
 
   mtcars_t <- tibble(mtcars |> mutate(name = rownames(mtcars)))
 

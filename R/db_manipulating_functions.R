@@ -71,7 +71,6 @@ unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALS
 
   # Check arguments
   checkmate::assert_class(data, "tbl_dbi")
-  #checkmate::assert_character(col) # I am not sure exactly what inputs tidyr::unite takes, so I cannot write a check
   checkmate::assert_character(sep)
   checkmate::assert_logical(remove)
   checkmate::assert_logical(na.rm)
@@ -156,9 +155,10 @@ interlace_sql <- function(tables, by = NULL, colnames = NULL) {
 
 
   # Rename valid_from / valid_until columns
-  tables <- tables |>
-    purrr::map2(from_cols,  \(table, from_col)  table |> dplyr::rename(valid_from  = !!from_col)) |>
-    purrr::map2(until_cols, \(table, until_col) table |> dplyr::rename(valid_until = !!until_col))
+  tables <- purrr::map2(tables, from_cols,
+                        \(table, from_col)  table |> dplyr::rename(valid_from  = !!from_col))
+  tables <- purrr::map2(tables, until_cols,
+                        \(table, until_col) table |> dplyr::rename(valid_until = !!until_col))
 
 
   # Get all changes to valid_from / valid_until
@@ -173,19 +173,18 @@ interlace_sql <- function(tables, by = NULL, colnames = NULL) {
   t <- t |>
     dplyr::group_by(dplyr::across(tidyselect::all_of(by))) |>
     dbplyr::window_order(.data$valid_from) |>
-    dplyr::mutate(
-      .row_number_id = dplyr::if_else(is.na(.data$valid_from),  # Some DB backends considers NULL to be the
-                                      dplyr::n(),               # smallest, so we need to adjust for that
-                                      dplyr::row_number() - ifelse(is.na(dplyr::first(.data$valid_from)), 1, 0)))
+    dplyr::mutate(.row = dplyr::if_else(is.na(.data$valid_from),  # Some DB backends considers NULL to be the
+                                        dplyr::n(),               # smallest, so we need to adjust for that
+                                        dplyr::row_number() - ifelse(is.na(dplyr::first(.data$valid_from)), 1, 0)))
 
   t <- dplyr::left_join(t |>
-                          dplyr::filter(.data$.row_number_id < dplyr::n()),
+                          dplyr::filter(.data$.row < dplyr::n()),
                         t |>
-                          dplyr::filter(.data$.row_number_id > 1) |>
-                          dplyr::mutate(.row_number_id = .data$.row_number_id - 1) |>
+                          dplyr::filter(.data$.row > 1) |>
+                          dplyr::mutate(.row = .data$.row - 1) |>
                           dplyr::rename("valid_until" = "valid_from"),
-                        by = c(by, ".row_number_id")) |>
-    dplyr::select(!".row_number_id") |>
+                        by = c(by, ".row")) |>
+    dplyr::select(!".row") |>
     dplyr::ungroup() |>
     dplyr::compute()
 
@@ -194,10 +193,9 @@ interlace_sql <- function(tables, by = NULL, colnames = NULL) {
   joiner <- \(.data, table) .data |>
     dplyr::left_join(table,
                      suffix = c("", ".tmp"),
-                     sql_on = paste0(
-                       '"LHS"."', by, '" = "RHS"."', by, '" AND
-                        "LHS"."valid_from"  >= "RHS"."valid_from" AND
-                       ("LHS"."valid_until" <= "RHS"."valid_until" OR "RHS"."valid_until" IS NULL)')) |>
+                     sql_on = paste0('"LHS"."', by, '" = "RHS"."', by, '" AND
+                                      "LHS"."valid_from"  >= "RHS"."valid_from" AND
+                                     ("LHS"."valid_until" <= "RHS"."valid_until" OR "RHS"."valid_until" IS NULL)')) |>
     dplyr::select(!tidyselect::ends_with(".tmp")) |>
     dplyr::relocate(tidyselect::starts_with("valid_"), .after = tidyselect::everything())
 

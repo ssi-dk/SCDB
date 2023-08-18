@@ -1,4 +1,4 @@
-test_that("unite.tbl_dbi() works", { for (conn in conns){
+test_that("unite.tbl_dbi() works", { for (conn in conns) { # nolint: brace_linter
 
   q <- get_table(conn, "__mtcars") |> utils::head(1)
   qu_remove <- unite(dplyr::select(q, mpg, hp), "new_column", mpg, hp) |> dplyr::compute()
@@ -23,24 +23,30 @@ test_that("unite.tbl_dbi() works", { for (conn in conns){
   # this way, the test should (hopefully) only fail if there are non-trivial differences
   expect_mapequal(get_table(conn, "__mtcars") |>
                     tidyr::unite("new_col", mpg, hp) |>
-                    dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |> dplyr::collect(),
+                    dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |>
+                    dplyr::collect(),
                   get_table(conn, "__mtcars") |>
-                    dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |> dplyr::collect() |>
+                    dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |>
+                    dplyr::collect() |>
                     tidyr::unite("new_col", mpg, hp))
 
   col <- "new_col"
   expect_mapequal(get_table(conn, "__mtcars") |>
                     tidyr::unite(col, mpg, hp) |>
-                    dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |> dplyr::collect(),
+                    dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |>
+                    dplyr::collect(),
                   get_table(conn, "__mtcars") |>
-                    dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |> dplyr::collect() |>
+                    dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |>
+                    dplyr::collect() |>
                     tidyr::unite(col, mpg, hp))
 
   expect_mapequal(get_table(conn, "__mtcars") |>
                     tidyr::unite(!!col, mpg, hp) |>
-                    dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |> dplyr::collect(),
+                    dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |>
+                    dplyr::collect(),
                   get_table(conn, "__mtcars") |>
-                    dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |> dplyr::collect() |>
+                    dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |>
+                    dplyr::collect() |>
                     tidyr::unite(!!col, mpg, hp))
 
   # Unite places cols in a particular way, lets be sure we match
@@ -50,7 +56,7 @@ test_that("unite.tbl_dbi() works", { for (conn in conns){
 }})
 
 
-test_that("interlace_sql() works", { for (conn in conns){
+test_that("interlace_sql() works", { for (conn in conns) { # nolint: brace_linter
 
   t1 <- data.frame(key = c("A", "A", "B"),
                    obs_1   = c(1, 2, 2),
@@ -71,19 +77,17 @@ test_that("interlace_sql() works", { for (conn in conns){
                   valid_until = as.Date(c("2021-02-01", "2021-03-01", "2021-04-01", NA))) %>%
     dplyr::copy_to(conn, ., id("test.mg_tmp3", conn), overwrite = TRUE, temporary = FALSE)
 
-  expect_identical(
-    interlace_sql(list(t1, t2), by = "key") |> dplyr::collect(),
-    t_ref |> dplyr::collect())
+  expect_identical(interlace_sql(list(t1, t2), by = "key") |> dplyr::collect(),
+                   t_ref |> dplyr::collect())
 
-  expect_mapequal(
-    interlace_sql(list(t1, t2), by = "key") |> dplyr::collect(),
-    interlace_sql(list(t2, t1), by = "key") |> dplyr::collect())
+  expect_mapequal(interlace_sql(list(t1, t2), by = "key") |> dplyr::collect(),
+                  interlace_sql(list(t2, t1), by = "key") |> dplyr::collect())
 
 
 }})
 
 
-test_that("digest_to_checksum() works", { for (conn in conns){
+test_that("digest_to_checksum() works", { for (conn in conns) { # nolint: brace_linter
 
   expect_s3_class(mtcars |> digest_to_checksum(), "data.frame")
   expect_s3_class(mtcars |> tibble::as_tibble() |> digest_to_checksum(), "tbl_df")
@@ -108,26 +112,26 @@ test_that("digest_to_checksum() works", { for (conn in conns){
 
   # .. and on the remote
   checksums <- dplyr::copy_to(conn, x, id("test.mg_tmp1", conn), overwrite = TRUE, temporary = FALSE) |>
-    digest_to_checksum() |> dplyr::pull("checksum")
+    digest_to_checksum() |>
+    dplyr::pull("checksum")
   expect_false(checksums[1] == checksums[2])
 }})
 
-test_that("digest_to_checksum() warns works correctly when overwriting", { for (conn in conns){
+test_that("digest_to_checksum() warns works correctly when overwriting", { for (conn in conns) { # nolint: brace_linter
   checksum_vector <- mtcars |>
     digest_to_checksum() |>
     dplyr::pull(checksum)
 
   expect_warning(checksum_vector2 <- mtcars |>
                    digest_to_checksum(col = "checksum") |>
-                   digest_to_checksum(col = "checksum", warn = T) |>
-                   dplyr::pull(checksum)
-      )
+                   digest_to_checksum(col = "checksum", warn = TRUE) |>
+                   dplyr::pull(checksum))
 
   expect_identical(checksum_vector, checksum_vector2)
 }})
 
 
-test_that("slice_time() works", { for (conn in conns){
+test_that("slice_time() works", { for (conn in conns) { # nolint: brace_linter
 
   # SQLite does not work with dates. But since we use ISO 8601 for dates, we can compare lexicographically
   xx <- get_table(conn, "__mtcars") |>
@@ -141,7 +145,7 @@ test_that("slice_time() works", { for (conn in conns){
 }})
 
 
-test_that("add_age_group() works", { for (conn in conns){
+test_that("add_age_group() works", { for (conn in conns) { # nolint: brace_linter
   if (inherits(conn, "SQLiteConnection")) { # SQLite does not support "years" and cannot use this function
     expect_true(TRUE)
   } else {
