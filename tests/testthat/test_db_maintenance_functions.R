@@ -129,17 +129,20 @@ test_that("update_snapshot() works", { for (conn in conns){
   expect_identical(dplyr::collect(t2) |> dplyr::arrange(col1),
                    dplyr::collect(get_table(conn, "test.mg_tmp1")) |> dplyr::arrange(col1))
 
-  expect_identical(get_table(conn, "test.mg_tmp1", slice_ts = NULL) |>
-                     dplyr::select(!any_of(c("from_ts", "until_ts", "checksum"))) |>
-                     dplyr::collect() |>
-                     dplyr::mutate(col2 = as.character(col2)) |>
-                     dplyr::arrange(col1, col2),
-                   list(t0, t1, t2) |>
-                     purrr::reduce(union) |>
-                     dplyr::collect() |>
-                     dplyr::mutate(col2 = as.character(col2)) |>
-                     dplyr::arrange(col1, col2) |>
-                     utils::head(5))
+  t <- list(t0, t1, t2) |>
+    purrr::reduce(union) |>
+    dplyr::collect() |>
+    dplyr::mutate(col2 = as.character(col2)) |>
+    dplyr::arrange(col1, col2) |>
+    utils::head(5)
+
+  t_ref <- get_table(conn, "test.mg_tmp1", slice_ts = NULL) |>
+    dplyr::select(!any_of(c("from_ts", "until_ts", "checksum"))) |>
+    dplyr::collect() |>
+    dplyr::mutate(col2 = as.character(col2)) |>
+    dplyr::arrange(col1, col2)
+
+  expect_identical(t, t_ref)
 
   if (DBI::dbExistsTable(conn, id("test.mg_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.mg_tmp1", conn))
 
