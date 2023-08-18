@@ -27,7 +27,6 @@ Imports:
     glue,
     magrittr,
     methods,
-    lifecycle,
     openssl,
     purrr,
     rlang,
@@ -37,8 +36,11 @@ Imports:
     utils
 Suggests:
     RPostgres,
+    RSQLite,
     roxygen2,
-    testthat (>= 3.0.0)
+    spelling,
+    testthat (>= 3.0.0),
+    tibble
 Language: en-US
 URL: https://rasmusskytte.github.io/SCDB/
 Config/testthat/edition: 3

@@ -5,7 +5,7 @@ conn_list <- list(
   "PostgreSQL" = "RPostgres::Postgres"
 )
 
-get_driver <- function(x){
+get_driver <- function(x) {
   if (!grepl(".*::.*", x)) stop("Package must be specified with namespace (e.g. RSQLite::SQLite)!\n",
                                 "Received: ", x)
   parts <- strsplit(x, "::")[[1]]
@@ -50,7 +50,7 @@ if (length(conns[names(conns) != "SQLite"]) == 0) {
 }
 
 # Start with some clean up
-for (conn in conns){
+for (conn in conns) {
 if (!inherits(conn, "SQLiteConnection") && !schema_exists(conn, "test")){
   stop("Tests require the schema 'test' to exist in all available connections (except SQLite)")
 }

@@ -47,15 +47,14 @@ get_schema <- function(.x) { # nocov start
 #' schema_exists(conn, "test")
 #'
 #' @export
-
-schema_exists <- function(conn, schema_name){
+schema_exists <- function(conn, schema) {
 
   checkmate::assert_class(conn, "DBIConnection")
-  checkmate::assert_character(schema_name)
+  checkmate::assert_character(schema)
 
   objs <- DBI::dbListObjects(conn)
-  matches <- sapply(objs$table, \(.x) slot(.x, "name")) |>
-    (\(.x) names(.x) == "schema" & .x == schema_name)()
+  matches <- sapply(objs$table, \(.x) methods::slot(.x, "name")) |>
+    (\(.x) names(.x) == "schema" & .x == schema)()
 
   return(any(matches))
 }

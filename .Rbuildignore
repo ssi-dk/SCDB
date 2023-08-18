@@ -6,3 +6,5 @@
 ^pkgdown$
 ^\.github$
 ^codecov\.yml$
+.lintr
+man-roxygen/*
