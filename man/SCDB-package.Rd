@@ -8,6 +8,13 @@
 \description{
 This package contains scripts for easily accessing and updating a database of data over time.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://rasmusskytte.github.io/SCDB/}
+}
+
+}
 \author{
 \strong{Maintainer}: Rasmus Skytte Randløv \email{rske@ssi.dk} (\href{https://orcid.org/0000-0002-5860-3838}{ORCID})
 
