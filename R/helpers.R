@@ -56,7 +56,6 @@ is.historical <- function(.data) { # nolint: object_name_linter
 #' @param .data Object to test if is data.table, data.frame, tbl or tibble
 #' @param ...   Parameters passed to checkmate::check_*
 #' @param add   `AssertCollection` to add assertions to
-#' @export
 assert_data_like <- function(.data, ..., add = NULL) {
   checkmate::assert( # nolint start: indentation_linter
     checkmate::check_class(.data, "tbl_dbi", ...),
@@ -71,7 +70,6 @@ assert_data_like <- function(.data, ..., add = NULL) {
 #' @param timestamp Object to test if is POSIX or character
 #' @param ...       parameters passed to checkmate::check_*
 #' @param add       `AssertCollection` to add assertions to
-#' @export
 assert_timestamp_like <- function(timestamp, ..., add = NULL) {
   checkmate::assert( # nolint start: indentation_linter
     checkmate::check_posixct(timestamp, ...),
@@ -85,7 +83,6 @@ assert_timestamp_like <- function(timestamp, ..., add = NULL) {
 #' @param db_table Object to test if is of class "tbl_dbi" or character on form "schema.table"
 #' @param ...      Parameters passed to checkmate::check_*
 #' @param add      `AssertCollection` to add assertions to
-#' @export
 assert_dbtable_like <- function(db_table, ..., add = NULL) {
   checkmate::assert( # nolint start: indentation_linter
     checkmate::check_character(db_table, pattern = r"{^\w*.\w*$}", ...),
@@ -99,7 +96,6 @@ assert_dbtable_like <- function(db_table, ..., add = NULL) {
 #' @param id   Object to test if is of class "Id" or character on form "schema.table"
 #' @param ...  Parameters passed to checkmate::check_*
 #' @param add `AssertCollection` to add assertions to
-#' @export
 assert_id_like <- function(id, ..., add = NULL) {
   checkmate::assert( # nolint start: indentation_linter
     checkmate::check_character(id, ...),
