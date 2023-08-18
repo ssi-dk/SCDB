@@ -9,7 +9,7 @@
 #' @param ... Other arguments passed to [DBI::dbCreateTable()]
 #' @returns Invisibly returns the table as it looks on the destination (or locally if conn is NULL)
 #' @examples
-#' conn <- get_connection()
+#' conn <- DBI::dbConnect(RSQLite::SQLite())
 #'
 #' create_table(mtcars, conn = conn, db_table_id = "mtcars_tmp")
 #'

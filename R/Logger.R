@@ -14,7 +14,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter
   public = list(
 
     #' @field log_path (`character(1)`)\cr
-    #' A directory where log file is written (if this is not NULL). Defaults to `getOption("mg.log_path")`.
+    #' A directory where log file is written (if this is not NULL). Defaults to `getOption("SCDB.log_path")`.
     log_path = NULL,
 
     #' @field log_filename (`character(1)`)\cr
@@ -34,9 +34,9 @@ Logger <- R6::R6Class( #nolint: object_name_linter
     #' @param log_conn A database connection inheriting from `DBIConnection`
     #' @param warn Show a warning if neither log_table_id or log_path could be determined
     initialize = function(db_tablestring = NULL,
-                          log_table_id   = getOption("mg.log_table_id"),
+                          log_table_id   = getOption("SCDB.log_table_id"),
                           log_conn = NULL,
-                          log_path = getOption("mg.log_path"),
+                          log_path = getOption("SCDB.log_path"),
                           warn = TRUE,
                           ts = NULL,
                           start_time = Sys.time()) {

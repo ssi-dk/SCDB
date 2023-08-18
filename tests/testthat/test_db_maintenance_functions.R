@@ -216,4 +216,14 @@ test_that("filter_keys() works", { for (conn in conns) { # nolint: brace_linter
                x |>
                  filter_keys(filter) |>
                  dplyr::collect())
+
+  # Filtering with null means no filtering is done
+  m <- mtcars
+  row.names(m) <- NULL
+  filter <- NULL
+  expect_identical(filter_keys(m, filter), m)
+
+  # Filtering by vs = 0
+  filter <- data.frame(vs = 0)
+  expect_mapequal(filter_keys(m, filter), dplyr::filter(m, vs == 0))
 }})

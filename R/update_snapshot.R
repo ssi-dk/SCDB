@@ -19,7 +19,7 @@
 #' @importFrom rlang .data
 #' @export
 update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, message = NULL, tic = Sys.time(), # nolint: cyclocomp_linter
-                            log_path = getOption("mg.log_path"), log_table_id = getOption("mg.log_table_id"),
+                            log_path = getOption("SCDB.log_path"), log_table_id = getOption("SCDB.log_table_id"),
                             enforce_chronological_order = TRUE) {
 
   # Check arguments

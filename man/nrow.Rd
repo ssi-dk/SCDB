@@ -16,10 +16,10 @@ The number of records in the object
 nrow() but also works on remote tables
 }
 \examples{
-conn <- get_connection()
+conn <- DBI::dbConnect(RSQLite::SQLite())
 
-get_table(conn, "mg.epicpr") \%>\%
-     nrow()
+m <- dplyr::copy_to(conn, mtcars)
+nrow(m) == nrow(mtcars) # TRUE
 
 close_connection(conn)
 }

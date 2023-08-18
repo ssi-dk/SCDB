@@ -29,18 +29,3 @@ colnames must be named in same order as as given in tables
 The function "interlaces" the queries and combines their validity time axes
 onto a single time axis
 }
-\examples{
-conn <- get_connection()
-
-x <- head(get_table(conn, "prod.cpr3_t_adresse"), 100)
-y <- head(get_table(conn, "prod.cpr3_t_person"), 100)
-
-q <- interlace_sql(list(x, y),
-                   by = "v_pnr",
-                   colnames = c(t1.from = "d_tilflyt_kom_dato",
-                                t1.until = "d_tilflyt_dato", # columns of x
-                                t2.from = "d_foddato",       # columns of y
-                                t2.until = "d_status_hen_start"))
-
-close_connection(conn)
-}

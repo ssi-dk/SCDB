@@ -25,11 +25,12 @@ A "lazy" dataframe (tbl_lazy) generated using dbplyr
 Gets a named table from a given schema
 }
 \examples{
-conn <- get_connection()
+conn <- DBI::dbConnect(RSQLite::SQLite())
+
+dplyr::copy_to(conn, mtcars, name = "mtcars")
 
 get_table(conn)
-get_table(conn, "prod.covid_19_wgs")
-get_table(conn, "prod.covid_19_wgs", slice_ts = "2022-01-01", include_slice_info = TRUE)
+get_table(conn, "mtcars")
 
 close_connection(conn)
 }

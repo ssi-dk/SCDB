@@ -10,7 +10,7 @@ Create an object for logging database operations
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{log_path}}{(\code{character(1)})\cr
-A directory where log file is written (if this is not NULL). Defaults to \code{getOption("mg.log_path")}.}
+A directory where log file is written (if this is not NULL). Defaults to \code{getOption("SCDB.log_path")}.}
 
 \item{\code{log_filename}}{(\code{character(1)})\cr
 The name (basename) of the log file.}
@@ -41,9 +41,9 @@ Create a new Logger object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logger$new(
   db_tablestring = NULL,
-  log_table_id = getOption("mg.log_table_id"),
+  log_table_id = getOption("SCDB.log_table_id"),
   log_conn = NULL,
-  log_path = getOption("mg.log_path"),
+  log_path = getOption("SCDB.log_path"),
   warn = TRUE,
   ts = NULL,
   start_time = Sys.time()

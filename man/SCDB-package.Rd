@@ -6,6 +6,8 @@
 \alias{SCDB-package}
 \title{SCDB: Easily access and maintain time-based versioned data}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 This package contains scripts for easily accessing and updating a database of data over time.
 }
 \seealso{

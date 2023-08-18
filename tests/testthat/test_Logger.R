@@ -30,7 +30,7 @@ test_that("Logger works", { for (conn in conns) { # nolint: brace_linter
 
   # Empty logger should use default value
   logger <- Logger$new(db_tablestring = db_tablestring, ts = ts, warn = FALSE)
-  expect_equal(logger$log_path, getOption("mg.log_path"))
+  expect_equal(logger$log_path, getOption("SCDB.log_path"))
   expect_null(logger$log_tbl) # log_table_id is NOT defined here, despite the option existing
   # the logger does not have the connection, so cannot pull the table from conn
 

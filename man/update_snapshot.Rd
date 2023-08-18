@@ -12,8 +12,8 @@ update_snapshot(
   filters = NULL,
   message = NULL,
   tic = Sys.time(),
-  log_path = getOption("mg.log_path"),
-  log_table_id = getOption("mg.log_table_id"),
+  log_path = getOption("SCDB.log_path"),
+  log_table_id = getOption("SCDB.log_table_id"),
   enforce_chronological_order = TRUE
 )
 }

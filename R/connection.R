@@ -24,7 +24,7 @@
 #' @return
 #'   An object that inherits from DBIConnection driver specified in drv
 #' @examples
-#' conn <- get_connection()
+#' conn <- DBI::dbConnect(RSQLite::SQLite())
 #'
 #' close_connection(conn)
 #'

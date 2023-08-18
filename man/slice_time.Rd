@@ -22,12 +22,20 @@ An object similar to .data
 Slices a data object based on time / date
 }
 \examples{
-conn <- get_connection()
+conn <- DBI::dbConnect(RSQLite::SQLite())
 
-q <- tbl(conn, in_schema("prod.covid_19_wgs"))
+m <- mtcars |>
+  dplyr::mutate(from_ts = dplyr::if_else(dplyr::row_number() > 10,
+                                         as.Date("2020-01-01"),
+                                         as.Date("2021-01-01")),
+                until_ts = as.Date(NA))
 
-slice_time(q, "2021-01-05")
-slice_time(q, "2021-01-05", from_ts = from_ts, until_ts = until_ts)
+dplyr::copy_to(conn, m, name = "mtcars")
+
+q <- tbl(conn, id("mtcars", conn))
+
+nrow(slice_time(q, "2020-01-01")) # 10
+nrow(slice_time(q, "2021-01-01")) # nrow(mtcars)
 
 close_connection(conn)
 }

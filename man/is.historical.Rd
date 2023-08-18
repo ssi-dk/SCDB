@@ -16,10 +16,13 @@ TRUE if .data contains the columns: "checksum", "from_ts", and "until_ts". FALSE
 Checks if table contains historical data
 }
 \examples{
-conn <- get_connection()
+conn <- DBI::dbConnect(RSQLite::SQLite())
 
-is.historical(get_table(conn, "prod.basis_samples")) # TRUE
-is.historical(get_table(conn, "prod.cpr_status")) # FALSE
+dplyr::copy_to(conn, mtcars, name = id("mtcars", conn))
+create_table(mtcars, conn, db_table_id = id("mtcars_historical", conn))
+
+is.historical(get_table(conn, "mtcars")) # FALSE
+is.historical(get_table(conn, "mtcars_historical")) # TRUE
 
 close_connection(conn)
 }

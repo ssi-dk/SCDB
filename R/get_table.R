@@ -12,11 +12,12 @@
 #' @return
 #'   A "lazy" dataframe (tbl_lazy) generated using dbplyr
 #' @examples
-#' conn <- get_connection()
+#' conn <- DBI::dbConnect(RSQLite::SQLite())
+#'
+#' dplyr::copy_to(conn, mtcars, name = "mtcars")
 #'
 #' get_table(conn)
-#' get_table(conn, "prod.covid_19_wgs")
-#' get_table(conn, "prod.covid_19_wgs", slice_ts = "2022-01-01", include_slice_info = TRUE)
+#' get_table(conn, "mtcars")
 #'
 #' close_connection(conn)
 #' @importFrom rlang .data
@@ -74,7 +75,7 @@ get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_inf
 #' @param pattern A regex pattern with which to subset the returned tables
 #' @return A data.frame containing table names in the DB
 #' @examples
-#' conn <- get_connection()
+#' conn <- DBI::dbConnect(RSQLite::SQLite())
 #'
 #' get_tables(conn)
 #'
@@ -140,12 +141,20 @@ get_tables <- function(conn, pattern = NULL) {
 #' @param until_ts The name of the column in .data specifying valid until time (note: must be unquoted)
 #' @template .data_return
 #' @examples
-#' conn <- get_connection()
+#' conn <- DBI::dbConnect(RSQLite::SQLite())
 #'
-#' q <- tbl(conn, in_schema("prod.covid_19_wgs"))
+#' m <- mtcars |>
+#'   dplyr::mutate(from_ts = dplyr::if_else(dplyr::row_number() > 10,
+#'                                          as.Date("2020-01-01"),
+#'                                          as.Date("2021-01-01")),
+#'                 until_ts = as.Date(NA))
 #'
-#' slice_time(q, "2021-01-05")
-#' slice_time(q, "2021-01-05", from_ts = from_ts, until_ts = until_ts)
+#' dplyr::copy_to(conn, m, name = "mtcars")
+#'
+#' q <- tbl(conn, id("mtcars", conn))
+#'
+#' nrow(slice_time(q, "2020-01-01")) # 10
+#' nrow(slice_time(q, "2021-01-01")) # nrow(mtcars)
 #'
 #' close_connection(conn)
 #' @export
@@ -169,10 +178,12 @@ slice_time <- function(.data, slice_ts, from_ts = from_ts, until_ts = until_ts) 
 #' @template conn
 #' @template db_table_id
 #' @examples
-#' conn <- get_connection()
+#' conn <- DBI::dbConnect(RSQLite::SQLite())
 #'
-#' table_exists(conn, "prod.basis_samples") # TRUE
-#' table_exists(conn, "data.basis_samples") # FALSE
+#' dplyr::copy_to(conn, mtcars, name = "mtcars")
+#'
+#' table_exists(conn, "mtcars") # TRUE
+#' table_exists(conn, "iris") # FALSE
 #'
 #' close_connection(conn)
 #' @export

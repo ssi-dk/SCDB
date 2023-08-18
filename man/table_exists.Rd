@@ -15,10 +15,12 @@ table_exists(conn, db_table_id)
 Test if a table exists in database
 }
 \examples{
-conn <- get_connection()
+conn <- DBI::dbConnect(RSQLite::SQLite())
 
-table_exists(conn, "prod.basis_samples") # TRUE
-table_exists(conn, "data.basis_samples") # FALSE
+dplyr::copy_to(conn, mtcars, name = "mtcars")
+
+table_exists(conn, "mtcars") # TRUE
+table_exists(conn, "iris") # FALSE
 
 close_connection(conn)
 }

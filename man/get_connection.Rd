@@ -43,7 +43,7 @@ Connects to the specified dbname of host:port using user and password from given
 Certain drivers may use credentials stored in a file, such as ~/.pgpass (PostgreSQL)
 }
 \examples{
-conn <- get_connection()
+conn <- DBI::dbConnect(RSQLite::SQLite())
 
 close_connection(conn)
 

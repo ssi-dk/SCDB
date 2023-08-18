@@ -13,20 +13,18 @@
 #' @param na_by   passed to inner_join if different from NULL
 #' @template .data_return
 #' @examples
-#' conn <- get_connection()
-#'
-#' cpr3_t_person <- get_table(conn, "prod.cpr3_t_person") |> head(100) |> compute()
-#'
 #' # Filtering with null means no filtering is done
 #' filter <- NULL
-#' nrow(filter_keys(cpr3_t_person, filter)) == 100
+#' identical(filter_keys(mtcars, filter), mtcars) # TRUE
 #'
-#' # Lets select those who have a birthdate of "2000-01-01" and have cprnr that
-#' # starts with 'c'
-#' filter <- cpr3_t_person |> filter(d_foddato == "2000-01-01", grepl("c%", v_pnr))
-#' nrow(filter_keys(cpr3_t_person, filter)) # < 100
+#' # Filtering by vs = 0
+#' filter <- data.frame(vs = 0)
+#' identical(filter_keys(mtcars, filter), dplyr::filter(mtcars, vs == 0)) # TRUE
 #'
-#' close_connection(conn)
+#' # Filtering by the specific combinations of vs = 0 and am = 1
+#' filter <- dplyr::distinct(mtcars, vs, am)
+#' filter_keys(mtcars, filter)
+#'
 #' @importFrom rlang .data
 #' @export
 filter_keys <- function(.data, filters, by = NULL, na_by = NULL) {
@@ -44,7 +42,7 @@ filter_keys <- function(.data, filters, by = NULL, na_by = NULL) {
       # Determine key types
       key_types <- filters |>
         dplyr::ungroup() |>
-        dplyr::summarise(dplyr::across(.fns = ~ any(is.na(.), na.rm = TRUE))) |>
+        dplyr::summarise(dplyr::across(.cols = tidyselect::everything(), .fns = ~ any(is.na(.), na.rm = TRUE))) |>
         tidyr::pivot_longer(tidyselect::everything(), names_to = "column_name", values_to = "is_na")
 
       by    <- key_types |> dplyr::filter(!.data$is_na) |> dplyr::pull("column_name")
@@ -119,20 +117,6 @@ unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALS
 #'                  (i.e. t1, t2, t3, ...).
 #' @return          The combination of input queries with a single, interlaced
 #'                  valid_from / valid_until time axis
-#' @examples
-#' conn <- get_connection()
-#'
-#' x <- head(get_table(conn, "prod.cpr3_t_adresse"), 100)
-#' y <- head(get_table(conn, "prod.cpr3_t_person"), 100)
-#'
-#' q <- interlace_sql(list(x, y),
-#'                    by = "v_pnr",
-#'                    colnames = c(t1.from = "d_tilflyt_kom_dato",
-#'                                 t1.until = "d_tilflyt_dato", # columns of x
-#'                                 t2.from = "d_foddato",       # columns of y
-#'                                 t2.until = "d_status_hen_start"))
-#'
-#' close_connection(conn)
 #' @importFrom rlang .data
 #' @export
 interlace_sql <- function(tables, by = NULL, colnames = NULL) {

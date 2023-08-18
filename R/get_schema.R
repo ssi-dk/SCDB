@@ -3,10 +3,12 @@
 #' @param .x A DBIConnection or lazy_query object
 #' @return The current schema name, but defaults to "prod" instead of "public"
 #' @examples
-#' conn <- get_connection()
+#' conn <- DBI::dbConnect(RSQLite::SQLite())
+#'
+#' dplyr::copy_to(conn, mtcars, name = "mtcars")
 #'
 #' get_schema(conn)
-#' get_schema(get_table(conn, 'prod.basis_samples'))
+#' get_schema(get_table(conn, "mtcars"))
 #'
 #' close_connection(conn)
 #' @export
@@ -16,7 +18,7 @@ get_schema <- function(.x) { # nocov start
     # Get schema from connection object
     schema <- DBI::dbGetQuery(.x, "SELECT CURRENT_SCHEMA()")$current_schema
 
-  } else if (inherits(.x, "SQLiteConnection")) {
+  } else if (inherits(.x, "SQLiteConnection") || inherits(.x, "tbl_SQLiteConnection")) {
     return(NULL)
   } else if (inherits(.x, "tbl_dbi")) {
     # Get schema from a DBI object (e.g. lazy query)
@@ -37,13 +39,14 @@ get_schema <- function(.x) { # nocov start
   return(schema)
 } # nocov end
 
+
 #' Test if a schema exists in given connection
 #' @param schema A character string giving the schema name
 #' @template conn
 #'
 #' @examples
 #'
-#' conn <- get_connection()
+#' conn <- DBI::dbConnect(RSQLite::SQLite())
 #' schema_exists(conn, "test")
 #'
 #' @export

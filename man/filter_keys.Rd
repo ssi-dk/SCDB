@@ -26,18 +26,16 @@ If filter is different from NULL, the .data is filtered by a inner_join using al
 by and na_by can overwrite the inner_join columns used in the filtering
 }
 \examples{
-conn <- get_connection()
-
-cpr3_t_person <- get_table(conn, "prod.cpr3_t_person") |> head(100) |> compute()
-
 # Filtering with null means no filtering is done
 filter <- NULL
-nrow(filter_keys(cpr3_t_person, filter)) == 100
+identical(filter_keys(mtcars, filter), mtcars) # TRUE
 
-# Lets select those who have a birthdate of "2000-01-01" and have cprnr that
-# starts with 'c'
-filter <- cpr3_t_person |> filter(d_foddato == "2000-01-01", grepl("c\%", v_pnr))
-nrow(filter_keys(cpr3_t_person, filter)) # < 100
+# Filtering by vs = 0
+filter <- data.frame(vs = 0)
+identical(filter_keys(mtcars, filter), dplyr::filter(mtcars, vs == 0)) # TRUE
 
-close_connection(conn)
+# Filtering by the specific combinations of vs = 0 and am = 1
+filter <- dplyr::distinct(mtcars, vs, am)
+filter_keys(mtcars, filter)
+
 }
