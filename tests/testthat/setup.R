@@ -10,7 +10,7 @@ get_driver <- function(x) {
                                 "Received: ", x)
   parts <- strsplit(x, "::")[[1]]
 
-  if (!exists("pkgs")) pkgs <<- installed.packages()[, "Package"]
+  pkgs <- installed.packages()[, "Package"]
 
   # Skip unavailable packages
   if (!parts[1] %in% pkgs) {
