@@ -1,7 +1,7 @@
 Package: SCDB
 Type: Package
-Title: Easily access and maintain time-based versioned data
-Version: 1.0
+Title: Easily access and maintain time-based versioned data (Slowly-Changing-Dimension)
+Version: 0.1
 Authors@R:
 	  c(person("Rasmus Skytte", "Randløv", , "rske@ssi.dk",
 	           role = c("aut", "cre"),
