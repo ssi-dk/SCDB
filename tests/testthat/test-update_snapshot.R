@@ -1,14 +1,14 @@
 test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_linter
 
-  if (DBI::dbExistsTable(conn, id("test.mg_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.mg_tmp1", conn))
-  if (DBI::dbExistsTable(conn, id("test.mg_logs", conn))) DBI::dbRemoveTable(conn, id("test.mg_logs", conn))
+  if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
+  if (DBI::dbExistsTable(conn, id("test.SCDB_logs", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_logs", conn))
 
   target <- mtcars %>%
     dplyr::copy_to(conn, ., overwrite = TRUE) |>
     digest_to_checksum(col = "checksum", warn = FALSE) |>
     dplyr::mutate(from_ts  = !!db_timestamp("2022-10-01 09:00:00", conn),
                   until_ts = !!db_timestamp(NA, conn)) %>%
-    dplyr::copy_to(conn, ., id("test.mg_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+    dplyr::copy_to(conn, ., id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
 
 
   .data <- mtcars |>
@@ -16,8 +16,8 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
     dplyr::copy_to(conn, ., overwrite = TRUE)
 
   # This is a simple update where 23 rows are replaced with 23 new ones on the given date
-  db_table <- "test.mg_tmp1"
-  log_table_id <- "test.mg_logs"
+  db_table <- "test.SCDB_tmp1"
+  log_table_id <- "test.SCDB_logs"
   timestamp <- "2022-10-03 09:00:00"
   log_path <- tempdir()
   dir(log_path) |>
@@ -44,12 +44,12 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
                nrow(mtcars))
 
   # Check log outputs exists
-  log_pattern <- paste(stringr::str_replace_all(as.Date(timestamp), "-", "_"), "test.mg_tmp1.log", sep = ".")
+  log_pattern <- paste(stringr::str_replace_all(as.Date(timestamp), "-", "_"), "test.SCDB_tmp1.log", sep = ".")
   log_file <- purrr::keep(dir(log_path), ~stringr::str_detect(., log_pattern))
   expect_true(length(log_file) == 1)
   expect_true(file.info(file.path(log_path, log_file))$size > 0)
-  expect_true(nrow(get_table(conn, "test.mg_logs")) == 1)
-  expect_true(nrow(filter(get_table(conn, "test.mg_logs"), if_any(.cols = !c(log_file), .fns = ~ !is.na(.)))) == 1)
+  expect_true(nrow(get_table(conn, "test.SCDB_logs")) == 1)
+  expect_true(nrow(filter(get_table(conn, "test.SCDB_logs"), if_any(.cols = !c(log_file), .fns = ~ !is.na(.)))) == 1)
 
 
   # We now attempt to do another update on the same date
@@ -57,7 +57,7 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
     dplyr::mutate(hp = dplyr::if_else(hp > 100, hp - 10, hp)) %>%
     dplyr::copy_to(conn, ., overwrite = TRUE)
 
-  utils::capture.output(update_snapshot(.data, conn, "test.mg_tmp1", "2022-10-03 09:00:00",
+  utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-03 09:00:00",
                                         log_path = NULL, log_table_id = log_table_id))
 
   # Even though we insert twice on the same date, we expect the data to be minimal (compacted)
@@ -86,12 +86,12 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
     dplyr::copy_to(conn, ., overwrite = TRUE)
 
   # This should fail if we do not specify "enforce_chronological_order = FALSE"
-  expect_error(utils::capture.output(update_snapshot(.data, conn, "test.mg_tmp1", "2022-10-02 09:00:00",
+  expect_error(utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-02 09:00:00",
                                                      log_path = NULL, log_table_id = log_table_id)),
                regexp = "Given timestamp 2022-10-02 09:00:00 is earlier")
 
   # But not with the variable set
-  utils::capture.output(update_snapshot(.data, conn, "test.mg_tmp1", "2022-10-02 09:00:00",
+  utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-02 09:00:00",
                                         log_path = NULL, log_table_id = log_table_id,
                                         enforce_chronological_order = FALSE))
 
@@ -112,32 +112,32 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
                nrow(mtcars))
 
 
-  if (DBI::dbExistsTable(conn, id("test.mg_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.mg_tmp1", conn))
-  expect_false(table_exists(conn, "test.mg_tmp1"))
+  if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
+  expect_false(table_exists(conn, "test.SCDB_tmp1"))
 
   # Check deletion of redundant rows
   t0 <- data.frame(col1 = c("A", "B"),      col2 = c(NA_real_, NA_real_))
   t1 <- data.frame(col1 = c("A", "B", "C"), col2 = c(1,        NA_real_, NA_real_))
   t2 <- data.frame(col1 = c("A", "B", "C"), col2 = c(1,        2,        3))
 
-  t0 <- copy_to(conn, t0, id("test.mg_t0", conn), overwrite = TRUE, temporary = FALSE)
-  t1 <- copy_to(conn, t1, id("test.mg_t1", conn), overwrite = TRUE, temporary = FALSE)
-  t2 <- copy_to(conn, t2, id("test.mg_t2", conn), overwrite = TRUE, temporary = FALSE)
+  t0 <- copy_to(conn, t0, id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE)
+  t1 <- copy_to(conn, t1, id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE)
+  t2 <- copy_to(conn, t2, id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE)
 
-  utils::capture.output(update_snapshot(t0, conn, "test.mg_tmp1", "2022-01-01",
+  utils::capture.output(update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01",
                                         log_path = NULL, log_table_id = log_table_id))
   expect_identical(dplyr::collect(t0) |> dplyr::arrange(col1),
-                   dplyr::collect(get_table(conn, "test.mg_tmp1")) |> dplyr::arrange(col1))
+                   dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
-  utils::capture.output(update_snapshot(t1, conn, "test.mg_tmp1", "2022-02-01",
+  utils::capture.output(update_snapshot(t1, conn, "test.SCDB_tmp1", "2022-02-01",
                                         log_path = NULL, log_table_id = log_table_id))
   expect_identical(dplyr::collect(t1) |> dplyr::arrange(col1),
-                   dplyr::collect(get_table(conn, "test.mg_tmp1")) |> dplyr::arrange(col1))
+                   dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
-  utils::capture.output(update_snapshot(t2, conn, "test.mg_tmp1", "2022-02-01",
+  utils::capture.output(update_snapshot(t2, conn, "test.SCDB_tmp1", "2022-02-01",
                                         log_path = NULL, log_table_id = log_table_id))
   expect_identical(dplyr::collect(t2) |> dplyr::arrange(col1),
-                   dplyr::collect(get_table(conn, "test.mg_tmp1")) |> dplyr::arrange(col1))
+                   dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
   t <- list(t0, t1, t2) |>
     purrr::reduce(union) |>
@@ -146,7 +146,7 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
     dplyr::arrange(col1, col2) |>
     utils::head(5)
 
-  t_ref <- get_table(conn, "test.mg_tmp1", slice_ts = NULL) |>
+  t_ref <- get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
     dplyr::select(!any_of(c("from_ts", "until_ts", "checksum"))) |>
     dplyr::collect() |>
     dplyr::mutate(col2 = as.character(col2)) |>
@@ -154,26 +154,26 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
 
   expect_identical(t, t_ref)
 
-  if (DBI::dbExistsTable(conn, id("test.mg_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.mg_tmp1", conn))
+  if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
 
 
 
   # Check non-chronological insertion
-  utils::capture.output(update_snapshot(t0, conn, "test.mg_tmp1", "2022-01-01",
+  utils::capture.output(update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01",
                                         log_path = NULL, log_table_id = log_table_id))
   expect_identical(dplyr::collect(t0) |> dplyr::arrange(col1),
-                   dplyr::collect(get_table(conn, "test.mg_tmp1")) |> dplyr::arrange(col1))
+                   dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
-  utils::capture.output(update_snapshot(t2, conn, "test.mg_tmp1", "2022-03-01",
+  utils::capture.output(update_snapshot(t2, conn, "test.SCDB_tmp1", "2022-03-01",
                                         log_path = NULL, log_table_id = log_table_id))
   expect_identical(dplyr::collect(t2) |> dplyr::arrange(col1),
-                   dplyr::collect(get_table(conn, "test.mg_tmp1")) |> dplyr::arrange(col1))
+                   dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
-  utils::capture.output(update_snapshot(t1, conn, "test.mg_tmp1", "2022-02-01",
+  utils::capture.output(update_snapshot(t1, conn, "test.SCDB_tmp1", "2022-02-01",
                                         log_path = NULL, log_table_id = log_table_id,
                                         enforce_chronological_order = FALSE))
   expect_identical(dplyr::collect(t1) |> dplyr::arrange(col1),
-                   dplyr::collect(get_table(conn, "test.mg_tmp1", slice_ts = "2022-02-01")) |> arrange(col1))
+                   dplyr::collect(get_table(conn, "test.SCDB_tmp1", slice_ts = "2022-02-01")) |> arrange(col1))
 
   t_ref <-
     tibble::tibble(col1     = c("A",          "B",          "A",          "C",          "B",          "C"),
@@ -181,7 +181,7 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
                    from_ts  = c("2022-01-01", "2022-01-01", "2022-02-01", "2022-02-01", "2022-03-01", "2022-03-01"),
                    until_ts = c("2022-02-01", "2022-03-01", NA,           "2022-03-01", NA,           NA))
 
-  expect_identical(get_table(conn, "test.mg_tmp1", slice_ts = NULL) |>
+  expect_identical(get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
                      dplyr::select(!"checksum") |>
                      dplyr::collect() |>
                      dplyr::mutate(from_ts  = strftime(from_ts),
@@ -190,5 +190,5 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
                    t_ref |>
                      dplyr::arrange(col1, from_ts))
 
-  if (DBI::dbExistsTable(conn, id("test.mg_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.mg_tmp1", conn))
+  if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
 }})

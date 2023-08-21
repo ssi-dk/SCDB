@@ -62,20 +62,20 @@ test_that("interlace_sql() works", { for (conn in conns) { # nolint: brace_linte
                    obs_1   = c(1, 2, 2),
                    valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-01-01")),
                    valid_until = as.Date(c("2021-02-01", "2021-03-01", NA))) %>%
-    dplyr::copy_to(conn, ., id("test.mg_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+    dplyr::copy_to(conn, ., id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
 
   t2 <- data.frame(key = c("A", "B"),
                    obs_2 = c("a", "b"),
                    valid_from  = as.Date(c("2021-01-01", "2021-01-01")),
                    valid_until = as.Date(c("2021-04-01", NA))) %>%
-    dplyr::copy_to(conn, ., id("test.mg_tmp2", conn), overwrite = TRUE, temporary = FALSE)
+    dplyr::copy_to(conn, ., id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
 
   t_ref <- tibble(key = c("A", "A", "A", "B"),
                   obs_1   = c(1, 2, NA, 2),
                   obs_2   = c("a", "a", "a", "b"),
                   valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-03-01", "2021-01-01")),
                   valid_until = as.Date(c("2021-02-01", "2021-03-01", "2021-04-01", NA))) %>%
-    dplyr::copy_to(conn, ., id("test.mg_tmp3", conn), overwrite = TRUE, temporary = FALSE)
+    dplyr::copy_to(conn, ., id("test.SCDB_tmp3", conn), overwrite = TRUE, temporary = FALSE)
 
   expect_identical(interlace_sql(list(t1, t2), by = "key") |> dplyr::collect(),
                    t_ref |> dplyr::collect())
@@ -111,7 +111,7 @@ test_that("digest_to_checksum() works", { for (conn in conns) { # nolint: brace_
   expect_false(checksums[1] == checksums[2])
 
   # .. and on the remote
-  checksums <- dplyr::copy_to(conn, x, id("test.mg_tmp1", conn), overwrite = TRUE, temporary = FALSE) |>
+  checksums <- dplyr::copy_to(conn, x, id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE) |>
     digest_to_checksum() |>
     dplyr::pull("checksum")
   expect_false(checksums[1] == checksums[2])

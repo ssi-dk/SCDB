@@ -27,11 +27,11 @@ test_that("*_join() works", { for (conn in conns) { # nolint: brace_linter
   # First test case
   x <- data.frame(number = c("1", "2", NA),
                   t = c("strA", NA, "strB")) %>%
-    dplyr::copy_to(conn, ., name = id("test.mg_tmp1", conn), overwrite =  TRUE, temporary = FALSE)
+    dplyr::copy_to(conn, ., name = id("test.SCDB_tmp1", conn), overwrite =  TRUE, temporary = FALSE)
 
   y <- data.frame(letter = c("A", "B", "A", "B"),
                   number = c(NA, "2", "1", "1")) %>%
-    dplyr::copy_to(conn, ., name = id("test.mg_tmp2", conn), overwrite = TRUE, temporary = FALSE)
+    dplyr::copy_to(conn, ., name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
 
 
   q  <- left_join(x, y, na_by = "number") |>
@@ -61,8 +61,8 @@ test_that("*_join() works", { for (conn in conns) { # nolint: brace_linter
     sql_on <- join_na_sql(by = NULL, na_by = "number")
     renamer <- select_na_sql(x, y, by = NULL, na_by = "number", left = FALSE)
 
-    expect_false(identical(collect(mg_right_join.tbl_SQLiteConnection(x, y, sql_on, renamer)),
-                           collect(mg_right_join.tbl_dbi(x, y, sql_on, renamer))))
+    expect_false(identical(collect(scdb_right_join.tbl_SQLiteConnection(x, y, sql_on, renamer)),
+                           collect(scdb_right_join.tbl_dbi(x, y, sql_on, renamer))))
   }
 
 
@@ -70,11 +70,11 @@ test_that("*_join() works", { for (conn in conns) { # nolint: brace_linter
   x <- data.frame(date = as.Date(c("2022-05-01", "2022-05-01", "2022-05-02", "2022-05-02")),
                   region_id = c("1", NA, NA, "1"),
                   n_start = c(3, NA, NA, NA)) %>%
-    dplyr::copy_to(conn, ., name = id("test.mg_tmp1", conn), overwrite =  TRUE, temporary = FALSE)
+    dplyr::copy_to(conn, ., name = id("test.SCDB_tmp1", conn), overwrite =  TRUE, temporary = FALSE)
   y <- data.frame(date = as.Date("2022-05-02"),
                   region_id = "1",
                   n_add = 4) %>%
-    dplyr::copy_to(conn, ., name = id("test.mg_tmp2", conn), overwrite =  TRUE, temporary = FALSE)
+    dplyr::copy_to(conn, ., name = id("test.SCDB_tmp2", conn), overwrite =  TRUE, temporary = FALSE)
 
   q  <- full_join(x, y, by = "date", na_by = "region_id") |>
     dplyr::collect() |>

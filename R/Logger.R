@@ -62,7 +62,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
       if (warn && (is.null(log_path) & is.null(log_table_id))) {
         warning("log_path and log_table_id are both NULL and therefore NO LOGGING WILL BE DONE.\n",
-                "Consider adding options mg.log_table_id and/or mg.log_path to your .Rprofile")
+                "Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile")
       }
 
       self$log_path <- log_path

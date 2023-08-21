@@ -54,8 +54,8 @@ for (conn in conns) {
   }
 
   purrr::walk(c("test.mtcars", "__mtcars",
-                "test.mg_logs", "test.mg_tmp1", "test.mg_tmp2", "test.mg_tmp3",
-                "test.mg_t0", "test.mg_t1", "test.mg_t2"),
+                "test.scdb_logs", "test.scdb_tmp1", "test.scdb_tmp2", "test.SCDB_tmp3",
+                "test.SCDB_t0", "test.SCDB_t1", "test.SCDB_t2"),
               ~ if (DBI::dbExistsTable(conn, id(., conn))) DBI::dbRemoveTable(conn, id(., conn)))
 
 
