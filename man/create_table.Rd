@@ -24,7 +24,7 @@ Invisibly returns the table as it looks on the destination (or locally if conn i
 Create a historical table from input data
 }
 \examples{
-conn <- DBI::dbConnect(RSQLite::SQLite())
+conn <- get_connection(drv = RSQLite::SQLite())
 
 create_table(mtcars, conn = conn, db_table_id = "mtcars_tmp")
 

@@ -25,7 +25,7 @@ A "lazy" dataframe (tbl_lazy) generated using dbplyr
 Gets a named table from a given schema
 }
 \examples{
-conn <- DBI::dbConnect(RSQLite::SQLite())
+conn <- get_connection(drv = RSQLite::SQLite())
 
 dplyr::copy_to(conn, mtcars, name = "mtcars")
 

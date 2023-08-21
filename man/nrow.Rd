@@ -16,7 +16,7 @@ The number of records in the object
 nrow() but also works on remote tables
 }
 \examples{
-conn <- DBI::dbConnect(RSQLite::SQLite())
+conn <- get_connection(drv = RSQLite::SQLite())
 
 m <- dplyr::copy_to(conn, mtcars)
 nrow(m) == nrow(mtcars) # TRUE

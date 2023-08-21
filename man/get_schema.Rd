@@ -16,7 +16,7 @@ The current schema name, but defaults to "prod" instead of "public"
 Get the current schema of a DB connection
 }
 \examples{
-conn <- DBI::dbConnect(RSQLite::SQLite())
+conn <- get_connection(drv = RSQLite::SQLite())
 
 dplyr::copy_to(conn, mtcars, name = "mtcars")
 

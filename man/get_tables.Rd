@@ -18,7 +18,7 @@ A data.frame containing table names in the DB
 Gets the available tables
 }
 \examples{
-conn <- DBI::dbConnect(RSQLite::SQLite())
+conn <- get_connection(drv = RSQLite::SQLite())
 
 get_tables(conn)
 

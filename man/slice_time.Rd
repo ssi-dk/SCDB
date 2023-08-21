@@ -22,7 +22,7 @@ An object similar to .data
 Slices a data object based on time / date
 }
 \examples{
-conn <- DBI::dbConnect(RSQLite::SQLite())
+conn <- get_connection(drv = RSQLite::SQLite())
 
 m <- mtcars |>
   dplyr::mutate(from_ts = dplyr::if_else(dplyr::row_number() > 10,

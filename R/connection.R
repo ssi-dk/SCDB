@@ -25,7 +25,7 @@
 #'   An object that inherits from DBIConnection driver specified in drv
 #' @examples
 #' \dontrun{
-close_connection(conn)
+#' close_connection(conn)
 #' }
 #'
 #' @seealso [RPostgres::Postgres]

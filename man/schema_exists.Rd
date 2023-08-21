@@ -16,7 +16,7 @@ Test if a schema exists in given connection
 }
 \examples{
 
-conn <- DBI::dbConnect(RSQLite::SQLite())
+conn <- get_connection(drv = RSQLite::SQLite())
 schema_exists(conn, "test")
 
 }

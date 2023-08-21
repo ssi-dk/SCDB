@@ -4,7 +4,7 @@
 \name{SCDB-package}
 \alias{SCDB}
 \alias{SCDB-package}
-\title{SCDB: Easily access and maintain time-based versioned data (Slowly-Changing-Dimension)}
+\title{SCDB: Easily Access and Maintain Time-Based Versioned Data (Slowly-Changing-Dimension)}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
