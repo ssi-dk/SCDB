@@ -1,15 +1,45 @@
 Package: SCDB
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: GPL (>= 3)
+Type: Package
+Title: Easily Access and Maintain Time-Based Versioned Data (Slowly-Changing-Dimension)
+Version: 0.1
+Authors@R:
+	  c(person("Rasmus Skytte", "Randløv", , "rske@ssi.dk",
+	           role = c("aut", "cre"),
+	           comment = c(ORCID = "0000-0002-5860-3838")),
+	    person("Marcus Munch", "Grünewald", , "mmgr@ssi.dk",
+	           role = c("aut"),
+	           comment = c(ORCID = "0009-0006-8090-406X")))
+Maintainer: Rasmus Skytte Randløv <rske@ssi.dk>
+Description: This package contains scripts for easily accessing and updating a database of data over time.
+License: GPL-3
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Suggests: 
-    spelling
+Roxygen: list(markdown = TRUE, r6 = TRUE)
+Depends:
+    tidyverse,
+    dbplyr,
+    lubridate
+Imports:
+    checkmate,
+    DBI,
+    dplyr,
+    glue,
+    magrittr,
+    methods,
+    openssl,
+    purrr,
+    rlang,
+    stringr,
+    tidyr,
+    tidyselect,
+    utils
+Suggests:
+    RPostgres,
+    RSQLite,
+    roxygen2,
+    spelling,
+    testthat (>= 3.0.0),
+    tibble
 Language: en-US
 URL: https://rasmusskytte.github.io/SCDB/
+Config/testthat/edition: 3
