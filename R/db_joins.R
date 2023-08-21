@@ -1,6 +1,6 @@
 #' Generate sql_on statement for na joins
 #' @details
-#'   This function generates a much faster sql statement for NA join compared to dbplyr's _join with na_matches = "na".
+#'   This function generates a much faster SQL statement for NA join compared to dbplyr's _join with na_matches = "na".
 #' @inheritParams left_join
 join_na_sql <- function(by, na_by) {
   sql_on <- ""

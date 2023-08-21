@@ -42,5 +42,5 @@ To perform a cross-join, generating all combinations of \code{x} and \code{y}, s
 Generate sql_on statement for na joins
 }
 \details{
-This function generates a much faster sql statement for NA join compared to dbplyr's _join with na_matches = "na".
+This function generates a much faster SQL statement for NA join compared to dbplyr's _join with na_matches = "na".
 }

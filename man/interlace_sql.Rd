@@ -2,7 +2,7 @@
 % Please edit documentation in R/db_manipulating_functions.R
 \name{interlace_sql}
 \alias{interlace_sql}
-\title{Combine any number of sql queries, where each has their own time axis of
+\title{Combine any number of SQL queries, where each has their own time axis of
 validity (valid_from and valid_until)}
 \usage{
 interlace_sql(tables, by = NULL, colnames = NULL)

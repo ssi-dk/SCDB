@@ -99,7 +99,7 @@ unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALS
 }
 
 
-#' Combine any number of sql queries, where each has their own time axis of
+#' Combine any number of SQL queries, where each has their own time axis of
 #' validity (valid_from and valid_until)
 #'
 #' @description
