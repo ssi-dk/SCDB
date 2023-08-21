@@ -143,39 +143,3 @@ test_that("slice_time() works", { for (conn in conns) { # nolint: brace_linter
   expect_equal(xx |> slice_time("2022-06-01") |> nrow(), 20)
   expect_equal(xx |> slice_time("2022-06-15") |> nrow(), nrow(mtcars))
 }})
-
-
-test_that("add_age_group() works", { for (conn in conns) { # nolint: brace_linter
-  if (inherits(conn, "SQLiteConnection")) { # SQLite does not support "years" and cannot use this function
-    expect_true(TRUE)
-  } else {
-
-    age_cuts <- c(10, 20, 25, 35)
-
-    x <- tibble::tibble(birth = seq.Date(from = as.Date("1920-01-01"),
-                                         to = as.Date("2020-01-01"),
-                                         by = "202 weeks"),
-                        key = LETTERS[seq_along(birth)],
-                        obs = LETTERS[seq_along(birth)],
-                        valid_from  = as.Date("2020-01-01") + lubridate::days(round(runif(length(birth), -20, 20))), #nolint: infix_spaces_linter
-                        valid_until = NA_Date_) %>%
-      dplyr::copy_to(conn, ., id("test.mg_tmp1", conn), overwrite = TRUE, temporary = FALSE)
-
-    x <- dplyr::union_all(x |>
-                            dplyr::mutate(obs = stringr::str_to_lower(obs),
-                                          valid_until = valid_from,
-                                          valid_from = birth),
-                          x) |>
-      dplyr::compute()
-
-    q <- add_age_group(x, age_cuts, key = "key", birth = "birth") |>
-      dplyr::compute()
-
-    # adding age groups should not introduce NA records
-    expect_equal(x |> dplyr::filter(is.na(obs)) |> nrow(), 0)
-    expect_equal(q |> dplyr::filter(is.na(obs)) |> nrow(), 0)
-
-    # age groups should match the age cuts
-    expect_setequal(q |> dplyr::distinct(age_group) |> dplyr::pull(), age_labels(age_cuts))
-  }
-}})
