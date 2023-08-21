@@ -3,7 +3,7 @@
 #' @param .x A DBIConnection or lazy_query object
 #' @return The current schema name, but defaults to "prod" instead of "public"
 #' @examples
-#' conn <- DBI::dbConnect(RSQLite::SQLite())
+#' conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #' dplyr::copy_to(conn, mtcars, name = "mtcars")
 #'
@@ -46,7 +46,7 @@ get_schema <- function(.x) { # nocov start
 #'
 #' @examples
 #'
-#' conn <- DBI::dbConnect(RSQLite::SQLite())
+#' conn <- get_connection(drv = RSQLite::SQLite())
 #' schema_exists(conn, "test")
 #'
 #' @export

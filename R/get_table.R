@@ -12,7 +12,7 @@
 #' @return
 #'   A "lazy" dataframe (tbl_lazy) generated using dbplyr
 #' @examples
-#' conn <- DBI::dbConnect(RSQLite::SQLite())
+#' conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #' dplyr::copy_to(conn, mtcars, name = "mtcars")
 #'
@@ -75,7 +75,7 @@ get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_inf
 #' @param pattern A regex pattern with which to subset the returned tables
 #' @return A data.frame containing table names in the DB
 #' @examples
-#' conn <- DBI::dbConnect(RSQLite::SQLite())
+#' conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #' get_tables(conn)
 #'
@@ -141,7 +141,7 @@ get_tables <- function(conn, pattern = NULL) {
 #' @param until_ts The name of the column in .data specifying valid until time (note: must be unquoted)
 #' @template .data_return
 #' @examples
-#' conn <- DBI::dbConnect(RSQLite::SQLite())
+#' conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #' m <- mtcars |>
 #'   dplyr::mutate(from_ts = dplyr::if_else(dplyr::row_number() > 10,
@@ -178,7 +178,7 @@ slice_time <- function(.data, slice_ts, from_ts = from_ts, until_ts = until_ts) 
 #' @template conn
 #' @template db_table_id
 #' @examples
-#' conn <- DBI::dbConnect(RSQLite::SQLite())
+#' conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #' dplyr::copy_to(conn, mtcars, name = "mtcars")
 #'

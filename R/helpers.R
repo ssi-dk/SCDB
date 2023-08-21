@@ -6,7 +6,7 @@ NULL
 #' @param .data lazy_query to parse
 #' @return The number of records in the object
 #' @examples
-#' conn <- DBI::dbConnect(RSQLite::SQLite())
+#' conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #' m <- dplyr::copy_to(conn, mtcars)
 #' nrow(m) == nrow(mtcars) # TRUE
@@ -27,7 +27,7 @@ nrow <- function(.data) {
 #' @template .data
 #' @return TRUE if .data contains the columns: "checksum", "from_ts", and "until_ts". FALSE otherwise
 #' @examples
-#' conn <- DBI::dbConnect(RSQLite::SQLite())
+#' conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #' dplyr::copy_to(conn, mtcars, name = id("mtcars", conn))
 #' create_table(mtcars, conn, db_table_id = id("mtcars_historical", conn))

@@ -24,9 +24,9 @@
 #' @return
 #'   An object that inherits from DBIConnection driver specified in drv
 #' @examples
-#' conn <- DBI::dbConnect(RSQLite::SQLite())
-#'
-#' close_connection(conn)
+#' \dontrun{
+close_connection(conn)
+#' }
 #'
 #' @seealso [RPostgres::Postgres]
 #' @export
