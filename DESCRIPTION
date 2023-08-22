@@ -41,5 +41,5 @@ Suggests:
     testthat (>= 3.0.0),
     tibble
 Language: en-US
-URL: https://rasmusskytte.github.io/SCDB/
+URL: https://ssi-dk.github.io/SCDB/
 Config/testthat/edition: 3
