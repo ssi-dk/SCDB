@@ -10,7 +10,7 @@ Authors@R:
 	           role = c("aut"),
 	           comment = c(ORCID = "0009-0006-8090-406X")))
 Maintainer: Rasmus Skytte Randløv <rske@ssi.dk>
-Description: This package contains scripts for easily accessing and updating a database of data over time.
+Description: A collection of functions that enable easy access and updating of a database of data over time.
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.2.3
