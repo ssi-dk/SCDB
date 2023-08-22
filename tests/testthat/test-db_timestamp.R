@@ -7,7 +7,7 @@ test_that("db_timestamp produce consistent results", { for (conn in conns) { # n
     db_timestamp(ts_str, conn)
   )
 
-  # Test using NULL conn to trigger
+  # Test default fallback
   expect_identical(
     db_timestamp.default(ts_posix, conn = NULL),
     db_timestamp.default(ts_str, conn = NULL)
