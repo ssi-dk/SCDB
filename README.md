@@ -13,5 +13,5 @@ You can install the development version of `SCDB` from [GitHub](https://github.c
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("ssi-dk/SCDB")
+devtools::install_github("ssi-dk/SCDB")  # Use "ssi-dk/SCDB@*release" to install the latest release version
 ```
