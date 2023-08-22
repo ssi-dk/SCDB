@@ -13,7 +13,7 @@ This package contains scripts for easily accessing and updating a database of da
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://rasmusskytte.github.io/SCDB/}
+  \item \url{https://ssi-dk.github.io/SCDB/}
 }
 
 }
