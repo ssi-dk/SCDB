@@ -5,3 +5,13 @@
 
 
 R package for maintaining data bases with slowly-changing-dimensions
+
+
+## Installation
+
+You can install the development version of `SCDB` from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("ssi-dk/SCDB")
+```
