@@ -121,15 +121,15 @@ test_that("Logger works", { for (conn in conns) { # nolint: brace_linter
     purrr::walk(~ unlink(file.path(log_path, .)))
 }})
 
-test_that("Logger stops if file exists", { for (conn in conns){
+test_that("Logger stops if file exists", { for (conn in conns) { # nolint: brace_linter
   db_tablestring <- "test.SCDB_logger"
   ts <- Sys.time()
   log_path <- tempdir()
   logger <- Logger$new(
-      db_tablestring = db_tablestring,
-      ts = ts,
-      log_table_id = NULL,
-      log_path = log_path
+    db_tablestring = db_tablestring,
+    ts = ts,
+    log_table_id = NULL,
+    log_path = log_path
   )
 
   utils::capture.output(logger$log_info("test message"))

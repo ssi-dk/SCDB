@@ -65,8 +65,8 @@ test_that("get_table() works", { for (conn in conns) { # nolint: brace_linter
   expect_error(get_table(conn, t), regexp = "Table tset.mtcars is not found!")
 }})
 
-test_that("get_table returns list of tables if no table is requested", { for (conn in conns) {
+test_that("get_table returns list of tables if no table is requested", { for (conn in conns) { # nolint: brace_linter
   expect_output(get_table(conn),
-                regexp = "Select one of the following tables:"
+    regexp = "Select one of the following tables:"
   )
 }})
