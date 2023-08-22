@@ -5,7 +5,7 @@
 #' @param db_tablestring A string specifying the table being updated
 #' @template log_table_id
 #' @template log_path
-#' @param ts A timestamp describing the data being processed (`r "\U2260"` current time)
+#' @param ts A timestamp describing the data being processed (not the current time)
 #' @param start_time The time at which data processing was started (defaults to [Sys.time()])
 #'
 #' @export

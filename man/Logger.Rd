@@ -64,7 +64,7 @@ If NULL, no file logs are created.}
 
 \item{\code{warn}}{Show a warning if neither log_table_id or log_path could be determined}
 
-\item{\code{ts}}{A timestamp describing the data being processed (≠ current time)}
+\item{\code{ts}}{A timestamp describing the data being processed (not the current time)}
 
 \item{\code{start_time}}{The time at which data processing was started (defaults to \code{\link[=Sys.time]{Sys.time()}})}
 }
