@@ -209,7 +209,8 @@ test_that("update_snapshot checks table formats", {
         .data = broken_table,
         conn = conn,
         db_table = mtcars_table,
-        timestamp = timestamp
+        timestamp = timestamp,
+        message = "Test a broken input table"
       ),
     regex = "Columns do not match!"))
 
@@ -220,7 +221,8 @@ test_that("update_snapshot checks table formats", {
       tbl(conn, id("test.mtcars", conn = conn), mtcars),
       conn,
       tbl(conn, "__mtcars"),
-      timestamp = timestamp
+      timestamp = timestamp,
+      message = "Test target table not being historical"
     ),
     regex = "Table does not seem like a historical table"
     ))
