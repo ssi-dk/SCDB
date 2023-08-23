@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-This package contains scripts for easily accessing and updating a database of data over time.
+A collection of functions that enable easy access and updating of a database of data over time.
 }
 \seealso{
 Useful links:
