@@ -202,30 +202,34 @@ test_that("update_snapshot checks table formats", {
     timestamp <- Sys.time()
 
     # Test columns not matching
-    broken_table <- copy_to(conn, dplyr::select(mtcars, -"mpg"), name = "mtcars_broken", overwrite = T)
+    broken_table <- copy_to(conn, dplyr::select(mtcars, -"mpg"), name = "mtcars_broken", overwrite = TRUE)
 
-    expect_error(
-      utils::capture.output(update_snapshot(
+    expect_error(utils::capture.output(
+      update_snapshot(
         .data = broken_table,
         conn = conn,
         db_table = mtcars_table,
         timestamp = timestamp,
         message = "Test a broken input table"
       ),
-    regex = "Columns do not match!"))
+      regex = "Columns do not match!"
+    ))
 
-    file.remove(list.files(getOption("SCDB.log_path"), pattern = format(timestamp, "^%Y%m%d.%H%M"), full.names = T))
+    file.remove(list.files(getOption("SCDB.log_path"), pattern = format(timestamp, "^%Y%m%d.%H%M"), full.names = TRUE))
 
     # Test target table not being a historical table
-    expect_error(utils::capture.output(update_snapshot(
-      tbl(conn, id("test.mtcars", conn = conn), mtcars),
-      conn,
-      tbl(conn, "__mtcars"),
-      timestamp = timestamp,
-      message = "Test target table not being historical"
-    ),
-    regex = "Table does not seem like a historical table"
-    ))
+    expect_error(
+      utils::capture.output(
+        update_snapshot(
+          tbl(conn, id("test.mtcars", conn = conn), mtcars),
+          conn,
+          tbl(conn, "__mtcars"),
+          timestamp = timestamp,
+          message = "Test target table not being historical"
+        ),
+        regex = "Table does not seem like a historical table"
+      )
+    )
   }
 
   options(ops)
