@@ -166,12 +166,8 @@ Logger <- R6::R6Class( #nolint: object_name_linter
       return()
     },
 
-    log_format = function(..., tic = NULL, log_type = NULL) {
-      ts_str <- if (is.null(tic)) {
-        self$start_time
-      } else {
-        stringr::str_replace(format(tic, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
-      }
+    log_format = function(..., tic = self$start_time, log_type = NULL) {
+      ts_str <- stringr::str_replace(format(tic, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
 
       return(paste(ts_str, Sys.info()[["user"]], log_type, paste(...), sep = " - "))
     }
