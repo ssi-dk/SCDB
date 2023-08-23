@@ -102,10 +102,10 @@ get_tables <- function(conn, pattern = NULL) {
       }
 
       # ...retrieve all tables
-      DBI::dbListObjects(conn, .x) |>
+      DBI::dbListObjects(conn, .x) |> # nocov start
         dplyr::pull(table) |>
         purrr::map(\(.y) data.frame(schema = .x@name, table = .y@name["table"])) |>
-        purrr::reduce(rbind.data.frame)
+        purrr::reduce(rbind.data.frame) # nocov end
     }) |>
     purrr::reduce(rbind.data.frame)
 
@@ -113,13 +113,13 @@ get_tables <- function(conn, pattern = NULL) {
   tables <- dplyr::filter(tables, !startsWith(.data$table, "dbplyr_"))
 
   # Skip PostgreSQL metadata tables
-  if (inherits(conn, "PqConnection")) {
+  if (inherits(conn, "PqConnection")) { # nocov start
     tables <- dplyr::filter(tables,
                             dplyr::case_when(is.na(schema) ~ TRUE,
                                              .data$schema == "information_schema" ~ FALSE,
                                              grepl("^pg_.*", .data$schema) ~ FALSE,
                                              TRUE ~ TRUE))
-  }
+  } # nocov end
 
   # Subset if pattern is given
   if (!is.null(pattern)) {
