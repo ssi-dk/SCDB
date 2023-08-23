@@ -192,3 +192,39 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
 
   if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
 }})
+
+test_that("update_snapshot checks table formats", {
+
+  ops <- options(SCDB.log_path = tempdir())
+
+  for (conn in conns) {
+    mtcars_table <- tbl(conn, id("__mtcars_historical", conn = conn))
+    timestamp <- Sys.time()
+
+    # Test columns not matching
+    broken_table <- copy_to(conn, dplyr::select(mtcars, -"mpg"), name = "mtcars_broken", overwrite = T)
+
+    expect_error(
+      utils::capture.output(update_snapshot(
+        .data = broken_table,
+        conn = conn,
+        db_table = mtcars_table,
+        timestamp = timestamp
+      ),
+    regex = "Columns do not match!"))
+
+    file.remove(list.files(getOption("SCDB.log_path"), pattern = format(timestamp, "^%Y%m%d.%H%M"), full.names = T))
+
+    # Test target table not being a historical table
+    expect_error(utils::capture.output(update_snapshot(
+      tbl(conn, id("test.mtcars", conn = conn), mtcars),
+      conn,
+      tbl(conn, "__mtcars"),
+      timestamp = timestamp
+    ),
+    regex = "Table does not seem like a historical table"
+    ))
+  }
+
+  options(ops)
+})
