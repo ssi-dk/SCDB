@@ -16,3 +16,6 @@ x \%notin\% table
 \description{
 not-in operator
 }
+\examples{
+2 \%notin\% c(1,3) # TRUE
+}

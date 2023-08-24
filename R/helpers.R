@@ -49,6 +49,8 @@ is.historical <- function(.data) { # nolint: object_name_linter
 
 #' not-in operator
 #' @inheritParams base::match
+#' @examples
+#' 2 %notin% c(1,3) # TRUE
 #' @export
 `%notin%` <- function(x, table) {
   return(!(x %in% table))
