@@ -1,0 +1,4 @@
+# Workflow frrom https://github.com/marketplace/actions/r-dependency-license-report
+
+name: R Dependency License Report
+  uses: insightsengineering/r-license-report@v1.1.1
