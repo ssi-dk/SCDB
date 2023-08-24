@@ -66,7 +66,7 @@ test_that("get_table() works", { for (conn in conns) { # nolint: brace_linter
 }})
 
 test_that("get_table returns list of tables if no table is requested", { for (conn in conns) { # nolint: brace_linter
-  expect_output(get_table(conn),
+  expect_message(get_table(conn),
     regexp = "Select one of the following tables:"
   )
 }})
