@@ -6,6 +6,9 @@
 \usage{
 join_warn()
 }
+\value{
+A warning that *_joins on SQL backends does not match NA by default
+}
 \description{
 A warning to users that SQL does not match on NA by default
 }

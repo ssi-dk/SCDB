@@ -38,6 +38,10 @@ To perform a cross-join, generating all combinations of \code{x} and \code{y}, s
 
 \item{na_by}{columns that should match on NA}
 }
+\value{
+A sql_on statement to join by such that "NA" are matched with "NA"
+given the columns listed in "by" and "na_by"
+}
 \description{
 Generate sql_on statement for na joins
 }

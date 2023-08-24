@@ -20,6 +20,11 @@ right-hand side of the join respectively.}
 
 \item{...}{Other parameters passed onto methods.}
 }
+\value{
+Another \code{tbl_lazy}. Use \code{\link[=show_query]{show_query()}} to see the generated
+query, and use \code{\link[dbplyr:collect.tbl_sql]{collect()}} to execute the query
+and return data to R.
+}
 \description{
 dbplyr and SQLite does not work right now for right_joins it seems
 so we "fix" it by doing a left join on SQLiteConnections

@@ -6,6 +6,9 @@
 \usage{
 join_warn_experimental()
 }
+\value{
+A warning that *_joins are still experimental
+}
 \description{
 A warning to users that SQL does not match on NA by default
 }

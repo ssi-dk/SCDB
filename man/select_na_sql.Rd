@@ -42,6 +42,9 @@ To perform a cross-join, generating all combinations of \code{x} and \code{y}, s
 
 \item{left}{Boolean that control if joins is left (alternatively right) join}
 }
+\value{
+A named character vector indicating which columns to select from x and y
+}
 \description{
 Get colnames to select
 }
