@@ -60,6 +60,7 @@ is.historical <- function(.data) { # nolint: object_name_linter
 #' @param ...   Parameters passed to checkmate::check_*
 #' @param add   `AssertCollection` to add assertions to
 #' @inherit checkmate::assert return
+#' @noRd
 assert_data_like <- function(.data, ..., add = NULL) {
   checkmate::assert( # nolint start: indentation_linter
     checkmate::check_class(.data, "tbl_dbi", ...),
@@ -75,6 +76,7 @@ assert_data_like <- function(.data, ..., add = NULL) {
 #' @param ...       parameters passed to checkmate::check_*
 #' @param add       `AssertCollection` to add assertions to
 #' @inherit checkmate::assert return
+#' @noRd
 assert_timestamp_like <- function(timestamp, ..., add = NULL) {
   checkmate::assert( # nolint start: indentation_linter
     checkmate::check_posixct(timestamp, ...),
@@ -89,6 +91,7 @@ assert_timestamp_like <- function(timestamp, ..., add = NULL) {
 #' @param ...      Parameters passed to checkmate::check_*
 #' @param add      `AssertCollection` to add assertions to
 #' @inherit checkmate::assert return
+#' @noRd
 assert_dbtable_like <- function(db_table, ..., add = NULL) {
   checkmate::assert( # nolint start: indentation_linter
     checkmate::check_character(db_table, pattern = r"{^\w*.\w*$}", ...),
@@ -103,6 +106,7 @@ assert_dbtable_like <- function(db_table, ..., add = NULL) {
 #' @param ...  Parameters passed to checkmate::check_*
 #' @param add `AssertCollection` to add assertions to
 #' @inherit checkmate::assert return
+#' @noRd
 assert_id_like <- function(id, ..., add = NULL) {
   checkmate::assert( # nolint start: indentation_linter
     checkmate::check_character(id, ...),
