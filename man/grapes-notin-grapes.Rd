@@ -13,6 +13,9 @@ x \%notin\% table
 \item{table}{vector or \code{NULL}: the values to be matched against.
     \link[base]{Long vectors} are not supported.}
 }
+\value{
+A logical vector, indicating if a match was NOT located for each element of x
+}
 \description{
 not-in operator
 }

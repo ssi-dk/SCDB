@@ -48,9 +48,10 @@ is.historical <- function(.data) { # nolint: object_name_linter
 
 
 #' not-in operator
-#' @inheritParams base::match
+#' @inheritParams base::`%in%`
 #' @examples
 #' 2 %notin% c(1,3) # TRUE
+#' @return A logical vector, indicating if a match was NOT located for each element of x
 #' @export
 `%notin%` <- function(x, table) {
   return(!(x %in% table))
