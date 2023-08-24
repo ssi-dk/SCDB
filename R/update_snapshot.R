@@ -17,6 +17,7 @@
 #' @return NULL
 #' @seealso filter_keys
 #' @importFrom rlang .data
+#' @return No return value, called for side effects
 #' @export
 update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, message = NULL, tic = Sys.time(), # nolint: cyclocomp_linter
                             log_path = getOption("SCDB.log_path"), log_table_id = getOption("SCDB.log_table_id"),
@@ -255,4 +256,5 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
                    duration = !!format(round(difftime(toc, tic), digits = 2)), success = TRUE)
   logger$log_info("Finished processing for table", db_table_name, tic = toc)
 
+  return(NULL)
 }

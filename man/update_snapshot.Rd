@@ -40,6 +40,9 @@ If NULL, no file logs are created.}
 
 \item{enforce_chronological_order}{A logical that controls whether or not to check if timestamp of update is prior to timestamps in the DB}
 }
+\value{
+No return value, called for side effects
+}
 \description{
 Update a historical table
 }
