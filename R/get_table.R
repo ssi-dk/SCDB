@@ -177,6 +177,7 @@ slice_time <- function(.data, slice_ts, from_ts = from_ts, until_ts = until_ts) 
 #'
 #' @template conn
 #' @template db_table_id
+#' @return TRUE if db_table_id can be parsed to a table found in conn
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
