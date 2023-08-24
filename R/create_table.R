@@ -104,6 +104,12 @@ methods::setMethod("getTableSignature", "NULL", function(.data, conn) {
 #' @template conn
 #' @param log_table A specification of where the logs should exist ("schema.table")
 #' @return A tbl_dbi with the generated (or existing) log table
+#' @examples
+#' conn <- get_connection(drv = RSQLite::SQLite())
+#'
+#' create_logs_if_missing("test.logs", conn)
+#'
+#' close_connection(conn)
 #' @export
 create_logs_if_missing <- function(log_table, conn) {
 

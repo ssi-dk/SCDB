@@ -17,3 +17,10 @@ A tbl_dbi with the generated (or existing) log table
 \description{
 Create a table with the SCDB log structure if it does not exists
 }
+\examples{
+conn <- get_connection(drv = RSQLite::SQLite())
+
+create_logs_if_missing("test.logs", conn)
+
+close_connection(conn)
+}
