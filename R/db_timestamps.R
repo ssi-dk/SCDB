@@ -2,6 +2,7 @@
 #' @name db_timestamp
 #' @param timestamp The timestamp to be transformed to the DB type. Can be character.
 #' @param conn A `DBIConnection` to the DB where the timestamp should be stored
+#' @return The given timestamp converted to a SQL-backend dependent timestamp
 db_timestamp <- function(timestamp, conn) {
   UseMethod("db_timestamp", conn)
 }
