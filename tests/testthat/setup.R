@@ -11,7 +11,7 @@ get_driver <- function(x) {
   parts <- strsplit(x, "::")[[1]]
 
   # Skip unavailable packages
-  if (!do.call(require, args = list(parts[1], quietly = TRUE))) {
+  if (!requireNamespace(parts[1], quietly = TRUE)) {
     return(NULL)
   }
 
