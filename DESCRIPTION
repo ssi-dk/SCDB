@@ -11,6 +11,8 @@ Authors@R:
 	           comment = c(ORCID = "0009-0006-8090-406X")))
 Maintainer: Rasmus Skytte Randløv <rske@ssi.dk>
 Description: A collection of functions that enable easy access and updating of a database of data over time.
+             More specifically, the package facilitates Type-2 history for data-warehouses and provides a number
+             of Quality of life improvements for working on SQL data bases with R.
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.2.3
