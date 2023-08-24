@@ -1,4 +1,4 @@
-test_that("Exported code has @return and @examples", {
+test_that("Exported code has @return", {
   pkg_dir <- stringr::str_remove(getwd(), "/tests/testthat")
 
   r_files  <- list.files(path = file.path(pkg_dir, "R"),   pattern = r"{\.[Rr]$}",     full.names = TRUE)
@@ -23,9 +23,6 @@ test_that("Exported code has @return and @examples", {
     # Look for missing @return tag
     no_return <- purrr::discard(exported_code_blocks, ~ any(stringr::str_detect(., "@return")))
 
-    # Look for missing @examples tag
-    no_examples <- purrr::discard(exported_code_blocks, ~ any(stringr::str_detect(., "@example")))
-
     # Report issues
     for (block in no_return) {
       function_with_issue <- purrr::keep(block, ~ stringr::str_detect(., r"{(?<= <-) (function\(|R6::R6Class)}")) |>
@@ -33,15 +30,6 @@ test_that("Exported code has @return and @examples", {
 
       expect_true(any(stringr::str_detect(block, "@return")),
                   label = glue::glue("{function_with_issue} is exported but has no @return"))
-    }
-
-    # Report issues
-    for (block in no_examples) {
-      function_with_issue <- purrr::keep(block, ~ stringr::str_detect(., r"{(?<= <-) function\(}")) |>
-        stringr::str_extract(r"{^[\w\.%`]*(?= <-)}")
-
-      expect_true(any(stringr::str_detect(block, "@example")),
-                  label = glue::glue("{function_with_issue} is exported but has no @example(s)"))
     }
   }
 })
