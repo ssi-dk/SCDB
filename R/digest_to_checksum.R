@@ -8,6 +8,7 @@
 #' @param exclude Columns to exclude from the checksum generation
 #'
 #' @importFrom rlang `:=`
+#' @return .data with an checksum column added
 #' @export
 digest_to_checksum <- function(.data, col = "checksum", exclude = NULL, warn = TRUE) {
 
@@ -35,6 +36,7 @@ digest_to_checksum <- function(.data, col = "checksum", exclude = NULL, warn = T
 #' @name digest_internal
 #' @template .data
 #' @param col The name of column the checksums will be placed in
+#' @inherit digest_to_checksum return
 digest_to_checksum_internal <- function(.data, col) {
   UseMethod("digest_to_checksum_internal")
 }

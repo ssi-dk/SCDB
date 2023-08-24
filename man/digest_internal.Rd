@@ -27,6 +27,9 @@ digest_to_checksum_native_md5(.data, col)
 
 \item{col}{The name of column the checksums will be placed in}
 }
+\value{
+.data with an checksum column added
+}
 \description{
 Some backends have native md5 support, these use this function
 }

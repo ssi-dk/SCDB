@@ -15,6 +15,9 @@ digest_to_checksum(.data, col = "checksum", exclude = NULL, warn = TRUE)
 
 \item{warn}{Flag to warn if target column already exists in data}
 }
+\value{
+.data with an checksum column added
+}
 \description{
 Computes an MD5 checksum from columns
 }
