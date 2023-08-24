@@ -27,6 +27,9 @@ tidyverse; we support it here for backward compatibility).}
 \item{na.rm}{If \code{TRUE}, missing values will be removed prior to uniting
 each value.}
 }
+\value{
+A tbl_dbi with the specified columns united into a new column named according to "col"
+}
 \description{
 tidyr::unite for tbl_dbi
 }

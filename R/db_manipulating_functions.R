@@ -60,6 +60,7 @@ filter_keys <- function(.data, filters, by = NULL, na_by = NULL) {
 #'
 #' @inheritParams tidyr::unite
 #' @inherit tidyr::unite examples
+#' @return A tbl_dbi with the specified columns united into a new column named according to "col"
 #' @importFrom rlang `:=`
 #' @exportS3Method tidyr::unite tbl_dbi
 unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALSE) { # nolint: object_name_linter
