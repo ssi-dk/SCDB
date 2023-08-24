@@ -3,6 +3,9 @@
 \name{Logger}
 \alias{Logger}
 \title{Logger}
+\value{
+A new instance of the \code{Logger} \link[R6:R6Class]{R6} class.
+}
 \description{
 Create an object for logging database operations
 }

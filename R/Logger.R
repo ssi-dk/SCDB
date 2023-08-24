@@ -10,6 +10,7 @@
 #' @examples
 #' logger <- Logger$new(db_tablestring = "test.table",
 #'                      ts = "2020-01-01 09:00:00")
+#' @return A new instance of the `Logger` [R6][R6::R6Class] class.
 #' @export
 Logger <- R6::R6Class( #nolint: object_name_linter
   classname  = "Logger",
