@@ -6,6 +6,10 @@
 \description{
 Create an object for logging database operations
 }
+\examples{
+logger <- Logger$new(db_tablestring = "test.table",
+                     ts = "2020-01-01 09:00:00")
+}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
