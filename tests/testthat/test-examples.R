@@ -9,7 +9,7 @@ test_that(r"{.Rd files have \examples}", {
   for (file in files_to_check) {
     lines <- readLines(file, warn = FALSE)
 
-    has_example <- any(grepl(r"{\\examples}", lines))
+    has_example <- any(stringr::str_detect(lines, r"{\\example}"))
     expect_true(has_example, label = paste("File:", file))
   }
 })
