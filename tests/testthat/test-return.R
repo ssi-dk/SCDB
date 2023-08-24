@@ -9,7 +9,7 @@ test_that(r"{.Rd files have \Value}", {
   for (file in files_to_check) {
     lines <- readLines(file, warn = FALSE)
 
-    has_value <- any(grepl(r"{\Value}", lines, perl = TRUE))
+    has_value <- any(grepl(r"{\\Value}", lines, perl = TRUE))
     expect_true(has_value, label = paste("File:", file))
   }
 })

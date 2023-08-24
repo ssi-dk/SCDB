@@ -47,8 +47,10 @@ get_schema <- function(.x) { # nocov start
 #' @examples
 #'
 #' conn <- get_connection(drv = RSQLite::SQLite())
+#'
 #' schema_exists(conn, "test")
 #'
+#' close_connection(conn)
 #' @export
 schema_exists <- function(conn, schema) {
 

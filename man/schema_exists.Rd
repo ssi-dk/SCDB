@@ -20,6 +20,8 @@ Test if a schema exists in given connection
 \examples{
 
 conn <- get_connection(drv = RSQLite::SQLite())
+
 schema_exists(conn, "test")
 
+close_connection(conn)
 }
