@@ -21,3 +21,7 @@ digest_to_checksum(.data, col = "checksum", exclude = NULL, warn = TRUE)
 \description{
 Computes an MD5 checksum from columns
 }
+\examples{
+digest_to_checksum(mtcars)
+
+}

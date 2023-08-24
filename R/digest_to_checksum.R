@@ -6,9 +6,11 @@
 #' @param col Name of the column to put the checksums in
 #' @param warn Flag to warn if target column already exists in data
 #' @param exclude Columns to exclude from the checksum generation
+#' @examples
+#' digest_to_checksum(mtcars)
 #'
-#' @importFrom rlang `:=`
 #' @return .data with an checksum column added
+#' @importFrom rlang `:=`
 #' @export
 digest_to_checksum <- function(.data, col = "checksum", exclude = NULL, warn = TRUE) {
 
