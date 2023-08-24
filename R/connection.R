@@ -76,7 +76,8 @@ get_connection <- function(drv = RPostgres::Postgres(),
 
   # Check connection
   if (nrow(get_tables(conn)) == 0) {
-    warn_str <- "No tables found. Check user permissions / database configuration"
+    warn_str <- "No tables found. This typically means malconfigured user permissions.\n"
+    warn_str <- paste0(warn_str, "Check user permissions / database configuration")
     args <- c(as.list(environment()), list(...))
     set_args <- args[names(args) %in% c("dbname", "host", "port", "user", "password")]
 
@@ -84,7 +85,7 @@ get_connection <- function(drv = RPostgres::Postgres(),
       warn_str <- paste0(warn_str, ":\n  ")
       warn_str <- paste0(warn_str, paste(names(set_args), set_args, sep = ": ", collapse = "\n  "))
     }
-    warning(warn_str)
+    message(warn_str)
   }
 
   return(conn)
