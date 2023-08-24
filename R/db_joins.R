@@ -99,6 +99,7 @@ join_warn_experimental <- function() {
 #' If no na_by is given, the function defaults to using dplyr::*_join
 #' @inheritParams dbplyr::join.tbl_sql
 #' @inherit dbplyr::join.tbl_sql return
+#' @inherit dbplyr::join.tbl_sql examples
 #' @param na_by columns that should match on NA
 #' @seealso [dplyr::mutate-joins] which this function wraps.
 #' @seealso [dbplyr::join.tbl_sql] which this function wraps.
