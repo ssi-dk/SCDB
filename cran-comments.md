@@ -8,3 +8,5 @@
 We have added a test to our testing to prevent this issue going forward
 
 2) Printing to console in get_table replaced with a message in the usecase where information needs to be passed to the user
+
+3) We now use requireNamespace intead of checking installed.packages in testing
