@@ -33,15 +33,14 @@ digest_to_checksum <- function(.data, col = "checksum", exclude = NULL, warn = T
   digest_to_checksum_internal(.data, col)
 }
 
-#' @name digest_internal
 #' @template .data
 #' @param col The name of column the checksums will be placed in
 #' @inherit digest_to_checksum return
+#' @noRd
 digest_to_checksum_internal <- function(.data, col) {
   UseMethod("digest_to_checksum_internal")
 }
 
-#' @rdname digest_internal
 #' @importFrom rlang `:=` .data
 digest_to_checksum_internal.default <- function(.data, col) {
 
@@ -67,8 +66,7 @@ digest_to_checksum_internal.default <- function(.data, col) {
 # and remote objects to use their own md5 functions.
 md5 <- openssl::md5
 
-#' Some backends have native md5 support, these use this function
-#' @rdname digest_internal
+# Some backends have native md5 support, these use this function
 #' @importFrom rlang `:=`
 digest_to_checksum_native_md5 <- function(.data, col) {
 
@@ -79,11 +77,8 @@ digest_to_checksum_native_md5 <- function(.data, col) {
   return(.data)
 }
 
-#' @rdname digest_internal
 digest_to_checksum_internal.tbl_PqConnection <- digest_to_checksum_native_md5
 
-#' @rdname digest_internal
 digest_to_checksum_internal.data.frame       <- digest_to_checksum_native_md5
 
-#' @rdname digest_internal
 digest_to_checksum_internal.tibble           <- digest_to_checksum_native_md5
