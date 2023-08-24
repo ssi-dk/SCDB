@@ -6,3 +6,5 @@
 
 1) Exported functions are documented with @return statements (\Value generated in .Rd files)
 We have added a test to our testing to prevent this issue going forward
+
+2) Printing to console in get_table replaced with a message in the usecase where information needs to be passed to the user

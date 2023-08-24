@@ -32,7 +32,7 @@ get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_inf
 
   # Get tables in db schema
   if (is.null(db_table_id)) {
-    print("Select one of the following tables:")
+    message("Select one of the following tables:")
     return(get_tables(conn))
   }
 
