@@ -21,6 +21,9 @@ Convenience function for DBI::Id
 The given db_table_id is parsed using an assumption of "schema.table" syntax into
 a DBI::Id object with corresponding schema (if the conn supports it) and table values.
 }
+\examples{
+id("schema.table")
+}
 \seealso{
 \link[DBI:Id]{DBI::Id} which this function wraps.
 }

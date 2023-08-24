@@ -15,3 +15,8 @@ close_connection(conn)
 \description{
 Close connection to the DB
 }
+\examples{
+conn <- get_connection(drv = RSQLite::SQLite())
+
+close_connection(conn)
+}
