@@ -30,3 +30,17 @@ each value.}
 \description{
 tidyr::unite for tbl_dbi
 }
+\examples{
+df <- expand_grid(x = c("a", NA), y = c("b", NA))
+df
+
+df \%>\% unite("z", x:y, remove = FALSE)
+# To remove missing values:
+df \%>\% unite("z", x:y, na.rm = TRUE, remove = FALSE)
+
+# Separate is almost the complement of unite
+df \%>\%
+  unite("xy", x:y) \%>\%
+  separate(xy, c("x", "y"))
+# (but note `x` and `y` contain now "NA" not NA)
+}

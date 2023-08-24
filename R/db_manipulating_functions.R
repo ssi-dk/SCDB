@@ -59,6 +59,7 @@ filter_keys <- function(.data, filters, by = NULL, na_by = NULL) {
 #' tidyr::unite for tbl_dbi
 #'
 #' @inheritParams tidyr::unite
+#' @inherit tidyr::unite examples
 #' @importFrom rlang `:=`
 #' @exportS3Method tidyr::unite tbl_dbi
 unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALSE) { # nolint: object_name_linter
@@ -115,6 +116,24 @@ unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALS
 #'                  (e.g. c(t1.from = "\<colname\>", t2.until = "\<colname\>").
 #'                  colnames must be named in same order as as given in tables
 #'                  (i.e. t1, t2, t3, ...).
+#' @examples
+#' conn <- get_connection(drv = RSQLite::SQLite())
+#'
+#' t1 <- data.frame(key = c("A", "A", "B"),
+#'                  obs_1   = c(1, 2, 2),
+#'                  valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-01-01")),
+#'                  valid_until = as.Date(c("2021-02-01", "2021-03-01", NA))) %>%
+#'   dplyr::copy_to(conn, ., id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+#'
+#' t2 <- data.frame(key = c("A", "B"),
+#'                 obs_2 = c("a", "b"),
+#'                 valid_from  = as.Date(c("2021-01-01", "2021-01-01")),
+#'                 valid_until = as.Date(c("2021-04-01", NA))) %>%
+#'   dplyr::copy_to(conn, ., id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
+#'
+#' interlace_sql(list(t1, t2), by = "key")
+#'
+#' close_connection(conn)
 #' @return          The combination of input queries with a single, interlaced
 #'                  valid_from / valid_until time axis
 #' @importFrom rlang .data
