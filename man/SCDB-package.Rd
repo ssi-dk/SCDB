@@ -13,7 +13,8 @@ A collection of functions that enable easy access and updating of a database of 
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://ssi-dk.github.io/SCDB/}
+  \item \url{https://github.com/ssi-dk/SCDB}
+  \item Report bugs at \url{https://github.com/ssi-dk/SCDB/issues}
 }
 
 }

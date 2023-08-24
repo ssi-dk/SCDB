@@ -40,5 +40,6 @@ Suggests:
     testthat (>= 3.0.0),
     tibble
 Language: en-US
-URL: https://ssi-dk.github.io/SCDB/
+URL: https://github.com/ssi-dk/SCDB
 Config/testthat/edition: 3
+BugReports: https://github.com/ssi-dk/SCDB/issues
