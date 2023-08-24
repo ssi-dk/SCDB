@@ -103,6 +103,7 @@ methods::setMethod("getTableSignature", "NULL", function(.data, conn) {
 #' Create a table with the SCDB log structure if it does not exists
 #' @template conn
 #' @param log_table A specification of where the logs should exist ("schema.table")
+#' @return A tbl_dbi with the generated (or existing) log table
 #' @export
 create_logs_if_missing <- function(log_table, conn) {
 
