@@ -24,7 +24,6 @@ Imports:
     DBI,
     dplyr,
     glue,
-    magrittr,
     methods,
     openssl,
     purrr,
