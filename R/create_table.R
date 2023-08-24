@@ -7,7 +7,7 @@
 #' @template db_table_id
 #' @param temporary Should the table be created as a temporary table?
 #' @param ... Other arguments passed to [DBI::dbCreateTable()]
-#' @returns Invisibly returns the table as it looks on the destination (or locally if conn is NULL)
+#' @return Invisibly returns the table as it looks on the destination (or locally if conn is NULL)
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
