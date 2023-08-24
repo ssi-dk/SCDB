@@ -13,6 +13,11 @@ assert_dbtable_like(db_table, ..., add = NULL)
 
 \item{add}{\code{AssertCollection} to add assertions to}
 }
+\value{
+Throws an error (or pushes the error message to an 
+  \code{\link[checkmate]{AssertCollection}} if \code{add} is not \code{NULL}) 
+  if the checks fail and invisibly returns \code{TRUE} otherwise.
+}
 \description{
 checkmate helper: Assert for "generic" db_table type
 }
