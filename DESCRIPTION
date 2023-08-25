@@ -40,8 +40,11 @@ Suggests:
     roxygen2,
     spelling,
     testthat (>= 3.0.0),
-    tibble
+    tibble,
+    knitr,
+    rmarkdown
 Language: en-US
 URL: https://github.com/ssi-dk/SCDB
 Config/testthat/edition: 3
 BugReports: https://github.com/ssi-dk/SCDB/issues
+VignetteBuilder: knitr
