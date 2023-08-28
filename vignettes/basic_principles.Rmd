@@ -74,7 +74,7 @@ invisible(capture.output({  # NOTE: update_snapshot does some printing to termin
                   db_table = "mtcars", # the name of the DB table we want to store the data in
                   timestamp = as.POSIXct("2020-01-01 11:00:00"))
 }))
-
+```
 
 ```{r example_1_results}
 # We can access our data using the `get_table` function
@@ -82,6 +82,7 @@ print(get_table(conn, "mtcars"))
 
 # And we can see the time-keeping if we set `include_slice_info = TRUE`
 print(get_table(conn, "mtcars", include_slice_info = TRUE))
+```
 
 ```{r example_2}
 # Let's say that the next day, our data set is now the first 5 of our example data
