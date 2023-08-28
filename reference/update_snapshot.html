@@ -21,13 +21,25 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/basic_principles.html">Basic principles</a>
+  </div>
+</li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/ssi-dk/SCDB/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -35,7 +47,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Update a historical table</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/ssi-dk/SCDB/blob/HEAD/R/update_snapshot.R" class="external-link"><code>R/update_snapshot.R</code></a></small>
       <div class="d-none name"><code>update_snapshot.Rd</code></div>
     </div>
 
@@ -104,10 +116,43 @@ If NULL, no file logs are created.</p></dd>
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>No return value, called for side effects</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>filter_keys</p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_connection.html">get_connection</a></span><span class="op">(</span>drv <span class="op">=</span> <span class="fu">RSQLite</span><span class="fu">::</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html" class="external-link">SQLite</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/copy_to.html" class="external-link">copy_to</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">update_snapshot</span><span class="op">(</span><span class="va">data</span>,</span></span>
+<span class="r-in"><span>                conn <span class="op">=</span> <span class="va">conn</span>,</span></span>
+<span class="r-in"><span>                db_table <span class="op">=</span> <span class="st">"test.mtcars"</span>,</span></span>
+<span class="r-in"><span>                timestamp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>log_path and log_table_id are both NULL and therefore NO LOGGING WILL BE DONE.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-08-28 11:20:18,009 - runner - INFO - Started</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-08-28 11:20:18,009 - runner - INFO - Parsing data for table test.mtcars started</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-08-28 11:20:18,009 - runner - INFO - Given timestamp for table is 2023-08-28 11:20:18.009206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-08-28 11:20:18,593 - runner - INFO - Deactivating records</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-08-28 11:20:18,593 - runner - INFO - After to_remove</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-08-28 11:20:18,744 - runner - INFO - After to_add</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-08-28 11:20:18,745 - runner - INFO - Deactivate records count: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-08-28 11:20:18,745 - runner - INFO - Adding new records</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-08-28 11:20:18,839 - runner - INFO - Insert records count: 32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-08-28 11:20:18,928 - runner - INFO - Finished processing for table test.mtcars</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="close_connection.html">close_connection</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

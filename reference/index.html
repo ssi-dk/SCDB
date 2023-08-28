@@ -21,13 +21,25 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/basic_principles.html">Basic principles</a>
+  </div>
+</li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/ssi-dk/SCDB/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -55,26 +67,6 @@
         <dd>Logger</dd>
       </dl><dl><dt>
           
-          <code><a href="assert_data_like.html">assert_data_like()</a></code> 
-        </dt>
-        <dd>checkmate helper: Assert "generic" data.table/data.frame/tbl/tibble type</dd>
-      </dl><dl><dt>
-          
-          <code><a href="assert_dbtable_like.html">assert_dbtable_like()</a></code> 
-        </dt>
-        <dd>checkmate helper: Assert for "generic" db_table type</dd>
-      </dl><dl><dt>
-          
-          <code><a href="assert_id_like.html">assert_id_like()</a></code> 
-        </dt>
-        <dd>checkmate helper: Assert for "generic" id structure</dd>
-      </dl><dl><dt>
-          
-          <code><a href="assert_timestamp_like.html">assert_timestamp_like()</a></code> 
-        </dt>
-        <dd>checkmate helper: Assert "generic" timestamp type</dd>
-      </dl><dl><dt>
-          
           <code><a href="close_connection.html">close_connection()</a></code> 
         </dt>
         <dd>Close connection to the DB</dd>
@@ -93,11 +85,6 @@
           <code><a href="db_timestamp.html">db_timestamp()</a></code> 
         </dt>
         <dd>Determine the type of timestamps the DB supports</dd>
-      </dl><dl><dt>
-          
-          <code><a href="digest_internal.html">digest_to_checksum_internal()</a></code> <code><a href="digest_internal.html">digest_to_checksum_native_md5()</a></code> 
-        </dt>
-        <dd>Some backends have native md5 support, these use this function</dd>
       </dl><dl><dt>
           
           <code><a href="digest_to_checksum.html">digest_to_checksum()</a></code> 
@@ -151,21 +138,6 @@ validity (valid_from and valid_until)</dd>
         <dd>Checks if table contains historical data</dd>
       </dl><dl><dt>
           
-          <code><a href="join_na_sql.html">join_na_sql()</a></code> 
-        </dt>
-        <dd>Generate sql_on statement for na joins</dd>
-      </dl><dl><dt>
-          
-          <code><a href="join_warn.html">join_warn()</a></code> 
-        </dt>
-        <dd>A warning to users that SQL does not match on NA by default</dd>
-      </dl><dl><dt>
-          
-          <code><a href="join_warn_experimental.html">join_warn_experimental()</a></code> 
-        </dt>
-        <dd>A warning to users that SQL does not match on NA by default</dd>
-      </dl><dl><dt>
-          
           <code><a href="joins.html">inner_join()</a></code> <code><a href="joins.html">left_join()</a></code> <code><a href="joins.html">right_join()</a></code> <code><a href="joins.html">full_join()</a></code> <code><a href="joins.html">semi_join()</a></code> <code><a href="joins.html">anti_join()</a></code> 
         </dt>
         <dd>SQL Joins</dd>
@@ -176,20 +148,9 @@ validity (valid_from and valid_until)</dd>
         <dd>nrow() but also works on remote tables</dd>
       </dl><dl><dt>
           
-          <code><a href="scdb_right_join.html">scdb_right_join()</a></code> 
-        </dt>
-        <dd>dbplyr and SQLite does not work right now for right_joins it seems
-so we "fix" it by doing a left join on SQLiteConnections</dd>
-      </dl><dl><dt>
-          
           <code><a href="schema_exists.html">schema_exists()</a></code> 
         </dt>
         <dd>Test if a schema exists in given connection</dd>
-      </dl><dl><dt>
-          
-          <code><a href="select_na_sql.html">select_na_sql()</a></code> 
-        </dt>
-        <dd>Get colnames to select</dd>
       </dl><dl><dt>
           
           <code><a href="slice_time.html">slice_time()</a></code> 
@@ -202,7 +163,7 @@ so we "fix" it by doing a left join on SQLiteConnections</dd>
         <dd>Test if a table exists in database</dd>
       </dl><dl><dt>
           
-          <code><a href="unite.tbl_dbi.html">unite(<i>&lt;tbl_dbi&gt;</i>)</a></code> 
+          <code><a href="unite.tbl_dbi.html">unite.tbl_dbi()</a></code> 
         </dt>
         <dd>tidyr::unite for tbl_dbi</dd>
       </dl><dl><dt>

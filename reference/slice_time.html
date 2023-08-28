@@ -21,13 +21,25 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/basic_principles.html">Basic principles</a>
+  </div>
+</li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
-      <ul class="navbar-nav"></ul></div>
+      <ul class="navbar-nav"><li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/ssi-dk/SCDB/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div>
 
     
   </div>
@@ -35,7 +47,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Slices a data object based on time / date</h1>
-      
+      <small class="dont-index">Source: <a href="https://github.com/ssi-dk/SCDB/blob/HEAD/R/get_table.R" class="external-link"><code>R/get_table.R</code></a></small>
       <div class="d-none name"><code>slice_time.Rd</code></div>
     </div>
 
@@ -76,12 +88,6 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_connection.html">get_connection</a></span><span class="op">(</span>drv <span class="op">=</span> <span class="fu">RSQLite</span><span class="fu">::</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html" class="external-link">SQLite</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>No tables found. Check user permissions / database configuration:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   host: NULL</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   port: NULL</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   dbname: </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   user: NULL</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   password: NULL</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="va">mtcars</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>from_ts <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">10</span>,</span></span>
@@ -91,12 +97,28 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/copy_to.html" class="external-link">copy_to</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">m</span>, name <span class="op">=</span> <span class="st">"mtcars"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu">tbl</span><span class="op">(</span><span class="va">conn</span>, <span class="fu"><a href="id.html">id</a></span><span class="op">(</span><span class="st">"mtcars"</span>, <span class="va">conn</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">conn</span>, <span class="fu"><a href="id.html">id</a></span><span class="op">(</span><span class="st">"mtcars"</span>, <span class="va">conn</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> `id()` was deprecated in dplyr 0.5.0 and is now defunct.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use `vctrs::vec_group_id()` instead.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="nrow.html">nrow</a></span><span class="op">(</span><span class="fu">slice_time</span><span class="op">(</span><span class="va">q</span>, <span class="st">"2020-01-01"</span><span class="op">)</span><span class="op">)</span> <span class="co"># 10</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 32</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> Assertion failed. One of the following must apply:</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  * checkmate::check_class(.data): Must inherit from class 'tbl_dbi',</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  * but has class 'function'</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  * checkmate::check_data_frame(.data): Must be of type 'data.frame',</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  * not 'closure'</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  * checkmate::check_data_table(.data): Must be a data.table, not</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  * closure</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  * checkmate::check_tibble(.data): Must be a tibble, not closure</span>
 <span class="r-in"><span><span class="fu"><a href="nrow.html">nrow</a></span><span class="op">(</span><span class="fu">slice_time</span><span class="op">(</span><span class="va">q</span>, <span class="st">"2021-01-01"</span><span class="op">)</span><span class="op">)</span> <span class="co"># nrow(mtcars)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 32</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> Assertion failed. One of the following must apply:</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  * checkmate::check_class(.data): Must inherit from class 'tbl_dbi',</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  * but has class 'function'</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  * checkmate::check_data_frame(.data): Must be of type 'data.frame',</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  * not 'closure'</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  * checkmate::check_data_table(.data): Must be a data.table, not</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  * closure</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  * checkmate::check_tibble(.data): Must be a tibble, not closure</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="close_connection.html">close_connection</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span></span>
 </code></pre></div>
