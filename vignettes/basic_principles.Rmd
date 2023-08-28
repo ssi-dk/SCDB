@@ -21,7 +21,7 @@ options("SCDB.log_path" = tempdir())
 
 The basic principle of the SCDB package is to enable the user to easily implement and maintain a database of time-versioned data.
 
-In practice, this is done by labelling each record in the data with three additional fields:
+In practice, this is done by labeling each record in the data with three additional fields:
 
 * checksum: An md5 hash of information stored the record
 * from\_ts: the timestamp at which the record was introduced to the dataset
