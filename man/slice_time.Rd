@@ -32,7 +32,7 @@ m <- mtcars |>
 
 dplyr::copy_to(conn, m, name = "mtcars")
 
-q <- tbl(conn, id("mtcars", conn))
+q <- dplyr::tbl(conn, id("mtcars", conn))
 
 nrow(slice_time(q, "2020-01-01")) # 10
 nrow(slice_time(q, "2021-01-01")) # nrow(mtcars)

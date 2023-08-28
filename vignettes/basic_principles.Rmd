@@ -14,10 +14,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, include = FALSE}
+```{r setup}
 library(SCDB)
 options("SCDB.log_path" = tempdir())
-options(warn=-1) # at least until get_connection does not give a warning on a new sqlite connection
 ```
 
 The basic principle of the SCDB package is to enable the user to easily implement and maintain a data base of time-versioned data.
@@ -28,7 +27,7 @@ In practice, this is done by labeling each record in the data with three additio
 * from_ts: the timestamp at which the record was first introduced to the dataset
 * until_ts: the timestamp at which the record was first removed from the dataset
 
-Note: This strategy of time versioning is often called "type 2" historics.
+Note: This strategy of time versioning is often called "type 2" history.
 
 
 The SCDB package provides the function `update_snapshot` to handle the insertion and deactivation of records using this strategy, and it further includes several functions to improve the Quality-of-life for working with data base data.

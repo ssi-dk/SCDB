@@ -151,7 +151,7 @@ get_tables <- function(conn, pattern = NULL) {
 #'
 #' dplyr::copy_to(conn, m, name = "mtcars")
 #'
-#' q <- tbl(conn, id("mtcars", conn))
+#' q <- dplyr::tbl(conn, id("mtcars", conn))
 #'
 #' nrow(slice_time(q, "2020-01-01")) # 10
 #' nrow(slice_time(q, "2021-01-01")) # nrow(mtcars)
@@ -163,7 +163,6 @@ slice_time <- function(.data, slice_ts, from_ts = from_ts, until_ts = until_ts) 
   # Check arguments
   assert_data_like(.data)
   assert_timestamp_like(slice_ts)
-  # TODO: How to checkmate from_ts and until_ts?
 
   from_ts  <- dplyr::enquo(from_ts)
   until_ts <- dplyr::enquo(until_ts)

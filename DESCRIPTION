@@ -17,15 +17,13 @@ License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE, r6 = TRUE)
-Depends:
-    tidyverse,
-    dbplyr,
-    lubridate
 Imports:
     checkmate,
     DBI,
+    dbplyr,
     dplyr,
     glue,
+    lubridate,
     methods,
     openssl,
     purrr,
@@ -33,16 +31,17 @@ Imports:
     stringr,
     tidyr,
     tidyselect,
+    tidyverse,
     utils
 Suggests:
+    knitr,
+    rmarkdown,
     RPostgres,
     RSQLite,
     roxygen2,
     spelling,
     testthat (>= 3.0.0),
-    tibble,
-    knitr,
-    rmarkdown
+    tibble
 Language: en-US
 URL: https://github.com/ssi-dk/SCDB
 Config/testthat/edition: 3

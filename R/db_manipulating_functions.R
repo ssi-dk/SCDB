@@ -59,7 +59,20 @@ filter_keys <- function(.data, filters, by = NULL, na_by = NULL) {
 #' tidyr::unite for tbl_dbi
 #'
 #' @inheritParams tidyr::unite
-#' @inherit tidyr::unite examples
+#' @examples
+#' library(tidyr, warn.conflicts = FALSE)
+#' df <- expand_grid(x = c("a", NA), y = c("b", NA))
+#' df
+
+#' df %>% unite("z", x:y, remove = FALSE)
+#' # To remove missing values:
+#* df %>% unite("z", x:y, na.rm = TRUE, remove = FALSE)
+#'
+#' # Separate is almost the complement of unite
+#' df %>%
+#'   unite("xy", x:y) %>%
+#'   separate(xy, c("x", "y"))
+# (but note `x` and `y` contain now "NA" not NA)
 #' @return A tbl_dbi with the specified columns united into a new column named according to "col"
 #' @importFrom rlang `:=`
 #' @exportS3Method tidyr::unite tbl_dbi
@@ -123,14 +136,14 @@ unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALS
 #' t1 <- data.frame(key = c("A", "A", "B"),
 #'                  obs_1   = c(1, 2, 2),
 #'                  valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-01-01")),
-#'                  valid_until = as.Date(c("2021-02-01", "2021-03-01", NA))) %>%
-#'   dplyr::copy_to(conn, ., id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+#'                  valid_until = as.Date(c("2021-02-01", "2021-03-01", NA)))
+#' t1 <- dplyr::copy_to(conn, t1, id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
 #'
 #' t2 <- data.frame(key = c("A", "B"),
-#'                 obs_2 = c("a", "b"),
-#'                 valid_from  = as.Date(c("2021-01-01", "2021-01-01")),
-#'                 valid_until = as.Date(c("2021-04-01", NA))) %>%
-#'   dplyr::copy_to(conn, ., id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
+#'                  obs_2 = c("a", "b"),
+#'                  valid_from  = as.Date(c("2021-01-01", "2021-01-01")),
+#'                  valid_until = as.Date(c("2021-04-01", NA)))
+#' t2 <- dplyr::copy_to(conn, t2, id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
 #'
 #' interlace_sql(list(t1, t2), by = "key")
 #'

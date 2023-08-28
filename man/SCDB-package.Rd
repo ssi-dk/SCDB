@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A collection of functions that enable easy access and updating of a database of data over time. More specifically, the package facilitates Type-2 history for data-warehouses and provides a number of Quality of life improvements for working on SQL data bases with R.
+A collection of functions that enable easy access and updating of a database of data over time. More specifically, the package facilitates Type-2 history for data-warehouses and provides a number of Quality of life improvements for working on SQL databases with R.
 }
 \seealso{
 Useful links:

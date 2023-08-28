@@ -73,7 +73,7 @@ If no na_by is given, the function defaults to using dplyr::}_join
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
-
+library(dbplyr, warn.conflicts = FALSE)
 band_db <- tbl_memdb(dplyr::band_members)
 instrument_db <- tbl_memdb(dplyr::band_instruments)
 band_db \%>\% left_join(instrument_db) \%>\% show_query()

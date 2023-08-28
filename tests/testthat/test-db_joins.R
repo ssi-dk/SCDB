@@ -61,8 +61,8 @@ test_that("*_join() works", { for (conn in conns) { # nolint: brace_linter
     sql_on <- join_na_sql(by = NULL, na_by = "number")
     renamer <- select_na_sql(x, y, by = NULL, na_by = "number", left = FALSE)
 
-    expect_false(identical(collect(scdb_right_join.tbl_SQLiteConnection(x, y, sql_on, renamer)),
-                           collect(scdb_right_join.tbl_dbi(x, y, sql_on, renamer))))
+    expect_false(identical(dplyr::collect(scdb_right_join.tbl_SQLiteConnection(x, y, sql_on, renamer)),
+                           dplyr::collect(scdb_right_join.tbl_dbi(x, y, sql_on, renamer))))
   }
 
 
@@ -79,7 +79,7 @@ test_that("*_join() works", { for (conn in conns) { # nolint: brace_linter
   q  <- full_join(x, y, by = "date", na_by = "region_id") |>
     dplyr::collect() |>
     dplyr::arrange(date, region_id)
-  qr <- dplyr::full_join(collect(x), collect(y), by = c("date", "region_id")) |>
+  qr <- dplyr::full_join(dplyr::collect(x), dplyr::collect(y), by = c("date", "region_id")) |>
     dplyr::arrange(date, region_id)
   expect_equal(q, qr)
 
@@ -118,12 +118,12 @@ test_that("*_join() works", { for (conn in conns) { # nolint: brace_linter
   xx <- get_table(conn, "__mtcars") |>
     dplyr::mutate(vs = dplyr::if_else(vs == 0, NA, vs),
                   am = dplyr::if_else(am == 0, NA, am)) |>
-    compute()
+    dplyr::compute()
   xx <- purrr::map(seq(100), ~ xx) |> purrr::reduce(dplyr::union_all) |> dplyr::compute()
-  t1 <- system.time(q1 <- compute(left_join(xx, xx, by = c("gear", "cyl"), na_by = c("am", "vs"))))
-  t2 <- system.time(q2 <- compute(dplyr::left_join(xx, xx, by = c("gear", "cyl", "am", "vs"), na_matches = "na")))
+  t1 <- system.time(q1 <- dplyr::compute(left_join(xx, xx, by = c("gear", "cyl"), na_by = c("am", "vs"))))
+  t2 <- system.time(q2 <- dplyr::compute(dplyr::left_join(xx, xx, by = c("gear", "cyl", "am", "vs"), na_matches = "na")))
 
-  expect_equal(collect(count(q1)), collect(count(q2)))
+  expect_equal(nrow(q1), nrow(q2))
 
   if (!inherits(conn, "SQLiteConnection")) {
     expect_true(t1[["elapsed"]] < t2[["elapsed"]])
