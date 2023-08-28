@@ -23,12 +23,13 @@ The basic principle of the SCDB package is to enable the user to easily implemen
 
 In practice, this is done by labelling each record in the data with three additional fields:
 
-* checksum: the md5 hash of the information stored in the record
+* checksum: An md5 hash of information stored the record
 * from\_ts: the timestamp at which the record was introduced to the dataset
 * until\_ts: the timestamp at which the record was removed from the dataset
 
-Note: This strategy of time versioning is often called "type 2" history.
+This strategy of time versioning is often called "type 2" history.
 
+Note that identical records may be removed and introduced more than once; for example, in a table of names and addresses, a person may change their address (or name) back to a previous value.
 
 The SCDB package provides the function `update_snapshot` to handle the insertion and deactivation of records using this strategy.
 It further includes several functions to improve the Quality of life for working with database data.
@@ -73,7 +74,6 @@ invisible(capture.output({  # NOTE: update_snapshot does some printing to termin
                   db_table = "mtcars", # the name of the DB table we want to store the data in
                   timestamp = as.POSIXct("2020-01-01 11:00:00"))
 }))
-```
 
 
 ```{r example_1_results}
@@ -82,7 +82,6 @@ print(get_table(conn, "mtcars"))
 
 # And we can see the time-keeping if we set `include_slice_info = TRUE`
 print(get_table(conn, "mtcars", include_slice_info = TRUE))
-```
 
 ```{r example_2}
 # Let's say that the next day, our data set is now the first 5 of our example data
