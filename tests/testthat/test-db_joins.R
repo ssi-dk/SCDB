@@ -120,8 +120,12 @@ test_that("*_join() works", { for (conn in conns) { # nolint: brace_linter
                   am = dplyr::if_else(am == 0, NA, am)) |>
     dplyr::compute()
   xx <- purrr::map(seq(100), ~ xx) |> purrr::reduce(dplyr::union_all) |> dplyr::compute()
-  t1 <- system.time(q1 <- dplyr::compute(left_join(xx, xx, by = c("gear", "cyl"), na_by = c("am", "vs"))))
-  t2 <- system.time(q2 <- dplyr::compute(dplyr::left_join(xx, xx, by = c("gear", "cyl", "am", "vs"), na_matches = "na")))
+  t1 <- system.time(q1 <- dplyr::compute(left_join(xx, xx,
+                                                   by = c("gear", "cyl"),
+                                                   na_by = c("am", "vs"))))
+  t2 <- system.time(q2 <- dplyr::compute(dplyr::left_join(xx, xx,
+                                                          by = c("gear", "cyl", "am", "vs"),
+                                                          na_matches = "na")))
 
   expect_equal(nrow(q1), nrow(q2))
 

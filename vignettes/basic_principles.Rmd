@@ -39,7 +39,7 @@ Below we illustrate how this looks in practice:
 # If this is, e.g., a PostgreSQL data base already running on the machine, connection
 # can be done after the configuration of a .pgpass file.
 # For this example, we use an on-disk SQLite db to showcase.
-conn <- get_connection(drv = RSQLite::SQLite()) 
+conn <- get_connection(drv = RSQLite::SQLite())
 # NOTE: Had the PostgreSQL DB been configured, we would not need to pass any args to get_connection()
 
 # Our example data is mtcars with rownames converted to a column and only the first hp column of mtcars
@@ -53,13 +53,13 @@ data <- head(example_data, 3)
 
 # We then store these data in the data base using update_snapshot
 invisible(capture.output({  # NOTE: update_snapshot does some printing to terminal
-  update_snapshot(.data = data, 
-                conn = conn,
-                db_table = "mtcars", # the name of the DB table we want to store the data in
-                timestamp = as.POSIXct("2020-01-01 11:00:00")) 
+  update_snapshot(.data = data,
+                  conn = conn,
+                  db_table = "mtcars", # the name of the DB table we want to store the data in
+                  timestamp = as.POSIXct("2020-01-01 11:00:00"))
 }))
 
-# We can access our data using the `get_table` function 
+# We can access our data using the `get_table` function
 print(get_table(conn, "mtcars"))
 
 # And we can see the time-keeping if we set `include_slice_info = TRUE`
@@ -71,11 +71,11 @@ print(get_table(conn, "mtcars", include_slice_info = TRUE))
 data <- head(example_data, 5)
 
 # We then store these data in the data base using update_snapshot
-invisible(capture.output({ 
-  update_snapshot(.data = data, 
-                conn = conn,
-                db_table = "mtcars", # the name of the DB table we want to store the data in
-                timestamp = as.POSIXct("2020-01-02 12:00:00")) 
+invisible(capture.output({
+  update_snapshot(.data = data,
+                  conn = conn,
+                  db_table = "mtcars", # the name of the DB table we want to store the data in
+                  timestamp = as.POSIXct("2020-01-02 12:00:00"))
 }))
 
 # We can again access our data using the `get_table` function and see the latest available data
@@ -95,10 +95,10 @@ data <- head(example_data, 5) |>
 
 # We then store these data in the data base using update_snapshot
 invisible(capture.output({
-  update_snapshot(.data = data, 
-                conn = conn,
-                db_table = "mtcars", # the name of the DB table we want to store the data in
-                timestamp = as.POSIXct("2020-01-03 10:00:00")) 
+  update_snapshot(.data = data,
+                  conn = conn,
+                  db_table = "mtcars", # the name of the DB table we want to store the data in
+                  timestamp = as.POSIXct("2020-01-03 10:00:00"))
 }))
 
 # We can again access our data using the `get_table` function and see that the currently available data
@@ -108,5 +108,4 @@ print(get_table(conn, "mtcars"))
 
 # To see the full history of our table, we can set `slice_ts = NULL`
 print(get_table(conn, "mtcars", slice_ts = NULL))
-
 ```
