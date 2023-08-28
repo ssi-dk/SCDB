@@ -94,7 +94,7 @@ get_tables <- function(conn, pattern = NULL) {
 
   # purrr::map fails if .x is empty, avoid by returning early
   if (nrow(objs) == 0) {
-    if (!(inherits(conn, "SQLiteConnection") & conn@dbname %in% c("", ":memory:"))) {
+    if (!(inherits(conn, "SQLiteConnection") && conn@dbname %in% c("", ":memory:"))) {
       warning("No tables found. Check user permissions / database configuration")
     }
     return(data.frame(schema = character(), table = character()))
