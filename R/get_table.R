@@ -93,7 +93,12 @@ get_tables <- function(conn, pattern = NULL) {
     dplyr::select(table)
 
   # purrr::map fails if .x is empty, avoid by returning early
-  if (nrow(objs) == 0) return(data.frame(schema = character(), table = character()))
+  if (nrow(objs) == 0) {
+    if (!(inherits(conn, "SQLiteConnection") & conn@dbname %in% c("", ":memory:"))) {
+      warning("No tables found. Check user permissions / database configuration")
+    }
+    return(data.frame(schema = character(), table = character()))
+  }
 
   tables <- objs$table |> # For each top-level object (except tables)...
     purrr::map(\(.x) {
