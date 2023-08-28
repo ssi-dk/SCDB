@@ -19,24 +19,24 @@ library(SCDB)
 options("SCDB.log_path" = tempdir())
 ```
 
-The basic principle of the SCDB package is to enable the user to easily implement and maintain a data base of time-versioned data.
+The basic principle of the SCDB package is to enable the user to easily implement and maintain a database of time-versioned data.
 
-In practice, this is done by labeling each record in the data with three additional information:
+In practice, this is done by labeling each record in the data with three additional fields:
 
 * checksum: the md5 hash of the information stored in the record
-* from_ts: the timestamp at which the record was first introduced to the dataset
-* until_ts: the timestamp at which the record was first removed from the dataset
+* from_ts: the timestamp at which the record was introduced to the dataset
+* until_ts: the timestamp at which the record was removed from the dataset
 
 Note: This strategy of time versioning is often called "type 2" history.
 
 
-The SCDB package provides the function `update_snapshot` to handle the insertion and deactivation of records using this strategy, and it further includes several functions to improve the Quality-of-life for working with data base data.
+The SCDB package provides the function `update_snapshot` to handle the insertion and deactivation of records using this strategy, and it further includes several functions to improve the Quality-of-life for working with database data.
 
 Below we illustrate how this looks in practice:
 
 ```{r Example}
-# First we connect to our data base.
-# If this is, e.g., a PostgreSQL data base already running on the machine, connection
+# First we connect to our database.
+# If this is, e.g., a PostgreSQL database already running on the machine, connection
 # can be done after the configuration of a .pgpass file.
 # For this example, we use an on-disk SQLite db to showcase.
 conn <- get_connection(drv = RSQLite::SQLite())
@@ -51,7 +51,7 @@ example_data <- dplyr::copy_to(conn, example_data, overwrite = TRUE)
 # the first 3 records of mtcars
 data <- head(example_data, 3)
 
-# We then store these data in the data base using update_snapshot
+# We then store these data in the database using update_snapshot
 invisible(capture.output({  # NOTE: update_snapshot does some printing to terminal
   update_snapshot(.data = data,
                   conn = conn,
@@ -67,10 +67,10 @@ print(get_table(conn, "mtcars", include_slice_info = TRUE))
 
 
 
-# Lets say that the next day, our data set is now the first 5 of our example data
+# Let's say that the next day, our data set is now the first 5 of our example data
 data <- head(example_data, 5)
 
-# We then store these data in the data base using update_snapshot
+# We then store these data in the database using update_snapshot
 invisible(capture.output({
   update_snapshot(.data = data,
                   conn = conn,
@@ -93,7 +93,7 @@ print(get_table(conn, "mtcars", slice_ts = "2020-01-01 11:00:00"))
 data <- head(example_data, 5) |>
   dplyr::mutate(hp = ifelse(dplyr::row_number() == 1, hp / 2, hp))
 
-# We then store these data in the data base using update_snapshot
+# We then store these data in the database using update_snapshot
 invisible(capture.output({
   update_snapshot(.data = data,
                   conn = conn,
