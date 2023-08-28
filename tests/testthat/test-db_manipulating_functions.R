@@ -1,9 +1,9 @@
 test_that("unite.tbl_dbi() works", { for (conn in conns) { # nolint: brace_linter
 
   q <- get_table(conn, "__mtcars") |> utils::head(1)
-  qu_remove <- unite(dplyr::select(q, mpg, hp), "new_column", mpg, hp) |> dplyr::compute()
-  qu        <- unite(dplyr::select(q, mpg, hp), "new_column", mpg, hp, remove = FALSE) |> dplyr::compute()
-  qu_alt    <- unite(dplyr::select(q, mpg, hp), "new_column", "mpg", "hp", remove = FALSE) |> dplyr::compute()
+  qu_remove <- tidyr::unite(dplyr::select(q, mpg, hp), "new_column", mpg, hp) |> dplyr::compute()
+  qu        <- tidyr::unite(dplyr::select(q, mpg, hp), "new_column", mpg, hp, remove = FALSE) |> dplyr::compute()
+  qu_alt    <- tidyr::unite(dplyr::select(q, mpg, hp), "new_column", "mpg", "hp", remove = FALSE) |> dplyr::compute()
 
   expect_s3_class(qu_remove, "tbl_dbi")
   expect_s3_class(qu,        "tbl_dbi")
@@ -13,7 +13,7 @@ test_that("unite.tbl_dbi() works", { for (conn in conns) { # nolint: brace_linte
   expect_equal(colnames(qu),     c("new_column", "mpg", "hp"))
   expect_equal(colnames(qu_alt), c("new_column", "mpg", "hp"))
 
-  expect_equal(collect(qu), collect(qu_alt))
+  expect_equal(dplyr::collect(qu), dplyr::collect(qu_alt))
 
   # tidyr::unite has some quirky (and FUN!!! behavior) that we are forced to match here
   # specifically, the input "col" is converted to a symbol, so we have to do escape-bullshit
@@ -70,11 +70,11 @@ test_that("interlace_sql() works", { for (conn in conns) { # nolint: brace_linte
                    valid_until = as.Date(c("2021-04-01", NA))) %>%
     dplyr::copy_to(conn, ., id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
 
-  t_ref <- tibble(key = c("A", "A", "A", "B"),
-                  obs_1   = c(1, 2, NA, 2),
-                  obs_2   = c("a", "a", "a", "b"),
-                  valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-03-01", "2021-01-01")),
-                  valid_until = as.Date(c("2021-02-01", "2021-03-01", "2021-04-01", NA))) %>%
+  t_ref <- data.frame(key = c("A", "A", "A", "B"),
+                      obs_1   = c(1, 2, NA, 2),
+                      obs_2   = c("a", "a", "a", "b"),
+                      valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-03-01", "2021-01-01")),
+                      valid_until = as.Date(c("2021-02-01", "2021-03-01", "2021-04-01", NA))) %>%
     dplyr::copy_to(conn, ., id("test.SCDB_tmp3", conn), overwrite = TRUE, temporary = FALSE)
 
   expect_identical(interlace_sql(list(t1, t2), by = "key") |> dplyr::collect(),
@@ -153,7 +153,7 @@ test_that("filter_keys() works", { for (conn in conns) { # nolint: brace_linter
 
   filter <- x |> utils::head(10) |> dplyr::select(name)
   expect_equal(x |>
-                 dplyr::filter(name %in% !!pull(filter, name)) |>
+                 dplyr::filter(name %in% !!dplyr::pull(filter, name)) |>
                  dplyr::collect(),
                x |>
                  filter_keys(filter) |>

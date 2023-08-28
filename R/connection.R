@@ -81,6 +81,11 @@ get_connection <- function(drv = RPostgres::Postgres(),
 #' Close connection to the DB
 #'
 #' @template conn
+#' @inherit DBI::dbDisconnect return
+#' @examples
+#' conn <- get_connection(drv = RSQLite::SQLite())
+#'
+#' close_connection(conn)
 #' @export
 close_connection <- function(conn) {
 
@@ -91,11 +96,15 @@ close_connection <- function(conn) {
 }
 
 
-# TODO: id as S3 vs in-function
 #' Convenience function for DBI::Id
 #'
 #' @template db_table_id
 #' @template conn
+#' @details The given db_table_id is parsed using an assumption of "schema.table" syntax into
+#'  a DBI::Id object with corresponding schema (if the conn supports it) and table values.
+#' @return A DBI::Id object parsed from db_table_id
+#' @examples
+#' id("schema.table")
 #' @seealso [DBI::Id] which this function wraps.
 #' @export
 id <- function(db_table_id, conn = NULL) {

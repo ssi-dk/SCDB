@@ -11,12 +11,17 @@ schema_exists(conn, schema)
 
 \item{schema}{A character string giving the schema name}
 }
+\value{
+TRUE if the given schema is found on conn
+}
 \description{
 Test if a schema exists in given connection
 }
 \examples{
 
 conn <- get_connection(drv = RSQLite::SQLite())
+
 schema_exists(conn, "test")
 
+close_connection(conn)
 }

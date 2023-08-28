@@ -4,7 +4,7 @@
 \alias{unite.tbl_dbi}
 \title{tidyr::unite for tbl_dbi}
 \usage{
-\method{unite}{tbl_dbi}(data, col, ..., sep = "_", remove = TRUE, na.rm = FALSE)
+unite.tbl_dbi(data, col, ..., sep = "_", remove = TRUE, na.rm = FALSE)
 }
 \arguments{
 \item{data}{A data frame.}
@@ -27,6 +27,21 @@ tidyverse; we support it here for backward compatibility).}
 \item{na.rm}{If \code{TRUE}, missing values will be removed prior to uniting
 each value.}
 }
+\value{
+A tbl_dbi with the specified columns united into a new column named according to "col"
+}
 \description{
 tidyr::unite for tbl_dbi
+}
+\examples{
+library(tidyr, warn.conflicts = FALSE)
+df <- expand_grid(x = c("a", NA), y = c("b", NA))
+df
+df \%>\% unite("z", x:y, remove = FALSE)
+# To remove missing values:
+
+# Separate is almost the complement of unite
+df \%>\%
+  unite("xy", x:y) \%>\%
+  separate(xy, c("x", "y"))
 }

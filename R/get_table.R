@@ -32,7 +32,7 @@ get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_inf
 
   # Get tables in db schema
   if (is.null(db_table_id)) {
-    print("Select one of the following tables:")
+    message("Select one of the following tables:")
     return(get_tables(conn))
   }
 
@@ -95,7 +95,7 @@ get_tables <- function(conn, pattern = NULL) {
   # purrr::map fails if .x is empty, avoid by returning early
   if (nrow(objs) == 0) {
     if (!(inherits(conn, "SQLiteConnection") && conn@dbname %in% c("", ":memory:"))) {
-      warning("No tables found. Check user permissions / database configuration")
+      warning("No tables found. Check user privileges / database configuration")
     }
     return(data.frame(schema = character(), table = character()))
   }
@@ -156,7 +156,7 @@ get_tables <- function(conn, pattern = NULL) {
 #'
 #' dplyr::copy_to(conn, m, name = "mtcars")
 #'
-#' q <- tbl(conn, id("mtcars", conn))
+#' q <- dplyr::tbl(conn, id("mtcars", conn))
 #'
 #' nrow(slice_time(q, "2020-01-01")) # 10
 #' nrow(slice_time(q, "2021-01-01")) # nrow(mtcars)
@@ -168,7 +168,6 @@ slice_time <- function(.data, slice_ts, from_ts = from_ts, until_ts = until_ts) 
   # Check arguments
   assert_data_like(.data)
   assert_timestamp_like(slice_ts)
-  # TODO: How to checkmate from_ts and until_ts?
 
   from_ts  <- dplyr::enquo(from_ts)
   until_ts <- dplyr::enquo(until_ts)
@@ -182,6 +181,7 @@ slice_time <- function(.data, slice_ts, from_ts = from_ts, until_ts = until_ts) 
 #'
 #' @template conn
 #' @template db_table_id
+#' @return TRUE if db_table_id can be parsed to a table found in conn
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'

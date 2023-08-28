@@ -43,12 +43,14 @@ get_schema <- function(.x) { # nocov start
 #' Test if a schema exists in given connection
 #' @param schema A character string giving the schema name
 #' @template conn
-#'
+#' @return TRUE if the given schema is found on conn
 #' @examples
 #'
 #' conn <- get_connection(drv = RSQLite::SQLite())
+#'
 #' schema_exists(conn, "test")
 #'
+#' close_connection(conn)
 #' @export
 schema_exists <- function(conn, schema) {
 

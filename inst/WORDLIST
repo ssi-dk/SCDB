@@ -7,6 +7,7 @@ CMD
 Codecov
 colname
 conn
+cr
 
 dbConnect
 dbi
@@ -20,6 +21,9 @@ drv
 
 ip
 
+Kimball
+
+Margy
 md
 
 na

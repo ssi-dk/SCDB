@@ -58,6 +58,11 @@ To perform a cross-join, generating all combinations of \code{x} and \code{y}, s
 
 \item{...}{Other parameters passed onto methods.}
 }
+\value{
+Another \code{tbl_lazy}. Use \code{\link[=show_query]{show_query()}} to see the generated
+query, and use \code{\link[dbplyr:collect.tbl_sql]{collect()}} to execute the query
+and return data to R.
+}
 \description{
 Overloads the dplyr \emph{_join to accept an na_by argument.
 By default, joining using SQL does not match on NA / NULL.
@@ -65,6 +70,31 @@ dbplyr has the option "na_matches = na" to match on NA / NULL but this is very i
 This function does the matching more efficiently.
 If a column contains NA / NULL, give the argument to na_by to match during the join
 If no na_by is given, the function defaults to using dplyr::}_join
+}
+\examples{
+library(dplyr, warn.conflicts = FALSE)
+library(dbplyr, warn.conflicts = FALSE)
+band_db <- tbl_memdb(dplyr::band_members)
+instrument_db <- tbl_memdb(dplyr::band_instruments)
+band_db \%>\% left_join(instrument_db) \%>\% show_query()
+
+# Can join with local data frames by setting copy = TRUE
+band_db \%>\%
+  left_join(dplyr::band_instruments, copy = TRUE)
+
+# Unlike R, joins in SQL don't usually match NAs (NULLs)
+db <- memdb_frame(x = c(1, 2, NA))
+label <- memdb_frame(x = c(1, NA), label = c("one", "missing"))
+db \%>\% left_join(label, by = "x")
+# But you can activate R's usual behaviour with the na_matches argument
+db \%>\% left_join(label, by = "x", na_matches = "na")
+
+# By default, joins are equijoins, but you can use `sql_on` to
+# express richer relationships
+db1 <- memdb_frame(x = 1:5)
+db2 <- memdb_frame(x = 1:3, y = letters[1:3])
+db1 \%>\% left_join(db2) \%>\% show_query()
+db1 \%>\% left_join(db2, sql_on = "LHS.x < RHS.x") \%>\% show_query()
 }
 \seealso{
 \link[dplyr:mutate-joins]{dplyr::mutate-joins} which this function wraps.

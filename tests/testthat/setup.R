@@ -31,18 +31,18 @@ if (length(conns[names(conns) != "SQLite"]) == 0) {
 }
 
 
-cat("#####\n",
-    "Following drivers will be tested:\n",
-    sprintf("  %s (%s)\n", conn_list[names(conns)], names(conns)),
-    sep = "")
+message("#####\n",
+        "Following drivers will be tested:\n",
+        sprintf("  %s (%s)\n", conn_list[names(conns)], names(conns)),
+        sep = "")
 
 unavailable_drv <- conn_list[which(!names(conn_list) %in% names(conns))]
 if (length(unavailable_drv) > 0) {
-  cat("\nFollowing drivers were not found and will NOT be tested:\n",
-      sprintf("  %s (%s)\n", conn_list[names(unavailable_drv)], names(unavailable_drv)),
-      sep = "")
+  message("\nFollowing drivers were not found and will NOT be tested:\n",
+          sprintf("  %s (%s)\n", conn_list[names(unavailable_drv)], names(unavailable_drv)),
+          sep = "")
 }
-cat("#####\n")
+message("#####\n")
 
 
 # Start with some clean up

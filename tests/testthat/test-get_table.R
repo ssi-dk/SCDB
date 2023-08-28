@@ -4,7 +4,7 @@ test_that("get_tables() works", { for (conn in conns) { # nolint: brace_linter
   expect_s3_class(tables, "data.frame")
 
   db_table_names <- tables |>
-    unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
+    tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
     dplyr::pull(db_table_name)
 
   expect_true("test.mtcars" %in% db_table_names)
@@ -12,7 +12,7 @@ test_that("get_tables() works", { for (conn in conns) { # nolint: brace_linter
 
   # Now test with pattern
   db_table_names <- get_tables(conn, pattern = "__mt") |>
-    unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
+    tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
     dplyr::pull(db_table_name)
 
 
@@ -38,7 +38,7 @@ test_that("table_exists() works", { for (conn in conns) { # nolint: brace_linter
 
 test_that("get_table() works", { for (conn in conns) { # nolint: brace_linter
 
-  mtcars_t <- tibble(mtcars |> mutate(name = rownames(mtcars)))
+  mtcars_t <- tibble::tibble(mtcars |> dplyr::mutate(name = rownames(mtcars)))
 
   # Lets try different ways to read __mtcars
   expect_mapequal(get_table(conn, "__mtcars") |> dplyr::collect(), mtcars_t)
@@ -66,7 +66,7 @@ test_that("get_table() works", { for (conn in conns) { # nolint: brace_linter
 }})
 
 test_that("get_table returns list of tables if no table is requested", { for (conn in conns) { # nolint: brace_linter
-  expect_output(get_table(conn),
+  expect_message(get_table(conn),
     regexp = "Select one of the following tables:"
   )
 }})
