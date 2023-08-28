@@ -83,6 +83,7 @@ testthat::test_that("get_tables skips warning about no tables found in temporary
         get_driver(getElement(conn_list, names(.x)), dbname = temp_db_file)
       })()
 
-    expect_warning(get_tables(conn2))
+    expect_warning(get_tables(conn2),
+                   regex = "No tables found")
   }
 })
