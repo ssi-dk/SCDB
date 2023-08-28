@@ -5,19 +5,19 @@ conn_list <- list(
   "PostgreSQL" = "RPostgres::Postgres"
 )
 
-get_driver <- function(x) {
+get_driver <- function(x = character(), ...) {
   if (!grepl(".*::.*", x)) stop("Package must be specified with namespace (e.g. RSQLite::SQLite)!\n",
                                 "Received: ", x)
   parts <- strsplit(x, "::")[[1]]
 
   # Skip unavailable packages
-  if (!requireNamespace(parts[1])) {
+  if (!requireNamespace(parts[1], quietly = TRUE)) {
     return(NULL)
   }
 
   drv <- getExportedValue(parts[1], parts[2])
 
-  tryCatch(suppressWarnings(get_connection(drv = drv())),  # We expect a warning if no tables are found
+  tryCatch(suppressWarnings(get_connection(drv = drv(), ...)),  # We expect a warning if no tables are found
            error = function(e) {
              NULL # Return NULL, if we cannot connect
            })
