@@ -3,8 +3,15 @@
 \name{Logger}
 \alias{Logger}
 \title{Logger}
+\value{
+A new instance of the \code{Logger} \link[R6:R6Class]{R6} class.
+}
 \description{
 Create an object for logging database operations
+}
+\examples{
+logger <- Logger$new(db_tablestring = "test.table",
+                     ts = "2020-01-01 09:00:00")
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

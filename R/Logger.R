@@ -7,7 +7,10 @@
 #' @template log_path
 #' @param ts A timestamp describing the data being processed (not the current time)
 #' @param start_time The time at which data processing was started (defaults to [Sys.time()])
-#'
+#' @examples
+#' logger <- Logger$new(db_tablestring = "test.table",
+#'                      ts = "2020-01-01 09:00:00")
+#' @return A new instance of the `Logger` [R6][R6::R6Class] class.
 #' @export
 Logger <- R6::R6Class( #nolint: object_name_linter
   classname  = "Logger",
@@ -128,6 +131,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter
       )
     }
   ),
+
   private = list(
 
     db_tablestring = NULL,
@@ -153,7 +157,6 @@ Logger <- R6::R6Class( #nolint: object_name_linter
       return(filename)
     },
 
-
     generate_log_entry = function() {
       # Create a row for log in question
       if (!is.null(self$log_tbl)) {
@@ -166,12 +169,8 @@ Logger <- R6::R6Class( #nolint: object_name_linter
       return()
     },
 
-    log_format = function(..., tic = NULL, log_type = NULL) {
-      ts_str <- if (is.null(tic)) {
-        self$start_time
-      } else {
-        stringr::str_replace(format(tic, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
-      }
+    log_format = function(..., tic = self$start_time, log_type = NULL) {
+      ts_str <- stringr::str_replace(format(tic, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
 
       return(paste(ts_str, Sys.info()[["user"]], log_type, paste(...), sep = " - "))
     }

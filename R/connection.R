@@ -74,19 +74,6 @@ get_connection <- function(drv = RPostgres::Postgres(),
                          bigint = "integer", # R has poor integer64 integration, which is the default return
                          check_interrupts = TRUE)
 
-  # Check connection
-  if (nrow(get_tables(conn)) == 0) {
-    warn_str <- "No tables found. Check user permissions / database configuration"
-    args <- c(as.list(environment()), list(...))
-    set_args <- args[names(args) %in% c("dbname", "host", "port", "user", "password")]
-
-    if (length(set_args) > 0) {
-      warn_str <- paste0(warn_str, ":\n  ")
-      warn_str <- paste0(warn_str, paste(names(set_args), set_args, sep = ": ", collapse = "\n  "))
-    }
-    warning(warn_str)
-  }
-
   return(conn)
 }
 
@@ -94,6 +81,11 @@ get_connection <- function(drv = RPostgres::Postgres(),
 #' Close connection to the DB
 #'
 #' @template conn
+#' @inherit DBI::dbDisconnect return
+#' @examples
+#' conn <- get_connection(drv = RSQLite::SQLite())
+#'
+#' close_connection(conn)
 #' @export
 close_connection <- function(conn) {
 
@@ -104,11 +96,15 @@ close_connection <- function(conn) {
 }
 
 
-# TODO: id as S3 vs in-function
 #' Convenience function for DBI::Id
 #'
 #' @template db_table_id
 #' @template conn
+#' @details The given db_table_id is parsed using an assumption of "schema.table" syntax into
+#'  a DBI::Id object with corresponding schema (if the conn supports it) and table values.
+#' @return A DBI::Id object parsed from db_table_id
+#' @examples
+#' id("schema.table")
 #' @seealso [DBI::Id] which this function wraps.
 #' @export
 id <- function(db_table_id, conn = NULL) {

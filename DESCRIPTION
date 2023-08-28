@@ -11,35 +11,40 @@ Authors@R:
 	           comment = c(ORCID = "0009-0006-8090-406X")))
 Maintainer: Rasmus Skytte Randløv <rske@ssi.dk>
 Description: A collection of functions that enable easy access and updating of a database of data over time.
+             More specifically, the package facilitates type-2 history[1] for data-warehouses and provides a number
+             of Quality of life improvements for working on SQL databases with R.\cr
+             [1] see Ralph Kimball and Margy Ross (2013, ISBN 9781118530801).
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE, r6 = TRUE)
-Depends:
-    tidyverse,
-    dbplyr,
-    lubridate
 Imports:
     checkmate,
     DBI,
+    dbplyr,
     dplyr,
     glue,
-    magrittr,
+    lubridate,
     methods,
     openssl,
     purrr,
     rlang,
+    RSQLite,
     stringr,
     tidyr,
     tidyselect,
+    tidyverse,
     utils
 Suggests:
+    knitr,
+    rmarkdown,
     RPostgres,
-    RSQLite,
     roxygen2,
     spelling,
     testthat (>= 3.0.0),
     tibble
 Language: en-US
-URL: https://ssi-dk.github.io/SCDB/
+URL: https://github.com/ssi-dk/SCDB
 Config/testthat/edition: 3
+BugReports: https://github.com/ssi-dk/SCDB/issues
+VignetteBuilder: knitr

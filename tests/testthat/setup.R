@@ -5,21 +5,19 @@ conn_list <- list(
   "PostgreSQL" = "RPostgres::Postgres"
 )
 
-get_driver <- function(x) {
+get_driver <- function(x = character(), ...) {
   if (!grepl(".*::.*", x)) stop("Package must be specified with namespace (e.g. RSQLite::SQLite)!\n",
                                 "Received: ", x)
   parts <- strsplit(x, "::")[[1]]
 
-  pkgs <- installed.packages()[, "Package"]
-
   # Skip unavailable packages
-  if (!parts[1] %in% pkgs) {
+  if (!requireNamespace(parts[1], quietly = TRUE)) {
     return(NULL)
   }
 
   drv <- getExportedValue(parts[1], parts[2])
 
-  tryCatch(suppressWarnings(get_connection(drv = drv())),  # We expect a warning if no tables are found
+  tryCatch(suppressWarnings(get_connection(drv = drv(), ...)),  # We expect a warning if no tables are found
            error = function(e) {
              NULL # Return NULL, if we cannot connect
            })
@@ -33,18 +31,18 @@ if (length(conns[names(conns) != "SQLite"]) == 0) {
 }
 
 
-cat("#####\n",
-    "Following drivers will be tested:\n",
-    sprintf("  %s (%s)\n", conn_list[names(conns)], names(conns)),
-    sep = "")
+message("#####\n",
+        "Following drivers will be tested:\n",
+        sprintf("  %s (%s)\n", conn_list[names(conns)], names(conns)),
+        sep = "")
 
 unavailable_drv <- conn_list[which(!names(conn_list) %in% names(conns))]
 if (length(unavailable_drv) > 0) {
-  cat("\nFollowing drivers were not found and will NOT be tested:\n",
-      sprintf("  %s (%s)\n", conn_list[names(unavailable_drv)], names(unavailable_drv)),
-      sep = "")
+  message("\nFollowing drivers were not found and will NOT be tested:\n",
+          sprintf("  %s (%s)\n", conn_list[names(unavailable_drv)], names(unavailable_drv)),
+          sep = "")
 }
-cat("#####\n")
+message("#####\n")
 
 
 # Start with some clean up

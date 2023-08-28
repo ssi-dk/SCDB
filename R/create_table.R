@@ -7,7 +7,7 @@
 #' @template db_table_id
 #' @param temporary Should the table be created as a temporary table?
 #' @param ... Other arguments passed to [DBI::dbCreateTable()]
-#' @returns Invisibly returns the table as it looks on the destination (or locally if conn is NULL)
+#' @return Invisibly returns the table as it looks on the destination (or locally if conn is NULL)
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
@@ -103,6 +103,13 @@ methods::setMethod("getTableSignature", "NULL", function(.data, conn) {
 #' Create a table with the SCDB log structure if it does not exists
 #' @template conn
 #' @param log_table A specification of where the logs should exist ("schema.table")
+#' @return A tbl_dbi with the generated (or existing) log table
+#' @examples
+#' conn <- get_connection(drv = RSQLite::SQLite())
+#'
+#' create_logs_if_missing("test.logs", conn)
+#'
+#' close_connection(conn)
 #' @export
 create_logs_if_missing <- function(log_table, conn) {
 

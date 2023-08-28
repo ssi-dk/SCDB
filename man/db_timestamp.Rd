@@ -17,6 +17,16 @@ db_timestamp(timestamp, conn)
 
 \item{conn}{A \code{DBIConnection} to the DB where the timestamp should be stored}
 }
+\value{
+The given timestamp converted to a SQL-backend dependent timestamp
+}
 \description{
 Determine the type of timestamps the DB supports
+}
+\examples{
+conn <- get_connection(drv = RSQLite::SQLite())
+
+db_timestamp(Sys.time(), conn)
+
+close_connection(conn)
 }

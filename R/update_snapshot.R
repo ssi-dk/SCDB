@@ -14,7 +14,18 @@
 #' @template log_table_id
 #' @param enforce_chronological_order
 #'   A logical that controls whether or not to check if timestamp of update is prior to timestamps in the DB
-#' @return NULL
+#' @return No return value, called for side effects
+#' @examples
+#' conn <- get_connection(drv = RSQLite::SQLite())
+#'
+#' data <- dplyr::copy_to(conn, mtcars)
+#'
+#' update_snapshot(data,
+#'                 conn = conn,
+#'                 db_table = "test.mtcars",
+#'                 timestamp = Sys.time())
+#'
+#' close_connection(conn)
 #' @seealso filter_keys
 #' @importFrom rlang .data
 #' @export
@@ -255,4 +266,5 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
                    duration = !!format(round(difftime(toc, tic), digits = 2)), success = TRUE)
   logger$log_info("Finished processing for table", db_table_name, tic = toc)
 
+  return(NULL)
 }

@@ -11,6 +11,9 @@ table_exists(conn, db_table_id)
 
 \item{db_table_id}{A \code{\link[DBI:Id]{DBI::Id()}} object or a character string readable by \link{id}.}
 }
+\value{
+TRUE if db_table_id can be parsed to a table found in conn
+}
 \description{
 Test if a table exists in database
 }

@@ -39,7 +39,7 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
                      dplyr::collect() |>
                      dplyr::arrange(wt, qsec),
-                   .data |> collect() |> dplyr::arrange(wt, qsec))
+                   .data |> dplyr::collect() |> dplyr::arrange(wt, qsec))
   expect_equal(nrow(slice_time(target, "2022-10-03 09:00:00")),
                nrow(mtcars))
 
@@ -49,7 +49,8 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
   expect_true(length(log_file) == 1)
   expect_true(file.info(file.path(log_path, log_file))$size > 0)
   expect_true(nrow(get_table(conn, "test.SCDB_logs")) == 1)
-  expect_true(nrow(filter(get_table(conn, "test.SCDB_logs"), if_any(.cols = !c(log_file), .fns = ~ !is.na(.)))) == 1)
+  expect_true(nrow(dplyr::filter(get_table(conn, "test.SCDB_logs"),
+                                 dplyr::if_any(.cols = !c(log_file), .fns = ~ !is.na(.)))) == 1)
 
 
   # We now attempt to do another update on the same date
@@ -73,7 +74,7 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
                      dplyr::collect() |>
                      dplyr::arrange(wt, qsec),
-                   .data |> collect() |> dplyr::arrange(wt, qsec))
+                   .data |> dplyr::collect() |> dplyr::arrange(wt, qsec))
   expect_equal(nrow(slice_time(target, "2022-10-03 09:00:00")),
                nrow(mtcars))
 
@@ -107,7 +108,7 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
                      dplyr::collect() |>
                      dplyr::arrange(wt, qsec),
-                   .data |> collect() |> dplyr::arrange(wt, qsec))
+                   .data |> dplyr::collect() |> dplyr::arrange(wt, qsec))
   expect_equal(nrow(slice_time(target, "2022-10-02 09:00:00")),
                nrow(mtcars))
 
@@ -120,9 +121,9 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
   t1 <- data.frame(col1 = c("A", "B", "C"), col2 = c(1,        NA_real_, NA_real_))
   t2 <- data.frame(col1 = c("A", "B", "C"), col2 = c(1,        2,        3))
 
-  t0 <- copy_to(conn, t0, id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE)
-  t1 <- copy_to(conn, t1, id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE)
-  t2 <- copy_to(conn, t2, id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE)
+  t0 <- dplyr::copy_to(conn, t0, id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE)
+  t1 <- dplyr::copy_to(conn, t1, id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE)
+  t2 <- dplyr::copy_to(conn, t2, id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE)
 
   utils::capture.output(update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01",
                                         log_path = NULL, log_table_id = log_table_id))
@@ -173,7 +174,7 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
                                         log_path = NULL, log_table_id = log_table_id,
                                         enforce_chronological_order = FALSE))
   expect_identical(dplyr::collect(t1) |> dplyr::arrange(col1),
-                   dplyr::collect(get_table(conn, "test.SCDB_tmp1", slice_ts = "2022-02-01")) |> arrange(col1))
+                   dplyr::collect(get_table(conn, "test.SCDB_tmp1", slice_ts = "2022-02-01")) |> dplyr::arrange(col1))
 
   t_ref <-
     tibble::tibble(col1     = c("A",          "B",          "A",          "C",          "B",          "C"),
@@ -198,11 +199,11 @@ test_that("update_snapshot checks table formats", {
   ops <- options(SCDB.log_path = tempdir())
 
   for (conn in conns) {
-    mtcars_table <- tbl(conn, id("__mtcars_historical", conn = conn))
+    mtcars_table <- dplyr::tbl(conn, id("__mtcars_historical", conn = conn))
     timestamp <- Sys.time()
 
     # Test columns not matching
-    broken_table <- copy_to(conn, dplyr::select(mtcars, -"mpg"), name = "mtcars_broken", overwrite = TRUE)
+    broken_table <- dplyr::copy_to(conn, dplyr::select(mtcars, -"mpg"), name = "mtcars_broken", overwrite = TRUE)
 
     expect_error(utils::capture.output(
       update_snapshot(
@@ -221,9 +222,9 @@ test_that("update_snapshot checks table formats", {
     expect_error(
       utils::capture.output(
         update_snapshot(
-          tbl(conn, id("test.mtcars", conn = conn), mtcars),
+          dplyr::tbl(conn, id("test.mtcars", conn = conn), mtcars),
           conn,
-          tbl(conn, "__mtcars"),
+          dplyr::tbl(conn, "__mtcars"),
           timestamp = timestamp,
           message = "Test target table not being historical"
         ),

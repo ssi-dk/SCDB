@@ -40,8 +40,23 @@ If NULL, no file logs are created.}
 
 \item{enforce_chronological_order}{A logical that controls whether or not to check if timestamp of update is prior to timestamps in the DB}
 }
+\value{
+No return value, called for side effects
+}
 \description{
 Update a historical table
+}
+\examples{
+conn <- get_connection(drv = RSQLite::SQLite())
+
+data <- dplyr::copy_to(conn, mtcars)
+
+update_snapshot(data,
+                conn = conn,
+                db_table = "test.mtcars",
+                timestamp = Sys.time())
+
+close_connection(conn)
 }
 \seealso{
 filter_keys
