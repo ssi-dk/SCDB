@@ -15,24 +15,25 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup, results = 'hide'}
-library(SCDB)
+suppressPackageStartupMessages(library(SCDB))
 options("SCDB.log_path" = tempdir())
 ```
 
 The basic principle of the SCDB package is to enable the user to easily implement and maintain a database of time-versioned data.
 
-In practice, this is done by labeling each record in the data with three additional fields:
+In practice, this is done by labelling each record in the data with three additional fields:
 
 * checksum: the md5 hash of the information stored in the record
-* from_ts: the timestamp at which the record was introduced to the dataset
-* until_ts: the timestamp at which the record was removed from the dataset
+* from\_ts: the timestamp at which the record was introduced to the dataset
+* until\_ts: the timestamp at which the record was removed from the dataset
 
 Note: This strategy of time versioning is often called "type 2" history.
 
 
-The SCDB package provides the function `update_snapshot` to handle the insertion and deactivation of records using this strategy, and it further includes several functions to improve the Quality-of-life for working with database data.
+The SCDB package provides the function `update_snapshot` to handle the insertion and deactivation of records using this strategy.
+It further includes several functions to improve the Quality of life for working with database data.
 
-Below we illustrate how this looks in practice:
+A simple example is shown below:
 
 ```{r example_conn}
 # First we connect to our database.
@@ -145,6 +146,11 @@ invisible(capture.output({
 # (with the changed hp value for Mazda RX4)
 print(get_table(conn, "mtcars"))
 
-# To see the full history of our table, we can set `slice_ts = NULL`
+
+# When `slice_ts` is set to `NULL`, the full history of the table is returned
 print(get_table(conn, "mtcars", slice_ts = NULL))
+
+# Setting include_slice_info to TRUE also returns the checksum, from_ts and until_ts fields.
+# This is most useful when viewing data from a specific point in time
+print(get_table(conn, "mtcars", slice_ts = "2020-01-03 06:30:00", include_slice_info = TRUE))
 ```
