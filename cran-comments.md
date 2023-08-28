@@ -12,6 +12,8 @@ Likewise, we now ensure .Rd files have examples
 
   3) We now use requireNamespace intead of checking installed.packages in testing
 
+  4) We have added a reference to the description for the methods used
+
 * Additionally, we have made minor changes to the package.
 
   1) Added a vignette to describe functionality
