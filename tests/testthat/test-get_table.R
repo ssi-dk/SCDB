@@ -70,3 +70,20 @@ test_that("get_table returns list of tables if no table is requested", { for (co
     regexp = "Select one of the following tables:"
   )
 }})
+
+testthat::test_that("get_tables skips warning about no tables found in temporary databases", {
+  for (conn in conns) {
+    if (!inherits(conn, "SQLiteConnection")) next
+
+    temp_db_file <- tempfile(pattern = "SCDB_test", fileext = ".SQLite")
+
+    # Clone the current connection
+    conn2 <- Filter(\(.x) identical(.x, conn), conns) |>
+      (\(.x) {
+        get_driver(getElement(conn_list, names(.x)), dbname = temp_db_file)
+      })()
+
+    expect_warning(get_tables(conn2),
+                   regex = "No tables found")
+  }
+})
