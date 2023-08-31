@@ -152,7 +152,8 @@ test_that("Logger console output may be suppressed", {
   ts <- Sys.time()
   log_path <- tempdir()
 
-  # Test output_to_console == FALSE by default
+  # First test cases with output_to_console == FALSE
+  # Here, only print when explicitly stated
   logger <- Logger$new(
     db_tablestring = db_tablestring,
     ts = ts,
@@ -161,30 +162,40 @@ test_that("Logger console output may be suppressed", {
     output_to_console = FALSE
   )
 
+  # In lieu of testthat::expect_no_output...
   expect_identical(
     utils::capture.output(logger$log_info("Whoops! This should not have been printed!"), type = "output"),
     character(0)
   )
   expect_identical(
-    utils::capture.output(logger$log_info("Whoops! This should not have been printed either!", split = FALSE),
+    utils::capture.output(logger$log_info("Whoops! This should not have been printed either!",
+                                          output_to_console = FALSE),
                           type = "output"),
     character(0)
   )
 
   expect_output(
-    logger$log_info("This line should be printed", split = TRUE),
+    logger$log_info("This line should be printed",
+                    output_to_console = TRUE),
     regex = "This line should be printed$"
   )
 
+  # ...and now, only suppress printing when explicitly stated
   logger$output_to_console <- TRUE
 
   expect_output(
     logger$log_info("This line should be printed"),
     regex = "This line should be printed$"
   )
+  expect_output(
+    logger$log_info("This line should also be printed",
+                    output_to_console = TRUE),
+    regex = "This line should also be printed$"
+  )
 
   expect_identical(
-    utils::capture.output(logger$log_info("Whoops! This should not have been printed at all!", split = FALSE),
+    utils::capture.output(logger$log_info("Whoops! This should not have been printed at all!",
+                                          output_to_console = FALSE),
                           type = "output"),
     character(0)
   )
