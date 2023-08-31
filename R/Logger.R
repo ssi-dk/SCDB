@@ -32,7 +32,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter
     #' The time at which data processing was started.
     start_time = NULL,
 
-    #' @field print_to_console (`logical(1)`)\cr
+    #' @field output_to_console (`logical(1)`)\cr
     #' Should the Logger output to console?
     #' This can always be overridden by Logger$log_info(split = FALSE).
     output_to_console = NULL,
@@ -95,6 +95,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter
     #' Write a line to log file
     #' @param ... `r log_dots <- "One or more character strings to be concatenated"; log_dots`
     #' @param tic The timestamp used by the log entry (default Sys.time())
+    #' @param split Should the log line also be printed to console?
     #' @param log_type `r log_type <- "A character string which describes the severity of the log message"; log_type`
     log_info = function(..., tic = Sys.time(), split = self$output_to_console, log_type = "INFO") {
 
