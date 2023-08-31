@@ -34,7 +34,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
     #' @field output_to_console (`logical(1)`)\cr
     #' Should the Logger output to console?
-    #' This can always be overridden by Logger$log_info(split = FALSE).
+    #' This can always be overridden by Logger$log_info(..., output_to_console = FALSE).
     output_to_console = NULL,
 
     #' @description

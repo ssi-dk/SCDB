@@ -29,7 +29,7 @@ The time at which data processing was started.}
 
 \item{\code{output_to_console}}{(\code{logical(1)})\cr
 Should the Logger output to console?
-This can always be overridden by Logger$log_info(split = FALSE).}
+This can always be overridden by Logger$log_info(..., output_to_console = FALSE).}
 }
 \if{html}{\out{</div>}}
 }
