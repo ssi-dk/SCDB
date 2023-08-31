@@ -146,3 +146,44 @@ test_that("Logger stops if file exists", { for (conn in conns) { # nolint: brace
 
   file.remove(file.path(log_path, logger$log_filename))
 }})
+
+test_that("Logger console output may be suppressed", {
+  db_tablestring <- "test.SCDB_logger"
+  ts <- Sys.time()
+  log_path <- tempdir()
+
+  # Test output_to_console == FALSE by default
+  logger <- Logger$new(
+    db_tablestring = db_tablestring,
+    ts = ts,
+    log_table_id = NULL,
+    log_path = log_path,
+    output_to_console = FALSE
+  )
+
+  expect_identical(
+    utils::capture.output(logger$log_info("Whoops! This should not have been printed!"), type = "output"),
+    character(0)
+  )
+  expect_identical(
+    utils::capture.output(logger$log_info("Whoops! This should not have been printed either!", split = FALSE), type = "output"),
+    character(0)
+  )
+
+  expect_output(
+    logger$log_info("This line should be printed", split = TRUE),
+    regex = "This line should be printed$"
+  )
+
+  logger$output_to_console <- TRUE
+
+  expect_output(
+    logger$log_info("This line should be printed"),
+    regex = "This line should be printed$"
+  )
+
+  expect_identical(
+    utils::capture.output(logger$log_info("Whoops! This should not have been printed at all!", split = FALSE), type = "output"),
+    character(0)
+  )
+})
