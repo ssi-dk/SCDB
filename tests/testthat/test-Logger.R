@@ -166,7 +166,8 @@ test_that("Logger console output may be suppressed", {
     character(0)
   )
   expect_identical(
-    utils::capture.output(logger$log_info("Whoops! This should not have been printed either!", split = FALSE), type = "output"),
+    utils::capture.output(logger$log_info("Whoops! This should not have been printed either!", split = FALSE),
+                          type = "output"),
     character(0)
   )
 
@@ -183,7 +184,8 @@ test_that("Logger console output may be suppressed", {
   )
 
   expect_identical(
-    utils::capture.output(logger$log_info("Whoops! This should not have been printed at all!", split = FALSE), type = "output"),
+    utils::capture.output(logger$log_info("Whoops! This should not have been printed at all!", split = FALSE),
+                          type = "output"),
     character(0)
   )
 })
