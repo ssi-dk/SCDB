@@ -95,18 +95,27 @@ Logger <- R6::R6Class( #nolint: object_name_linter
     #' Write a line to log file
     #' @param ... `r log_dots <- "One or more character strings to be concatenated"; log_dots`
     #' @param tic The timestamp used by the log entry (default Sys.time())
-    #' @param split Should the log line also be printed to console?
+    #' @param output_to_console Should the line be written to console?
     #' @param log_type `r log_type <- "A character string which describes the severity of the log message"; log_type`
-    log_info = function(..., tic = Sys.time(), split = self$output_to_console, log_type = "INFO") {
+    log_info = function(..., tic = Sys.time(), output_to_console = self$output_to_console, log_type = "INFO") {
 
-      # Writes log file (if set)
-      if (!is.null(self$log_path)) {
-        sink(file = file.path(self$log_path, self$log_filename), split = split, append = TRUE, type = "output")
+      format_str <- private$log_format(..., tic = tic, log_type = log_type)
+
+      # Write log file (if set)
+      if (is.null(self$log_path)) {
+        fp <- nullfile()
+      } else {
+        fp <- file.path(self$log_path, self$log_filename)
       }
 
+      sink(
+        file = fp,
+        split = isTRUE(output_to_console),
+        append = TRUE,
+        type = "output"
+      )
       cat(private$log_format(..., tic = tic, log_type = log_type), "\n", sep = "")
-
-      if (!is.null(self$log_path)) sink()
+      sink()
     },
 
     #' @description Write a warning to log file and generate warning.

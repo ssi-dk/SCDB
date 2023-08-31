@@ -94,7 +94,7 @@ Write a line to log file
 \if{html}{\out{<div class="r">}}\preformatted{Logger$log_info(
   ...,
   tic = Sys.time(),
-  split = self$output_to_console,
+  output_to_console = self$output_to_console,
   log_type = "INFO"
 )}\if{html}{\out{</div>}}
 }
@@ -106,7 +106,7 @@ Write a line to log file
 
 \item{\code{tic}}{The timestamp used by the log entry (default Sys.time())}
 
-\item{\code{split}}{Should the log line also be printed to console?}
+\item{\code{output_to_console}}{Should the line be written to console?}
 
 \item{\code{log_type}}{A character string which describes the severity of the log message}
 }
