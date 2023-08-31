@@ -32,14 +32,21 @@ Logger <- R6::R6Class( #nolint: object_name_linter
     #' The time at which data processing was started.
     start_time = NULL,
 
+    #' @field print_to_console (`logical(1)`)\cr
+    #' Should the Logger output to console?
+    #' This can always be overridden by Logger$log_info(split = FALSE).
+    output_to_console = NULL,
+
     #' @description
     #' Create a new Logger object
     #' @param log_conn A database connection inheriting from `DBIConnection`
     #' @param warn Show a warning if neither log_table_id or log_path could be determined
+    #' @param output_to_console Should the Logger output to console (TRUE/FALSE)?
     initialize = function(db_tablestring = NULL,
                           log_table_id   = getOption("SCDB.log_table_id"),
                           log_conn = NULL,
                           log_path = getOption("SCDB.log_path"),
+                          output_to_console = TRUE,
                           warn = TRUE,
                           ts = NULL,
                           start_time = Sys.time()) {
@@ -53,6 +60,8 @@ Logger <- R6::R6Class( #nolint: object_name_linter
       assert_timestamp_like(ts, add = coll)
       checkmate::assert_posixct(start_time, add = coll)
       checkmate::reportAssertions(coll)
+
+      self$output_to_console <- output_to_console
 
       private$ts <- ts
       self$start_time <- start_time
@@ -87,11 +96,11 @@ Logger <- R6::R6Class( #nolint: object_name_linter
     #' @param ... `r log_dots <- "One or more character strings to be concatenated"; log_dots`
     #' @param tic The timestamp used by the log entry (default Sys.time())
     #' @param log_type `r log_type <- "A character string which describes the severity of the log message"; log_type`
-    log_info = function(..., tic = Sys.time(), log_type = "INFO") {
+    log_info = function(..., tic = Sys.time(), split = self$output_to_console, log_type = "INFO") {
 
       # Writes log file (if set)
       if (!is.null(self$log_path)) {
-        sink(file = file.path(self$log_path, self$log_filename), split = TRUE, append = TRUE, type = "output")
+        sink(file = file.path(self$log_path, self$log_filename), split = split, append = TRUE, type = "output")
       }
 
       cat(private$log_format(..., tic = tic, log_type = log_type), "\n", sep = "")
