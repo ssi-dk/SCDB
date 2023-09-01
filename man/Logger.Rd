@@ -19,9 +19,6 @@ logger <- Logger$new(db_tablestring = "test.table",
 \item{\code{log_path}}{(\code{character(1)})\cr
 A directory where log file is written (if this is not NULL). Defaults to \code{getOption("SCDB.log_path")}.}
 
-\item{\code{log_filename}}{(\code{character(1)})\cr
-The name (basename) of the log file.}
-
 \item{\code{log_tbl}}{The DB table used for logging. Class is connection-specific, but inherits from \code{tbl_dbi}.}
 
 \item{\code{start_time}}{(\code{POSIXct(1)})\cr
