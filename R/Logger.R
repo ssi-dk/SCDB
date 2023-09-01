@@ -161,6 +161,8 @@ Logger <- R6::R6Class( #nolint: object_name_linter
   ),
 
   active = list(
+    #' @field log_filename `character(1)`\cr
+    #' The filename (basename) of the file that the `Logger` instance will output to
     log_filename = function() {
       # If we are not producing a file log, we provide a random string to key by
       if (!is.null(private$.log_filename)) return(private$.log_filename)
@@ -195,6 +197,8 @@ Logger <- R6::R6Class( #nolint: object_name_linter
       return(filename)
     },
 
+    #' @field log_realpath `character(1)`\cr
+    #' The full path to the logger's log file.
     log_realpath = function() {
       if (is.null(self$log_path)) {
         nullfile()

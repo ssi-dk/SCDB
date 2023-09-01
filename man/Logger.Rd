@@ -30,6 +30,17 @@ This can always be overridden by Logger$log_info(..., output_to_console = FALSE)
 }
 \if{html}{\out{</div>}}
 }
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{log_filename}}{\code{character(1)}\cr
+The filename (basename) of the file that the \code{Logger} instance will output to}
+
+\item{\code{log_realpath}}{\code{character(1)}\cr
+The full path to the logger's log file.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
