@@ -12,8 +12,7 @@ update_snapshot(
   filters = NULL,
   message = NULL,
   tic = Sys.time(),
-  log_path = getOption("SCDB.log_path"),
-  log_table_id = getOption("SCDB.log_table_id"),
+  logger = NULL,
   enforce_chronological_order = TRUE
 )
 }
@@ -33,10 +32,7 @@ update_snapshot(
 \item{tic}{A timestamp when computation began. If not supplied, it will be created at call-time.
 (Used to more accurately convey how long runtime of the update process has been)}
 
-\item{log_path}{The path where logs are stored.
-If NULL, no file logs are created.}
-
-\item{log_table_id}{A \code{\link[DBI:Id]{DBI::Id()}} object or a character string readable by \link{id}, specifying the location of the log table.}
+\item{logger}{A \link{Logger}. If none is given, one is initialized with default arguments.}
 
 \item{enforce_chronological_order}{A logical that controls whether or not to check if timestamp of update is prior to timestamps in the DB}
 }
