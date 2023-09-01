@@ -53,11 +53,11 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
       # Initialize logger
       coll <- checkmate::makeAssertCollection()
-      checkmate::assert_character(db_tablestring, add = coll)
+      checkmate::assert_character(db_tablestring, null.ok = TRUE, add = coll)
       assert_id_like(log_table_id, null.ok = TRUE, add = coll)
       checkmate::assert_class(log_conn, "DBIConnection", null.ok = TRUE, add = coll)
       checkmate::assert_character(log_path, null.ok = TRUE, add = coll)
-      assert_timestamp_like(ts, add = coll)
+      assert_timestamp_like(ts, null.ok = TRUE, add = coll)
       checkmate::assert_posixct(start_time, add = coll)
       checkmate::reportAssertions(coll)
 
@@ -79,15 +79,9 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
       self$log_path <- log_path
       private$db_tablestring <- db_tablestring
-      self$log_filename <- private$generate_filename()
-      lockBinding("log_filename", self)
 
       # Create a line in log DB for Logger
       private$generate_log_entry()
-
-      if (!is.null(self$log_path) && file.exists(file.path(self$log_path, self$log_filename))) {
-        stop("Log file for given timestamp already exists!")
-      }
 
     },
 
@@ -101,15 +95,8 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
       format_str <- private$log_format(..., tic = tic, log_type = log_type)
 
-      # Write log file (if set)
-      if (is.null(self$log_path)) {
-        fp <- nullfile()
-      } else {
-        fp <- file.path(self$log_path, self$log_filename)
-      }
-
       sink(
-        file = fp,
+        file = self$log_realpath,
         split = isTRUE(output_to_console),
         append = TRUE,
         type = "output"
@@ -141,7 +128,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
       dplyr::rows_patch(
         x = self$log_tbl,
-        y = dplyr::copy_to(private$log_conn, data.frame(log_file = self$log_filename), overwrite = TRUE) |>
+        y = dplyr::copy_to(private$log_conn, data.frame(log_file = private$generate_filename()), overwrite = TRUE) |>
           dplyr::mutate(...),
         by = "log_file",
         copy = TRUE,
@@ -161,6 +148,13 @@ Logger <- R6::R6Class( #nolint: object_name_linter
       # If we are not producing a file log, we provide a random string to key by
       if (is.null(self$log_path)) return(basename(tempfile(tmpdir = "", pattern = "")))
 
+      if (!is.null(self$log_filename)) return(self$log_filename)
+
+      coll <- checkmate::makeAssertCollection()
+      checkmate::assert_character(private$db_tablestring, null.ok = FALSE, add = coll)
+      assert_timestamp_like(private$ts, null.ok = FALSE, add = coll)
+      checkmate::reportAssertions(coll)
+
       start_format <- format(self$start_time, "%Y%m%d.%H%M")
       ts <- private$ts
 
@@ -172,6 +166,10 @@ Logger <- R6::R6Class( #nolint: object_name_linter
         ts_format,
         private$db_tablestring
       )
+
+      self$log_filename <- filename
+      lockBinding("log_filename", self)
+      if (file.exists(self$log_realpath)) stop("Log file for given timestamp already exists!")
 
       return(filename)
     },
@@ -192,6 +190,16 @@ Logger <- R6::R6Class( #nolint: object_name_linter
       ts_str <- stringr::str_replace(format(tic, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
 
       return(paste(ts_str, Sys.info()[["user"]], log_type, paste(...), sep = " - "))
+    }
+  ),
+
+  active = list(
+    log_realpath = function() {
+      if (is.null(self$log_path)) {
+        nullfile()
+      } else {
+        file.path(self$log_path, private$generate_filename())
+      }
     }
   )
 )
