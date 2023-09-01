@@ -146,3 +146,57 @@ test_that("Logger stops if file exists", { for (conn in conns) { # nolint: brace
 
   file.remove(file.path(log_path, logger$log_filename))
 }})
+
+test_that("Logger console output may be suppressed", {
+  db_tablestring <- "test.SCDB_logger"
+  ts <- Sys.time()
+  log_path <- tempdir()
+
+  # First test cases with output_to_console == FALSE
+  # Here, only print when explicitly stated
+  logger <- Logger$new(
+    db_tablestring = db_tablestring,
+    ts = ts,
+    log_table_id = NULL,
+    log_path = log_path,
+    output_to_console = FALSE
+  )
+
+  # In lieu of testthat::expect_no_output...
+  expect_identical(
+    utils::capture.output(logger$log_info("Whoops! This should not have been printed!"), type = "output"),
+    character(0)
+  )
+  expect_identical(
+    utils::capture.output(logger$log_info("Whoops! This should not have been printed either!",
+                                          output_to_console = FALSE),
+                          type = "output"),
+    character(0)
+  )
+
+  expect_output(
+    logger$log_info("This line should be printed",
+                    output_to_console = TRUE),
+    regex = "This line should be printed$"
+  )
+
+  # ...and now, only suppress printing when explicitly stated
+  logger$output_to_console <- TRUE
+
+  expect_output(
+    logger$log_info("This line should be printed"),
+    regex = "This line should be printed$"
+  )
+  expect_output(
+    logger$log_info("This line should also be printed",
+                    output_to_console = TRUE),
+    regex = "This line should also be printed$"
+  )
+
+  expect_identical(
+    utils::capture.output(logger$log_info("Whoops! This should not have been printed at all!",
+                                          output_to_console = FALSE),
+                          type = "output"),
+    character(0)
+  )
+})
