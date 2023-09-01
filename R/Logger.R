@@ -136,6 +136,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
   private = list(
 
+    .log_filename = NULL,
     db_tablestring = NULL,
     log_conn = NULL,
     ts = NULL,
@@ -162,7 +163,11 @@ Logger <- R6::R6Class( #nolint: object_name_linter
   active = list(
     log_filename = function() {
       # If we are not producing a file log, we provide a random string to key by
-      if (is.null(self$log_path)) return(basename(tempfile(tmpdir = "", pattern = "")))
+      if (!is.null(private$.log_filename)) return(private$.log_filename)
+      if (is.null(self$log_path)) {
+        private$.log_filename <- basename(tempfile(tmpdir = "", pattern = ""))
+        return(private$.log_filename)
+      }
 
       coll <- checkmate::makeAssertCollection()
       checkmate::assert_character(private$db_tablestring, null.ok = FALSE, add = coll)
@@ -181,7 +186,13 @@ Logger <- R6::R6Class( #nolint: object_name_linter
         private$db_tablestring
       )
 
-      filename
+      private$.log_filename <- filename
+
+      if (file.exists(file.path(self$log_path, private$.log_filename))) {
+        stop(sprintf("Log file '%s' already exists!", private$.log_filename))
+      }
+
+      return(filename)
     },
 
     log_realpath = function() {
