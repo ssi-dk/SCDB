@@ -12,7 +12,7 @@
 #'
 #' close_connection(conn)
 #' @export
-get_schema <- function(.x) { # nocov start
+get_schema <- function(.x) {
 
   if (inherits(.x, "PqConnection")) {
     # Get schema from connection object
@@ -37,7 +37,7 @@ get_schema <- function(.x) { # nocov start
   if (schema == "public") schema <- "prod"
 
   return(schema)
-} # nocov end
+}
 
 
 #' Test if a schema exists in given connection
