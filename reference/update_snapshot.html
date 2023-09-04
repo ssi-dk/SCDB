@@ -65,8 +65,7 @@
 <span>  filters <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  message <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  log_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"SCDB.log_path"</span><span class="op">)</span>,</span>
-<span>  log_table_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"SCDB.log_table_id"</span><span class="op">)</span>,</span>
+<span>  logger <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  enforce_chronological_order <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -102,13 +101,8 @@
 (Used to more accurately convey how long runtime of the update process has been)</p></dd>
 
 
-<dt>log_path</dt>
-<dd><p>The path where logs are stored.
-If NULL, no file logs are created.</p></dd>
-
-
-<dt>log_table_id</dt>
-<dd><p>A <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">DBI::Id()</a></code> object or a character string readable by <a href="id.html">id</a>, specifying the location of the log table.</p></dd>
+<dt>logger</dt>
+<dd><p>A <a href="Logger.html">Logger</a> instance. If none is given, one is initialized with default arguments.</p></dd>
 
 
 <dt>enforce_chronological_order</dt>
@@ -138,16 +132,16 @@ If NULL, no file logs are created.</p></dd>
 <span class="r-in"><span>                timestamp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>log_path and log_table_id are both NULL and therefore NO LOGGING WILL BE DONE.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-01 08:38:17,426 - runner - INFO - Started</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-01 08:38:17,426 - runner - INFO - Parsing data for table test.mtcars started</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-01 08:38:17,426 - runner - INFO - Given timestamp for table is 2023-09-01 08:38:17.426727</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-01 08:38:18,002 - runner - INFO - Deactivating records</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-01 08:38:18,003 - runner - INFO - After to_remove</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-01 08:38:18,150 - runner - INFO - After to_add</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-01 08:38:18,151 - runner - INFO - Deactivate records count: 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-01 08:38:18,152 - runner - INFO - Adding new records</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-01 08:38:18,243 - runner - INFO - Insert records count: 32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-01 08:38:18,329 - runner - INFO - Finished processing for table test.mtcars</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-04 07:55:51,215 - runner - INFO - Started</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-04 07:55:51,215 - runner - INFO - Parsing data for table test.mtcars started</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-04 07:55:51,215 - runner - INFO - Given timestamp for table is 2023-09-04 07:55:51.215145</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-04 07:55:51,754 - runner - INFO - Deactivating records</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-04 07:55:51,755 - runner - INFO - After to_remove</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-04 07:55:51,886 - runner - INFO - After to_add</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-04 07:55:51,887 - runner - INFO - Deactivate records count: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-04 07:55:51,888 - runner - INFO - Adding new records</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-04 07:55:51,968 - runner - INFO - Insert records count: 32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-09-04 07:55:52,046 - runner - INFO - Finished processing for table test.mtcars</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="close_connection.html">close_connection</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span></span>
