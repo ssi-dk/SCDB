@@ -32,7 +32,7 @@ update_snapshot(
 \item{tic}{A timestamp when computation began. If not supplied, it will be created at call-time.
 (Used to more accurately convey how long runtime of the update process has been)}
 
-\item{logger}{A \link{Logger}. If none is given, one is initialized with default arguments.}
+\item{logger}{A \link{Logger} instance. If none is given, one is initialized with default arguments.}
 
 \item{enforce_chronological_order}{A logical that controls whether or not to check if timestamp of update is prior to timestamps in the DB}
 }
