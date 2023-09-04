@@ -11,7 +11,7 @@
 #'   A timestamp when computation began. If not supplied, it will be created at call-time.
 #'   (Used to more accurately convey how long runtime of the update process has been)
 #' @param logger
-#'   A [Logger]. If none is given, one is initialized with default arguments.
+#'   A [Logger] instance. If none is given, one is initialized with default arguments.
 #' @param enforce_chronological_order
 #'   A logical that controls whether or not to check if timestamp of update is prior to timestamps in the DB
 #' @return No return value, called for side effects
