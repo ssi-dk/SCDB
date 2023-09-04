@@ -23,11 +23,14 @@
 #'  Additional parameters sent to DBI::dbConnect()
 #' @return
 #'   An object that inherits from DBIConnection driver specified in drv
-#' @examples
-#' \dontrun{
-#' close_connection(conn)
-#' }
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
+#' conn <- get_connection(drv = RSQLite::SQLite(), dbname = ":memory:")
 #'
+#' DBI::dbIsValid(conn) # TRUE
+#'
+#' close_connection(conn)
+#'
+#' DBI::dbIsValid(conn) # FALSE
 #' @seealso [RPostgres::Postgres]
 #' @export
 get_connection <- function(drv = RPostgres::Postgres(),
