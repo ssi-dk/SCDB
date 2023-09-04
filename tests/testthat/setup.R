@@ -12,7 +12,7 @@ get_driver <- function(x = character(), ...) {
 
   # Skip unavailable packages
   if (!requireNamespace(parts[1], quietly = TRUE)) {
-    return(NULL)
+    return()
   }
 
   drv <- getExportedValue(parts[1], parts[2])

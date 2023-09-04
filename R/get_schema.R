@@ -19,7 +19,7 @@ get_schema <- function(.x) { # nocov start
     schema <- DBI::dbGetQuery(.x, "SELECT CURRENT_SCHEMA()")$current_schema
 
   } else if (inherits(.x, "SQLiteConnection") || inherits(.x, "tbl_SQLiteConnection")) {
-    return(NULL)
+    return()
   } else if (inherits(.x, "tbl_dbi")) {
     # Get schema from a DBI object (e.g. lazy query)
     schema <- stringr::str_extract_all(dbplyr::remote_query(.x), '(?<=FROM \")[^"]*')[[1]]
