@@ -49,7 +49,7 @@ create_table <- function(.data, conn = NULL, db_table_id, temporary = TRUE, ...)
                      temporary = temporary,
                      ...)
 
-  invisible(dplyr::tbl(conn, db_table_id))
+  return(invisible(dplyr::tbl(conn, db_table_id)))
 }
 
 

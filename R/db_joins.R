@@ -194,7 +194,7 @@ right_join <- function(x, y, by = NULL, na_by = NULL, ...) {
     renamer <- select_na_sql(x, y, by, na_by, left = FALSE)
 
     # Seems like right_join does not work for SQLite, so we'll do a left join for now
-    scdb_right_join(x, y, sql_on, renamer, ...)
+    return(scdb_right_join(x, y, sql_on, renamer, ...))
   }
 }
 

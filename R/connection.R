@@ -145,5 +145,5 @@ id <- function(db_table_id, conn = NULL) {
     db_table <- db_table_id
   }
 
-  DBI::Id(schema = db_schema, table = db_table)
+  return(DBI::Id(schema = db_schema, table = db_table))
 }

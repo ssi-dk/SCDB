@@ -201,9 +201,9 @@ Logger <- R6::R6Class( #nolint: object_name_linter
     #' The full path to the logger's log file.
     log_realpath = function() {
       if (is.null(self$log_path)) {
-        nullfile()
+        return(nullfile())
       } else {
-        file.path(self$log_path, self$log_filename)
+        return(file.path(self$log_path, self$log_filename))
       }
     }
   )
