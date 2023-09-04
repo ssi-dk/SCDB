@@ -49,6 +49,15 @@ get_connection <- function(drv = RPostgres::Postgres(),
   checkmate::assert_character(timezone, null.ok = TRUE)
   checkmate::assert_character(timezone_out, null.ok = TRUE)
 
+  supported_drivers <- c(
+    "PqDriver",
+    "SQLiteDriver"
+  )
+
+  if (!class(drv) %in% supported_drivers) {
+    warning("Driver of class'", class(drv), "' is currently not fully supported and SCDB may not perform as expected.")
+  }
+
   # Set PostgreSQL-specific options
   if (inherits(drv, "PqDriver")) {
     if (is.null(timezone)) timezone <- Sys.timezone()
