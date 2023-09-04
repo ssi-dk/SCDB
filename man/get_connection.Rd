@@ -43,10 +43,15 @@ Connects to the specified dbname of host:port using user and password from given
 Certain drivers may use credentials stored in a file, such as ~/.pgpass (PostgreSQL)
 }
 \examples{
-\dontrun{
-close_connection(conn)
-}
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+conn <- get_connection(drv = RSQLite::SQLite(), dbname = ":memory:")
 
+DBI::dbIsValid(conn) # TRUE
+
+close_connection(conn)
+
+DBI::dbIsValid(conn) # FALSE
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \link[RPostgres:Postgres]{RPostgres::Postgres}
