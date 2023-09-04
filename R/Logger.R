@@ -20,10 +20,6 @@ Logger <- R6::R6Class( #nolint: object_name_linter
     #' A directory where log file is written (if this is not NULL). Defaults to `getOption("SCDB.log_path")`.
     log_path = NULL,
 
-    #' @field log_filename (`character(1)`)\cr
-    #' The name (basename) of the log file.
-    log_filename = NULL,
-
     #' @field log_tbl
     #' The DB table used for logging. Class is connection-specific, but inherits from `tbl_dbi`.
     log_tbl = NULL,
@@ -53,11 +49,11 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
       # Initialize logger
       coll <- checkmate::makeAssertCollection()
-      checkmate::assert_character(db_tablestring, add = coll)
+      checkmate::assert_character(db_tablestring, null.ok = TRUE, add = coll)
       assert_id_like(log_table_id, null.ok = TRUE, add = coll)
       checkmate::assert_class(log_conn, "DBIConnection", null.ok = TRUE, add = coll)
       checkmate::assert_character(log_path, null.ok = TRUE, add = coll)
-      assert_timestamp_like(ts, add = coll)
+      assert_timestamp_like(ts, null.ok = TRUE, add = coll)
       checkmate::assert_posixct(start_time, add = coll)
       checkmate::reportAssertions(coll)
 
@@ -79,15 +75,9 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
       self$log_path <- log_path
       private$db_tablestring <- db_tablestring
-      self$log_filename <- private$generate_filename()
-      lockBinding("log_filename", self)
 
       # Create a line in log DB for Logger
       private$generate_log_entry()
-
-      if (!is.null(self$log_path) && file.exists(file.path(self$log_path, self$log_filename))) {
-        stop("Log file for given timestamp already exists!")
-      }
 
     },
 
@@ -101,15 +91,8 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
       format_str <- private$log_format(..., tic = tic, log_type = log_type)
 
-      # Write log file (if set)
-      if (is.null(self$log_path)) {
-        fp <- nullfile()
-      } else {
-        fp <- file.path(self$log_path, self$log_filename)
-      }
-
       sink(
-        file = fp,
+        file = self$log_realpath,
         split = isTRUE(output_to_console),
         append = TRUE,
         type = "output"
@@ -153,28 +136,10 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
   private = list(
 
+    .log_filename = NULL,
     db_tablestring = NULL,
     log_conn = NULL,
     ts = NULL,
-
-    generate_filename = function() {
-      # If we are not producing a file log, we provide a random string to key by
-      if (is.null(self$log_path)) return(basename(tempfile(tmpdir = "", pattern = "")))
-
-      start_format <- format(self$start_time, "%Y%m%d.%H%M")
-      ts <- private$ts
-
-      if (is.character(ts)) ts <- as.Date(ts)
-      ts_format <- format(ts, "%Y_%m_%d")
-      filename <- sprintf(
-        "%s.%s.%s.log",
-        start_format,
-        ts_format,
-        private$db_tablestring
-      )
-
-      return(filename)
-    },
 
     generate_log_entry = function() {
       # Create a row for log in question
@@ -192,6 +157,54 @@ Logger <- R6::R6Class( #nolint: object_name_linter
       ts_str <- stringr::str_replace(format(tic, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
 
       return(paste(ts_str, Sys.info()[["user"]], log_type, paste(...), sep = " - "))
+    }
+  ),
+
+  active = list(
+    #' @field log_filename `character(1)`\cr
+    #' The filename (basename) of the file that the `Logger` instance will output to
+    log_filename = function() {
+      # If we are not producing a file log, we provide a random string to key by
+      if (!is.null(private$.log_filename)) return(private$.log_filename)
+      if (is.null(self$log_path)) {
+        private$.log_filename <- basename(tempfile(tmpdir = "", pattern = ""))
+        return(private$.log_filename)
+      }
+
+      coll <- checkmate::makeAssertCollection()
+      checkmate::assert_character(private$db_tablestring, null.ok = FALSE, add = coll)
+      assert_timestamp_like(private$ts, null.ok = FALSE, add = coll)
+      checkmate::reportAssertions(coll)
+
+      start_format <- format(self$start_time, "%Y%m%d.%H%M")
+      ts <- private$ts
+
+      if (is.character(ts)) ts <- as.Date(ts)
+      ts_format <- format(ts, "%Y_%m_%d")
+      filename <- sprintf(
+        "%s.%s.%s.log",
+        start_format,
+        ts_format,
+        private$db_tablestring
+      )
+
+      private$.log_filename <- filename
+
+      if (file.exists(file.path(self$log_path, private$.log_filename))) {
+        stop(sprintf("Log file '%s' already exists!", private$.log_filename))
+      }
+
+      return(filename)
+    },
+
+    #' @field log_realpath `character(1)`\cr
+    #' The full path to the logger's log file.
+    log_realpath = function() {
+      if (is.null(self$log_path)) {
+        nullfile()
+      } else {
+        file.path(self$log_path, self$log_filename)
+      }
     }
   )
 )

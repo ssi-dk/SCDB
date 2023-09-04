@@ -17,15 +17,23 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
 
   # This is a simple update where 23 rows are replaced with 23 new ones on the given date
   db_table <- "test.SCDB_tmp1"
-  log_table_id <- "test.SCDB_logs"
   timestamp <- "2022-10-03 09:00:00"
   log_path <- tempdir()
+
+  logger <- Logger$new(
+    db_tablestring = db_table,
+    ts = timestamp,
+    log_path = log_path,
+    log_table_id = "test.SCDB_logs",
+    log_conn = conn
+  )
+
   dir(log_path) |>
     purrr::keep(~ endsWith(., ".log")) |>
     purrr::walk(~ unlink(file.path(log_path, .)))
 
   utils::capture.output(update_snapshot(.data, conn, db_table, timestamp,
-                                        log_path = log_path, log_table_id = log_table_id))
+                                        logger = logger))
 
   expect_identical(slice_time(target, "2022-10-01 09:00:00") |>
                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
@@ -59,7 +67,7 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
     dplyr::copy_to(conn, ., overwrite = TRUE)
 
   utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-03 09:00:00",
-                                        log_path = NULL, log_table_id = log_table_id))
+                                        logger = logger))
 
   # Even though we insert twice on the same date, we expect the data to be minimal (compacted)
   expect_identical(slice_time(target, "2022-10-01 09:00:00") |>
@@ -88,12 +96,12 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
 
   # This should fail if we do not specify "enforce_chronological_order = FALSE"
   expect_error(utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-02 09:00:00",
-                                                     log_path = NULL, log_table_id = log_table_id)),
+                                                     logger = logger)),
                regexp = "Given timestamp 2022-10-02 09:00:00 is earlier")
 
   # But not with the variable set
   utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-02 09:00:00",
-                                        log_path = NULL, log_table_id = log_table_id,
+                                        logger = logger,
                                         enforce_chronological_order = FALSE))
 
   expect_identical(slice_time(target, "2022-10-01 09:00:00") |>
@@ -126,17 +134,17 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
   t2 <- dplyr::copy_to(conn, t2, id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE)
 
   utils::capture.output(update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01",
-                                        log_path = NULL, log_table_id = log_table_id))
+                                        logger = logger))
   expect_identical(dplyr::collect(t0) |> dplyr::arrange(col1),
                    dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
   utils::capture.output(update_snapshot(t1, conn, "test.SCDB_tmp1", "2022-02-01",
-                                        log_path = NULL, log_table_id = log_table_id))
+                                        logger = logger))
   expect_identical(dplyr::collect(t1) |> dplyr::arrange(col1),
                    dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
   utils::capture.output(update_snapshot(t2, conn, "test.SCDB_tmp1", "2022-02-01",
-                                        log_path = NULL, log_table_id = log_table_id))
+                                        logger = logger))
   expect_identical(dplyr::collect(t2) |> dplyr::arrange(col1),
                    dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
@@ -161,17 +169,17 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
 
   # Check non-chronological insertion
   utils::capture.output(update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01",
-                                        log_path = NULL, log_table_id = log_table_id))
+                                        logger = logger))
   expect_identical(dplyr::collect(t0) |> dplyr::arrange(col1),
                    dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
   utils::capture.output(update_snapshot(t2, conn, "test.SCDB_tmp1", "2022-03-01",
-                                        log_path = NULL, log_table_id = log_table_id))
+                                        logger = logger))
   expect_identical(dplyr::collect(t2) |> dplyr::arrange(col1),
                    dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
   utils::capture.output(update_snapshot(t1, conn, "test.SCDB_tmp1", "2022-02-01",
-                                        log_path = NULL, log_table_id = log_table_id,
+                                        logger = logger,
                                         enforce_chronological_order = FALSE))
   expect_identical(dplyr::collect(t1) |> dplyr::arrange(col1),
                    dplyr::collect(get_table(conn, "test.SCDB_tmp1", slice_ts = "2022-02-01")) |> dplyr::arrange(col1))

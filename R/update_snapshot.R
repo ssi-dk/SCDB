@@ -10,8 +10,8 @@
 #' @param tic
 #'   A timestamp when computation began. If not supplied, it will be created at call-time.
 #'   (Used to more accurately convey how long runtime of the update process has been)
-#' @template log_path
-#' @template log_table_id
+#' @param logger
+#'   A [Logger] instance. If none is given, one is initialized with default arguments.
 #' @param enforce_chronological_order
 #'   A logical that controls whether or not to check if timestamp of update is prior to timestamps in the DB
 #' @return No return value, called for side effects
@@ -30,7 +30,7 @@
 #' @importFrom rlang .data
 #' @export
 update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, message = NULL, tic = Sys.time(), # nolint: cyclocomp_linter
-                            log_path = getOption("SCDB.log_path"), log_table_id = getOption("SCDB.log_table_id"),
+                            logger = NULL,
                             enforce_chronological_order = TRUE) {
 
   # Check arguments
@@ -41,6 +41,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   checkmate::assert_class(filters, "tbl_dbi", null.ok = TRUE)
   checkmate::assert_character(message, null.ok = TRUE)
   assert_timestamp_like(tic)
+  checkmate::assert_class(logger, "Logger", null.ok = TRUE)
   checkmate::assert_logical(enforce_chronological_order)
 
 
@@ -62,14 +63,14 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   }
 
   # Initialize logger
-  logger <- Logger$new(
-    db_tablestring = db_table_name,
-    log_table_id = log_table_id,
-    log_conn = conn,
-    log_path = log_path,
-    ts = timestamp,
-    start_time = tic
-  )
+  if (is.null(logger)) {
+    logger <- Logger$new(
+      db_tablestring = db_table_name,
+      log_conn = conn,
+      ts = timestamp,
+      start_time = tic
+    )
+  }
 
   logger$log_to_db(start_time = !!db_timestamp(tic, conn))
   logger$log_info("Started", tic = tic) # Use input time in log
