@@ -27,7 +27,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       PGHOST: localhost
       PGPORT: 5432
-      PGDATABSE: SCDB_TEST
+      PGDATABSE: SCDB_test
       PGUSER: postgres
       PGPASSWORD: postgres
 
