@@ -45,7 +45,7 @@ jobs:
 
       - name: Create schema "test" in PostgreSQL
         run: |
-          psql -c "CREATE SCHEMA test;"
+          psql SCDB_test -c "CREATE SCHEMA test;"
 
       - name: Test coverage
         run: |
