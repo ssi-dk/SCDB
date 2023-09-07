@@ -8,9 +8,28 @@ on:
 
 name: test-coverage
 
+env:
+  PGHOST: localhost
+  PGPORT: 5432
+  PGDATABASE: SCDB_test
+  PGUSER: postgres
+  PGPASSWORD: postgres
+
 jobs:
   test-coverage:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: SCDB_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd "pg_isready -U postgres" --health-interval 10s --health-timeout 5s --health-retries 5
+
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
@@ -25,6 +44,10 @@ jobs:
         with:
           extra-packages: any::covr
           needs: coverage
+
+      - name: Create schema "test" in PostgreSQL
+        run: |
+          psql SCDB_test -c "CREATE SCHEMA test;"
 
       - name: Test coverage
         run: |
