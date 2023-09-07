@@ -68,12 +68,12 @@ schema_exists <- function(conn, schema) {
   tryCatch({
     DBI::dbCreateTable(
       conn,
-      name = DBI::Id(schema = schema, table = "schema_test"),
+      name = DBI::Id(schema = schema, table = "SCDB_schema_test"),
       fields = data.frame(name = character()),
       temporary = FALSE
     )
 
-    DBI::dbRemoveTable(conn, DBI::Id(schema = schema, table = "schema_test"))
+    DBI::dbRemoveTable(conn, DBI::Id(schema = schema, table = "SCDB_schema_test"))
     TRUE
   },
   error = function(e) FALSE)
