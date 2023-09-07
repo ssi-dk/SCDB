@@ -57,9 +57,25 @@ schema_exists <- function(conn, schema) {
   checkmate::assert_class(conn, "DBIConnection")
   checkmate::assert_character(schema)
 
+  if (inherits(conn, "SQLiteConnection")) return(NULL)
+
   objs <- DBI::dbListObjects(conn)
   matches <- sapply(objs$table, \(.x) methods::slot(.x, "name")) |>
     (\(.x) names(.x) == "schema" & .x == schema)()
 
-  return(any(matches))
+  if (any(matches)) return(TRUE)
+
+  tryCatch({
+    DBI::dbCreateTable(
+      conn,
+      name = DBI::Id(schema = schema, table = "schema_test"),
+      fields = data.frame(name = character()),
+      temporary = FALSE
+    )
+
+    DBI::dbRemoveTable(conn, DBI::Id(schema = schema, table = "schema_test"))
+    TRUE
+  },
+  error = function(e)
+    FALSE)
 }
