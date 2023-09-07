@@ -57,7 +57,7 @@ schema_exists <- function(conn, schema) {
   checkmate::assert_class(conn, "DBIConnection")
   checkmate::assert_character(schema)
 
-  if (inherits(conn, "SQLiteConnection")) return(NULL)
+  if (inherits(conn, "SQLiteConnection")) return(FALSE)
 
   objs <- DBI::dbListObjects(conn)
   matches <- sapply(objs$table, \(.x) methods::slot(.x, "name")) |>
