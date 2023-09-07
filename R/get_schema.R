@@ -76,6 +76,5 @@ schema_exists <- function(conn, schema) {
     DBI::dbRemoveTable(conn, DBI::Id(schema = schema, table = "schema_test"))
     TRUE
   },
-  error = function(e)
-    FALSE)
+  error = function(e) FALSE)
 }
