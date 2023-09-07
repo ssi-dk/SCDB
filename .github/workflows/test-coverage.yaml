@@ -11,7 +11,7 @@ name: test-coverage
 env:
   PGHOST: localhost
   PGPORT: 5432
-  PGDATABSE: SCDB_test
+  PGDATABASE: SCDB_test
   PGUSER: postgres
   PGPASSWORD: postgres
 
