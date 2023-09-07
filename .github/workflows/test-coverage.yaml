@@ -25,6 +25,11 @@ jobs:
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      PGHOST: localhost
+      PGPORT: 5432
+      PGDATABSE: SCDB_TEST
+      PGUSER: postgres
+      PGPASSWORD: postgres
 
     steps:
       - uses: actions/checkout@v3
@@ -40,10 +45,7 @@ jobs:
 
       - name: Create schema "test" in PostgreSQL
         run: |
-          psql -h localhost -d SCDB_test -c "CREATE SCHEMA test;"
-        env:
-          PGUSER: postgres
-          PGPASSWORD: postgres
+          psql -c "CREATE SCHEMA test;"
 
       - name: Test coverage
         run: |
