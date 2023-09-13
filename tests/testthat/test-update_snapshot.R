@@ -199,6 +199,8 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
                    t_ref |>
                      dplyr::arrange(col1, from_ts))
 
+  if (file.exists(logger$log_realpath)) file.remove(logger$log_realpath)
+
   if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
 }})
 
