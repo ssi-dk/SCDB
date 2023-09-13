@@ -85,5 +85,7 @@ testthat::test_that("get_tables skips warning about no tables found in temporary
 
     expect_warning(get_tables(conn2),
                    regex = "No tables found")
+
+    DBI::dbDisconnect(conn2)
   }
 })
