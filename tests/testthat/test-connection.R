@@ -13,6 +13,13 @@ test_that("get_connection notifies if connection fails", {
   }
 })
 
+test_that("get_connection warns about unsupported backend", {
+  get_connection(drv = character(0)) |>
+    expect_error(regex = paste("unable to find an inherited method for function",
+                               "'dbCanConnect' for signature '\"character\"'")) |>
+    expect_warning("Driver of class 'character' is currently not fully supported")
+})
+
 
 test_that("id() works", { for (conn in conns) { # nolint: brace_linter
 
