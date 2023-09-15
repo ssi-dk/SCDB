@@ -4,7 +4,7 @@
 \alias{create_table}
 \title{Create a historical table from input data}
 \usage{
-create_table(.data, conn = NULL, db_table_id = NULL, temporary = TRUE, ...)
+create_table(.data, conn = NULL, db_table_id, temporary = TRUE, ...)
 }
 \arguments{
 \item{.data}{A data frame, a tibble, a data.table or a tbl.}
