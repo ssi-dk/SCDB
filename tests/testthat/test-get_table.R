@@ -71,6 +71,28 @@ test_that("get_table returns list of tables if no table is requested", { for (co
   )
 }})
 
+test_that("table_exists fails when multiple matches are found", {
+  for (conn in conns) {
+    # This test exploits ambiguous notation requiring schemas to exits
+    if (!inherits(conn, "PqConnection")) next
+
+    # Ensure that the schema "test.one" has been created
+    result <- DBI::dbGetQuery(
+      conn,
+      "SELECT EXISTS (SELECT 1 FROM information_schema.schemata WHERE schema_name = 'test.one') as exists"
+    )
+    expect_identical(result, data.frame(exists = TRUE))
+
+    DBI::dbExecute(conn, 'CREATE TABLE "test"."one.two"(a TEXT)')
+    DBI::dbExecute(conn, 'CREATE TABLE "test.one"."two"(b TEXT)')
+
+    expect_error(
+      table_exists(conn, "test.one.two"),
+      regex = "More than one table matching 'test.one.two' was found!"
+    )
+  }
+})
+
 testthat::test_that("get_tables skips warning about no tables found in temporary databases", {
   for (conn in conns) {
     if (!inherits(conn, "SQLiteConnection")) next
