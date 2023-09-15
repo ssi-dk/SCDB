@@ -210,6 +210,6 @@ table_exists <- function(conn, db_table_id) {
     dplyr::filter(db_table_id == !!db_table_id) |>
     nrow()
 
-  if (n_matches >= 2) stop("Edge case detected. Cannot determine if table exists!")
+  if (n_matches > 1) stop("More than one table matching '", db_table_id, "' was found!")
   return(n_matches == 1)
 }
