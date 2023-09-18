@@ -86,6 +86,10 @@ test_that("interlace_sql() works", { for (conn in conns) { # nolint: brace_linte
 
 }})
 
+test_that("interlace_sql returns early if length(table) == 1", {
+  expect_identical(mtcars$mpg, interlace_sql(mtcars["mpg"], by = "mpg"))
+})
+
 
 test_that("digest_to_checksum() works", { for (conn in conns) { # nolint: brace_linter
 
