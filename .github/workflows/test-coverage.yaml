@@ -45,9 +45,9 @@ jobs:
           extra-packages: any::covr
           needs: coverage
 
-      - name: Create schema "test" in PostgreSQL
+      - name: Setup testing schemata in PostgreSQL
         run: |
-          psql SCDB_test -c "CREATE SCHEMA test;"
+          psql SCDB_test -c "CREATE SCHEMA test; CREATE SCHEMA \"test.one\";"
 
       - name: Test coverage
         run: |

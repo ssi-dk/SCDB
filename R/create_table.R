@@ -15,7 +15,7 @@
 #'
 #' close_connection(conn)
 #' @export
-create_table <- function(.data, conn = NULL, db_table_id = NULL, temporary = TRUE, ...) {
+create_table <- function(.data, conn = NULL, db_table_id, temporary = TRUE, ...) {
 
   checkmate::assert_class(.data, "data.frame")
   checkmate::assert_class(conn, "DBIConnection", null.ok = TRUE)
@@ -25,11 +25,7 @@ create_table <- function(.data, conn = NULL, db_table_id = NULL, temporary = TRU
   checkmate::assert_character(names(.data), unique = TRUE)
 
   # Convert db_table_id to id (id() returns early if this is the case)
-  if (!is.null(db_table_id)) { # TODO: db_table_name vs db_table_id
-    db_table_id <- id(db_table_id, conn = conn)
-  } else {
-    db_table_id <- deparse(substitute(.data))
-  }
+  db_table_id <- id(db_table_id, conn = conn)
 
   if (is.historical(.data)) {
     stop("checksum/from_ts/until_ts column(s) already exist(s) in .data!")

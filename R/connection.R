@@ -58,7 +58,7 @@ get_connection <- function(drv = RPostgres::Postgres(),
   )
 
   if (!class(drv) %in% supported_drivers) {
-    warning("Driver of class'", class(drv), "' is currently not fully supported and SCDB may not perform as expected.")
+    warning("Driver of class '", class(drv), "' is currently not fully supported and SCDB may not perform as expected.")
   }
 
   # Set PostgreSQL-specific options
