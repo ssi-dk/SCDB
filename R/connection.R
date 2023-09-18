@@ -52,12 +52,12 @@ get_connection <- function(drv = RPostgres::Postgres(),
   checkmate::assert_character(timezone, null.ok = TRUE)
   checkmate::assert_character(timezone_out, null.ok = TRUE)
 
-  supported_drivers <- c(
+  .supported_drivers <- c(
     "PqDriver",
     "SQLiteDriver"
   )
 
-  if (!class(drv) %in% supported_drivers) {
+  if (!class(drv) %in% .supported_drivers) {
     warning("Driver of class '", class(drv), "' is currently not fully supported and SCDB may not perform as expected.")
   }
 
@@ -71,8 +71,12 @@ get_connection <- function(drv = RPostgres::Postgres(),
   if (inherits(drv, "SQLiteDriver") && is.null(dbname)) dbname <- ""
 
   # Check if connection can be established given these settings
-  can_connect <- DBI::dbCanConnect(drv = drv, ...)
-  if (!can_connect) stop("Could not connect to database with the given parameters: ", attr(can_connect, "reason"))
+  tryCatch({
+    args <- append(list(...), as.list(environment()))
+    status <- do.call(DBI::dbCanConnect, args = args)
+
+    if (!status) rlang::abort(attr(status, "reason"))
+  })
 
   conn <- DBI::dbConnect(drv = drv,
                          dbname = dbname,
