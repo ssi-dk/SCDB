@@ -52,6 +52,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="scdb-development-version">SCDB (development version)<a class="anchor" aria-label="anchor" href="#scdb-development-version"></a></h2>
+<p>Features: * Increased flexibility for the Logger object - A Logger instance may now be created with no arguments - Suppress console output with output_to_console (TRUE by default) - If no log_path is set, Logger does not fail before trying to write to a file * Warn user is get_connection is called with untested driver * update_snapshot may take an already initialized Logger</p>
+<p>Testing: * Package functions are now also tested on a Postgres database</p>
+<p>Documentation: * Package description has been updated to not use a footnote</p>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1" id="scdb-01">SCDB 0.1<a class="anchor" aria-label="anchor" href="#scdb-01"></a></h2><p class="text-muted">CRAN release: 2023-08-28</p>
