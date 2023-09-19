@@ -1,5 +1,20 @@
 # SCDB (development version)
 
+Features:
+* Increased flexibility for the Logger object
+  - A Logger instance may now be created with no arguments
+  - Suppress console output with output_to_console (TRUE by default)
+  - If no log_path is set, Logger does not fail before trying to write to a file
+* Warn user is get_connection is called with untested driver
+* update_snapshot may take an already initialized Logger
+
+
+Testing:
+* Package functions are now also tested on a Postgres database
+
+Documentation:
+* Package description has been updated to not use a footnote
+
 # SCDB 0.1
 
 Features:
