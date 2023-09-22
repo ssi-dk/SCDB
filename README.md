@@ -13,14 +13,27 @@ coverage](https://codecov.io/gh/ssi-dk/SCDB/branch/main/graph/badge.svg)](https:
 
 <!-- badges: end -->
 
-R package for maintaining data bases with slowly-changing-dimensions
+## Overview
+
+`SCDB` is a package for easily maintaining and updating data with a
+slowly changing dimension. More specifically, the package facilitates
+type-2 history for data warehouses and provide a number of
+quality-of-life improvements for working with SQL databases within R.
+
+To better understand what a slowly changing dimension is and how and
+this packages provides it, see `vignette("basic_principles")`.
 
 ## Installation
 
-You can install the development version of `SCDB` from
-[GitHub](https://github.com/) with:
-
 ``` r
+# Install SCDB from CRAN:
+install.packages("SCDB")
+
+# Alternatively, install the development version from github:
 # install.packages("devtools")
-devtools::install_github("ssi-dk/SCDB")  # Use "ssi-dk/SCDB@*release" to install the latest release version
+devtools::install_github("ssi-dk/SCDB")
 ```
+
+## Usage
+
+For basic usage examples, see `vignette("basic_principles")`.
