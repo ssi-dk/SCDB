@@ -146,9 +146,9 @@ Logger <- R6::R6Class( #nolint: object_name_linter
       if (is.null(self$log_tbl)) return()
 
       dplyr::rows_append(x = self$log_tbl,
-                          y = data.frame(log_file = self$log_filename),
-                          copy = TRUE,
-                          in_place = TRUE)
+                         y = data.frame(log_file = self$log_filename),
+                         copy = TRUE,
+                         in_place = TRUE)
     },
 
     log_format = function(..., tic = self$start_time, log_type = NULL) {
