@@ -51,16 +51,99 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="scdb-development-version">SCDB (development version)<a class="anchor" aria-label="anchor" href="#scdb-development-version"></a></h2>
-<p>Features: * Increased flexibility for the Logger object - A Logger instance may now be created with no arguments - Suppress console output with output_to_console (TRUE by default) - If no log_path is set, Logger does not fail before trying to write to a file * Warn user is get_connection is called with untested driver * update_snapshot may take an already initialized Logger</p>
-<p>Testing: * Package functions are now also tested on a Postgres database</p>
-<p>Documentation: * Package description has been updated to not use a footnote</p>
+<h2 class="pkg-version" data-toc-text="0.2" id="scdb-02">SCDB 0.2<a class="anchor" aria-label="anchor" href="#scdb-02"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-2">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-2"></a></h3>
+<ul><li><p><code>update_snapshot</code> now take a <code>Logger</code> object through the <code>logger</code> argument instead of <code>log_path</code> and <code>log_table_id</code> arguments (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/24" class="external-link">#24</a>)</p></li>
+<li><p><code>Logger\$log_filename</code> has been changed to <code>Logger\$log_basename</code> to reduce ambiguity</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-0-2">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2"></a></h3>
+<ul><li><p>Package functions are now also tested with <code><a href="https://rpostgres.r-dbi.org/reference/Postgres.html" class="external-link">RPostgres::Postgres()</a></code>, which is therefore now <em>officially</em> supported (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/31" class="external-link">#31</a>)</p></li>
+<li><p><code>get_connection</code> shows a warning if an unsupported backend is used (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/26" class="external-link">#26</a>)</p></li>
+<li>
+<p>Increased flexibility for the <code>Logger</code> object (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/21" class="external-link">#21</a> <a href="https://github.com/ssi-dk/SCDB/issues/24" class="external-link">#24</a>)</p>
+<ul><li>A <code>Logger</code> instance may now be created with no arguments</li>
+<li>Suppress console output with <code>output_to_console</code> (<code>TRUE</code> by default)</li>
+<li>If no <code>log_path</code> is set, <code>Logger</code> does not fail before trying to write to a file</li>
+<li>
+<code>Logger\$log_realpath</code> gives the full path to log file being written</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-improvements-and-fixes-0-2">Minor improvements and fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-fixes-0-2"></a></h3>
+<ul><li><p><code>schema_exists</code> correctly detects a schema with no tables (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/30" class="external-link">#30</a>)</p></li>
+<li><p><code>db_timestamps</code> now newer calls <code>translate_sql</code> with <code>con = NULL</code> (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/37" class="external-link">#37</a>)</p></li>
+<li><p>Package description has been updated to not use a footnote on CRAN</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="known-issues-0-2">Known issues<a class="anchor" aria-label="anchor" href="#known-issues-0-2"></a></h3>
+<ul><li>As <code>schema_exists</code> on an empty schema tests by creating a new table, this may cause issues if the user does not have sufficient privileges.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1" id="scdb-01">SCDB 0.1<a class="anchor" aria-label="anchor" href="#scdb-01"></a></h2><p class="text-muted">CRAN release: 2023-08-28</p>
-<p>Features: * Functions to handle DB connections * get_connection, close_connection, id * Functions to interface with DB * get_tables, table_exists, get_schema, schema_exists * Functions to create “historical” tables and logs * create_table, create_logs_if_missing * Function to maintain “historical” tables * update_snapshot * Functions to interface with “historical” tables * get_table, slice_time, is.historical * Functions to facilitate faster joins with NAs on SQL backends * full_join, inner_join, left_join, right_join * Functions to manipulate tables on SQL backends * filter_keys, unite.tbl_dbi, interlace_sql * A logging object to facilitate logging * Logger * Function to generate checksums * digest_to_checksum * Function to write timestamps to tables on SQL backends * db_timestamp * Helper functions * nrow - DB compliant nrow * %notin% - negated %in%</p>
-<p>Testing: * Most package functions are tested here</p>
-<p>Documentation * The functions are fully documented</p>
+<div class="section level3">
+<h3 id="features-0-1">Features<a class="anchor" aria-label="anchor" href="#features-0-1"></a></h3>
+<ul><li>Functions to handle DB connections
+<ul><li>
+<code>get_connection</code>, <code>close_connection</code>, <code>id</code>
+</li>
+</ul></li>
+<li>Functions to interface with DB
+<ul><li>
+<code>get_tables</code>, <code>table_exists</code>, <code>get_schema</code>, <code>schema_exists</code>
+</li>
+</ul></li>
+<li>Functions to create “historical” tables and logs
+<ul><li>
+<code>create_table</code>, <code>create_logs_if_missing</code>
+</li>
+</ul></li>
+<li>Function to maintain “historical” tables
+<ul><li><code>update_snapshot</code></li>
+</ul></li>
+<li>Functions to interface with “historical” tables
+<ul><li>
+<code>get_table</code>, <code>slice_time</code>, <code>is.historical</code>
+</li>
+</ul></li>
+<li>Functions to facilitate faster joins with NAs on SQL backends
+<ul><li>
+<code>full_join</code>, <code>inner_join</code>, <code>left_join</code>, <code>right_join</code>
+</li>
+</ul></li>
+<li>Functions to manipulate tables on SQL backends
+<ul><li>
+<code>filter_keys</code>, <code>unite.tbl_dbi</code>, <code>interlace_sql</code>
+</li>
+</ul></li>
+<li>A logging object to facilitate logging
+<ul><li><code>Logger</code></li>
+</ul></li>
+<li>Function to generate checksums
+<ul><li><code>digest_to_checksum</code></li>
+</ul></li>
+<li>Function to write timestamps to tables on SQL backends
+<ul><li><code>db_timestamp</code></li>
+</ul></li>
+<li>Helper functions
+<ul><li>
+<code>nrow</code> - DB compliant <code>nrow</code>
+</li>
+<li>
+<code>%notin%</code> - negated <code>%in%</code>
+</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-0-1">Testing<a class="anchor" aria-label="anchor" href="#testing-0-1"></a></h3>
+<ul><li>Most package functions are tested here</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-0-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-1"></a></h3>
+<ul><li>The functions are fully documented</li>
+</ul></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

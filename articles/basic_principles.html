@@ -117,21 +117,23 @@ working with database data.</p>
 <span><span class="co"># can be done after the configuration of a .pgpass file.</span></span>
 <span><span class="co"># For this example, we use an on-disk SQLite db to showcase.</span></span>
 <span><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_connection.html">get_connection</a></span><span class="op">(</span>drv <span class="op">=</span> <span class="fu">RSQLite</span><span class="fu">::</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html" class="external-link">SQLite</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># NOTE: Had the PostgreSQL DB been configured, we would not need to pass any args to get_connection()</span></span></code></pre></div>
+<span><span class="co"># NOTE: Had the PostgreSQL DB been configured, we would not need to pass any args</span></span>
+<span><span class="co"># to get_connection()</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Our example data is mtcars with rownames converted to a column and only the first hp column of mtcars</span></span>
+<code class="sourceCode R"><span><span class="co"># Our example data is mtcars with rownames converted to a column and only the first hp</span></span>
+<span><span class="co"># column of mtcars</span></span>
 <span><span class="va">example_data</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html" class="external-link">transmute</a></span><span class="op">(</span><span class="va">mtcars</span>, car <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>, <span class="va">hp</span><span class="op">)</span></span>
 <span><span class="co"># If the data does not already live on the remote, we must transfer it</span></span>
 <span><span class="va">example_data</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/copy_to.html" class="external-link">copy_to</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">example_data</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># In this example, we imagine that on day 1, in this case 2020-01-01 11:00:00, our data known to us is</span></span>
-<span><span class="co"># the first 3 records of mtcars</span></span>
+<code class="sourceCode R"><span><span class="co"># In this example, we imagine that on day 1, in this case 2020-01-01 11:00:00, our data</span></span>
+<span><span class="co"># known to us is the first 3 records of mtcars</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">example_data</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># We then store these data in the database using update_snapshot</span></span>
 <span><span class="fu"><a href="../reference/update_snapshot.html">update_snapshot</a></span><span class="op">(</span>.data <span class="op">=</span> <span class="va">data</span>,</span>
 <span>                conn <span class="op">=</span> <span class="va">conn</span>,</span>
-<span>                db_table <span class="op">=</span> <span class="st">"mtcars"</span>, <span class="co"># the name of the DB table we want to store the data in</span></span>
+<span>                db_table <span class="op">=</span> <span class="st">"mtcars"</span>, <span class="co"># the name of the DB table to store the data in</span></span>
 <span>                timestamp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2020-01-01 11:00:00"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># We can access our data using the `get_table` function</span></span>
@@ -160,11 +162,11 @@ working with database data.</p>
 <code class="sourceCode R"><span><span class="co"># We then store these data in the database using update_snapshot</span></span>
 <span><span class="fu"><a href="../reference/update_snapshot.html">update_snapshot</a></span><span class="op">(</span>.data <span class="op">=</span> <span class="va">data</span>,</span>
 <span>                conn <span class="op">=</span> <span class="va">conn</span>,</span>
-<span>                db_table <span class="op">=</span> <span class="st">"mtcars"</span>, <span class="co"># the name of the DB table we want to store the data in</span></span>
+<span>                db_table <span class="op">=</span> <span class="st">"mtcars"</span>, <span class="co"># the name of the DB table to store the data in</span></span>
 <span>                timestamp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2020-01-02 12:00:00"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="co"># We can again access our data using the `get_table` function and see the latest available data</span></span>
+<span><span class="co"># We again use the `get_table` function and see the latest available data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_table.html">get_table</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"mtcars"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [5 x 2]</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Database: sqlite 3.41.2 []</span></span></span>
@@ -188,7 +190,7 @@ working with database data.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Hornet 4 Drive      110 3c1b6c43b206dd93ee4f6c3d06e1b416 2020-01-02 … <span style="color: #BB0000;">NA</span>      </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Hornet Sportabout   175 9355ed7a70e3ff73a4b6ee7f7129aa35 2020-01-02 … <span style="color: #BB0000;">NA</span></span></span>
 <span></span>
-<span><span class="co"># Since our data is time-versioned, we can still recover the data as it looked the day before</span></span>
+<span><span class="co"># Since our data is time-versioned, we can recover the data from the day before</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_table.html">get_table</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"mtcars"</span>, slice_ts <span class="op">=</span> <span class="st">"2020-01-01 11:00:00"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [3 x 2]</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Database: sqlite 3.41.2 []</span></span></span>
@@ -198,18 +200,18 @@ working with database data.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Mazda RX4       110</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Mazda RX4 Wag   110</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># On day 3, we imagine that we have the same 5 records, but one of them is altered slightly</span></span>
+<code class="sourceCode R"><span><span class="co"># On day 3, we imagine that we have the same 5 records, but one of them is altered</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">example_data</span>, <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>hp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">hp</span> <span class="op">/</span> <span class="fl">2</span>, <span class="va">hp</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># We then store these data in the database using update_snapshot</span></span>
 <span><span class="fu"><a href="../reference/update_snapshot.html">update_snapshot</a></span><span class="op">(</span>.data <span class="op">=</span> <span class="va">data</span>,</span>
 <span>                conn <span class="op">=</span> <span class="va">conn</span>,</span>
-<span>                db_table <span class="op">=</span> <span class="st">"mtcars"</span>, <span class="co"># the name of the DB table we want to store the data in</span></span>
+<span>                db_table <span class="op">=</span> <span class="st">"mtcars"</span>, <span class="co"># the name of the DB table to store the data in</span></span>
 <span>                timestamp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2020-01-03 10:00:00"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># We can again access our data using the `get_table` function and see that the currently available data</span></span>
-<span><span class="co"># (with the changed hp value for Mazda RX4)</span></span>
+<code class="sourceCode R"><span><span class="co"># We can again access our data using the `get_table` function and see that the currently</span></span>
+<span><span class="co"># available data (with the changed hp value for Mazda RX4)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_table.html">get_table</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"mtcars"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [5 x 2]</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Database: sqlite 3.41.2 []</span></span></span>
@@ -235,9 +237,10 @@ working with database data.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Hornet Sportabout   175 9355ed7a70e3ff73a4b6ee7f7129aa35 2020-01-02 … <span style="color: #BB0000;">NA</span>      </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Mazda RX4            55 1232f78f7befb3a765b91176eaacdbb0 2020-01-03 … <span style="color: #BB0000;">NA</span></span></span>
 <span></span>
-<span><span class="co"># Setting include_slice_info to TRUE also returns the checksum, from_ts and until_ts fields.</span></span>
+<span><span class="co"># Setting include_slice_info = TRUE also returns checksum, from_ts and until_ts.</span></span>
 <span><span class="co"># This is most useful when viewing data from a specific point in time</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_table.html">get_table</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"mtcars"</span>, slice_ts <span class="op">=</span> <span class="st">"2020-01-03 06:30:00"</span>, include_slice_info <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="../reference/get_table.html">get_table</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"mtcars"</span>, slice_ts <span class="op">=</span> <span class="st">"2020-01-03 06:30:00"</span>,</span>
+<span>                include_slice_info <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [5 x 5]</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Database: sqlite 3.41.2 []</span></span></span>
 <span><span class="co">#&gt;   car                  hp checksum                         from_ts      until_ts</span></span>
