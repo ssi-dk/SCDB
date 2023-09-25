@@ -29,6 +29,7 @@ Imports:
     openssl,
     purrr,
     rlang,
+    R6,
     RSQLite,
     stringr,
     tidyr,
