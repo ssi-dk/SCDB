@@ -85,15 +85,30 @@
 <a class="anchor" aria-label="anchor" href="#scdb-"></a>
 </h1>
 </div>
-<p><a href="https://CRAN.R-project.org/package=SCDB" class="external-link"><img src="https://www.r-pkg.org/badges/version/SCDB" alt="CRAN status"></a> <a href="https://github.com/ssi-dk/SCDB/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/ssi-dk/SCDB/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/gh/ssi-dk/SCDB?branch=main" class="external-link"><img src="https://codecov.io/gh/ssi-dk/SCDB/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></p>
-<p>R package for maintaining data bases with slowly-changing-dimensions</p>
+<!-- badges: start -->
+
+<!-- badges: end -->
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p><code>SCDB</code> is a package for easily maintaining and updating data with a slowly changing dimension. More specifically, the package facilitates type-2 history for data warehouses and provide a number of quality-of-life improvements for working with SQL databases within R.</p>
+<p>To better understand what a slowly changing dimension is and how and this packages provides it, see <code><a href="articles/basic_principles.html">vignette("basic_principles")</a></code>.</p>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of <code>SCDB</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ssi-dk/SCDB"</span><span class="op">)</span>  <span class="co"># Use "ssi-dk/SCDB@*release" to install the latest release version</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Install SCDB from CRAN:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"SCDB"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Alternatively, install the development version from github:</span></span>
+<span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ssi-dk/SCDB"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h2>
+<p>For basic usage examples, see <code><a href="articles/basic_principles.html">vignette("basic_principles")</a></code>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -129,7 +144,14 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://CRAN.R-project.org/package=SCDB" class="external-link"><img src="https://www.r-pkg.org/badges/version/SCDB" alt="CRAN status"></a></li>
+<li><a href="https://github.com/ssi-dk/SCDB/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/ssi-dk/SCDB/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/ssi-dk/SCDB?branch=main" class="external-link"><img src="https://codecov.io/gh/ssi-dk/SCDB/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
