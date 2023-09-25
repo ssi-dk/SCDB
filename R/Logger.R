@@ -2,6 +2,7 @@
 #' @description
 #' Create an object for logging database operations
 #'
+#' @importFrom R6 R6Class
 #' @param db_tablestring A string specifying the table being updated
 #' @template log_table_id
 #' @template log_path
