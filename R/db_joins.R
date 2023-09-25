@@ -66,12 +66,12 @@ select_na_sql <- function(x, y, by, na_by, left = TRUE) {
 #' @noRd
 join_warn <- function() {
   if (testthat::is_testing() || !interactive()) return()
-  if (identical(parent.frame(n = 2), globalenv())) { # nocov start
+  if (identical(parent.frame(n = 2), globalenv())) {
     rlang::warn(paste("*_joins in database-backend does not match NA by default.\n",
                       "If your data contains NA, the columns with NA values must be supplied to \"na_by\",",
                       "or you must specifiy na_matches = \"na\""),
                 .frequency = "once", .frequency_id = "*_join NA warning")
-  } # nocov end
+  }
 }
 
 
@@ -80,10 +80,10 @@ join_warn <- function() {
 #' @noRd
 join_warn_experimental <- function() {
   if (testthat::is_testing() || !interactive()) return()
-  if (identical(parent.frame(n = 2), globalenv())) { # nocov start
+  if (identical(parent.frame(n = 2), globalenv())) {
     rlang::warn("*_joins with na_by is stil experimental. Please report issues to rassky",
                 .frequency = "once", .frequency_id = "*_join NA warning")
-  } # nocov end
+  }
 }
 
 
@@ -194,7 +194,7 @@ right_join <- function(x, y, by = NULL, na_by = NULL, ...) {
     renamer <- select_na_sql(x, y, by, na_by, left = FALSE)
 
     # Seems like right_join does not work for SQLite, so we'll do a left join for now
-    scdb_right_join(x, y, sql_on, renamer, ...)
+    return(scdb_right_join(x, y, sql_on, renamer, ...))
   }
 }
 
@@ -249,7 +249,7 @@ full_join <- function(x, y, by = NULL, na_by = NULL, ...) {
 
 #' @export
 #' @rdname joins
-semi_join <- function(x, y, by = NULL, na_by = NULL, ...) { # nocov start
+semi_join <- function(x, y, by = NULL, na_by = NULL, ...) {
 
   # Check arguments
   assert_data_like(x)
@@ -263,11 +263,11 @@ semi_join <- function(x, y, by = NULL, na_by = NULL, ...) { # nocov start
   } else {
     stop("Not implemented")
   }
-} # nocov end
+}
 
 #' @export
 #' @rdname joins
-anti_join <- function(x, y, by = NULL, na_by = NULL, ...) { # nocov start
+anti_join <- function(x, y, by = NULL, na_by = NULL, ...) {
 
   # Check arguments
   assert_data_like(x)
@@ -281,4 +281,4 @@ anti_join <- function(x, y, by = NULL, na_by = NULL, ...) { # nocov start
   } else {
     stop("Not implemented")
   }
-} # nocov end
+}

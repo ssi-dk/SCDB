@@ -267,5 +267,5 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
                    duration = !!format(round(difftime(toc, tic), digits = 2)), success = TRUE)
   logger$log_info("Finished processing for table", db_table_name, tic = toc)
 
-  return(NULL)
+  return()
 }

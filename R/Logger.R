@@ -143,14 +143,12 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
     generate_log_entry = function() {
       # Create a row for log in question
-      if (!is.null(self$log_tbl)) {
-        dplyr::rows_append(x = self$log_tbl,
-                           y = data.frame(log_file = self$log_filename),
-                           copy = TRUE,
-                           in_place = TRUE)
-      }
+      if (is.null(self$log_tbl)) return()
 
-      return()
+      dplyr::rows_append(x = self$log_tbl,
+                         y = data.frame(log_file = self$log_filename),
+                         copy = TRUE,
+                         in_place = TRUE)
     },
 
     log_format = function(..., tic = self$start_time, log_type = NULL) {
@@ -201,9 +199,9 @@ Logger <- R6::R6Class( #nolint: object_name_linter
     #' The full path to the logger's log file.
     log_realpath = function() {
       if (is.null(self$log_path)) {
-        nullfile()
+        return(nullfile())
       } else {
-        file.path(self$log_path, self$log_filename)
+        return(file.path(self$log_path, self$log_filename))
       }
     }
   )

@@ -49,18 +49,16 @@ create_table <- function(.data, conn = NULL, db_table_id, temporary = TRUE, ...)
                      temporary = temporary,
                      ...)
 
-  invisible(dplyr::tbl(conn, db_table_id))
+  return(invisible(dplyr::tbl(conn, db_table_id)))
 }
 
 
 
-# TODO: some development comments
 #' @importFrom methods setGeneric
 methods::setGeneric("getTableSignature",
                     function(.data, conn = NULL) standardGeneric("getTableSignature"),
                     signature = "conn")
 
-#'
 methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
   # Define the column types to be updated based on backend class
   col_types <- DBI::dbDataType(conn, .data)
@@ -85,7 +83,6 @@ methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
   return(replace(col_types, special_indices, special_cols))
 })
 
-#'
 methods::setMethod("getTableSignature", "NULL", function(.data, conn) {
   # Emulate product of DBI::dbDataType
   signature <- dplyr::summarise(.data, dplyr::across(tidyselect::everything(), ~ class(.)[1]))

@@ -12,14 +12,14 @@
 #'
 #' close_connection(conn)
 #' @export
-get_schema <- function(.x) { # nocov start
+get_schema <- function(.x) {
 
   if (inherits(.x, "PqConnection")) {
     # Get schema from connection object
     schema <- DBI::dbGetQuery(.x, "SELECT CURRENT_SCHEMA()")$current_schema
 
   } else if (inherits(.x, "SQLiteConnection") || inherits(.x, "tbl_SQLiteConnection")) {
-    return(NULL)
+    return()
   } else if (inherits(.x, "tbl_dbi")) {
     # Get schema from a DBI object (e.g. lazy query)
     schema <- stringr::str_extract_all(dbplyr::remote_query(.x), '(?<=FROM \")[^"]*')[[1]]
@@ -37,7 +37,7 @@ get_schema <- function(.x) { # nocov start
   if (schema == "public") schema <- "prod"
 
   return(schema)
-} # nocov end
+}
 
 
 #' Test if a schema exists in given connection
