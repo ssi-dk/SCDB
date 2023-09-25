@@ -12,3 +12,4 @@ man-roxygen/*
 ^doc$
 ^Meta$
 ^README.Rmd$
+^revdep$
