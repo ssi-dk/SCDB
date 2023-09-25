@@ -1,3 +1,7 @@
+# dplyr has a deprecated function called "id" that in some cases are called over the SCDB implementation if "id"
+# We here explicitly prefer our implementation for our tests
+conflicted::conflict_prefer("id", "SCDB")
+
 # Define list of connections to check
 conn_list <- list(
   # Backend string = package::function
@@ -59,9 +63,9 @@ for (conn in conns) {
 
   # Copy mtcars to conn
   dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
-                 name = SCDB::id("test.mtcars", conn), temporary = FALSE, overwrite = TRUE)
+                 name = id("test.mtcars", conn), temporary = FALSE, overwrite = TRUE)
   dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
-                 name = SCDB::id("__mtcars", conn),    temporary = FALSE, overwrite = TRUE)
+                 name = id("__mtcars", conn),    temporary = FALSE, overwrite = TRUE)
 
   dplyr::copy_to(conn,
                  mtcars |>
@@ -69,5 +73,5 @@ for (conn in conns) {
                    digest_to_checksum() |>
                    dplyr::mutate(from_ts = as.POSIXct("2020-01-01 09:00:00"),
                                  until_ts = as.POSIXct(NA)),
-                 name = SCDB::id("__mtcars_historical", conn),    temporary = FALSE, overwrite = TRUE)
+                 name = id("__mtcars_historical", conn),    temporary = FALSE, overwrite = TRUE)
 }
