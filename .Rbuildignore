@@ -9,3 +9,5 @@
 .lintr
 man-roxygen/*
 ^cran-comments\.md$
+^doc$
+^Meta$
