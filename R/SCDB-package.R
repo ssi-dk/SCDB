@@ -2,6 +2,7 @@
 "_PACKAGE"
 
 #' @import RSQLite
+#' @import R6
 NULL
 
 #' @import utils
