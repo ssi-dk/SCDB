@@ -1,49 +1,79 @@
-# SCDB (development version)
+# SCDB 0.2
 
-Features:
-* Increased flexibility for the Logger object
-  - A Logger instance may now be created with no arguments
-  - Suppress console output with output_to_console (TRUE by default)
-  - If no log_path is set, Logger does not fail before trying to write to a file
-* Warn user is get_connection is called with untested driver
-* update_snapshot may take an already initialized Logger
+## Breaking changes
 
+* `update_snapshot` now take a `Logger` object through the `logger` argument instead of `log_path` and `log_table_id` arguments (@marcusmunch, #24)
 
-Testing:
-* Package functions are now also tested on a Postgres database
+* `Logger\$log_filename` has been changed to `Logger\$log_basename` to reduce ambiguity
 
-Documentation:
-* Package description has been updated to not use a footnote
+## New features
+
+* Package functions are now also tested with `RPostgres::Postgres()`, which is
+  therefore now *officially* supported (@marcusmunch, #31)
+
+* `get_connection` shows a warning if an unsupported backend is used (@marcusmunch, #26)
+
+* Increased flexibility for the `Logger` object (@marcusmunch, #21 #24)
+  - A `Logger` instance may now be created with no arguments
+  - Suppress console output with `output_to_console` (`TRUE` by default)
+  - If no `log_path` is set, `Logger` does not fail before trying to write to a file
+  - `Logger\$log_realpath` gives the full path to log file being written
+
+## Minor improvements and fixes
+
+* `schema_exists` correctly detects a schema with no tables (@marcusmunch, #30)
+
+* `db_timestamps` now newer calls `translate_sql` with `con = NULL` (@marcusmunch, #37)
+
+* Package description has been updated to not use a footnote on CRAN
+
+## Known issues
+
+* As `schema_exists` on an empty schema tests by creating a new table, this may
+  cause issues if the user does not have sufficient privileges.
 
 # SCDB 0.1
 
-Features:
-* Functions to handle DB connections
-  * get_connection, close_connection, id
-* Functions to interface with DB
-  * get_tables, table_exists, get_schema, schema_exists
-* Functions to create "historical" tables and logs
-  * create_table, create_logs_if_missing
-* Function to maintain "historical" tables
-  * update_snapshot
-* Functions to interface with "historical" tables
-  * get_table, slice_time, is.historical
-* Functions to facilitate faster joins with NAs on SQL backends
-  * full_join, inner_join, left_join, right_join
-* Functions to manipulate tables on SQL backends
-  * filter_keys, unite.tbl_dbi, interlace_sql
-* A logging object to facilitate logging
-  * Logger
-* Function to generate checksums
-  * digest_to_checksum
-* Function to write timestamps to tables on SQL backends
-  * db_timestamp
-* Helper functions
-  * nrow - DB compliant nrow
-  * %notin% - negated %in%
+## Features
 
-Testing:
+* Functions to handle DB connections
+  - `get_connection`, `close_connection`, `id`
+
+* Functions to interface with DB
+  - `get_tables`, `table_exists`, `get_schema`, `schema_exists`
+
+* Functions to create "historical" tables and logs
+  - `create_table`, `create_logs_if_missing`
+
+* Function to maintain "historical" tables
+  - `update_snapshot`
+
+* Functions to interface with "historical" tables
+  - `get_table`, `slice_time`, `is.historical`
+
+* Functions to facilitate faster joins with NAs on SQL backends
+  - `full_join`, `inner_join`, `left_join`, `right_join`
+
+* Functions to manipulate tables on SQL backends
+  - `filter_keys`, `unite.tbl_dbi`, `interlace_sql`
+
+* A logging object to facilitate logging
+  - `Logger`
+
+* Function to generate checksums
+  - `digest_to_checksum`
+
+* Function to write timestamps to tables on SQL backends
+  - `db_timestamp`
+
+* Helper functions
+  - `nrow` - DB compliant `nrow`
+  - `%notin%` - negated `%in%`
+
+## Testing
+
 * Most package functions are tested here
 
-Documentation
+## Documentation
+
 * The functions are fully documented
