@@ -53,14 +53,15 @@ conns <- lapply(conn_list, get_driver) |>
 # Our benchmark data is the iris data set but repeated to increase the data size
 data_generator <- function(repeats) {
   purrr::map(seq(repeats),
-             \(it) dplyr::mutate(iris, r = dplyr::row_number() + (it - 1) * nrow(iris)))
+             \(it) dplyr::mutate(iris, r = dplyr::row_number() + (it - 1) * nrow(iris))) |>
+    purrr::reduce(rbind)
 }
 
 data_1 <- data_generator(10)
 data_2 <- data_generator(20) |>
   dplyr::mutate(Sepal.Length = dplyr::if_else(Sepal.Length > median(Sepal.Length),
                                               Sepal.Length, Sepal.Length / 2))
-data_2 <- data_generator(30) |>
+data_3 <- data_generator(30) |>
   dplyr::mutate(Sepal.Length = dplyr::if_else(Sepal.Length > median(Sepal.Length),
                                               Sepal.Length, Sepal.Length / 2),
                 Sepal.Width = dplyr::if_else(Sepal.Width > median(Sepal.Width),
