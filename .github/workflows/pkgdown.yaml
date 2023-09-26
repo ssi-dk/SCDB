@@ -68,3 +68,10 @@ jobs:
           clean: false
           branch: gh-pages
           folder: docs
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-test-failures
+          path: ${{ runner.temp }}/package
