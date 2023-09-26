@@ -4,6 +4,10 @@
 
 * Package logo slightly altered to have a readable clock (@RasmusSkytte, #49)
 
+## Other news
+
+* Maintainer changed to Marcus Munch Grünewald (@marcusmunch, #59)
+
 # SCDB 0.2
 
 ## Breaking changes
