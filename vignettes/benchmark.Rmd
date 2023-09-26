@@ -57,11 +57,11 @@ data_generator <- function(repeats) {
     purrr::reduce(rbind)
 }
 
-data_1 <- data_generator(10)
-data_2 <- data_generator(20) |>
+data_1 <- data_generator(20)
+data_2 <- data_generator(40) |>
   dplyr::mutate(Sepal.Length = dplyr::if_else(Sepal.Length > median(Sepal.Length),
                                               Sepal.Length, Sepal.Length / 2))
-data_3 <- data_generator(30) |>
+data_3 <- data_generator(60) |>
   dplyr::mutate(Sepal.Length = dplyr::if_else(Sepal.Length > median(Sepal.Length),
                                               Sepal.Length, Sepal.Length / 2),
                 Sepal.Width = dplyr::if_else(Sepal.Width > median(Sepal.Width),
@@ -75,9 +75,7 @@ data_on_conns <- purrr::map(conns, ~ {
 })
 ```
 
-
 ```{r benchmark_functions}
-
 # Define the data to loop over for benchmark
 ts <- list("2021-01-01", "2021-01-02", "2021-01-03")
 
@@ -104,7 +102,6 @@ res <- microbenchmark::microbenchmark(list = benchmark_exprs,
                                       times = 10)
 
 print(res)
-
 ```
 
 ```{r cleanup}
