@@ -5,6 +5,10 @@
 * Package logo slightly altered to have a readable clock (@RasmusSkytte, #49)
 * Added a vignette describing the concept of a slowly changing dimension using examples (@marcusmunch, #53)
 
+## Other news
+
+* Maintainer changed to Marcus Munch Grünewald (@marcusmunch, #59)
+
 # SCDB 0.2
 
 ## Breaking changes
