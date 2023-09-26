@@ -39,6 +39,7 @@ Imports:
 Suggests:
     conflicted,
     knitr,
+    microbenchmark,
     rmarkdown,
     RPostgres,
     roxygen2,
