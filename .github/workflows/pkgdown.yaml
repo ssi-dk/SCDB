@@ -22,16 +22,16 @@ jobs:
   pkgdown:
     runs-on: ubuntu-latest
 
-  services:
-    postgres:
-      image: postgres:latest
-      env:
-        POSTGRES_DB: SCDB_test
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
-      ports:
-        - 5432:5432
-      options: --health-cmd "pg_isready -U postgres" --health-interval 10s --health-timeout 5s --health-retries 5
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: SCDB_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd "pg_isready -U postgres" --health-interval 10s --health-timeout 5s --health-retries 5
 
     # Only restrict concurrency for non-PR jobs
     concurrency:
