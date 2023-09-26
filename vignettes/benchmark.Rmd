@@ -50,15 +50,21 @@ conns <- lapply(conn_list, get_driver) |>
 ```
 
 ```{r benchmark_data}
-# We use the example data from the `basic_principles` vignette:
-# Our example data is mtcars with rownames converted to a column and only the first hp
-# column of mtcars
-example_data <- dplyr::transmute(mtcars, car = rownames(mtcars), hp)
+# Our benchmark data is the iris data set but repeated to increase the data size
+data_generator <- function(repeats) {
+  purrr::map(seq(repeats),
+             \(it) dplyr::mutate(iris, r = dplyr::row_number() + (it - 1) * nrow(iris)))
+}
 
-data_1 <- head(example_data, 3)
-data_2 <- head(example_data, 5)
-data_3 <- head(example_data, 5) |>
-  dplyr::mutate(hp = ifelse(dplyr::row_number() == 1, hp / 2, hp))
+data_1 <- data_generator(10)
+data_2 <- data_generator(20) |>
+  dplyr::mutate(Sepal.Length = dplyr::if_else(Sepal.Length > median(Sepal.Length),
+                                              Sepal.Length, Sepal.Length / 2))
+data_2 <- data_generator(30) |>
+  dplyr::mutate(Sepal.Length = dplyr::if_else(Sepal.Length > median(Sepal.Length),
+                                              Sepal.Length, Sepal.Length / 2),
+                Sepal.Width = dplyr::if_else(Sepal.Width > median(Sepal.Width),
+                                             Sepal.Width, Sepal.Width / 2))
 
 # copy data to the conns
 data_on_conns <- purrr::map(conns, ~ {
@@ -88,15 +94,15 @@ scdb_updates <- function(conn, data_on_conn) {
 # Construct the list of benchmarks
 benchmark_exprs <- alist()
 for (benchmark_id in seq_along(conns)) {
-  benchmark_on_conn <- local({
-    bquote(scdb_updates(conns[[benchmark_id]], data_on_conns[[benchmark_id]]))
-  })
+  benchmark_on_conn <- local(bquote(scdb_updates(conns[[benchmark_id]], data_on_conns[[benchmark_id]])))
   benchmark_exprs <- append(benchmark_exprs, benchmark_on_conn)
 }
 names(benchmark_exprs) <- names(conns)
 
-microbenchmark::microbenchmark(list = benchmark_exprs,
-                               times = 10)
+res <- microbenchmark::microbenchmark(list = benchmark_exprs,
+                                      times = 10)
+
+print(res)
 
 ```
 
