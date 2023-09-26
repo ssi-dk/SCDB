@@ -69,9 +69,8 @@ jobs:
           branch: gh-pages
           folder: docs
 
-      - name: Upload test results
-        if: failure()
+      - name: Upload pgkdown output
         uses: actions/upload-artifact@v3
         with:
-          name: coverage-test-failures
+          name: pkgdown-output
           path: ${{ runner.temp }}/package
