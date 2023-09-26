@@ -11,3 +11,5 @@ man-roxygen/*
 ^cran-comments\.md$
 ^doc$
 ^Meta$
+^README.Rmd$
+^revdep$
