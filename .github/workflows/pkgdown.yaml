@@ -11,16 +11,38 @@ on:
 
 name: pkgdown
 
+env:
+  PGHOST: localhost
+  PGPORT: 5432
+  PGDATABASE: SCDB_test
+  PGUSER: postgres
+  PGPASSWORD: postgres
+
 jobs:
   pkgdown:
     runs-on: ubuntu-latest
+
+  services:
+    postgres:
+      image: postgres:latest
+      env:
+        POSTGRES_DB: SCDB_test
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+      ports:
+        - 5432:5432
+      options: --health-cmd "pg_isready -U postgres" --health-interval 10s --health-timeout 5s --health-retries 5
+
     # Only restrict concurrency for non-PR jobs
     concurrency:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
+
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
     permissions:
       contents: write
+
     steps:
       - uses: actions/checkout@v3
 
