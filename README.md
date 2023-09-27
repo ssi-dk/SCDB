@@ -21,7 +21,7 @@ type-2 history for data warehouses and provide a number of
 quality-of-life improvements for working with SQL databases within R.
 
 To better understand what a slowly changing dimension is and how and
-this packages provides it, see `vignette("basic_principles")`.
+this packages provides it, see `vignette("basic-principles")`.
 
 ## Installation
 
@@ -36,4 +36,4 @@ devtools::install_github("ssi-dk/SCDB")
 
 ## Usage
 
-For basic usage examples, see `vignette("basic_principles")`.
+For basic usage examples, see `vignette("basic-principles")`.
