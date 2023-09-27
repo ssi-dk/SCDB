@@ -9,10 +9,25 @@ on:
     types: [published]
   workflow_dispatch:
 
-name: pkgdown
+name: Deploy to GitHub Pages
 
 jobs:
+  cleanup:
+    name: 🧼 Clean up environment
+    runs-on: ubuntu-latest
+    permissions: write-all
+
+    steps:
+      - name: 🗑 Delete previous deployments
+        uses: strumwolf/delete-deployment-environment@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: github-pages
+          onlyRemoveDeployments: true
   pkgdown:
+    # Cleanup previous deployments
+    name: Build and deploy GitHub Pages
+    needs: cleanup
     runs-on: ubuntu-latest
     # Only restrict concurrency for non-PR jobs
     concurrency:
