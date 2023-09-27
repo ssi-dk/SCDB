@@ -2,3 +2,7 @@ url: https://ssi-dk.github.io/SCDB/
 template:
   bootstrap: 5
 
+authors:
+  Statens Serum Institut:
+    href: http://ssi.dk
+    html: <img src='man/figures/ssi-logo.svg' alt='SSI' height='45' />
