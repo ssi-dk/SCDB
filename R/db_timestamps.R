@@ -22,7 +22,6 @@ db_timestamp.default <- function(timestamp, conn) {
   return(dbplyr::translate_sql(as.POSIXct(!!timestamp), con = conn))
 }
 
-#' @rdname db_timestamp
 #' @export
 db_timestamp.NULL <- function(timestamp, conn) {
   if (inherits(timestamp, "POSIXt")) timestamp <- format(timestamp)
