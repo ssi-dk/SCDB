@@ -3,15 +3,12 @@
 \name{db_timestamp}
 \alias{db_timestamp}
 \alias{db_timestamp.default}
-\alias{db_timestamp.NULL}
 \alias{db_timestamp.SQLiteConnection}
 \title{Determine the type of timestamps the DB supports}
 \usage{
 db_timestamp(timestamp, conn = NULL)
 
 \method{db_timestamp}{default}(timestamp, conn)
-
-\method{db_timestamp}{`NULL`}(timestamp, conn)
 
 \method{db_timestamp}{SQLiteConnection}(timestamp, conn)
 }
