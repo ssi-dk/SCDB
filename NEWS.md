@@ -1,5 +1,9 @@
 # SCDB (development version)
 
+## Minor improvements and fixes
+
+* Package logo slightly altered to have a readable clock (@RasmusSkytte, #49)
+
 # SCDB 0.2
 
 ## Breaking changes
