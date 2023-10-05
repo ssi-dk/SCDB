@@ -1,0 +1,241 @@
+---
+title: "Slowly Changing Dimension methodology"
+output: rmarkdown::html_vignette
+bibliography: "references.bib"
+vignette: >
+  %\VignetteIndexEntry{Slowly Changing Dimension methodology}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(tidyverse)
+
+forecasts_full <- tribble(
+  ~City, ~Forecast, ~ForecastDate,
+  "New York",    20, "2023-09-28",
+  "Los Angeles", 23, "2023-09-28",
+  "Seattle",     16, "2023-09-28",
+  "Houston",     34, "2023-09-28",
+  "New York",    18, "2023-09-29",
+  "Los Angeles", 25, "2023-09-29",
+  "Seattle",     17, "2023-09-29",
+  "Houston",     34, "2023-09-29"
+) %>%
+  mutate(across("ForecastDate", as.Date))
+
+forecasts_scd <- forecasts_full %>%
+  mutate(ForecastFrom = ForecastDate,
+         ForecastUntil = case_when(
+           City == "Houston" ~ NA,
+           ForecastDate == "2023-09-29" ~ NA,
+           TRUE ~ "2023-09-29"
+         )) %>%
+  mutate(across("ForecastUntil", as.Date)) %>%
+  filter(!(City == "Houston" & ForecastFrom == "2023-09-29")) %>%
+  distinct() %>%
+  select(!"ForecastDate") %>%
+  arrange(ForecastFrom)
+
+# Only define one connection
+if (!exists("con")) con <- DBI::dbConnect(drv = RSQLite::SQLite(), dbname = ":memory:")
+
+forecasts_dated <- filter(forecasts_full, ForecastDate == "2023-09-28")
+forecasts <- select(forecasts_dated, !"ForecastDate")
+
+forecasts2 <- filter(forecasts_full, ForecastDate == "2023-09-29") %>%
+  select(!"ForecastDate")
+forecasts2a <- filter(forecasts_full, ForecastDate == "2023-09-29")
+```
+
+A slowly changing dimension is a concept in data warehousing which refers to data which may change over time, but at an irregular schedule.
+
+## Type 1 and Type 2 history
+
+For example, consider the following table of forecasts for a number of cities:
+```{r forecasts}
+# Current date: 2023-09-28
+forecasts
+```
+
+The following day, the forecasts will have changed, and — barring the occasional data hoarder — the existing data is no longer relevant.
+
+In this example, most (if not all) of the values of the `Forecast_C` column will change with each regular update.
+Putting it into other words, the table is a *snapshot*^[A *snapshot* is a static view of (part of) a database at a specific point in time] of forecasts at the last time of update.
+
+The following day, the forecasts naturally change:
+```{r forecasts2a}
+# Current date: 2023-09-29
+forecasts2
+```
+We could choose to update the forecasts table so that it would always contain the current data.
+This is what is referred to as Type 1 methodology [@Kimball2013].
+
+Databases are thankfully a rather efficient way of storing and accessing data, so instead of discarding the values from the previous day, we append the new data to those of the previous day.
+Also, in order to keep our data organised, we add a column with the date of the forecast, aptly named `ForecastDate`.
+
+The full table of forecasts for the two days now looks like below, and we are slowly building a full history of forecasts:
+```{r forecasts_full}
+forecasts_full
+```
+Managing historical data by inserting new data in this manner is often referred to as Type 2 methodology or Type 2 history.
+
+Our table now provides much more information for the user through filtering:
+```{r forecasts_full_examples}
+library(tidyverse)
+
+# Current forecasts
+forecasts_full %>%
+  slice_max(ForecastDate, n = 1) %>%
+  select(!"ForecastDate")
+
+# Forecasts for a given date
+forecasts_full %>%
+  filter(ForecastDate == "2023-09-28")
+
+# Full history for a given city
+forecasts_full %>%
+  filter(City == "New York")
+```
+
+Now, we note that the forecast for Houston has not changed between the two days.
+
+In order to keep our data as minimized as possible, we modify the table again, now expanding `ForecastDate` into `ForecastFrom` and `ForecastUntil`.
+
+Our table of forecasts now looks like this:
+```{r forecasts_scd}
+forecasts_scd
+```
+For now, the `ForecastUntil` value is set to `NA`, as it is not known when these rows will "expire" (if ever).
+This also makes it easy to identify currently valid data.
+
+Adding a new column to save a single row of data naturally seems a bit overkill, but as the number of rows in the data set increases indefinitely, this solutions scales much better.
+
+## A "timeline of timelines"
+Let's now introduce additional information and see how managing slowly changing dimensions enables us to easily navigate large amounts of data over large periods of time.
+
+```{r adresses_setup, include = FALSE}
+addresses <- tibble::tibble(
+  ID = c(1,
+         2,
+         1,
+         1),
+  GivenName = c("Alice",
+                "Robert",
+                "Alice",
+                "Alice"),
+  Surname = c("Doe",
+              "Tables",
+              "Doe",
+              "Doe"),
+  Address = c("Donut Plains 1",
+              "Rainbow Road 8",
+              "Donut Plains 1",
+              "Rainbow Road 8"),
+  MovedIn = c("1989-06-26",
+              "1989-12-13",
+              "1989-06-26",
+              "2021-03-01"),
+  MovedOut = c(NA,
+               NA,
+               "2021-03-01",
+               NA),
+  ValidFrom = c("1989-06-26",
+                "1989-12-13",
+                "2021-03-08",
+                "2021-03-08"),
+  ValidUntil = c("2021-03-08",
+                 NA,
+                 NA,
+                 NA)
+) %>%
+  mutate(across(c("MovedIn", "MovedOut", "ValidFrom", "ValidUntil"), as.Date))
+
+
+name_change_date <- as.Date("2023-08-28")
+addresses2 <- addresses %>%
+  filter(ID == 1) %>%
+  {
+    .data <- .
+
+    .data %>%
+      filter(Address == "Rainbow Road 8") %>%
+      mutate(Surname = "Tables",
+             ValidFrom = !!name_change_date) %>%
+      bind_rows(.data)
+  } %>%
+  mutate(ValidUntil = as.Date(c(NA, !!name_change_date, NA, !!name_change_date))) %>%
+  bind_rows(filter(addresses,
+                   ID == 2)) %>%
+  arrange(ValidFrom) %>%
+  distinct()
+```
+
+Imagine a town of several thousand citizens, with a town hall maintaining a civil registry of names and addresses of every citizen, updated daily with any changes submitted by the citizens, each of whom having an individual identification number.^[If this concept seems very familiar, you may have heard of [the Danish central civil registry](https://en.wikipedia.org/wiki/Personal_identification_number_(Denmark))]
+
+The data is largely static, as a very small fraction of citizens move on any given day, but it is of interest to keep data relatively up-to-date.
+This is where managing a slowly changing dimension becomes very powerful, compared to full incremental backups.
+
+One day, Alice Doe meets [Robert "Bobby" Tables](https://xkcd.com/327), and they move in together:
+
+```{r addresses1}
+addresses
+```
+
+First thing to notice is that the registry is not updated in real-time, as citizens may have been late in registering a change of address.
+This can be seen when comparing the values of `MovedIn` and `ValidFrom` for row 4.
+
+When using Type 2 history, this feature is correctly replicated when reconstructing historical data:
+```{r addresses1a}
+slice_timestamp <- "2021-03-02"
+
+addresses %>%
+  filter(ID == 1,
+         ValidFrom < !!slice_timestamp &
+           (ValidUntil >= !!slice_timestamp | is.na(ValidUntil))) %>%
+  select(!c("ValidFrom", "ValidUntil"))
+```
+In other words, even though Alice's address was subsequently updated in the registry, we can still see that she *was* registered as living in Donut Plains at this time.
+
+By now, things are going well between Alice and Robert; they get married, with Alice taking Robert's surname.
+It is the same person that has lived with Robert, but as of the day of marriage, she has a different name:
+```{r addresses2}
+filter(addresses2,
+       ID == 1,
+       Address == "Rainbow Road 8") %>%
+  select(ID, GivenName, Surname, MovedIn, MovedOut, ValidFrom, ValidUntil)
+```
+
+This is now also reflected in the data; the `MovedIn` date is persistent across the date of the name change, only the `Surname` changes:
+```{r addresses3}
+slice_timestamp <- "2022-03-04"
+
+addresses2 %>%
+  filter(Address == "Rainbow Road 8",
+         is.na(MovedOut),
+         ValidFrom < !!slice_timestamp &
+           (ValidUntil >= !!slice_timestamp | is.na(ValidUntil))) %>%
+  select(ID, GivenName, Surname, MovedIn, MovedOut)
+
+slice_timestamp <- "2023-09-29"
+
+addresses2 %>%
+  filter(Address == "Rainbow Road 8",
+         is.na(MovedOut),
+         ValidFrom < !!slice_timestamp &
+           (ValidUntil >= !!slice_timestamp | is.na(ValidUntil))) %>%
+  select(ID, GivenName, Surname, MovedIn, MovedOut)
+```
+
+## Summary
+
+By now, it is hopefully clear how managing a slowly changing dimension allows you to access data at any point in (tracked) time while potentially avoiding a lot of data redundancy.
+
+You are now ready to get started with the `SCDB` package!
+
+### References
