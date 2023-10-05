@@ -3,6 +3,7 @@
 ## Minor improvements and fixes
 
 * Package logo slightly altered to have a readable clock (@RasmusSkytte, #49)
+* Added a vignette describing the concept of a slowly changing dimension using examples (@marcusmunch, #53)
 
 # SCDB 0.2
 
