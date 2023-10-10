@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: 🗑 Delete previous deployments
-        if: github.repository == 'ssi-dk/SCDB'
+        if: ${{ (github.repository == 'ssi-dk/SCDB') && (github.event_name == 'release') }}
         uses: strumwolf/delete-deployment-environment@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
