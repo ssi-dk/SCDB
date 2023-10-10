@@ -27,7 +27,7 @@ jobs:
           onlyRemoveDeployments: true
 
   pkgdown-build:
-    name: Build and deploy GitHub Pages
+    name: Render pkgdown output
     runs-on: ubuntu-latest
     # Only restrict concurrency for non-PR jobs
     concurrency:
@@ -54,7 +54,7 @@ jobs:
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
-      - name: Upload output to artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: pkgdown
@@ -68,7 +68,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Download pkgdown output artifact
+      - name: Download pkgdown output
         uses: actions/download-artifact@v3
         with:
           name: pkgdown
