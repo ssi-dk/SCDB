@@ -25,10 +25,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: github-pages
           onlyRemoveDeployments: true
-  pkgdown:
-    # Cleanup previous deployments
+
+  pkgdown-build:
     name: Build and deploy GitHub Pages
-    needs: cleanup
     runs-on: ubuntu-latest
     # Only restrict concurrency for non-PR jobs
     concurrency:
