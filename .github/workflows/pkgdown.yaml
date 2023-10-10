@@ -64,7 +64,7 @@ jobs:
     name: Deploy to GitHub pages 🚀
     runs-on: ubuntu-latest
     if: ${{ (github.repository == 'ssi-dk/SCDB') && (github.event_name == 'release') }}
-    needs: cleanup
+    needs: [cleanup, pkgdown-build]
     steps:
       - uses: actions/checkout@v3
 
