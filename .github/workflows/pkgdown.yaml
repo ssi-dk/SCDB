@@ -1,6 +1,10 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
+  push:
+    branch: main
+  pull_request:
+    branch: main
   release:
     types: [published]
   workflow_dispatch:
@@ -15,6 +19,7 @@ jobs:
 
     steps:
       - name: 🗑 Delete previous deployments
+        if: github.repository == 'ssi-dk/SCDB'
         uses: strumwolf/delete-deployment-environment@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
