@@ -14,12 +14,12 @@ name: Deploy to GitHub Pages
 jobs:
   cleanup:
     name: 🧼 Clean up environment
+    if: ${{ (github.repository == 'ssi-dk/SCDB') && (github.event_name == 'release') }}
     runs-on: ubuntu-latest
     permissions: write-all
 
     steps:
       - name: 🗑 Delete previous deployments
-        if: ${{ (github.repository == 'ssi-dk/SCDB') && (github.event_name == 'release') }}
         uses: strumwolf/delete-deployment-environment@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
