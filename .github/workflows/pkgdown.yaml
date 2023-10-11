@@ -1,6 +1,10 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
+  push:
+    branch: main
+  pull_request:
+    branch: main
   release:
     types: [published]
   workflow_dispatch:
@@ -15,15 +19,15 @@ jobs:
 
     steps:
       - name: 🗑 Delete previous deployments
+        if: ${{ (github.repository == 'ssi-dk/SCDB') && (github.event_name == 'release') }}
         uses: strumwolf/delete-deployment-environment@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: github-pages
           onlyRemoveDeployments: true
-  pkgdown:
-    # Cleanup previous deployments
-    name: Build and deploy GitHub Pages
-    needs: cleanup
+
+  pkgdown-build:
+    name: Render pkgdown output
     runs-on: ubuntu-latest
     # Only restrict concurrency for non-PR jobs
     concurrency:
@@ -50,8 +54,27 @@ jobs:
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: pkgdown
+          path: docs/
+
+  deploy:
+    name: Deploy to GitHub pages 🚀
+    runs-on: ubuntu-latest
+    if: ${{ (github.repository == 'ssi-dk/SCDB') && (github.event_name == 'release') }}
+    needs: [cleanup, pkgdown-build]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download pkgdown output
+        uses: actions/download-artifact@v3
+        with:
+          name: pkgdown
+          path: docs
+
       - name: Deploy to GitHub pages 🚀
-        if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
           clean: false
