@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">SCDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +24,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/basic-principles.html">Basic principles</a>
+    <a class="dropdown-item" href="../articles/basic_principles.html">Basic principles</a>
   </div>
 </li>
 <li class="nav-item">
@@ -62,6 +62,9 @@
 <span><span class="co"># S3 method for default</span></span>
 <span><span class="fu">db_timestamp</span><span class="op">(</span><span class="va">timestamp</span>, <span class="va">conn</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S3 method for `NULL`</span></span>
+<span><span class="fu">db_timestamp</span><span class="op">(</span><span class="va">timestamp</span>, <span class="va">conn</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># S3 method for SQLiteConnection</span></span>
 <span><span class="fu">db_timestamp</span><span class="op">(</span><span class="va">timestamp</span>, <span class="va">conn</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -88,7 +91,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_connection.html">get_connection</a></span><span class="op">(</span>drv <span class="op">=</span> <span class="fu">RSQLite</span><span class="fu">::</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html" class="external-link">SQLite</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">db_timestamp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">conn</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;SQL&gt; '2023-09-28 14:11:53'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;SQL&gt; '2023-10-11 07:27:07'</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="close_connection.html">close_connection</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span></span>
 </code></pre></div>
