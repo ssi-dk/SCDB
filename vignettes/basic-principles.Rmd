@@ -112,7 +112,7 @@ On day 3, we imagine that we have the same 5 records, but one of them is altered
 
 ```{r example_3}
 data <- head(example_data, 5) |>
-  dplyr::mutate(hp = ifelse(dplyr::row_number() == 1, hp / 2, hp))
+  dplyr::mutate(hp = ifelse(car == "Mazda RX4", hp / 2, hp))
 
 update_snapshot(.data = data,
                 conn = conn,
