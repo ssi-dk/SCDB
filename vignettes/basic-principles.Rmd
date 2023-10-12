@@ -32,7 +32,11 @@ if (!"update_snapshot" %in% ls(envir = globalenv())) {
 }
 
 # Setup example_data table in conn
-example_data <- dplyr::copy_to(conn, dplyr::transmute(datasets::mtcars, car = rownames(mtcars), hp), name = "example_data", overwrite = TRUE)
+example_data <-
+  dplyr::copy_to(conn,
+                 dplyr::transmute(datasets::mtcars, car = rownames(mtcars), hp),
+                 name = "example_data",
+                 overwrite = TRUE)
 ```
 The basic principle of the SCDB package is to enable the user to easily implement and maintain a database of time-versioned data.
 
