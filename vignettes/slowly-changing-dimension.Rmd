@@ -201,6 +201,7 @@ addresses %>%
   select(!c("ValidFrom", "ValidUntil"))
 ```
 In other words, even though Alice's address was subsequently updated in the registry, we can still see that she *was* registered as living in Donut Plains at this time.
+This modeling of "timelines of timelines" is also called bitemporal modeling.
 
 By now, things are going well between Alice and Robert; they get married, with Alice taking Robert's surname.
 It is the same person that has lived with Robert, but as of the day of marriage, she has a different name:
