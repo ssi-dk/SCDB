@@ -60,7 +60,7 @@ jobs:
   R-CMD-check-hard:
     runs-on: ubuntu-latest
 
-    name: ubuntu-latest (release)
+    name: ubuntu-latest (release, no dependencies)
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
