@@ -65,7 +65,7 @@ forecasts
 
 The following day, the forecasts will have changed, and — barring the occasional data hoarder — the existing data is no longer relevant.
 
-In this example, most (if not all) of the values of the `Forecast_C` column will change with each regular update.
+In this example, most (if not all) of the values of the `Forecast` column will change with each regular update.
 Putting it into other words, the table is a *snapshot*^[A *snapshot* is a static view of (part of) a database at a specific point in time] of forecasts at the last time of update.
 
 The following day, the forecasts naturally change:
