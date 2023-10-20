@@ -1,0 +1,41 @@
+name: Render SVG files
+
+on:
+  push:
+    paths:
+      - man/**logo.svg
+
+jobs:
+  render-svg:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: r-lib/actions/setup-r@v2
+
+      - name: Install dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::magick
+            any::rsvg
+
+      - name: Render logo SVG
+        run: |
+          library(magick)
+          image_read_svg("man/figures/logo.svg") |>
+            image_crop("100%x50%") |>
+            image_trim() |>
+            image_resize("x250") |>
+            image_write("man/figures/logo.png")
+        shell: Rscript {0}
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.name "${{ github.actor }}"
+          git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+          git add man/\*
+          git commit -m "Update logo from SVG" || echo "No changes to commit"
+          git pull --ff-only
+          git push origin
