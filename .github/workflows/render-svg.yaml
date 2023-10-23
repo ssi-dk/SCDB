@@ -24,11 +24,17 @@ jobs:
       - name: Render logo SVG
         run: |
           library(magick)
-          image_read_svg("man/figures/logo.svg") |>
+
+          svg_path <- list.files("man/figures", "*logo.svg", full.names = TRUE)
+
+          stopifnot(length(svg_path) == 1)
+
+          image_read_svg(svg_path) |>
             image_crop("100%x50%") |>
             image_trim() |>
             image_resize("x250") |>
             image_write("man/figures/logo.png")
+
         shell: Rscript {0}
 
       - name: Commit and push changes
