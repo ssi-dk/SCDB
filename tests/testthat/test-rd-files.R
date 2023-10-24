@@ -1,4 +1,4 @@
-test_that("Code contains no non-ASCII characters", {
+test_field_in_documentation <- function(field) {
 
   # Load .Rd files based on environment
   # When using R-CMD-Check the deployment is different from when using devtools::test().
@@ -40,28 +40,23 @@ test_that("Code contains no non-ASCII characters", {
 
   }
 
+
   # Skip the "*-package.Rd" file
   rd_files <- rd_files[!stringr::str_detect(names(rd_files), "-package.[Rr][Dd]$")]
 
-  r_dir <- file.path(pkg_path, "R")
-
-  if (checkmate::test_directory_exists(r_dir)) {
-
-    r_paths <- purrr::keep(dir(r_dir, full.names = TRUE), ~ stringr::str_detect(., ".[Rr]$"))
-    r_files <- purrr::map(r_paths, readLines)
-    names(r_paths) <- purrr::map_chr(r_paths, basename)
-
-  } else {
-
-    stop(".R files could not be located")
-
+  # Check renaming
+  for (rd_id in seq_along(rd_files)) {
+    has_field <- any(stringr::str_detect(rd_files[[rd_id]], paste0(r"{\\}", field)))
+    expect_true(has_field, label = paste("File:", names(rd_files)[[rd_id]]))
   }
+}
 
-  files_to_check <- c(r_files, rd_files)
 
-  # Check the files
-  for (file_id in seq_along(files_to_check)) {
-    has_non_ascii <- purrr::some(files_to_check[[file_id]], ~ stringr::str_detect(., r"{[^\x00-\x7f]}"))
-    expect_false(has_non_ascii, label = paste("File:", names(files_to_check)[[file_id]]))
-  }
+test_that(r"{.Rd files have \examples}", {
+  test_field_in_documentation("example")
+})
+
+
+test_that(r"{.Rd files have \value}", {
+  test_field_in_documentation("value")
 })
