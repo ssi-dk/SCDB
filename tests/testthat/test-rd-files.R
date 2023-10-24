@@ -47,7 +47,7 @@ test_field_in_documentation <- function(field) {
   # Check renaming
   for (rd_id in seq_along(rd_files)) {
     has_field <- any(stringr::str_detect(rd_files[[rd_id]], paste0(r"{\\}", field)))
-    expect_true(has_field, label = paste("File:", names(rd_files)[[rd_id]]))
+    testthat::expect_true(has_field, label = paste("File:", names(rd_files)[[rd_id]]))
   }
 }
 
