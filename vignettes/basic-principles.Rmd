@@ -71,7 +71,7 @@ example_data
 ```
 
 Imagine on Day 1, in this case January 1st, 2020, our currently available data is the first three records of the example_data.
-We then store this data in a table "mtcars":
+We then store this data in a table `mtcars`:
 ```{r example_1}
 data <- head(example_data, 3)
 

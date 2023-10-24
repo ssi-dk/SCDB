@@ -1,5 +1,6 @@
 birthdate
 birthdates
+bitemporal
 
 checksums
 cloneable
@@ -14,6 +15,7 @@ dbi
 DBIConnection
 DBIDriver
 dbname
+Donut
 dbplyr
 dbplyr's
 dplyr
