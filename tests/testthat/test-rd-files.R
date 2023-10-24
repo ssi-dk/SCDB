@@ -1,4 +1,4 @@
-test_that(r"{.Rd files have \Value}", {
+test_field_in_documentation <- function(field) {
 
   # Load .Rd files based on environment
   # When using R-CMD-Check the deployment is different from when using devtools::test().
@@ -46,7 +46,17 @@ test_that(r"{.Rd files have \Value}", {
 
   # Check renaming
   for (rd_id in seq_along(rd_files)) {
-    has_value <- any(stringr::str_detect(rd_files[[rd_id]], r"{\\value}"))
-    expect_true(has_value, label = paste("File:", names(rd_files)[[rd_id]]))
+    has_field <- any(stringr::str_detect(rd_files[[rd_id]], paste0(r"{\\}", field)))
+    expect_true(has_field, label = paste("File:", names(rd_files)[[rd_id]]))
   }
+}
+
+
+test_that(r"{.Rd files have \examples}", {
+  test_field_in_documentation("example")
+})
+
+
+test_that(r"{.Rd files have \value}", {
+  test_field_in_documentation("value")
 })
