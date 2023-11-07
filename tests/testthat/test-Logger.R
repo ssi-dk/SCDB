@@ -195,3 +195,16 @@ test_that("Logger console output may be suppressed", {
     character(0)
   )
 })
+
+test_that("Logger sets log_file to NULL in DB if not writing to file", {
+  for (conn in conns) {
+    logger <- Logger$new(log_conn = conn,
+                         log_table_id = "logs",
+                         log_path = NULL)
+
+    db_log_file <- dplyr::pull(dplyr::filter(logger$log_tbl, log_file == !!logger$log_filename))
+    expect_match(db_log_file, "^.+$")
+
+    logger$finalize()
+  }
+})
