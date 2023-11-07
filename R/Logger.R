@@ -96,6 +96,11 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
         if (isFALSE(table_exists)) return(NULL)
 
+        expected_rows <- self$log_tbl |>
+          dplyr::filter(log_file == !!self$log_filename) |>
+          dplyr::count() |>
+          dplyr::pull()
+
         query <- dbplyr::build_sql(
           "UPDATE ",
           remote_name(self$log_tbl),
@@ -109,8 +114,12 @@ Logger <- R6::R6Class( #nolint: object_name_linter
           con = private$log_conn
         )
 
-        if (DBI::dbExecute(private$log_conn, query) != 1) {
-          rlang::abort("Something went wrong while finalizing")
+        affected_rows <- DBI::dbExecute(private$log_conn, query)
+        if (affected_rows != expected_rows) {
+          rlang::warn("Something went wrong while finalizing Logger",
+                      log_filename = self$log_filename,
+                      affected_rows = affected_rows,
+                      expected_rows = expected_rows)
         }
       }
     },
