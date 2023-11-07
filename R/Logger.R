@@ -82,6 +82,25 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
     },
 
+    finalize = function() {
+      if (!is.null(self$log_tbl) && is.null(self$log_path)) {
+        query <- dbplyr::build_sql(
+          "UPDATE ",
+          remote_name(self$log_tbl),
+          " SET ",
+          ident("log_file"),
+          " = NULL WHERE ",
+          ident("log_file"),
+          " = '",
+          sql(self$log_filename),
+          "'",
+          con = private$log_conn
+        )
+
+        DBI::dbExecute(private$log_conn, query)
+      }
+    },
+
     #' @description
     #' Write a line to log file
     #' @param ... `r log_dots <- "One or more character strings to be concatenated"; log_dots`
