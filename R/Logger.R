@@ -85,8 +85,16 @@ Logger <- R6::R6Class( #nolint: object_name_linter
     finalize = function() {
       if (is.null(self$log_path) &&
           !is.null(self$log_tbl) &&
-          DBI::dbIsValid(private$log_conn) &&
-          DBI::dbExistsTable(private$log_conn, remote_name(self$log_tbl))) {
+          DBI::dbIsValid(private$log_conn)) {
+
+        # DBI::dbTableExists expects character(1) and does not work with dbplyr::remote_name which return an ident
+        table_exists <- tryCatch(
+          {dplyr::collect(self$log_tbl); TRUE},
+          error = function(e) {
+            return(FALSE)
+          })
+
+        if (isFALSE(table_exists)) return(NULL)
 
         query <- dbplyr::build_sql(
           "UPDATE ",
