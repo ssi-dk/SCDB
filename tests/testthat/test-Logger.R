@@ -209,3 +209,16 @@ test_that("Logger sets log_file to NULL in DB if not writing to file", {
     logger$finalize()
   }
 })
+
+test_that("Logger$finalize handles log table is at some point deleted", {
+  for (conn in conns) {
+    log_table_id <- "expendable_log_table"
+    logger <- Logger$new(log_conn = conn,
+                         log_table_id = log_table_id,
+                         log_path = NULL)
+
+    DBI::dbRemoveTable(conn, log_table_id)
+
+    expect_no_error(logger$finalize())
+  }
+})
