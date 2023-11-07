@@ -97,7 +97,9 @@ Logger <- R6::R6Class( #nolint: object_name_linter
           con = private$log_conn
         )
 
-        DBI::dbExecute(private$log_conn, query)
+        if (DBI::dbExecute(private$log_conn, query) != 1) {
+          rlang::abort("Something went wrong while finalizing")
+        }
       }
     },
 
