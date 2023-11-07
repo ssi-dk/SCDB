@@ -82,19 +82,14 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
     },
 
+    #' @description
+    #' Remove generated log_name from database if not writing to a file
     finalize = function() {
       if (is.null(self$log_path) &&
-          !is.null(self$log_tbl) &&
-          DBI::dbIsValid(private$log_conn)) {
+            !is.null(self$log_tbl) &&
+            DBI::dbIsValid(private$log_conn)) {
 
-        # DBI::dbTableExists expects character(1) and does not work with dbplyr::remote_name which return an ident
-        table_exists <- tryCatch(
-          {dplyr::collect(self$log_tbl); TRUE},
-          error = function(e) {
-            return(FALSE)
-          })
-
-        if (isFALSE(table_exists)) return(NULL)
+        if (!table_exists(private$log_conn, self$log_tbl)) return(NULL)
 
         expected_rows <- self$log_tbl |>
           dplyr::filter(log_file == !!self$log_filename) |>
