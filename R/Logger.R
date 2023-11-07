@@ -87,9 +87,8 @@ Logger <- R6::R6Class( #nolint: object_name_linter
     finalize = function() {
       if (is.null(self$log_path) &&
             !is.null(self$log_tbl) &&
-            DBI::dbIsValid(private$log_conn)) {
-
-        if (!table_exists(private$log_conn, self$log_tbl)) return(NULL)
+            DBI::dbIsValid(private$log_conn) &&
+            table_exists(private$log_conn, self$log_tbl)) {
 
         expected_rows <- self$log_tbl |>
           dplyr::filter(log_file == !!self$log_filename) |>
