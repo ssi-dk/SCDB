@@ -83,7 +83,11 @@ Logger <- R6::R6Class( #nolint: object_name_linter
     },
 
     finalize = function() {
-      if (!is.null(self$log_tbl) && is.null(self$log_path)) {
+      if (is.null(self$log_path) &&
+          !is.null(self$log_tbl) &&
+          DBI::dbIsValid(private$log_conn) &&
+          DBI::dbExistsTable(private$log_conn, remote_name(self$log_tbl))) {
+
         query <- dbplyr::build_sql(
           "UPDATE ",
           remote_name(self$log_tbl),
