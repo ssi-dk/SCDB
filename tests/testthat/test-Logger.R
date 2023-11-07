@@ -203,6 +203,7 @@ test_that("Logger sets log_file to NULL in DB if not writing to file", {
                          log_path = NULL)
 
     db_log_file <- dplyr::pull(dplyr::filter(logger$log_tbl, log_file == !!logger$log_filename))
+    expect_length(db_log_file, 1)
     expect_match(db_log_file, "^.+$")
 
     logger$finalize()
