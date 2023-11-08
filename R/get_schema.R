@@ -53,11 +53,33 @@ get_schema <- function(.x) {
 #' close_connection(conn)
 #' @export
 schema_exists <- function(conn, schema) {
+  UseMethod("schema_exists")
+}
 
-  checkmate::assert_class(conn, "DBIConnection")
+#' @export
+schema_exists.SQLiteConnection <- function(conn, schema) {
+  query <- paste0(
+    "SELECT schema, name FROM pragma_table_list WHERE schema == '",
+    schema,
+    "' AND name == 'sqlite_schema'"
+  )
+  result <- DBI::dbGetQuery(conn, query)
+
+  return(nrow(result) == 1)
+}
+
+#' @export
+schema_exists.PqConnection <- function(conn, schema) {
+  query <- paste0("SELECT schema_name FROM INFORMATION_SCHEMA.SCHEMATA WHERE schema_name = '", schema, "'")
+  result <- DBI::dbGetQuery(conn, query)
+
+  return(nrow(result) == 1)
+}
+
+#' @export
+schema_exists.default <- function(conn, schema) {
+
   checkmate::assert_character(schema)
-
-  if (inherits(conn, "SQLiteConnection")) return(FALSE)
 
   objs <- DBI::dbListObjects(conn)
   matches <- sapply(objs$table, \(.x) methods::slot(.x, "name")) |>

@@ -131,11 +131,6 @@ id <- function(db_table_id, conn = NULL) {
   # Check arguments
   checkmate::assert_character(db_table_id)
 
-  # SQLite does not have schemas
-  if (inherits(conn, "SQLiteConnection")) {
-    return(DBI::Id(table = db_table_id))
-  }
-
   if (stringr::str_detect(db_table_id, "\\.")) {
     db_name <- stringr::str_split_1(db_table_id, "\\.")
     db_schema <- db_name[1]

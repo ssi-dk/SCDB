@@ -32,11 +32,6 @@ test_that("id() works", { for (conn in conns) { # nolint: brace_linter
   expect_identical(id("test_mtcars"), DBI::Id(table = "test_mtcars"))
   expect_identical(id("test.mtcars"), DBI::Id(schema = "test", table = "mtcars"))
 
-  if (inherits(conn, "SQLiteConnection")) {
-    expect_identical(id("test.mtcars", conn), DBI::Id(table = "test.mtcars"))
-  } else {
-    expect_identical(id("test.mtcars", conn), DBI::Id(schema = "test", table = "mtcars"))
-  }
 }})
 
 

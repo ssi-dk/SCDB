@@ -47,7 +47,11 @@ get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_inf
   }
 
   # Look-up table in DB
-  q <- dplyr::tbl(conn, db_table_id)
+  if (packageVersion("dbplyr") >= "2.4.0"){
+    q <- dplyr::tbl(conn, db_table_id, check_from = FALSE)
+  } else {
+    q <- dplyr::tbl(conn, db_table_id)
+  }
 
   # Check whether data is historical
   if (is.historical(q) && !is.null(slice_ts)) {
@@ -83,6 +87,30 @@ get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_inf
 #' @importFrom rlang .data
 #' @export
 get_tables <- function(conn, pattern = NULL) {
+  UseMethod("get_tables")
+}
+
+#' @export
+get_tables.SQLiteConnection <- function(conn, pattern = NULL) {
+  query <- paste("SELECT schema, name 'table' FROM pragma_table_list",
+                   "WHERE schema != 'temp'",
+                   "AND name != 'sqlite_schema'",
+                   "AND NOT name LIKE 'sqlite_stat%'")
+
+  if (!is.null(pattern)) {
+    query <- paste0(query, " AND name LIKE '%", pattern, "%'")
+  }
+
+  tables <- DBI::dbGetQuery(conn, query) |>
+    dplyr::mutate(schema = ifelse(schema == "main", NA_character_, schema))
+
+  if (nrow(tables) == 0) warning("No tables found. Check user privileges / database configuration")
+
+  return(tables)
+}
+
+#' @export
+get_tables.default <- function(conn, pattern = NULL) {
 
   # Check arguments
   checkmate::assert_class(conn, "DBIConnection")
