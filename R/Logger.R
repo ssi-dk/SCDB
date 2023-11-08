@@ -97,7 +97,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
         query <- dbplyr::build_sql(
           "UPDATE ",
-          remote_name(self$log_tbl),
+          ident(remote_name(self$log_tbl)),
           " SET ",
           ident("log_file"),
           " = NULL WHERE ",
