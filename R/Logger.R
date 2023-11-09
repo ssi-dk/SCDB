@@ -83,6 +83,42 @@ Logger <- R6::R6Class( #nolint: object_name_linter
     },
 
     #' @description
+    #' Remove generated log_name from database if not writing to a file
+    finalize = function() {
+      if (is.null(self$log_path) &&
+            !is.null(self$log_tbl) &&
+            DBI::dbIsValid(private$log_conn) &&
+            table_exists(private$log_conn, self$log_tbl)) {
+
+        expected_rows <- self$log_tbl |>
+          dplyr::filter(log_file == !!self$log_filename) |>
+          dplyr::count() |>
+          dplyr::pull()
+
+        query <- dbplyr::build_sql(
+          "UPDATE ",
+          ident(remote_name(self$log_tbl)),
+          " SET ",
+          ident("log_file"),
+          " = NULL WHERE ",
+          ident("log_file"),
+          " = '",
+          sql(self$log_filename),
+          "'",
+          con = private$log_conn
+        )
+
+        affected_rows <- DBI::dbExecute(private$log_conn, query)
+        if (affected_rows != expected_rows) {
+          rlang::warn("Something went wrong while finalizing Logger",
+                      log_filename = self$log_filename,
+                      affected_rows = affected_rows,
+                      expected_rows = expected_rows)
+        }
+      }
+    },
+
+    #' @description
     #' Write a line to log file
     #' @param ... `r log_dots <- "One or more character strings to be concatenated"; log_dots`
     #' @param tic The timestamp used by the log entry (default Sys.time())

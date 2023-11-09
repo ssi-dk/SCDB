@@ -45,6 +45,7 @@ The full path to the logger's log file.}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Logger-new}{\code{Logger$new()}}
+\item \href{#method-Logger-finalize}{\code{Logger$finalize()}}
 \item \href{#method-Logger-log_info}{\code{Logger$log_info()}}
 \item \href{#method-Logger-log_warn}{\code{Logger$log_warn()}}
 \item \href{#method-Logger-log_error}{\code{Logger$log_error()}}
@@ -92,6 +93,16 @@ If NULL, no file logs are created.}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Logger-finalize"></a>}}
+\if{latex}{\out{\hypertarget{method-Logger-finalize}{}}}
+\subsection{Method \code{finalize()}}{
+Remove generated log_name from database if not writing to a file
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Logger$finalize()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Logger-log_info"></a>}}

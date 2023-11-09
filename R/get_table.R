@@ -195,6 +195,18 @@ slice_time <- function(.data, slice_ts, from_ts = from_ts, until_ts = until_ts) 
 table_exists <- function(conn, db_table_id) {
 
   # Check arguments
+  if (inherits(db_table_id, "tbl_dbi")) {
+    exists <- tryCatch({
+      dplyr::collect(db_table_id)
+      return(TRUE)
+    },
+    error = function(e) {
+      return(FALSE)
+    })
+
+    return(!isFALSE(exists))
+  }
+
   assert_id_like(db_table_id)
 
   if (inherits(db_table_id, "Id")) {

@@ -195,3 +195,30 @@ test_that("Logger console output may be suppressed", {
     character(0)
   )
 })
+
+test_that("Logger sets log_file to NULL in DB if not writing to file", {
+  for (conn in conns) {
+    logger <- Logger$new(log_conn = conn,
+                         log_table_id = "logs",
+                         log_path = NULL)
+
+    db_log_file <- dplyr::pull(dplyr::filter(logger$log_tbl, log_file == !!logger$log_filename))
+    expect_length(db_log_file, 1)
+    expect_match(db_log_file, "^.+$")
+
+    logger$finalize()
+  }
+})
+
+test_that("Logger$finalize handles log table is at some point deleted", {
+  for (conn in conns) {
+    log_table_id <- "expendable_log_table"
+    logger <- Logger$new(log_conn = conn,
+                         log_table_id = log_table_id,
+                         log_path = NULL)
+
+    DBI::dbRemoveTable(conn, log_table_id)
+
+    expect_no_error(logger$finalize())
+  }
+})
