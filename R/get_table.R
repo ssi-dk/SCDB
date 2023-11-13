@@ -47,11 +47,7 @@ get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_inf
   }
 
   # Look-up table in DB
-  if (packageVersion("dbplyr") >= "2.4.0"){
-    q <- dplyr::tbl(conn, db_table_id, check_from = FALSE)
-  } else {
-    q <- dplyr::tbl(conn, db_table_id)
-  }
+  q <- dplyr::tbl(conn, db_table_id, check_from = FALSE)
 
   # Check whether data is historical
   if (is.historical(q) && !is.null(slice_ts)) {
