@@ -179,11 +179,16 @@ interlace_sql <- function(tables, by = NULL, colnames = NULL) {
 
 
   # Get all changes to valid_from / valid_until
-  q1 <- tables |> purrr::map(\(table) table |>
-                               dplyr::select(tidyselect::all_of(by), "valid_from"))
-  q2 <- tables |> purrr::map(\(table) table |>
-                               dplyr::select(tidyselect::all_of(by), "valid_until") |>
-                               dplyr::rename(valid_from = "valid_until"))
+  q1 <- tables |> purrr::map(\(table) {
+    table |>
+      dplyr::select(tidyselect::all_of(by), "valid_from")
+  })
+  q2 <- tables |>
+    purrr::map(\(table) {
+      table |>
+        dplyr::select(tidyselect::all_of(by), "valid_until") |>
+        dplyr::rename(valid_from = "valid_until")
+    })
   t <- union(q1, q2) |> purrr::reduce(union)
 
   # Sort and find valid_until in the combined validities
@@ -207,14 +212,16 @@ interlace_sql <- function(tables, by = NULL, colnames = NULL) {
 
 
   # Merge data onto the new validities using non-equi joins
-  joiner <- \(.data, table) .data |>
-    dplyr::left_join(table,
-                     suffix = c("", ".tmp"),
-                     sql_on = paste0('"LHS"."', by, '" = "RHS"."', by, '" AND
+  joiner <- \(.data, table) {
+    .data |>
+      dplyr::left_join(table,
+                       suffix = c("", ".tmp"),
+                       sql_on = paste0('"LHS"."', by, '" = "RHS"."', by, '" AND
                                       "LHS"."valid_from"  >= "RHS"."valid_from" AND
                                      ("LHS"."valid_until" <= "RHS"."valid_until" OR "RHS"."valid_until" IS NULL)')) |>
-    dplyr::select(!tidyselect::ends_with(".tmp")) |>
-    dplyr::relocate(tidyselect::starts_with("valid_"), .after = tidyselect::everything())
+      dplyr::select(!tidyselect::ends_with(".tmp")) |>
+      dplyr::relocate(tidyselect::starts_with("valid_"), .after = tidyselect::everything())
+  }
 
   return(purrr::reduce(tables, joiner, .init = t))
 }
