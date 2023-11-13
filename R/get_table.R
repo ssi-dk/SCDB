@@ -89,16 +89,16 @@ get_tables <- function(conn, pattern = NULL) {
 #' @export
 get_tables.SQLiteConnection <- function(conn, pattern = NULL) {
   query <- paste("SELECT schema, name 'table' FROM pragma_table_list",
-                   "WHERE schema != 'temp'",
-                   "AND name != 'sqlite_schema'",
-                   "AND NOT name LIKE 'sqlite_stat%'")
+                 "WHERE schema != 'temp'",
+                 "AND name != 'sqlite_schema'",
+                 "AND NOT name LIKE 'sqlite_stat%'")
 
   if (!is.null(pattern)) {
     query <- paste0(query, " AND name LIKE '%", pattern, "%'")
   }
 
   tables <- DBI::dbGetQuery(conn, query) |>
-    dplyr::mutate(schema = ifelse(schema == "main", NA_character_, schema))
+    dplyr::mutate(dplyr::across("schema", ~ ifelse(. == "main", NA_character_, .)))
 
   if (nrow(tables) == 0) warning("No tables found. Check user privileges / database configuration")
 
