@@ -2,6 +2,7 @@
 
 ## Minor improvements and fixes
 
+* SQLite connections now support schemata similar to other backends (@marcusmunch, #67)
 * Package logo slightly altered to have a readable clock (@RasmusSkytte, #49)
 * Added a vignette describing the concept of a slowly changing dimension using examples (@marcusmunch, #53)
 * Added a `Logger$finalize` method which removes the `log_file` in the DB when not writing to a file (@marcusmunch, #66)
