@@ -13,7 +13,7 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
 
   .data <- mtcars |>
     dplyr::mutate(hp = dplyr::if_else(hp > 130, hp - 10, hp)) %>%
-    dplyr::copy_to(conn, ., overwrite = TRUE)
+    dplyr::copy_to(conn, df = ., overwrite = TRUE)
 
   # This is a simple update where 23 rows are replaced with 23 new ones on the given date
   db_table <- "test.SCDB_tmp1"
