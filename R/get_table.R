@@ -243,8 +243,11 @@ table_exists.SQLiteConnection <- function(conn, db_table_id) {
   tables <- get_tables(conn)
 
   if (inherits(db_table_id, "Id")) {
-    exact_match <- tables |>
-      dplyr::filter(.data$schema == db_table_id@name["schema"] & .data$table == db_table_id@name["table"])
+    exact_match <- dplyr::filter(tables, .data$table == db_table_id@name["table"])
+
+    if ("schema" %in% names(db_table_id@name)) {
+      exact_match <- dplyr::filter(tables, .data$schema == db_table_id@name["schema"])
+    }
 
     if (nrow(exact_match) == 1) {
       return(TRUE)
