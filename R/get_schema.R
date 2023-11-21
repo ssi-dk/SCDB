@@ -14,7 +14,7 @@
 #'
 #' close_connection(conn)
 #' @export
-get_schema <- function(.x){
+get_schema <- function(.x) {
   UseMethod("get_schema")
 }
 
@@ -24,7 +24,7 @@ get_schema.PqConnection <- function(.x) {
 }
 
 #' @export
-get_schema.SQLiteConnection <- function(.x){
+get_schema.SQLiteConnection <- function(.x) {
   schemata <- unique(get_tables(.x)["schema"])
 
   if ("main" %in% schemata) {

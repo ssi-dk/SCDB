@@ -260,7 +260,7 @@ table_exists.SQLiteConnection <- function(conn, db_table_id) {
     dplyr::filter(.data$table_str == !!target_str) |>
     dplyr::select(!"table_str")
 
-  if (nrow(matches) <= 1){
+  if (nrow(matches) <= 1) {
     return(nrow(matches) == 1)
   }
 
