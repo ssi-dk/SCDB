@@ -252,6 +252,8 @@ table_exists.SQLiteConnection <- function(conn, db_table_id) {
     if (nrow(exact_match) == 1) {
       return(TRUE)
     }
+
+    db_table_id <- paste(db_table_id@name, collapse = ".")
   }
 
   matches <- tables |>
