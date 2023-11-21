@@ -205,6 +205,8 @@ slice_time <- function(.data, slice_ts, from_ts = from_ts, until_ts = until_ts) 
 #' @template conn
 #' @template db_table_id
 #' @return TRUE if db_table_id can be parsed to a table found in conn
+#' @importFrom rlang .data
+#' @name table_exists
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
@@ -233,13 +235,14 @@ table_exists <- function(conn, db_table_id) {
   UseMethod("table_exists", conn)
 }
 
+#' @rdname table_exists
 #' @export
 table_exists.SQLiteConnection <- function(conn, db_table_id) {
   tables <- get_tables(conn)
 
   if (inherits(db_table_id, "Id")) {
     exact_match <- tables |>
-      dplyr::filter(schema == db_table_id@name["schema"] & table == db_table_id@name["table"])
+      dplyr::filter(.data$schema == db_table_id@name["schema"] & .data$table == db_table_id@name["table"])
 
     if (nrow(exact_match) == 1) {
       return(TRUE)
@@ -251,11 +254,9 @@ table_exists.SQLiteConnection <- function(conn, db_table_id) {
     (\(.x) paste(.x[!is.na(.x)], collapse = "."))()
 
   matches <- tables |>
-    dplyr::filter(target_str == ifelse(
-      is.na(schema),
-      table,
-      paste(schema, table, sep = ".")
-    ))
+    tidyr::unite("table_str", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
+    dplyr::filter(.data$table_str == !!target_str) |>
+    dplyr::select(!"table_str")
 
   if (nrow(matches) <= 1){
     return(nrow(matches) == 1)
@@ -267,6 +268,7 @@ table_exists.SQLiteConnection <- function(conn, db_table_id) {
   )
 }
 
+#' @rdname table_exists
 #' @export
 table_exists.default <- function(conn, db_table_id) {
   assert_id_like(db_table_id)
