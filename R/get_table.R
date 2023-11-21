@@ -251,13 +251,9 @@ table_exists.SQLiteConnection <- function(conn, db_table_id) {
     }
   }
 
-  db_table_id <- id(db_table_id, conn = conn)
-  target_str <- c(db_table_id@name["schema"], db_table_id@name["table"]) |>
-    (\(.x) paste(.x[!is.na(.x)], collapse = "."))()
-
   matches <- tables |>
     tidyr::unite("table_str", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
-    dplyr::filter(.data$table_str == !!target_str) |>
+    dplyr::filter(.data$table_str == !!db_table_id) |>
     dplyr::select(!"table_str")
 
   if (nrow(matches) <= 1) {
@@ -265,7 +261,7 @@ table_exists.SQLiteConnection <- function(conn, db_table_id) {
   }
 
   rlang::abort(
-    message = paste0("More than one table matching '", target_str, "' was found!"),
+    message = paste0("More than one table matching '", db_table_id, "' was found!"),
     matches = matches
   )
 }
