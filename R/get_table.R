@@ -228,10 +228,51 @@ table_exists <- function(conn, db_table_id) {
       return(FALSE)
     })
 
-    return(!isFALSE(exists))
+    return(exists)
   }
 
+  UseMethod("table_exists", conn)
+}
+
+#' @export
+table_exists.SQLiteConnection <- function(conn, db_table_id) {
+  tables <- get_tables(conn)
+
+  if (inherits(db_table_id, "Id")) {
+    exact_match <- tables |>
+      dplyr::filter(schema == db_table_id@name["schema"] & table == db_table_id@name["table"])
+
+    if (nrow(exact_match) == 1) {
+      return(TRUE)
+    }
+  }
+
+  db_table_id <- id(db_table_id, conn = conn)
+  target_str <- c(db_table_id@name["schema"], db_table_id@name["table"]) |>
+    (\(.x) paste(.x[!is.na(.x)], collapse = "."))()
+
+  matches <- tables |>
+    dplyr::filter(target_str == ifelse(
+      is.na(schema),
+      table,
+      paste(schema, table, sep = ".")
+    ))
+
+  if (nrow(matches) <= 1){
+    return(nrow(matches) == 1)
+  }
+
+  rlang::abort(
+    message = paste0("More than one table matching '", target_str, "' was found!"),
+    matches = matches
+  )
+}
+
+#' @export
+table_exists.default <- function(conn, db_table_id) {
   assert_id_like(db_table_id)
+
+  db_table_id <- id(db_table_id, conn = conn)
 
   if (inherits(db_table_id, "Id")) {
     db_name <- attr(db_table_id, "name")

@@ -8,11 +8,36 @@
 #' dplyr::copy_to(conn, mtcars, name = "mtcars")
 #'
 #' get_schema(conn)
-#' get_schema(get_table(conn, "mtcars"))
+#' if (table_exists(conn, id("mtcars", conn = conn))) {
+#'   get_schema(get_table(conn, id("mtcars", conn = conn)))
+#' }
 #'
 #' close_connection(conn)
 #' @export
-get_schema <- function(.x) {
+get_schema <- function(.x){
+  UseMethod("get_schema")
+}
+
+#' @export
+get_schema.PqConnection <- function(.x) {
+  return(DBI::dbGetQuery(.x, "SELECT CURRENT_SCHEMA()")$current_schema)
+}
+
+#' @export
+get_schema.SQLiteConnection <- function(.x){
+  schemata <- unique(get_tables(.x)["schema"])
+
+  if ("main" %in% schemata) {
+    return("main")
+  } else if ("temp" %in% schemata) {
+    return("temp")
+  } else {
+    return()
+  }
+}
+
+#' @export
+get_schema.default <- function(.x) {
 
   if (inherits(.x, "PqConnection")) {
     # Get schema from connection object
