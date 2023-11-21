@@ -89,8 +89,7 @@ get_tables <- function(conn, pattern = NULL) {
 #' @export
 get_tables.SQLiteConnection <- function(conn, pattern = NULL) {
   query <- paste("SELECT schema, name 'table' FROM pragma_table_list",
-                 "WHERE schema != 'temp'",
-                 "AND name != 'sqlite_schema'",
+                 "WHERE NOT name IN ('sqlite_schema', 'sqlite_temp_schema')",
                  "AND NOT name LIKE 'sqlite_stat%'")
 
   if (!is.null(pattern)) {
