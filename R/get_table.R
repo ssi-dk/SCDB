@@ -97,7 +97,7 @@ get_tables.SQLiteConnection <- function(conn, pattern = NULL) {
   }
 
   tables <- DBI::dbGetQuery(conn, query) |>
-    dplyr::mutate(dplyr::across("schema", ~ ifelse(. == "main", NA_character_, .)))
+    dplyr::mutate(dplyr::across("schema", ~ ifelse(. %in% c("temp", "main"), NA_character_, .)))
 
   if (nrow(tables) == 0) warning("No tables found. Check user privileges / database configuration")
 
