@@ -17,7 +17,9 @@
 #' dplyr::copy_to(conn, mtcars, name = "mtcars")
 #'
 #' get_table(conn)
-#' get_table(conn, "mtcars")
+#' if (table_exists(conn, "mtcars")) {
+#'   get_table(conn, "mtcars")
+#' }
 #'
 #' close_connection(conn)
 #' @importFrom rlang .data

@@ -100,7 +100,9 @@ methods::setMethod("getTableSignature", "NULL", function(.data, conn) {
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' create_logs_if_missing("test.logs", conn)
+#' if (schema_exists(conn, "test")) {
+#'   create_logs_if_missing("test.logs", conn)
+#' }
 #'
 #' close_connection(conn)
 #' @export
