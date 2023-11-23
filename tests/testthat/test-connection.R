@@ -32,6 +32,8 @@ test_that("id() works", { for (conn in conns) { # nolint: brace_linter
   expect_identical(id("test_mtcars"), DBI::Id(table = "test_mtcars"))
   expect_identical(id("test.mtcars"), DBI::Id(schema = "test", table = "mtcars"))
 
+  expect_identical(id("test.mtcars", conn = conn, allow_table_only = FALSE),
+                   DBI::Id(schema = "test", table = "mtcars"))
 }})
 
 test_that('id() returns table = "schema.table" if schema does not exist', {
