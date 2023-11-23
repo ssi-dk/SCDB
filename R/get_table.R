@@ -246,7 +246,7 @@ table_exists.SQLiteConnection <- function(conn, db_table_id) {
     exact_match <- dplyr::filter(tables, .data$table == db_table_id@name["table"])
 
     if ("schema" %in% names(db_table_id@name)) {
-      exact_match <- dplyr::filter(tables, .data$schema == db_table_id@name["schema"])
+      exact_match <- dplyr::filter(exact_match, .data$schema == db_table_id@name["schema"])
     }
 
     if (nrow(exact_match) == 1) {
