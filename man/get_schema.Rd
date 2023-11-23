@@ -21,9 +21,7 @@ conn <- get_connection(drv = RSQLite::SQLite())
 dplyr::copy_to(conn, mtcars, name = "mtcars")
 
 get_schema(conn)
-if (table_exists(conn, id("mtcars", conn = conn))) {
-  get_schema(get_table(conn, id("mtcars", conn = conn)))
-}
+get_schema(get_table(conn, id("mtcars", conn = conn)))
 
 close_connection(conn)
 }
