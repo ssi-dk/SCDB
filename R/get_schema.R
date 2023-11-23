@@ -1,6 +1,6 @@
-#' Get the current schema of a DB connection
+#' Get the current schema of a database-related objects
 #'
-#' @param .x A DBIConnection or lazy_query object
+#' @param .x The object from which to retrieve a schema
 #' @return The current schema name, but defaults to "prod" instead of "public"
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
@@ -14,6 +14,16 @@
 #' @export
 get_schema <- function(.x) {
   UseMethod("get_schema")
+}
+
+#' @export
+get_schema.tbl_dbi <- function(.x) {
+  return(unclass(dbplyr::remote_table(.x))$schema)
+}
+
+#' @export
+get_schema.Id <- function(.x) {
+  return(unname(.x@name["schema"]))
 }
 
 #' @export
@@ -33,35 +43,6 @@ get_schema.SQLiteConnection <- function(.x) {
     return()
   }
 }
-
-#' @export
-get_schema.default <- function(.x) {
-
-  if (inherits(.x, "PqConnection")) {
-    # Get schema from connection object
-    schema <- DBI::dbGetQuery(.x, "SELECT CURRENT_SCHEMA()")$current_schema
-
-  } else if (inherits(.x, "SQLiteConnection") || inherits(.x, "tbl_SQLiteConnection")) {
-    return()
-  } else if (inherits(.x, "tbl_dbi")) {
-    # Get schema from a DBI object (e.g. lazy query)
-    schema <- stringr::str_extract_all(dbplyr::remote_query(.x), '(?<=FROM \")[^"]*')[[1]]
-    if (length(unique(schema)) > 1) {
-      # Not sure if this is even possible due to dbplyr limitations
-      warning("Multiple different schemas detected. You might need to handle these (more) manually:\n",
-              paste(unique(schema), collapse = ", "))
-    } else {
-      schema <- unique(schema)
-    }
-  } else {
-    stop("Could not detect object type")
-  }
-
-  if (schema == "public") schema <- "prod"
-
-  return(schema)
-}
-
 
 #' Test if a schema exists in given connection
 #' @param schema A character string giving the schema name
