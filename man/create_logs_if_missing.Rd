@@ -19,7 +19,7 @@ Create a table with the SCDB log structure if it does not exists
 }
 \examples{
 conn <- get_connection(drv = RSQLite::SQLite())
-log_table_id <- id("test.logs", allow_table_only = TRUE)
+log_table_id <- id("test.logs", conn = conn, allow_table_only = TRUE)
 
 create_logs_if_missing(log_table_id, conn)
 
