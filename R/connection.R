@@ -127,13 +127,15 @@ close_connection <- function(conn) {
 #' @seealso [DBI::Id] which this function wraps.
 #' @export
 id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+  if (inherits(db_table_id, "Id")){
+    return(db_table_id)
+  }
 
-  # Check if already Id
-  if (inherits(db_table_id, "Id")) return(db_table_id)
+  UseMethod("id")
+}
 
-  # Check arguments
-  checkmate::assert_character(db_table_id)
-
+#' @export
+id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
   if (stringr::str_detect(db_table_id, "\\.")) {
     db_name <- stringr::str_split_1(db_table_id, "\\.")
     db_schema <- db_name[1]
@@ -148,4 +150,22 @@ id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
   }
 
   return(DBI::Id(schema = db_schema, table = db_table))
+}
+
+#' @export
+id.tbl_dbi <- function(db_table_id, conn = NULL) {
+  table_ident <- dbplyr::remote_table(db_table)
+
+  id <- with(table_ident, {
+    setNames(list(schema, table), c("schema", "table")) |>
+      (\(.x) subset(.x, !is.na(.x)))() |>
+      do.call(DBI::Id, args = _)
+  })
+
+  if (!is.null(conn) && !identical(conn, db_table_id$src$con)) {
+    rlang::warn("Table connection is different than conn",
+                frequency = "once")
+  }
+
+  return(id)
 }
