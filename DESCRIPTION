@@ -9,7 +9,6 @@ Authors@R:
 	    person("Marcus Munch", "Gr\U00FCnewald", , "mmgr@ssi.dk",
 	           role = c("aut"),
 	           comment = c(ORCID = "0009-0006-8090-406X")))
-Maintainer: Marcus Munch Gr\U00FCnewald <mmgr@ssi.dk>
 Description: A collection of functions that enable easy access and updating of a database of data over time.
              More specifically, the package facilitates type-2 history for data-warehouses and provides a number
              of Quality of life improvements for working on SQL databases with R.
