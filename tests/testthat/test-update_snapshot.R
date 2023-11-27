@@ -204,6 +204,46 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
   if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
 }})
 
+test_that("update_snapshot works with Id objects", {
+  for (conn in conns) {
+    old <- options(
+      SCDB.log_path = tempdir()
+    )
+
+    on.exit({ options(old); rm(old) })
+
+    target_table <- DBI::Id(schema = "test", table = "mtcars_modified")
+
+    on.exit({
+      options(old)
+      if (DBI::dbExistsTable(conn, "mtcars_modified")) DBI::dbRemoveTable(conn, "mtcars_modified")
+      if (DBI::dbExistsTable(conn, target_table)) DBI::dbRemoveTable(conn, target_table)
+
+      rm(list = c("target_table", "old"))
+    })
+
+    logger <- Logger$new(output_to_console = FALSE,
+                         ts = Sys.time(),
+                         db_tablestring = "test.mtcars_modified")
+
+    create_table(mtcars, conn = conn, db_table_id = target_table, temporary = FALSE)
+
+    expect_no_error(
+      mtcars |>
+        dplyr::mutate(disp = sample(mtcars$disp, nrow(mtcars))) |>
+        dplyr::copy_to(dest = conn,
+                       df = _,
+                       name = "mtcars_modified") |>
+        update_snapshot(
+          conn = conn,
+          db_table = target_table,
+          logger = logger,
+          timestamp = format(Sys.time())
+        )
+    )
+  }
+})
+
 test_that("update_snapshot checks table formats", {
 
   ops <- options(SCDB.log_path = tempdir())
