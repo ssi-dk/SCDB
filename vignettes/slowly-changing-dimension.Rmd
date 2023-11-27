@@ -181,7 +181,7 @@ Imagine a town of several thousand citizens, with a town hall maintaining a civi
 The data is largely static, as a very small fraction of citizens move on any given day, but it is of interest to keep data relatively up-to-date.
 This is where managing a slowly changing dimension becomes very powerful, compared to full incremental backups.
 
-One day, Alice Doe meets [Robert "Bobby" Tables](https://xkcd.com/327), and they move in together:
+One day, Alice Doe meets [Robert "Bobby" Tables](https://xkcd.com/327/), and they move in together:
 
 ```{r addresses1}
 addresses
