@@ -116,6 +116,9 @@ close_connection <- function(conn) {
 #'
 #' @template db_table_id
 #' @template conn
+#' @param allow_table_only
+#'  logical. If `TRUE`, allows for returning an `DBI::Id` with `table` = `myschema.table` if schema `myschema`
+#'  is not found in `conn`.
 #' @details The given db_table_id is parsed using an assumption of "schema.table" syntax into
 #'  a DBI::Id object with corresponding schema (if the conn supports it) and table values.
 #' @return A DBI::Id object parsed from db_table_id
@@ -123,7 +126,7 @@ close_connection <- function(conn) {
 #' id("schema.table")
 #' @seealso [DBI::Id] which this function wraps.
 #' @export
-id <- function(db_table_id, conn = NULL) {
+id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
 
   # Check if already Id
   if (inherits(db_table_id, "Id")) return(db_table_id)
@@ -131,15 +134,14 @@ id <- function(db_table_id, conn = NULL) {
   # Check arguments
   checkmate::assert_character(db_table_id)
 
-  # SQLite does not have schemas
-  if (inherits(conn, "SQLiteConnection")) {
-    return(DBI::Id(table = db_table_id))
-  }
-
   if (stringr::str_detect(db_table_id, "\\.")) {
     db_name <- stringr::str_split_1(db_table_id, "\\.")
     db_schema <- db_name[1]
     db_table  <- db_name[2]
+
+    if (allow_table_only && !is.null(conn) && !schema_exists(conn, db_schema)) {
+      return(DBI::Id(table = db_table_id))
+    }
   } else {
     db_schema <- NULL
     db_table <- db_table_id

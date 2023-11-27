@@ -48,11 +48,15 @@ if (length(unavailable_drv) > 0) {
 }
 message("#####\n")
 
+# Attach tempfile as schema for SQLite
+if ("SQLite" %in% names(conns)) {
+  DBI::dbExecute(conns$SQLite, paste0("ATTACH '", tempfile(), "' AS 'test'"))
+}
 
 # Start with some clean up
 for (conn in conns) {
-  if (!inherits(conn, "SQLiteConnection") && !schema_exists(conn, "test")) {
-    stop("Tests require the schema 'test' to exist in all available connections (except SQLite)")
+  if (!schema_exists(conn, "test")) {
+    stop("Tests require the schema 'test' to exist in all available connections")
   }
 
   purrr::walk(c("test.mtcars", "__mtcars",

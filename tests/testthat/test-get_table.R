@@ -74,14 +74,15 @@ test_that("get_table returns list of tables if no table is requested", { for (co
 test_that("table_exists fails when multiple matches are found", {
   for (conn in conns) {
     # This test exploits ambiguous notation requiring schemas to exits
-    if (!inherits(conn, "PqConnection")) next
+    if (!inherits(conn, "SQLiteConnection")) next
 
-    # Ensure that the schema "test.one" has been created
-    result <- DBI::dbGetQuery(
-      conn,
-      "SELECT EXISTS (SELECT 1 FROM information_schema.schemata WHERE schema_name = 'test.one') as exists"
-    )
-    expect_identical(result, data.frame(exists = TRUE))
+    if (!schema_exists(conn, "test.one")) {
+      tmp <- tempfile()
+      result <- DBI::dbExecute(
+        conn,
+        paste0("ATTACH '", tmp, "' AS \"test.one\"")
+      )
+    }
 
     DBI::dbExecute(conn, 'CREATE TABLE "test"."one.two"(a TEXT)')
     DBI::dbExecute(conn, 'CREATE TABLE "test.one"."two"(b TEXT)')

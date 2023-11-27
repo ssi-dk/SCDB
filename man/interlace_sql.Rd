@@ -32,19 +32,22 @@ onto a single time axis
 \examples{
 conn <- get_connection(drv = RSQLite::SQLite())
 
-t1 <- data.frame(key = c("A", "A", "B"),
-                 obs_1   = c(1, 2, 2),
-                 valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-01-01")),
-                 valid_until = as.Date(c("2021-02-01", "2021-03-01", NA)))
-t1 <- dplyr::copy_to(conn, t1, id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
 
-t2 <- data.frame(key = c("A", "B"),
-                 obs_2 = c("a", "b"),
-                 valid_from  = as.Date(c("2021-01-01", "2021-01-01")),
-                 valid_until = as.Date(c("2021-04-01", NA)))
-t2 <- dplyr::copy_to(conn, t2, id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
+if (schema_exists(conn, "test")) {
+  t1 <- data.frame(key = c("A", "A", "B"),
+                  obs_1   = c(1, 2, 2),
+                  valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-01-01")),
+                  valid_until = as.Date(c("2021-02-01", "2021-03-01", NA)))
+  t1 <- dplyr::copy_to(conn, t1, id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
 
-interlace_sql(list(t1, t2), by = "key")
+  t2 <- data.frame(key = c("A", "B"),
+                  obs_2 = c("a", "b"),
+                  valid_from  = as.Date(c("2021-01-01", "2021-01-01")),
+                  valid_until = as.Date(c("2021-04-01", NA)))
+  t2 <- dplyr::copy_to(conn, t2, id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
+
+  interlace_sql(list(t1, t2), by = "key")
+}
 
 close_connection(conn)
 }

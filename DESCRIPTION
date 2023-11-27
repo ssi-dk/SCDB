@@ -21,7 +21,7 @@ Roxygen: list(markdown = TRUE, r6 = TRUE)
 Imports:
     checkmate,
     DBI,
-    dbplyr,
+    dbplyr (>= 2.4.0),
     dplyr,
     glue,
     lubridate,
