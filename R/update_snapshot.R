@@ -44,22 +44,18 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   checkmate::assert_class(logger, "Logger", null.ok = TRUE)
   checkmate::assert_logical(enforce_chronological_order)
 
-
-  # If db_table is given as str, fetch the actual table
+  # If db_table is given as str or Id, fetch the actual table
   # If the table does not exist, create an empty table using the signature of the incoming data
-  if (is.character(db_table)) {
+  db_table_id <- id(db_table, conn)
+  db_table_name <- db_table_id |>
+    methods::slot("name") |>
+    stats::na.omit() |>
+    paste(collapse = ".")
 
-    db_table_name <- db_table
-    db_table_id <- id(db_table, conn)
-
-    if (table_exists(conn, db_table)) {
-      db_table <- dplyr::tbl(conn, db_table_id)
-    } else {
-      db_table <- create_table(dplyr::collect(utils::head(.data, 0)), conn, db_table_id, temporary = FALSE)
-    }
+  if (table_exists(conn, db_table_id)) {
+    db_table <- dplyr::tbl(conn, db_table_id)
   } else {
-    db_table_id <- dbplyr::remote_name(db_table)
-    db_table_name <- db_table_id |> as.character() |> stringr::str_remove_all('\"')
+    db_table <- create_table(dplyr::collect(utils::head(.data, 0)), conn, db_table_id, temporary = FALSE)
   }
 
   # Initialize logger
