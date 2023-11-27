@@ -153,8 +153,8 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
 }
 
 #' @export
-id.tbl_dbi <- function(db_table_id, conn = NULL) {
-  table_ident <- dbplyr::remote_table(db_table)
+id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+  table_ident <- dbplyr::remote_table(db_table_id)
 
   id <- with(table_ident, {
     setNames(list(schema, table), c("schema", "table")) |>
