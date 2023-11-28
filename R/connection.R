@@ -127,7 +127,7 @@ close_connection <- function(conn) {
 #' @seealso [DBI::Id] which this function wraps.
 #' @export
 id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
-  if (inherits(db_table_id, "Id")){
+  if (inherits(db_table_id, "Id")) {
     return(db_table_id)
   }
 
