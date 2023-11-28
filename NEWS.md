@@ -12,7 +12,7 @@
 
 ## Other news
 
-* Maintainer changed to Marcus Munch Grünewald (@marcusmunch, #59)
+* Maintainer changed to Marcus Munch Grünewald @marcusmunch (@RasmusSkytte, #59)
 
 # SCDB 0.2
 
