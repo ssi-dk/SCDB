@@ -1,3 +1,17 @@
+## Resubmission
+
+## R CMD check results
+
+0 errors | 0 warnings | 0 notes
+
+This is a resubmission. This version seeks to address the errors
+raised in incoming checks of previous submission.
+
+Additionally, it was found that the maintainer change was not properly
+reflected in man/SCDB-package.Rd.
+
+## Previous cran-comments
+
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
