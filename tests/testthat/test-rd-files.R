@@ -41,8 +41,6 @@ test_field_in_documentation <- function(field) {
   # Skip the "*-package.Rd" file
   rd_files <- rd_files[!stringr::str_detect(names(rd_files), "-package.[Rr][Dd]$")]
 
-  message("Found ", length(rd_files), " Rd files")
-
   # Check renaming
   for (rd_id in seq_along(rd_files)) {
     has_field <- any(stringr::str_detect(rd_files[[rd_id]], paste0(r"{\\}", field)))
