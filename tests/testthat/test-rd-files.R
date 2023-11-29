@@ -14,7 +14,7 @@ test_field_in_documentation <- function(field) {
   help_dir <- file.path(pkg_path, "help")
   man_dir  <- file.path(pkg_path, "man")
 
-  expect_true(any(dir.exists(c(help_dir, man_dir))))
+  testthat::expect_true(any(dir.exists(c(help_dir, man_dir))))
 
   if (checkmate::test_directory_exists(help_dir)) {
 
