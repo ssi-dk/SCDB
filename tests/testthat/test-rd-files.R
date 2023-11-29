@@ -9,10 +9,12 @@ test_field_in_documentation <- function(field) {
   # folder structures during testing, so we need to account for these differences
 
   # Look for the source of .Rd files
-  pkg_path <- devtools::as.package(".")$path
+  pkg_path <- base::system.file("", package = "SCDB")
 
   help_dir <- file.path(pkg_path, "help")
   man_dir  <- file.path(pkg_path, "man")
+
+  expect_true(any(dir.exists(c(help_dir, man_dir))))
 
   if (checkmate::test_directory_exists(help_dir)) {
 

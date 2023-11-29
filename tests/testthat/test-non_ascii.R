@@ -9,10 +9,12 @@ test_that("Code contains no non-ASCII characters", {
   # folder structures during testing, so we need to account for these differences
 
   # Look for the source of .Rd files
-  pkg_path <- devtools::as.package(".")$path
+  pkg_path <- base::system.file("", package = "SCDB")
 
   help_dir <- file.path(pkg_path, "help")
   man_dir  <- file.path(pkg_path, "man")
+
+  expect_true(any(dir.exists(c(help_dir, man_dir))))
 
   if (checkmate::test_directory_exists(help_dir)) {
 
@@ -58,8 +60,8 @@ test_that("Code contains no non-ASCII characters", {
   for (file_id in seq_along(files_to_check)) {
     non_ascii_line <- stringr::str_detect(files_to_check[[file_id]], r"{[^\x00-\x7f]}")
 
-    if(any(non_ascii_line)){
-      rel_path <- stringr::str_remove(c(r_paths, rd_paths)[file_id], paste0(devtools::as.package(".")$path, "/?"))
+    if (any(non_ascii_line)) {
+      rel_path <- stringr::str_remove(c(r_paths, rd_paths)[file_id], paste0(pkg_path, "/?"))
       n_lines <- which(non_ascii_line)
 
       msg <- sprintf("Non-ASCII character(s) in file %s line(s) %s",
