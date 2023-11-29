@@ -53,7 +53,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     paste(collapse = ".")
 
   if (table_exists(conn, db_table_id)) {
-    db_table <- dplyr::tbl(conn, db_table_id)
+    db_table <- dplyr::tbl(conn, db_table_id, check_from = FALSE)
   } else {
     db_table <- create_table(dplyr::collect(utils::head(.data, 0)), conn, db_table_id, temporary = FALSE)
   }
