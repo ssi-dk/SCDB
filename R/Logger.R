@@ -161,7 +161,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter
 
       dplyr::rows_patch(
         x = self$log_tbl,
-        y = dplyr::copy_to(private$log_conn, data.frame(log_file = self$log_filename), overwrite = TRUE) |>
+        y = data.frame(log_file = self$log_filename) |>
           dplyr::mutate(...),
         by = "log_file",
         copy = TRUE,
