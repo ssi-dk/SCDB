@@ -210,11 +210,6 @@ test_that("update_snapshot works with Id objects", {
       SCDB.log_path = tempdir()
     )
 
-    on.exit({
-      options(old)
-      rm(old)
-    })
-
     target_table <- DBI::Id(schema = "test", table = "mtcars_modified")
 
     on.exit({
