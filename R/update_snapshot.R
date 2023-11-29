@@ -1,7 +1,7 @@
 #' Update a historical table
 #' @template .data_dbi
 #' @template conn
-#' @template db_table
+#' @param db_table An object that inherits from `tbl_dbi`, a [DBI::Id()] object or a character string readable by [id].
 #' @param timestamp
 #'   A timestamp (POSIXct) with which to update from_ts/until_ts columns
 #' @template filters
@@ -44,8 +44,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   checkmate::assert_class(logger, "Logger", null.ok = TRUE)
   checkmate::assert_logical(enforce_chronological_order)
 
-  # If db_table is given as str or Id, fetch the actual table
-  # If the table does not exist, create an empty table using the signature of the incoming data
+  # Retrieve Id from any valid db_table inputs to correctly create a missing table
   db_table_id <- id(db_table, conn)
   db_table_name <- db_table_id |>
     methods::slot("name") |>
