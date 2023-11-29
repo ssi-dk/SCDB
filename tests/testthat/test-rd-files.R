@@ -8,16 +8,13 @@ test_field_in_documentation <- function(field) {
   # Note that `devtools::test()`, `devtools::check()` and GitHub workflows all have different
   # folder structures during testing, so we need to account for these differences
 
-  # Platform independent regex search to find root folder
-  path_regex <- stringr::str_replace(r"{(.*\/\w*(.Rcheck)?)\/.*(?=\/testthat)}", "/", .Platform$file.sep)
-  pkg_path <- stringr::str_extract(getwd(), path_regex, group = 1)
-
-  # If path contains .Rcheck, we need to add the package name to the path
-  pkg_path <- stringr::str_replace(pkg_path, r"{(\w*)(\.Rcheck)}", paste0("\\1\\2", .Platform$file.sep, "\\1"))
-
   # Look for the source of .Rd files
+  pkg_path <- base::system.file("", package = "SCDB")
+
   help_dir <- file.path(pkg_path, "help")
   man_dir  <- file.path(pkg_path, "man")
+
+  testthat::expect_true(any(dir.exists(c(help_dir, man_dir))))
 
   if (checkmate::test_directory_exists(help_dir)) {
 
