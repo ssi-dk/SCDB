@@ -222,9 +222,9 @@ test_that("update_snapshot works with Id objects", {
 
     logger <- Logger$new(output_to_console = FALSE,
                          ts = Sys.time(),
-                         db_tablestring = "test.mtcars_modified")
-
-    create_table(mtcars, conn = conn, db_table_id = target_table, temporary = FALSE)
+                         db_tablestring = "test.mtcars_modified",
+                         log_conn = NULL,
+                         log_table_id = NULL)
 
     expect_no_error(
       mtcars |>
@@ -240,7 +240,7 @@ test_that("update_snapshot works with Id objects", {
         )
     )
 
-    unlink(logger$realpath)
+    unlink(logger$log_realpath)
   }
 })
 
