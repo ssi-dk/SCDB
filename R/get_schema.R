@@ -40,7 +40,7 @@ get_schema.SQLiteConnection <- function(.x) {
   } else if ("temp" %in% schemata) {
     return("temp")
   } else {
-    return()
+    return(NA_character_)
   }
 }
 

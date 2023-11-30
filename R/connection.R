@@ -152,17 +152,20 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
   return(DBI::Id(schema = db_schema, table = db_table))
 }
 
+#' @importFrom rlang %||%
 #' @export
 id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
   table_ident <- dbplyr::remote_table(db_table_id)
 
   id <- with(table_ident, {
+    catalog <- catalog
+    schema <- ifelse(is.na(schema), get_schema(conn), schema)
     setNames(list(catalog, schema, table), c("catalog", "schema", "table")) |>
       (\(.x) subset(.x, !is.na(.x)))() |>
       do.call(DBI::Id, args = _)
   })
 
-  if (!is.null(conn) && !identical(conn, db_table_id$src$con)) {
+  if (!is.null(conn) && !identical(conn, dbplyr::remote_con(db_table_id))) {
     rlang::warn("Table connection is different than conn",
                 frequency = "once")
   }
