@@ -44,6 +44,11 @@ get_schema.SQLiteConnection <- function(.x) {
   }
 }
 
+#' @export
+get_schema.NULL <- function(.x) {
+  return(NULL)
+}
+
 #' Test if a schema exists in given connection
 #' @param schema A character string giving the schema name
 #' @template conn
