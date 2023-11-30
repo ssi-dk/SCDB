@@ -101,6 +101,28 @@ get_tables.SQLiteConnection <- function(conn, pattern = NULL) {
   tables <- DBI::dbGetQuery(conn, query) |>
     dplyr::mutate(dplyr::across("schema", ~ ifelse(. %in% c("temp", "main"), NA_character_, .)))
 
+  if (!conn@dbname %in% c("", ":memory:") && nrow(tables) == 0) {
+    warning("No tables found. Check user privileges / database configuration")
+  }
+
+  return(tables)
+}
+
+#' @export
+#' @importFrom rlang .data
+get_tables.PqConnection <- function(conn, pattern = NULL) {
+  query <- paste('SELECT schemaname "schema", tablename "table" FROM pg_tables',
+                 "WHERE NOT (schemaname LIKE 'pg_%'",
+                 "OR schemaname = 'information_schema'",
+                 "OR tablename LIKE 'dbplyr_%')")
+
+  if (!is.null(pattern)) {
+    query <- paste0(query, " AND tablename LIKE '%", pattern, "%'")
+  }
+
+  tables <- DBI::dbGetQuery(conn, query) |>
+    dplyr::mutate(schema = dplyr::na_if(.data$schema, "public"))
+
   if (nrow(tables) == 0) warning("No tables found. Check user privileges / database configuration")
 
   return(tables)
@@ -119,9 +141,8 @@ get_tables.default <- function(conn, pattern = NULL) {
 
   # purrr::map fails if .x is empty, avoid by returning early
   if (nrow(objs) == 0) {
-    if (!(inherits(conn, "SQLiteConnection") && conn@dbname %in% c("", ":memory:"))) {
-      warning("No tables found. Check user privileges / database configuration")
-    }
+    warning("No tables found. Check user privileges / database configuration")
+
     return(data.frame(schema = character(), table = character()))
   }
 
