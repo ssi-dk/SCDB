@@ -239,6 +239,8 @@ test_that("update_snapshot works with Id objects", {
           timestamp = format(Sys.time())
         )
     )
+
+    unlink(logger$realpath)
   }
 })
 
