@@ -13,7 +13,7 @@
 #'                      ts = "2020-01-01 09:00:00")
 #' @return A new instance of the `Logger` [R6][R6::R6Class] class.
 #' @export
-Logger <- R6::R6Class( #nolint: object_name_linter
+Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
   classname  = "Logger",
   public = list(
 
