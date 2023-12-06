@@ -10,11 +10,32 @@ get_schema(.x)
 \item{.x}{The object from which to retrieve a schema}
 }
 \value{
-The current schema name, but defaults to "prod" instead of "public"
+For \code{DBIConnection} objects, the current schema of the connection. See \link[=default schema]{Default schema} for more
+
+For \code{tbl_dbi} objects, the schema as retrieved from the lazy_query.
+If the lazy_query does not specify a schema, \code{NA} is returned.
+Note that lazy queries are sensitive to server-side changes and may therefore return entirely different tables
+if changes are made server-side.
 }
 \description{
 Get the current schema of a database-related objects
 }
+\section{Default schema}{
+
+
+In some backends, it is possible to modify settings so that when a schema is not explicitly stated in a query,
+the backend searches for the table in this schema by default.
+For Postgres databases, this can be shown with \verb{SELECT CURRENT_SCHEMA()} (defaults to \code{public}) and modified with
+\verb{SET search_path TO \{ schema \}}.
+
+For SQLite databases, a \code{temp} schema for temporary tables always exists as well as a \code{main} schema for permanent
+tables.
+Additional databases may be attached to the connection with a named schema, but as the attachment must be made after
+the connection is established, \code{get_schema} will never return any of these, as the default schema will always be
+one of \code{main} or \code{temp} (if \code{main} contains no tables).
+A return value of \code{NA} means that no tables exist within the connection and no default schema therefore exists.
+}
+
 \examples{
 conn <- get_connection(drv = RSQLite::SQLite())
 
