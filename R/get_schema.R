@@ -31,9 +31,15 @@ get_schema.PqConnection <- function(.x) {
   return(DBI::dbGetQuery(.x, "SELECT CURRENT_SCHEMA()")$current_schema)
 }
 
+#' @importFrom rlang .data
 #' @export
 get_schema.SQLiteConnection <- function(.x) {
-  schemata <- unique(get_tables(.x)["schema"])
+  schemata <-
+    DBI::dbGetQuery(.x, "PRAGMA table_list") |>
+    dplyr::filter(!.data$name %in% c("sqlite_schema", "sqlite_temp_schema"),
+                  !grepl("^sqlite_stat", .data$name)) |>
+    dplyr::pull(.data$schema) |>
+    unique()
 
   if ("main" %in% schemata) {
     return("main")
