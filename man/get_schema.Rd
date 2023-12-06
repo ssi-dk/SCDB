@@ -10,7 +10,7 @@ get_schema(.x)
 \item{.x}{The object from which to retrieve a schema}
 }
 \value{
-For \code{DBIConnection} objects, the current schema of the connection. See \link[=default schema]{Default schema} for more
+For \code{DBIConnection} objects, the current schema of the connection. See "default schema" for more
 
 For \code{tbl_dbi} objects, the schema as retrieved from the lazy_query.
 If the lazy_query does not specify a schema, \code{NA} is returned.

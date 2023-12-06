@@ -2,7 +2,7 @@
 #'
 #' @param .x The object from which to retrieve a schema
 #' @return
-#' For `DBIConnection` objects, the current schema of the connection. See [Default schema][default schema] for more
+#' For `DBIConnection` objects, the current schema of the connection. See "default schema" for more
 #'
 #' For `tbl_dbi` objects, the schema as retrieved from the lazy_query.
 #' If the lazy_query does not specify a schema, `NA` is returned.
