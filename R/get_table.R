@@ -247,7 +247,7 @@ table_exists <- function(conn, db_table_id) {
   # Check arguments
   if (inherits(db_table_id, "tbl_dbi")) {
     exists <- tryCatch({
-      dplyr::collect(db_table_id)
+      dplyr::collect(utils::head(db_table_id, 0))
       return(TRUE)
     },
     error = function(e) {
