@@ -158,10 +158,9 @@ id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
   table_ident <- dbplyr::remote_table(db_table_id)
 
   id <- with(table_ident, {
-    setNames(list(catalog = catalog,
-                  schema = ifelse(is.na(schema), get_schema(conn), schema),
-                  table = table),
-             c("catalog", "schema", "table")) |>
+    list(catalog = catalog,
+         schema = schema,
+         table = table) |>
       (\(.x) subset(.x, !is.na(.x)))() |>
       do.call(DBI::Id, args = _)
   })
