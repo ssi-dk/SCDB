@@ -166,8 +166,7 @@ id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
   })
 
   if (!is.null(conn) && !identical(conn, dbplyr::remote_con(db_table_id))) {
-    rlang::warn("Table connection is different than conn",
-                frequency = "once")
+    rlang::warn("Table connection is different than conn")
   }
 
   return(id)
