@@ -88,18 +88,20 @@ get_tables <- function(conn, pattern = NULL) {
   UseMethod("get_tables")
 }
 
+#' @importFrom rlang .data
 #' @export
 get_tables.SQLiteConnection <- function(conn, pattern = NULL) {
   query <- paste("SELECT schema, name 'table' FROM pragma_table_list",
                  "WHERE NOT name IN ('sqlite_schema', 'sqlite_temp_schema')",
-                 "AND NOT name LIKE 'sqlite_stat%'")
+                 "AND NOT name LIKE 'sqlite_stat%'",
+                 "AND NOT schema = 'temp'")
 
   if (!is.null(pattern)) {
     query <- paste0(query, " AND name LIKE '%", pattern, "%'")
   }
 
   tables <- DBI::dbGetQuery(conn, query) |>
-    dplyr::mutate(dplyr::across("schema", ~ ifelse(. %in% c("temp", "main"), NA_character_, .)))
+    dplyr::mutate(schema = ifelse(.data$schema == "main", NA_character_, .data$schema))
 
   if (!conn@dbname %in% c("", ":memory:") && nrow(tables) == 0) {
     warning("No tables found. Check user privileges / database configuration")
