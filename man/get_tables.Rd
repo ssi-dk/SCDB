@@ -28,7 +28,10 @@ Gets the available tables
 \examples{
 conn <- get_connection(drv = RSQLite::SQLite())
 
-get_tables(conn)
+dplyr::copy_to(conn, datasets::mtcars, name = DBI::Id(table = "my_test_table"))
+
+get_tables(conn, pattern = "my_[th]est")
+get_tables(conn, pattern = "my_[th]est", show_temp = "always")
 
 close_connection(conn)
 }
