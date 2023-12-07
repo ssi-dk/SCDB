@@ -108,10 +108,6 @@ get_tables.SQLiteConnection <- function(conn, pattern = NULL, show_temp = "never
                  "WHERE NOT name IN ('sqlite_schema', 'sqlite_temp_schema')",
                  "AND NOT name LIKE 'sqlite_stat%'")
 
-  if (!is.null(pattern)) {
-    query <- paste0(query, " AND name LIKE '%", pattern, "%'")
-  }
-
   tables <- DBI::dbGetQuery(conn, query)
 
   if (show_temp == "never") {
@@ -134,6 +130,16 @@ get_tables.SQLiteConnection <- function(conn, pattern = NULL, show_temp = "never
       dplyr::mutate(schema = ifelse(.data$schema == "main", NA_character_, .data$schema))
   }
 
+  if (!is.null(pattern)) {
+    tables <- tables |>
+      dplyr::mutate(db_table_str = ifelse(
+        is.na(.data$schema), .data$table,
+        paste(.data$schema, .data$table, sep = ".")
+      )) |>
+      dplyr::filter(grepl(pattern, .data$db_table_str)) |>
+      dplyr::select(!"db_table_str")
+  }
+
   if (!conn@dbname %in% c("", ":memory:") && nrow(tables) == 0) {
     warning("No tables found. Check user privileges / database configuration")
   }
@@ -148,10 +154,6 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temp = "never") {
                  "WHERE NOT (schemaname LIKE 'pg_%'",
                  "OR schemaname = 'information_schema'",
                  "OR tablename LIKE 'dbplyr_%')")
-
-  if (!is.null(pattern)) {
-    query <- paste0(query, " AND tablename LIKE '%", pattern, "%'")
-  }
 
   default_schema <- get_schema(conn)
   tables <- DBI::dbGetQuery(conn, query) |>
@@ -176,6 +178,17 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temp = "never") {
   tables <- tables |>
     dplyr::mutate(schema = ifelse(.data$schema == default_schema, NA_character_, .data$schema)) |>
     dplyr::select(!"is_temporary")
+
+
+  if (!is.null(pattern)) {
+    tables <- tables |>
+      dplyr::mutate(db_table_str = ifelse(
+        is.na(.data$schema), .data$table,
+        paste(.data$schema, .data$table, sep = ".")
+      )) |>
+      dplyr::filter(grepl(pattern, .data$db_table_str)) |>
+      dplyr::select(!"db_table_str")
+  }
 
   if (nrow(tables) == 0) warning("No tables found. Check user privileges / database configuration")
 
