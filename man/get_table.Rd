@@ -19,7 +19,10 @@ If set as NULL, all data is returned}
 If set TRUE, the history columns "checksum", "from_ts", "until_ts" are returned also}
 }
 \value{
-A "lazy" dataframe (tbl_lazy) generated using dbplyr
+A "lazy" dataframe (tbl_lazy) generated using dbplyr.
+
+Note that a temporary table will be preferred over ordinary tables in the default schema (see \code{\link[=get_schema]{get_schema()}}) with
+an identical name.
 }
 \description{
 Gets a named table from a given schema

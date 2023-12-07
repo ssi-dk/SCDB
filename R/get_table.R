@@ -10,7 +10,10 @@
 #'   Default FALSE.
 #'   If set TRUE, the history columns "checksum", "from_ts", "until_ts" are returned also
 #' @return
-#'   A "lazy" dataframe (tbl_lazy) generated using dbplyr
+#'   A "lazy" dataframe (tbl_lazy) generated using dbplyr.
+#'
+#'   Note that a temporary table will be preferred over ordinary tables in the default schema (see [get_schema()]) with
+#'   an identical name.
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
