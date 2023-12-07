@@ -10,6 +10,8 @@
 
 * Suppressed recurring messages from dbplyr >= 2.4.0 about table names containing `.`.
 
+* Added `show_temp` option to `get_tables` to allow retrieving temporary tables.
+
 # SCDB 0.2.1
 
 ## Minor Improvements and Fixes
