@@ -34,19 +34,23 @@ if (length(conns[names(conns) != "SQLite"]) == 0) {
   message("No useful drivers (other than SQLite) were found!")
 }
 
-
-message("#####\n",
-        "Following drivers will be tested:\n",
-        sprintf("  %s (%s)\n", conn_list[names(conns)], names(conns)),
-        sep = "")
+{
+  message("#####\n",
+          "Following drivers will be tested:\n",
+          paste0(sprintf("  %s (%s)",
+                         conn_list[names(conns)],
+                         names(conns)), collapse = "\n"))
 
 unavailable_drv <- conn_list[which(!names(conn_list) %in% names(conns))]
 if (length(unavailable_drv) > 0) {
-  message("\nFollowing drivers were not found and will NOT be tested:\n",
-          sprintf("  %s (%s)\n", conn_list[names(unavailable_drv)], names(unavailable_drv)),
-          sep = "")
+  message("\n",
+          "Following drivers were not found and will NOT be tested:\n",
+          paste0(sprintf("  %s (%s)",
+                         conn_list[names(unavailable_drv)],
+                         names(unavailable_drv)), collapse = "\n"))
 }
-message("#####\n")
+message("#####")
+}
 
 # Attach tempfile as schema for SQLite
 for (conn in conns) {
