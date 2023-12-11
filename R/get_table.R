@@ -99,6 +99,8 @@ get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_inf
 #' @importFrom rlang .data
 #' @export
 get_tables <- function(conn, pattern = NULL, show_temp = "never") {
+
+  checkmate::check_character(pattern, null.ok = TRUE)
   checkmate::check_choice(show_temp, c("always", "fallback", "never"))
 
   UseMethod("get_tables")
