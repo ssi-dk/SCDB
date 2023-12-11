@@ -144,6 +144,7 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
     db_schema <- db_name[1]
     db_table  <- db_name[2]
 
+    # If no matching implied schema is found, return the unmodified db_table_id
     if (allow_table_only && !is.null(conn) && !schema_exists(conn, db_schema)) {
       return(DBI::Id(table = db_table_id))
     }
