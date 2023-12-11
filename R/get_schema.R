@@ -97,7 +97,7 @@ schema_exists.SQLiteConnection <- function(conn, schema) {
   query <- paste0(
     "SELECT schema, name FROM pragma_table_list WHERE schema == '",
     schema,
-    "' AND name == 'sqlite_schema'"
+    "' AND name IN ('sqlite_schema', 'sqlite_temp_schema')"
   )
   result <- DBI::dbGetQuery(conn, query)
 
