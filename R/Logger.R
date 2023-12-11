@@ -162,22 +162,23 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
       patch <- data.frame(log_file = self$log_filename) |>
         dplyr::copy_to(
-          conn = private$log_conn,
+          dest = private$log_conn,
           df = _,
           name = "SCDB_log_patch",
           temporary = TRUE,
           overwrite = FALSE
-        ) |>
-        # Mutating after copying ensures consistency in SQL translation
-        dplyr::mutate(...)
+        )
 
       on.exit({
-        DBI::dbRemoveTable(private$log_conn, id(patch, conn = private$log_conn, allow_table_only = FALSE))
+        if (DBI::dbIsValid(private$log_conn) && table_exists(conn = private$log_conn, patch)) {
+          DBI::dbRemoveTable(private$log_conn, id(patch, conn = private$log_conn, allow_table_only = FALSE))
+        }
       })
 
+      # Mutating after copying ensures consistency in SQL translation
       dplyr::rows_patch(
         x = self$log_tbl,
-        y = patch,
+        y = dplyr::mutate(patch, ...),
         by = "log_file",
         in_place = TRUE,
         unmatched = "ignore"
