@@ -156,7 +156,6 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
   return(DBI::Id(schema = db_schema, table = db_table))
 }
 
-#' @importFrom rlang %||%
 #' @export
 id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
   table_ident <- dbplyr::remote_table(db_table_id)
