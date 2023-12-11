@@ -131,11 +131,14 @@ id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
     return(db_table_id)
   }
 
+  if (!allow_table_only) checkmate::check_class(conn, "DBIConnection")
+
   UseMethod("id")
 }
 
 #' @export
 id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+
   if (stringr::str_detect(db_table_id, "\\.")) {
     db_name <- stringr::str_split_1(db_table_id, "\\.")
     db_schema <- db_name[1]
