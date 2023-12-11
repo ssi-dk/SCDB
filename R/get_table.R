@@ -130,11 +130,6 @@ get_tables.SQLiteConnection <- function(conn, pattern = NULL, show_temp = "never
       dplyr::mutate(schema = ifelse(.data$schema == "main", NA_character_, .data$schema))
   }
 
-  if (show_temp != "always") {
-    tables <- tables |>
-      dplyr::mutate(schema = ifelse(.data$schema == "main", NA_character_, .data$schema))
-  }
-
   if (!is.null(pattern)) {
     tables <- tables |>
       dplyr::mutate(db_table_str = ifelse(
