@@ -3,8 +3,8 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
   if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
   if (DBI::dbExistsTable(conn, id("test.SCDB_logs", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_logs", conn))
 
-  target <- mtcars %>%
-    dplyr::copy_to(conn, ., overwrite = TRUE) |>
+  target <- mtcars |>
+    dplyr::copy_to(conn, df = _, name = "temp", overwrite = TRUE) |>
     digest_to_checksum(col = "checksum", warn = FALSE) |>
     dplyr::mutate(from_ts  = !!db_timestamp("2022-10-01 09:00:00", conn),
                   until_ts = !!db_timestamp(NA, conn)) %>%
@@ -12,8 +12,8 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
 
 
   .data <- mtcars |>
-    dplyr::mutate(hp = dplyr::if_else(hp > 130, hp - 10, hp)) %>%
-    dplyr::copy_to(conn, df = ., overwrite = TRUE)
+    dplyr::mutate(hp = dplyr::if_else(hp > 130, hp - 10, hp)) |>
+    dplyr::copy_to(conn, df = _, name = "temp", overwrite = TRUE)
 
   # This is a simple update where 23 rows are replaced with 23 new ones on the given date
   db_table <- "test.SCDB_tmp1"
@@ -63,8 +63,8 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
 
   # We now attempt to do another update on the same date
   .data <- mtcars |>
-    dplyr::mutate(hp = dplyr::if_else(hp > 100, hp - 10, hp)) %>%
-    dplyr::copy_to(conn, ., overwrite = TRUE)
+    dplyr::mutate(hp = dplyr::if_else(hp > 100, hp - 10, hp)) |>
+    dplyr::copy_to(conn, df = _, name = "temp", overwrite = TRUE)
 
   utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-03 09:00:00",
                                         logger = logger))
@@ -91,8 +91,8 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
 
   # We now attempt to an update between these two updates
   .data <- mtcars |>
-    dplyr::mutate(hp = dplyr::if_else(hp > 150, hp - 10, hp)) %>%
-    dplyr::copy_to(conn, ., overwrite = TRUE)
+    dplyr::mutate(hp = dplyr::if_else(hp > 150, hp - 10, hp)) |>
+    dplyr::copy_to(conn, df = _, name = "temp", overwrite = TRUE)
 
   # This should fail if we do not specify "enforce_chronological_order = FALSE"
   expect_error(utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-02 09:00:00",
@@ -203,6 +203,46 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
 
   if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
 }})
+
+test_that("update_snapshot works with Id objects", {
+  for (conn in conns) {
+    old <- options(
+      SCDB.log_path = tempdir()
+    )
+
+    target_table <- DBI::Id(schema = "test", table = "mtcars_modified")
+
+    on.exit({
+      options(old)
+      if (DBI::dbExistsTable(conn, "mtcars_modified")) DBI::dbRemoveTable(conn, "mtcars_modified")
+      if (DBI::dbExistsTable(conn, target_table)) DBI::dbRemoveTable(conn, target_table)
+
+      rm(list = c("target_table", "old"))
+    })
+
+    logger <- Logger$new(output_to_console = FALSE,
+                         ts = Sys.time(),
+                         db_tablestring = "test.mtcars_modified",
+                         log_conn = NULL,
+                         log_table_id = NULL)
+
+    expect_no_error(
+      mtcars |>
+        dplyr::mutate(disp = sample(mtcars$disp, nrow(mtcars))) |>
+        dplyr::copy_to(dest = conn,
+                       df = _,
+                       name = "mtcars_modified") |>
+        update_snapshot(
+          conn = conn,
+          db_table = target_table,
+          logger = logger,
+          timestamp = format(Sys.time())
+        )
+    )
+
+    unlink(logger$log_realpath)
+  }
+})
 
 test_that("update_snapshot checks table formats", {
 

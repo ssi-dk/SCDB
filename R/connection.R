@@ -127,18 +127,24 @@ close_connection <- function(conn) {
 #' @seealso [DBI::Id] which this function wraps.
 #' @export
 id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+  if (inherits(db_table_id, "Id")) {
+    return(db_table_id)
+  }
 
-  # Check if already Id
-  if (inherits(db_table_id, "Id")) return(db_table_id)
+  if (!allow_table_only) checkmate::check_class(conn, "DBIConnection")
 
-  # Check arguments
-  checkmate::assert_character(db_table_id)
+  UseMethod("id")
+}
+
+#' @export
+id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
 
   if (stringr::str_detect(db_table_id, "\\.")) {
     db_name <- stringr::str_split_1(db_table_id, "\\.")
     db_schema <- db_name[1]
     db_table  <- db_name[2]
 
+    # If no matching implied schema is found, return the unmodified db_table_id
     if (allow_table_only && !is.null(conn) && !schema_exists(conn, db_schema)) {
       return(DBI::Id(table = db_table_id))
     }
@@ -148,4 +154,23 @@ id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
   }
 
   return(DBI::Id(schema = db_schema, table = db_table))
+}
+
+#' @export
+id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+  table_ident <- dbplyr::remote_table(db_table_id)
+
+  id <- with(table_ident, {
+    list(catalog = catalog,
+         schema = schema,
+         table = table) |>
+      (\(.x) subset(.x, !is.na(.x)))() |>
+      do.call(DBI::Id, args = _)
+  })
+
+  if (!is.null(conn) && !identical(conn, dbplyr::remote_con(db_table_id))) {
+    rlang::warn("Table connection is different than conn")
+  }
+
+  return(id)
 }

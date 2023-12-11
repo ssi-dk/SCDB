@@ -65,6 +65,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
       lockBinding("start_time", self)
 
       if (!is.null(log_table_id)) {
+        log_table_id <- id(log_table_id, log_conn)
         self$log_tbl <- create_logs_if_missing(log_table_id, log_conn)
       }
       private$log_conn <- log_conn
@@ -97,11 +98,11 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
         query <- dbplyr::build_sql(
           "UPDATE ",
-          ident(remote_name(self$log_tbl)),
+          dbplyr::as.sql(id(self$log_tbl, conn = private$log_conn), con = private$log_conn),
           " SET ",
-          ident("log_file"),
+          dbplyr::ident("log_file"),
           " = NULL WHERE ",
-          ident("log_file"),
+          dbplyr::ident("log_file"),
           " = '",
           sql(self$log_filename),
           "'",
@@ -159,12 +160,26 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     log_to_db = function(...) {
       if (is.null(self$log_tbl)) return()
 
+      patch <- data.frame(log_file = self$log_filename) |>
+        dplyr::copy_to(
+          dest = private$log_conn,
+          df = _,
+          name = "SCDB_log_patch",
+          temporary = TRUE,
+          overwrite = FALSE
+        )
+
+      on.exit({
+        if (DBI::dbIsValid(private$log_conn) && table_exists(conn = private$log_conn, patch)) {
+          DBI::dbRemoveTable(private$log_conn, id(patch, conn = private$log_conn, allow_table_only = FALSE))
+        }
+      })
+
+      # Mutating after copying ensures consistency in SQL translation
       dplyr::rows_patch(
         x = self$log_tbl,
-        y = dplyr::copy_to(private$log_conn, data.frame(log_file = self$log_filename), overwrite = TRUE) |>
-          dplyr::mutate(...),
+        y = dplyr::mutate(patch, ...),
         by = "log_file",
-        copy = TRUE,
         in_place = TRUE,
         unmatched = "ignore"
       )

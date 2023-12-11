@@ -1,7 +1,28 @@
 #' Get the current schema of a database-related objects
 #'
 #' @param .x The object from which to retrieve a schema
-#' @return The current schema name, but defaults to "prod" instead of "public"
+#' @return
+#' For `DBIConnection` objects, the current schema of the connection. See "default schema" for more.
+#'
+#' For `tbl_dbi` objects, the schema as retrieved from the lazy_query.
+#' If the lazy_query does not specify a schema, `NA` is returned.
+#' Note that lazy queries are sensitive to server-side changes and may therefore return entirely different tables
+#' if changes are made server-side.
+#'
+#' @section Default schema:
+#'
+#' In some backends, it is possible to modify settings so that when a schema is not explicitly stated in a query,
+#' the backend searches for the table in this schema by default.
+#' For Postgres databases, this can be shown with `SELECT CURRENT_SCHEMA()` (defaults to `public`) and modified with
+#' `SET search_path TO { schema }`.
+#'
+#' For SQLite databases, a `temp` schema for temporary tables always exists as well as a `main` schema for permanent
+#' tables.
+#' Additional databases may be attached to the connection with a named schema, but as the attachment must be made after
+#' the connection is established, `get_schema` will never return any of these, as the default schema will always be
+#' one of `main` or `temp` (if `main` contains no tables).
+#' A return value of `NA` means that no tables exist within the connection and no default schema therefore exists.
+#'
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
@@ -31,17 +52,28 @@ get_schema.PqConnection <- function(.x) {
   return(DBI::dbGetQuery(.x, "SELECT CURRENT_SCHEMA()")$current_schema)
 }
 
+#' @importFrom rlang .data
 #' @export
 get_schema.SQLiteConnection <- function(.x) {
-  schemata <- unique(get_tables(.x)["schema"])
+  schemata <-
+    DBI::dbGetQuery(.x, "PRAGMA table_list") |>
+    dplyr::filter(!.data$name %in% c("sqlite_schema", "sqlite_temp_schema"),
+                  !grepl("^sqlite_stat", .data$name)) |>
+    dplyr::pull(.data$schema) |>
+    unique()
 
   if ("main" %in% schemata) {
     return("main")
   } else if ("temp" %in% schemata) {
     return("temp")
   } else {
-    return()
+    return(NA_character_)
   }
+}
+
+#' @export
+get_schema.NULL <- function(.x) {
+  return(NULL)
 }
 
 #' Test if a schema exists in given connection
@@ -65,7 +97,7 @@ schema_exists.SQLiteConnection <- function(conn, schema) {
   query <- paste0(
     "SELECT schema, name FROM pragma_table_list WHERE schema == '",
     schema,
-    "' AND name == 'sqlite_schema'"
+    "' AND name IN ('sqlite_schema', 'sqlite_temp_schema')"
   )
   result <- DBI::dbGetQuery(conn, query)
 

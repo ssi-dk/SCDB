@@ -56,8 +56,9 @@ if (length(unavailable_drv) > 0) {
 message("#####")
 
 # Attach tempfile as schema for SQLite
-if ("SQLite" %in% names(conns)) {
-  DBI::dbExecute(conns$SQLite, paste0("ATTACH '", tempfile(), "' AS 'test'"))
+for (conn in conns) {
+  if (!inherits(conn, "SQLiteConnection")) next
+  DBI::dbExecute(conn, paste0("ATTACH '", tempfile(), "' AS 'test'"))
 }
 
 # Start with some clean up

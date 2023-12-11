@@ -1,5 +1,17 @@
 # SCDB (development version)
 
+## Minor Improvements and Fixes
+
+* Added S3 method for `id.tbl_dbi`, returning a `DBI::Id()` instance matching the table.
+  - Calling `id` on a `tbl_dbi` thus allows to retrieve a `schema` even when not
+    initially given.
+
+* Fixed `update_snapshot()` not working with a `DBI::Id()` instance as `db_table` argument.
+
+* Suppressed recurring messages from dbplyr >= 2.4.0 about table names containing `.`.
+
+* Added `show_temp` option to `get_tables()` to allow retrieving temporary tables.
+
 # SCDB 0.2.1
 
 ## Minor Improvements and Fixes

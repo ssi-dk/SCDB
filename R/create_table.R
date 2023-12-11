@@ -49,7 +49,7 @@ create_table <- function(.data, conn = NULL, db_table_id, temporary = TRUE, ...)
                      temporary = temporary,
                      ...)
 
-  return(invisible(dplyr::tbl(conn, db_table_id)))
+  return(invisible(dplyr::tbl(conn, db_table_id, check_from = FALSE)))
 }
 
 
@@ -126,5 +126,5 @@ create_logs_if_missing <- function(log_table, conn) {
     DBI::dbWriteTable(conn, id(log_table, conn), log_signature)
   }
 
-  return(dplyr::tbl(conn, id(log_table, conn)))
+  return(dplyr::tbl(conn, id(log_table, conn), check_from = FALSE))
 }
