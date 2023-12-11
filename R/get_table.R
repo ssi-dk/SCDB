@@ -201,7 +201,6 @@ get_tables.default <- function(conn, pattern = NULL, show_temp = "never") {
     rlang::warn("show_temp must be 'never' for unsupported backends!")
   }
 
-  return(NULL)
   # Check arguments
   checkmate::assert_class(conn, "DBIConnection")
   checkmate::assert_character(pattern, null.ok = TRUE)
