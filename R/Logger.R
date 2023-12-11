@@ -160,11 +160,24 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     log_to_db = function(...) {
       if (is.null(self$log_tbl)) return()
 
+      patch <- data.frame(log_file = self$log_filename) |>
+        dplyr::copy_to(
+          conn = private$log_conn,
+          df = _,
+          name = "SCDB_log_patch",
+          temporary = TRUE,
+          overwrite = FALSE
+        ) |>
+        # Mutating after copying ensures consistency in SQL translation
+        dplyr::mutate(...)
+
+      on.exit({
+        DBI::dbRemoveTable(private$log_conn, id(patch, conn = private$log_conn, allow_table_only = FALSE))
+      })
+
       dplyr::rows_patch(
         x = self$log_tbl,
-        y = data.frame(log_file = self$log_filename) |>
-          dplyr::copy_to(private$log_conn, df = _, name = "logger_temp", temporary = TRUE, overwrite = TRUE) |>
-          dplyr::mutate(...),
+        y = patch,
         by = "log_file",
         in_place = TRUE,
         unmatched = "ignore"
