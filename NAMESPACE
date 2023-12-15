@@ -3,6 +3,7 @@
 S3method(db_timestamp,"NULL")
 S3method(db_timestamp,SQLiteConnection)
 S3method(db_timestamp,default)
+S3method(get_schema,"Microsoft SQL Server")
 S3method(get_schema,"NULL")
 S3method(get_schema,Id)
 S3method(get_schema,PqConnection)
