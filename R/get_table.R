@@ -196,7 +196,7 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temp = "never") {
 }
 
 #' @export
-get_tables.default <- function(conn, pattern = NULL, show_temp = "never") {
+get_tables.DBIConnection <- function(conn, pattern = NULL, show_temp = "never") {
   if (show_temp != "never") {
     rlang::warn("show_temp must be 'never' for unsupported backends!")
   }
@@ -374,7 +374,7 @@ table_exists.SQLiteConnection <- function(conn, db_table_id) {
 #' @rdname table_exists
 #' @importFrom rlang .data
 #' @export
-table_exists.default <- function(conn, db_table_id) {
+table_exists.DBIConnection <- function(conn, db_table_id) {
   assert_id_like(db_table_id)
 
   db_table_id <- id(db_table_id, conn = conn)
