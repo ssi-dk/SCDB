@@ -26,5 +26,10 @@ Authors:
   \item Rasmus Skytte Randløv \email{rske@ssi.dk} (\href{https://orcid.org/0000-0002-5860-3838}{ORCID})
 }
 
+Other contributors:
+\itemize{
+  \item Statens Serum Institut [copyright holder, funder]
+}
+
 }
 \keyword{internal}

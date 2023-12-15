@@ -8,7 +8,9 @@ Authors@R:
 	           comment = c(ORCID = "0000-0002-5860-3838")),
 	    person("Marcus Munch", "Gr\U00FCnewald", , "mmgr@ssi.dk",
 	           role = c("aut", "cre"),
-	           comment = c(ORCID = "0009-0006-8090-406X")))
+	           comment = c(ORCID = "0009-0006-8090-406X")),
+	    person("Statens Serum Institut",
+	           role = c("cph", "fnd")))
 Description: A collection of functions that enable easy access and updating of a database of data over time.
              More specifically, the package facilitates type-2 history for data-warehouses and provides a number
              of Quality of life improvements for working on SQL databases with R.
