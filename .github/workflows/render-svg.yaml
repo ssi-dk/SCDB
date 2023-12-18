@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - man/**logo.svg
+  workflow_dispatch:
 
 jobs:
   render-svg:
@@ -25,7 +26,10 @@ jobs:
         run: |
           library(magick)
 
-          svg_path <- list.files("man/figures", "*logo.svg", full.names = TRUE)
+          svg_path <- list.files(
+            "man/figures",
+            paste0(read.dcf("DESCRIPTION")[1, "Package"], "-logo.svg"),
+            full.names = TRUE)
 
           stopifnot(length(svg_path) == 1)
 
