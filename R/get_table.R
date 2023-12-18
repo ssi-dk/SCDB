@@ -195,6 +195,46 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temp = "never") {
   return(tables)
 }
 
+#' @importFrom rlang .data
+#' @export
+`get_tables.Microsoft SQL Server` <- function(conn, pattern = NULL, show_temp = "never") {
+  if (show_temp != "never") {
+    rlang::warn("Temporary tables are currently not supported for Microsoft SQL Server")
+  }
+
+  NextMethod("get_tables")
+
+  tables <- tables |>
+    dplyr::mutate(schema = dplyr::na_if(.data$schema, "dbo"))
+
+
+  if (!is.null(pattern)) {
+    tables <- tables |>
+      tidyr::unite("db_table_str", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
+      dplyr::filter(grepl(pattern, .data$db_table_str)) |>
+      dplyr::select(!"db_table_str")
+  }
+
+  if (nrow(tables) == 0) warning("No tables found. Check user privileges / database configuration")
+
+  return(tables)
+}
+
+#' @export
+get_tables.OdbcConnection <- function(conn, pattern = NULL, show_temp = "never") {
+  query <- paste("SELECT",
+                 "s.name AS [schema],",
+                 "t.name AS [table]",
+                 "FROM sys.tables t",
+                 "INNER JOIN sys.schemas s",
+                 "ON t.schema_id = s.schema_id")
+
+  tables <- DBI::dbGetQuery(conn, query) |>
+    tidyr::unite("db_table_str", "schema", "table", sep = ".", na.rm = TRUE)
+
+  return(tables)
+}
+
 #' @export
 get_tables.DBIConnection <- function(conn, pattern = NULL, show_temp = "never") {
   if (show_temp != "never") {
