@@ -100,8 +100,14 @@ unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALS
   # We need to determine where col should be placed
   first_from <- which(colnames(data) %in% from_vars)[1]
 
-  out <- data |>
-    dplyr::mutate({{col}} := NULLIF(paste(!!!col_symbols, sep = sep), ""), .before = !!first_from)
+  # CONCAT_WS does not exist in SQLite
+  if (inherits(data, "tbl_SQLiteConnection")) {
+    out <- data |>
+      dplyr::mutate({{col}} := NULLIF(paste(!!!col_symbols, sep = sep), ""), .before = !!first_from)
+  } else {
+    out <- data |>
+      dplyr::mutate({{col}} := NULLIF(CONCAT_WS(sep, !!!col_symbols), ""), .before = !!first_from)
+  }
 
   if (remove) out <- out |> dplyr::select(!tidyselect::all_of(from_vars))
 
