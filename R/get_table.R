@@ -228,7 +228,7 @@ get_tables.OdbcConnection <- function(conn, pattern = NULL, show_temp = "never")
                  "ON t.schema_id = s.schema_id")
 
   tables <- DBI::dbGetQuery(conn, query) |>
-    tidyr::unite("db_table_str", "schema", "table", sep = ".", na.rm = TRUE)
+    dplyr::mutate(schema = dplyr::na_if(.data$schema, "dbo"))
 
   return(tables)
 }
