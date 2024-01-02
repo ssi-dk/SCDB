@@ -87,7 +87,7 @@ unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALS
   rlang::check_dots_unnamed()
 
   if (rlang::dots_n(...) == 0) {
-    from_vars <- rlang::set_names(seq_along(data), names(data))
+    from_vars <- colnames(data)
   } else {
     from_vars <- colnames(dplyr::select(data, ...))
   }
