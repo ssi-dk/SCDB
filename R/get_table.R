@@ -202,9 +202,7 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temp = "never") {
     rlang::warn("Temporary tables are currently not supported for Microsoft SQL Server")
   }
 
-  NextMethod("get_tables")
-
-  tables <- tables |>
+  tables <- NextMethod("get_tables") |>
     dplyr::mutate(schema = dplyr::na_if(.data$schema, "dbo"))
 
 
