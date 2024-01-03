@@ -58,6 +58,9 @@ test_that('id() returns table = "schema.table" if schema does not exist', {
 
 test_that("close_connection() works", { for (conn in conns) { # nolint: brace_linter
 
+  # ODBC connections require arguments and therefore cannot be used in this test
+  if (inherits(conn, "OdbcConnection")) next
+
   # Identify driver of conn within conn_list
   conn_drv <- purrr::keep(conns, \(.x) identical(.x, conn)) |>
     names() |>
