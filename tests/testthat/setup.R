@@ -36,7 +36,7 @@ odbc_json <- Sys.getenv("SCDB_ODBC_JSON")
 if (odbc_json != "" && rlang::is_installed("jsonlite")) {
   conns <- jsonlite::fromJSON(odbc_json) |>
     lapply(\(.x) {
-      .x$drv = odbc::odbc()
+      .x$drv <- odbc::odbc()
 
       return(do.call(DBI::dbConnect, args = .x))
     }) |>
