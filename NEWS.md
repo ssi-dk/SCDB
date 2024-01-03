@@ -1,5 +1,7 @@
 # SCDB (development version)
 
+* Added support for Microsoft SQL Server using ODBC
+
 ## Minor Improvements and Fixes
 
 * Added S3 method for `id.tbl_dbi`, returning a `DBI::Id()` instance matching the table.
