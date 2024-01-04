@@ -28,6 +28,15 @@
 #' @importFrom rlang .data
 #' @export
 filter_keys <- function(.data, filters, by = NULL, na_by = NULL) {
+  if (is.null(filters)) {
+    return(.data)
+  }
+
+  UseMethod("filter_keys")
+}
+
+#' @export
+filter_keys.tbl_sql <- function(.data, filters, by = NULL, na_by = NULL) {
 
   if (is.null(filters)) return(.data)
 
@@ -47,7 +56,28 @@ filter_keys <- function(.data, filters, by = NULL, na_by = NULL) {
     if (length(by) == 0)    by    <- NULL
     if (length(na_by) == 0) na_by <- NULL
   }
-  return(inner_join(.data, filters, by = by, na_by = na_by))
+  return(dplyr::inner_join(.data, filters, by = by, na_by = na_by))
+}
+
+#' @export
+filter_keys.data.frame <- function(.data, filters, by = NULL, ...) {
+  .dots <- list(...)
+
+  args <- list(
+    x = .data,
+    y = filters,
+    by = by
+  ) |>
+    append(.dots)
+
+  if ("na_by" %in% names(args)) {
+    args$na_matches <- "na"
+    args$na_by <- NULL
+  }
+
+  if (is.null(by)) args$by <- colnames(filters)
+
+  return(do.call(dplyr::inner_join, args = args))
 }
 
 

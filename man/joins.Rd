@@ -2,25 +2,25 @@
 % Please edit documentation in R/db_joins.R
 \name{joins}
 \alias{joins}
-\alias{inner_join}
-\alias{left_join}
-\alias{right_join}
-\alias{full_join}
-\alias{semi_join}
-\alias{anti_join}
+\alias{inner_join.tbl_sql}
+\alias{left_join.tbl_sql}
+\alias{right_join.tbl_sql}
+\alias{full_join.tbl_sql}
+\alias{semi_join.tbl_sql}
+\alias{anti_join.tbl_sql}
 \title{SQL Joins}
 \usage{
-inner_join(x, y, by = NULL, na_by = NULL, ...)
+inner_join.tbl_sql(x, y, by = NULL, ...)
 
-left_join(x, y, by = NULL, na_by = NULL, ...)
+left_join.tbl_sql(x, y, by = NULL, ...)
 
-right_join(x, y, by = NULL, na_by = NULL, ...)
+right_join.tbl_sql(x, y, by = NULL, ...)
 
-full_join(x, y, by = NULL, na_by = NULL, ...)
+full_join.tbl_sql(x, y, by = NULL, ...)
 
-semi_join(x, y, by = NULL, na_by = NULL, ...)
+semi_join.tbl_sql(x, y, by = NULL, ...)
 
-anti_join(x, y, by = NULL, na_by = NULL, ...)
+anti_join.tbl_sql(x, y, by = NULL, ...)
 }
 \arguments{
 \item{x, y}{A pair of lazy data frames backed by database queries.}
@@ -54,9 +54,9 @@ use a named character vector like \code{by = c("x_a" = "y_a", "x_b" = "y_b")}.
 To perform a cross-join, generating all combinations of \code{x} and \code{y}, see
 \code{\link[dplyr:cross_join]{cross_join()}}.}
 
-\item{na_by}{columns that should match on NA}
-
 \item{...}{Other parameters passed onto methods.}
+
+\item{na_by}{columns that should match on NA}
 }
 \value{
 Another \code{tbl_lazy}. Use \code{\link[=show_query]{show_query()}} to see the generated
