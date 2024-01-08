@@ -55,8 +55,6 @@ To perform a cross-join, generating all combinations of \code{x} and \code{y}, s
 \code{\link[dplyr:cross_join]{cross_join()}}.}
 
 \item{...}{Other parameters passed onto methods.}
-
-\item{na_by}{columns that should match on NA}
 }
 \value{
 Another \code{tbl_lazy}. Use \code{\link[=show_query]{show_query()}} to see the generated
@@ -64,12 +62,12 @@ query, and use \code{\link[dbplyr:collect.tbl_sql]{collect()}} to execute the qu
 and return data to R.
 }
 \description{
-Overloads the dplyr \emph{_join to accept an na_by argument.
-By default, joining using SQL does not match on NA / NULL.
-dbplyr has the option "na_matches = na" to match on NA / NULL but this is very inefficient
+Overloads the dplyr \verb{*_join} to accept an na_by argument.
+By default, joining using SQL does not match on \code{NA} / \code{NULL}.
+dbplyr has the option "na_matches = na" to match on \code{NA} / \code{NULL} but this is very inefficient
 This function does the matching more efficiently.
-If a column contains NA / NULL, give the argument to na_by to match during the join
-If no na_by is given, the function defaults to using dplyr::}_join
+If a column contains \code{NA} / \code{NULL}, give the argument to na_by to match during the join
+If no na_by is given, the function defaults to using \verb{dplyr::*_join}
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)

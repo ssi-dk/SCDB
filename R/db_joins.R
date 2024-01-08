@@ -116,12 +116,12 @@ join_warn_experimental <- function() {
 #'
 #' @name joins
 #'
-#' @description Overloads the dplyr *_join to accept an na_by argument.
-#' By default, joining using SQL does not match on NA / NULL.
-#' dbplyr has the option "na_matches = na" to match on NA / NULL but this is very inefficient
+#' @description Overloads the dplyr `*_join` to accept an na_by argument.
+#' By default, joining using SQL does not match on `NA` / `NULL`.
+#' dbplyr has the option "na_matches = na" to match on `NA` / `NULL` but this is very inefficient
 #' This function does the matching more efficiently.
-#' If a column contains NA / NULL, give the argument to na_by to match during the join
-#' If no na_by is given, the function defaults to using dplyr::*_join
+#' If a column contains `NA` / `NULL`, give the argument to na_by to match during the join
+#' If no na_by is given, the function defaults to using `dplyr::*_join`
 #' @inheritParams dbplyr::join.tbl_sql
 #' @inherit dbplyr::join.tbl_sql return
 #' @examples
@@ -148,7 +148,6 @@ join_warn_experimental <- function() {
 #' db2 <- memdb_frame(x = 1:3, y = letters[1:3])
 #' db1 %>% left_join(db2) %>% show_query()
 #' db1 %>% left_join(db2, sql_on = "LHS.x < RHS.x") %>% show_query()
-#' @param na_by columns that should match on NA
 #' @seealso [dplyr::mutate-joins] which this function wraps.
 #' @seealso [dbplyr::join.tbl_sql] which this function wraps.
 #' @exportS3Method dplyr::inner_join
@@ -208,8 +207,8 @@ left_join.tbl_sql <- function(x, y, by = NULL, ...) {
   return(join_result)
 }
 
-#' @exportS3Method dplyr::right_join
 #' @rdname joins
+#' @exportS3Method dplyr::right_join
 right_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   # Check arguments
@@ -267,8 +266,8 @@ scdb_right_join.tbl_SQLiteConnection <- function(x, y, sql_on, renamer, ...) {
 }
 
 
-#' @exportS3Method dplyr::full_join
 #' @rdname joins
+#' @exportS3Method dplyr::full_join
 full_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   # Check arguments
@@ -291,8 +290,8 @@ full_join.tbl_sql <- function(x, y, by = NULL, ...) {
 }
 
 
-#' @exportS3Method dplyr::semi_join
 #' @rdname joins
+#' @exportS3Method dplyr::semi_join
 semi_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   # Check arguments
@@ -310,8 +309,9 @@ semi_join.tbl_sql <- function(x, y, by = NULL, ...) {
   }
 }
 
-#' @exportS3Method dplyr::anti_join
+
 #' @rdname joins
+#' @exportS3Method dplyr::anti_join
 anti_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   # Check arguments
