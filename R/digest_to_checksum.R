@@ -33,7 +33,8 @@ digest_to_checksum <- function(.data, col = "checksum", exclude = NULL, warn = T
     dplyr::mutate(dplyr::across(
       tidyselect::all_of(colnames),
       ~ dplyr::coalesce(as.character(.), ""),
-      .names = "{.col}.__chr"))
+      .names = "{.col}.__chr"
+    ))
 
   return(digest_to_checksum_internal(.data, col))
 }
