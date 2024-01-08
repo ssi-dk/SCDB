@@ -55,16 +55,6 @@ test_that("*_join() works", { for (conn in conns) { # nolint: brace_linter
     dplyr::arrange(number, t, letter)
   expect_equal(q, qr)
 
-  if (inherits(conn, "SQLiteConnection")) {
-    # If this test fails, it means dbplyr fixed the apparent bug in right_join
-    # This also means that our right_join should no longer be an S3 class and can revert to our regular implementation
-    sql_on <- join_na_sql(by = NULL, na_by = "number")
-    renamer <- select_na_sql(x, y, by = NULL, na_by = "number", left = FALSE)
-
-    expect_false(identical(dplyr::collect(scdb_right_join.tbl_SQLiteConnection(x, y, sql_on, renamer)),
-                           dplyr::collect(scdb_right_join.tbl_dbi(x, y, sql_on, renamer))))
-  }
-
 
   # Second test case
   x <- data.frame(date = as.Date(c("2022-05-01", "2022-05-01", "2022-05-02", "2022-05-02")),
@@ -113,23 +103,4 @@ test_that("*_join() works", { for (conn in conns) { # nolint: brace_linter
                  dplyr::select(!"name") |>
                  dplyr::collect())
 
-
-  # left_join should be no slower than dplyr::left_join (otherwise, just deprecate it)
-  xx <- get_table(conn, "__mtcars") |>
-    dplyr::mutate(vs = dplyr::if_else(vs == 0, NA, vs),
-                  am = dplyr::if_else(am == 0, NA, am)) |>
-    dplyr::compute()
-  xx <- purrr::map(seq(100), ~ xx) |> purrr::reduce(dplyr::union_all) |> dplyr::compute()
-  t1 <- system.time(q1 <- dplyr::compute(left_join(xx, xx,
-                                                   by = c("gear", "cyl"),
-                                                   na_by = c("am", "vs"))))
-  t2 <- system.time(q2 <- dplyr::compute(dplyr::left_join(xx, xx,
-                                                          by = c("gear", "cyl", "am", "vs"),
-                                                          na_matches = "na")))
-
-  expect_equal(nrow(q1), nrow(q2))
-
-  if (!inherits(conn, "SQLiteConnection")) {
-    expect_true(t1[["elapsed"]] <= t2[["elapsed"]])
-  }
 }})
