@@ -115,7 +115,7 @@ schema_exists.SQLiteConnection <- function(conn, schema) {
 }
 
 #' @export
-schema_exists.PqConnection <- function(conn, schema) {
+schema_exists.DBIConnection <- function(conn, schema) {
   query <- paste0("SELECT schema_name FROM INFORMATION_SCHEMA.SCHEMATA WHERE schema_name = '", schema, "'")
   result <- DBI::dbGetQuery(conn, query)
 
