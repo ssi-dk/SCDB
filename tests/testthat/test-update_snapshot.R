@@ -11,6 +11,10 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
     dplyr::copy_to(conn, ., id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
 
 
+  # For some reason dplyr::copy_to(overwrite = TRUE) does not work as expected for MSSQL
+  if (inherits(conn, "Microsoft SQL Server")) {
+    DBI::dbExecute(conn, "DROP TABLE #temp")
+  }
   .data <- mtcars |>
     dplyr::mutate(hp = dplyr::if_else(hp > 130, hp - 10, hp)) |>
     dplyr::copy_to(conn, df = _, name = "temp", overwrite = TRUE)
@@ -60,6 +64,9 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
   expect_true(nrow(dplyr::filter(get_table(conn, "test.SCDB_logs"),
                                  dplyr::if_any(.cols = !c(log_file), .fns = ~ !is.na(.)))) == 1)
 
+  if (inherits(conn, "Microsoft SQL Server")) {
+    DBI::dbExecute(conn, "DROP TABLE #temp")
+  }
 
   # We now attempt to do another update on the same date
   .data <- mtcars |>
@@ -87,7 +94,9 @@ test_that("update_snapshot() works", { for (conn in conns) { # nolint: brace_lin
                nrow(mtcars))
 
 
-
+  if (inherits(conn, "Microsoft SQL Server")) {
+    DBI::dbExecute(conn, "DROP TABLE #temp")
+  }
 
   # We now attempt to an update between these two updates
   .data <- mtcars |>

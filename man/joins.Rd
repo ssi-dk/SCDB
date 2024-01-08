@@ -2,25 +2,25 @@
 % Please edit documentation in R/db_joins.R
 \name{joins}
 \alias{joins}
-\alias{inner_join}
-\alias{left_join}
-\alias{right_join}
-\alias{full_join}
-\alias{semi_join}
-\alias{anti_join}
+\alias{inner_join.tbl_sql}
+\alias{left_join.tbl_sql}
+\alias{right_join.tbl_sql}
+\alias{full_join.tbl_sql}
+\alias{semi_join.tbl_sql}
+\alias{anti_join.tbl_sql}
 \title{SQL Joins}
 \usage{
-inner_join(x, y, by = NULL, na_by = NULL, ...)
+inner_join.tbl_sql(x, y, by = NULL, ...)
 
-left_join(x, y, by = NULL, na_by = NULL, ...)
+left_join.tbl_sql(x, y, by = NULL, ...)
 
-right_join(x, y, by = NULL, na_by = NULL, ...)
+right_join.tbl_sql(x, y, by = NULL, ...)
 
-full_join(x, y, by = NULL, na_by = NULL, ...)
+full_join.tbl_sql(x, y, by = NULL, ...)
 
-semi_join(x, y, by = NULL, na_by = NULL, ...)
+semi_join.tbl_sql(x, y, by = NULL, ...)
 
-anti_join(x, y, by = NULL, na_by = NULL, ...)
+anti_join.tbl_sql(x, y, by = NULL, ...)
 }
 \arguments{
 \item{x, y}{A pair of lazy data frames backed by database queries.}
@@ -54,8 +54,6 @@ use a named character vector like \code{by = c("x_a" = "y_a", "x_b" = "y_b")}.
 To perform a cross-join, generating all combinations of \code{x} and \code{y}, see
 \code{\link[dplyr:cross_join]{cross_join()}}.}
 
-\item{na_by}{columns that should match on NA}
-
 \item{...}{Other parameters passed onto methods.}
 }
 \value{
@@ -64,12 +62,12 @@ query, and use \code{\link[dbplyr:collect.tbl_sql]{collect()}} to execute the qu
 and return data to R.
 }
 \description{
-Overloads the dplyr \emph{_join to accept an na_by argument.
-By default, joining using SQL does not match on NA / NULL.
-dbplyr has the option "na_matches = na" to match on NA / NULL but this is very inefficient
+Overloads the dplyr \verb{*_join} to accept an na_by argument.
+By default, joining using SQL does not match on \code{NA} / \code{NULL}.
+dbplyr has the option "na_matches = na" to match on \code{NA} / \code{NULL} but this is very inefficient
 This function does the matching more efficiently.
-If a column contains NA / NULL, give the argument to na_by to match during the join
-If no na_by is given, the function defaults to using dplyr::}_join
+If a column contains \code{NA} / \code{NULL}, give the argument to na_by to match during the join
+If no na_by is given, the function defaults to using \verb{dplyr::*_join}
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)

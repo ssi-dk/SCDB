@@ -108,6 +108,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
   # Convert timestamp to character to prevent inconsistent R behavior with date/timestamps
   timestamp <- strftime(timestamp)
+  db_latest <- strftime(db_latest)
 
   if (enforce_chronological_order && timestamp < db_latest) {
     logger$log_to_db(success = FALSE, end_time = !!db_timestamp(tic, conn))
