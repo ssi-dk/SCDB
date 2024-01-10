@@ -60,26 +60,10 @@ filter_keys.tbl_sql <- function(.data, filters, by = NULL, na_by = NULL) {
 }
 
 #' @export
-filter_keys.data.frame <- function(.data, filters, by = NULL, ...) {
-  .dots <- list(...)
-
-  args <- list(
-    x = .data,
-    y = filters,
-    by = by
-  ) |>
-    append(.dots)
-
-  if ("na_by" %in% names(args)) {
-    args$na_matches <- "na"
-    args$na_by <- NULL
-  }
-
-  if (is.null(by)) args$by <- colnames(filters)
-
-  return(do.call(dplyr::inner_join, args = args))
+filter_keys.data.frame <- function(.data, filters, by = NULL, na_by = NULL) {
+  if (is.null(by) && is.null(na_by)) by <- colnames(filters)
+  return(dplyr::inner_join(.data, filters, by = c(by, na_by)))
 }
-
 
 #' tidyr::unite for tbl_dbi
 #'
