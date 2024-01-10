@@ -128,9 +128,11 @@ for (conn in get_test_conns()) {
                 "test.SCDB_t0", "test.SCDB_t1", "test.SCDB_t2"),
               ~ if (DBI::dbExistsTable(conn, id(., conn))) DBI::dbRemoveTable(conn, id(., conn)))
 
-  # Copy mtcars to conn
-  dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
-                 name = id("test.mtcars", conn), temporary = FALSE, overwrite = TRUE)
+  purrr::walk(c(DBI::Id(schema = "test", table = "one.two"), DBI::Id(schema = "test.one", table = "two")),
+              ~ if (schema_exists(conn, .@name[["schema"]]) && DBI::dbExistsTable(conn, .)) DBI::dbRemoveTable(conn, .))
+
+
+  # Copy mtcars to conn (and suppress check_from message)
   dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
                  name = id("__mtcars", conn),    temporary = FALSE, overwrite = TRUE)
 
