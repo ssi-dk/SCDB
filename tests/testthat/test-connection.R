@@ -55,8 +55,20 @@ test_that('id() returns table = "schema.table" if schema does not exist', {
   }
 })
 
+test_that("id() is consistent for DBI connections", {
+  expectation <- id(dplyr::tbl(conn, DBI::Id(schema = "test", table = "mtcars")))
+  for (conn in conns) {
+    expect_identical(expectation,
+                     id.tbl_dbi(dplyr::tbl(
+                       conn, DBI::Id(schema = "test", table = "mtcars")
+                     )))
+  }
+})
 
 test_that("close_connection() works", { for (conn in conns) { # nolint: brace_linter
+
+  # ODBC connections require arguments and therefore cannot be used in this test
+  if (inherits(conn, "OdbcConnection")) next
 
   # Identify driver of conn within conn_list
   conn_drv <- purrr::keep(conns, \(.x) identical(.x, conn)) |>

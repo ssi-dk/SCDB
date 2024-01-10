@@ -1,6 +1,10 @@
 # SCDB (development version)
 
+* Added support for Microsoft SQL Server using ODBC
+
 ## Minor Improvements and Fixes
+
+* Implementation of `*_join`s improved, now extending `dplyr::*_join`s rather than masking them.
 
 * Added S3 method for `id.tbl_dbi`, returning a `DBI::Id()` instance matching the table.
   - Calling `id` on a `tbl_dbi` thus allows to retrieve a `schema` even when not

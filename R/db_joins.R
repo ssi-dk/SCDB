@@ -5,12 +5,16 @@
 #' @return A sql_on statement to join by such that "NA" are matched with "NA"
 #'   given the columns listed in "by" and "na_by"
 #' @noRd
-join_na_sql <- function(by, na_by) {
+join_na_sql <- function(x, by, na_by) {
+  UseMethod("join_na_sql")
+}
+
+join_na_not_distinct <- function(by, na_by = NULL) {
   sql_on <- ""
   if (!missing(by)) {
     for (i in seq_along(by)) {
       sql_on <- paste0(sql_on, '"LHS"."', by[i], '" = "RHS"."', by[i], '"')
-      if (i < length(by) || !missing(na_by)) {
+      if (i < length(by) || !is.null(na_by)) {
         sql_on <- paste(sql_on, "\nAND ")
       }
     }
@@ -18,7 +22,7 @@ join_na_sql <- function(by, na_by) {
 
   if (!missing(na_by)) {
     for (i in seq_along(na_by)) {
-      sql_on <- paste0(sql_on, '("LHS"."', na_by[i], '" IS NOT DISTINCT FROM "RHS"."', na_by[i], '")')
+      sql_on <- paste0(sql_on, '"LHS"."', na_by[i], '" IS NOT DISTINCT FROM "RHS"."', na_by[i], '"')
       if (i < length(na_by)) {
         sql_on <- paste(sql_on, "\nAND ")
       }
@@ -28,6 +32,38 @@ join_na_sql <- function(by, na_by) {
   return(sql_on)
 }
 
+join_na_not_null <- function(by, na_by = NULL) {
+  sql_on <- ""
+  if (!missing(by)) {
+    for (i in seq_along(by)) {
+      sql_on <- paste0(sql_on, '"LHS"."', by[i], '" = "RHS"."', by[i], '"')
+      if (i < length(by) || !is.null(na_by)) {
+        sql_on <- paste(sql_on, "\nAND ")
+      }
+    }
+  }
+
+  if (!missing(na_by)) {
+    for (i in seq_along(na_by)) {
+      sql_on <- paste0(sql_on,
+                       '("LHS"."', na_by[i], '" IS NULL AND "RHS"."', na_by[i], '" IS NULL ',
+                       'OR "LHS"."', na_by[i], '" = "RHS"."', na_by[i], '")')
+      if (i < length(na_by)) {
+        sql_on <- paste(sql_on, "\nAND ")
+      }
+    }
+  }
+
+  return(sql_on)
+}
+
+join_na_sql.tbl_dbi <- function(x, by, na_by) {
+  return(join_na_not_distinct(by = by, na_by = na_by))
+}
+
+`join_na_sql.tbl_Microsoft SQL Server` <- function(x, by, na_by) {
+  return(join_na_not_null(by = by, na_by = na_by))
+}
 
 #' Get colnames to select
 #' @inheritParams left_join
@@ -37,25 +73,14 @@ join_na_sql <- function(by, na_by) {
 select_na_sql <- function(x, y, by, na_by, left = TRUE) {
 
   all_by <- c(by, na_by) # Variables to be common after join
-  cxy <- dplyr::setdiff(dplyr::intersect(colnames(x), colnames(y)), all_by)   # Duplicate columns after join
   cx  <- dplyr::setdiff(colnames(x), colnames(y)) # Variables only in x
   cy  <- dplyr::setdiff(colnames(y), colnames(x)) # Variables only in y
 
-  vars <- list(all_by, cx, cy, cxy, cxy)
-
-  renamer <- \(suffix) suffix |> purrr::map(~ purrr::partial(\(x, suffix) paste0(x, suffix), suffix = .))
-
-  sql_select <- vars |>
-    purrr::map2(renamer(list(ifelse(left, ".x", ".y"), "", "", ".x", ".y")), ~ purrr::map(.x, .y)) |>
-    purrr::map(~ purrr::reduce(., c, .init = character(0))) |>
-    purrr::reduce(c)
-
-  sql_names <- vars |>
-    purrr::map2(renamer(list("", "", "", ".x", ".y")), ~ purrr::map(.x, .y)) |>
-    purrr::map(~ purrr::reduce(., c, .init = character(0))) |>
-    purrr::reduce(c)
-
-  names(sql_select) <- sql_names
+  sql_select <-
+    c(paste0(colnames(x), ifelse(!colnames(x) %in% cx, ".x", "")),
+      paste0(colnames(y), ifelse(!colnames(y) %in% cy, ".y", ""))[!colnames(y) %in% all_by]) |>
+    stats::setNames(c(colnames(x),
+                      paste0(colnames(y), ifelse(colnames(y) %in% colnames(x), ".y", ""))[!colnames(y) %in% all_by]))
 
   return(sql_select)
 }
@@ -91,12 +116,12 @@ join_warn_experimental <- function() {
 #'
 #' @name joins
 #'
-#' @description Overloads the dplyr *_join to accept an na_by argument.
-#' By default, joining using SQL does not match on NA / NULL.
-#' dbplyr has the option "na_matches = na" to match on NA / NULL but this is very inefficient
+#' @description Overloads the dplyr `*_join` to accept an na_by argument.
+#' By default, joining using SQL does not match on `NA` / `NULL`.
+#' dbplyr has the option "na_matches = na" to match on `NA` / `NULL` but this is very inefficient
 #' This function does the matching more efficiently.
-#' If a column contains NA / NULL, give the argument to na_by to match during the join
-#' If no na_by is given, the function defaults to using dplyr::*_join
+#' If a column contains `NA` / `NULL`, give the argument to na_by to match during the join
+#' If no na_by is given, the function defaults to using `dplyr::*_join`
 #' @inheritParams dbplyr::join.tbl_sql
 #' @inherit dbplyr::join.tbl_sql return
 #' @examples
@@ -123,81 +148,98 @@ join_warn_experimental <- function() {
 #' db2 <- memdb_frame(x = 1:3, y = letters[1:3])
 #' db1 %>% left_join(db2) %>% show_query()
 #' db1 %>% left_join(db2, sql_on = "LHS.x < RHS.x") %>% show_query()
-#' @param na_by columns that should match on NA
 #' @seealso [dplyr::mutate-joins] which this function wraps.
 #' @seealso [dbplyr::join.tbl_sql] which this function wraps.
-#' @export
-inner_join <- function(x, y, by = NULL, na_by = NULL, ...) {
+#' @exportS3Method dplyr::inner_join
+inner_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   # Check arguments
   assert_data_like(x)
   assert_data_like(y)
   checkmate::assert_character(by, null.ok = TRUE)
-  checkmate::assert_character(na_by, null.ok = TRUE)
 
-  if (is.null(na_by)) {
+  .dots <- list(...)
+
+  if (!"na_by" %in% names(.dots)) {
     if (inherits(x, "tbl_dbi") || inherits(y, "tbl_dbi")) join_warn()
-    return(dplyr::inner_join(x, y, by = by, ...))
-  } else {
-    join_warn_experimental()
-    sql_on <- join_na_sql(by, na_by)
-    renamer <- select_na_sql(x, y, by, na_by)
-    return(dplyr::inner_join(x, y, suffix = c(".x", ".y"), sql_on = sql_on, ...) |>
-             dplyr::rename(!!renamer) |>
-             dplyr::select(tidyselect::all_of(names(renamer))))
+
+    return(NextMethod("inner_join"))
   }
+
+  join_warn_experimental()
+
+  # Modify arguments for new dplyr call
+  args <- as.list(rlang::current_env())
+  args$sql_on <- join_na_sql(x, by, .dots$na_by)
+  .renamer <- select_na_sql(x, y, by, .dots$na_by)
+
+  join_result <- do.call(dplyr::inner_join, args = args) |>
+    dplyr::rename(!!.renamer) |>
+    dplyr::select(tidyselect::all_of(names(.renamer)))
+
+  return(join_result)
 }
 
-
-#' @export
 #' @rdname joins
-left_join <- function(x, y, by = NULL, na_by = NULL, ...) {
+#' @exportS3Method dplyr::left_join
+left_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   # Check arguments
   assert_data_like(x)
   assert_data_like(y)
   checkmate::assert_character(by, null.ok = TRUE)
-  checkmate::assert_character(na_by, null.ok = TRUE)
 
-  if (is.null(na_by)) {
+  .dots <- list(...)
+
+  if (!"na_by" %in% names(.dots)) {
     if (inherits(x, "tbl_dbi") || inherits(y, "tbl_dbi")) join_warn()
-    return(dplyr::left_join(x, y, by = by, ...))
-  } else {
-    join_warn_experimental()
-    sql_on <- join_na_sql(by, na_by)
-    renamer <- select_na_sql(x, y, by, na_by)
-    return(dplyr::left_join(x, y, suffix = c(".x", ".y"), sql_on = sql_on, ...) |>
-             dplyr::rename(!!renamer) |>
-             dplyr::select(tidyselect::all_of(names(renamer))))
-
-
+    return(NextMethod("left_join"))
   }
+  join_warn_experimental()
+  args <- as.list(rlang::current_env())
+  args$sql_on <- join_na_sql(x, by, .dots$na_by)
+  .renamer <- select_na_sql(x, y, by, .dots$na_by)
+
+  join_result <- do.call(dplyr::left_join, args = args) |>
+    dplyr::rename(!!.renamer) |>
+    dplyr::select(tidyselect::all_of(names(.renamer)))
+
+  return(join_result)
 }
 
-
-#' @export
 #' @rdname joins
-right_join <- function(x, y, by = NULL, na_by = NULL, ...) {
+#' @exportS3Method dplyr::right_join
+right_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   # Check arguments
   assert_data_like(x)
   assert_data_like(y)
   checkmate::assert_character(by, null.ok = TRUE)
-  checkmate::assert_character(na_by, null.ok = TRUE)
 
-  if (is.null(na_by)) {
+  .dots <- list(...)
+  args <- as.list(rlang::current_env())
+
+  if (!"na_by" %in% names(.dots)) {
     if (inherits(x, "tbl_dbi") || inherits(y, "tbl_dbi")) join_warn()
-    return(dplyr::right_join(x, y, by = by, ...))
+
+    .renamer <- select_na_sql(x, y, by, na_by = NULL, left = FALSE)
   } else {
     join_warn_experimental()
-    sql_on <- join_na_sql(by, na_by)
-    renamer <- select_na_sql(x, y, by, na_by, left = FALSE)
-
-    # Seems like right_join does not work for SQLite, so we'll do a left join for now
-    return(scdb_right_join(x, y, sql_on, renamer, ...))
+    args$sql_on <- join_na_sql(x, by, .dots$na_by)
+    .renamer <- select_na_sql(x, y, by, .dots$na_by, left = FALSE)
   }
-}
 
+  # Swap x and y and proceed with left_join
+  args$x <- y
+  args$y <- x
+  args$keep <- TRUE
+
+  join_result <- do.call(dplyr::left_join, args = args) |>
+    dplyr::rename(!!.renamer) |>
+    dplyr::select(tidyselect::all_of(names(.renamer)))
+
+  return(join_result)
+}
 
 #' dbplyr and SQLite does not work right now for right_joins it seems
 #' so we "fix" it by doing a left join on SQLiteConnections
@@ -205,7 +247,7 @@ right_join <- function(x, y, by = NULL, na_by = NULL, ...) {
 #' @inherit dbplyr::join.tbl_sql return
 #' @param renamer named list generated by select_na_sql
 #' @noRd
-scdb_right_join <- function(x, y, sql_on, renamer, ...) {
+scdb_right_join <- function(x, y, sql_on, suffix = c(".x", ".y"), renamer, ...) {
   UseMethod("scdb_right_join")
 }
 
@@ -224,40 +266,42 @@ scdb_right_join.tbl_SQLiteConnection <- function(x, y, sql_on, renamer, ...) {
 }
 
 
-#' @export
 #' @rdname joins
-full_join <- function(x, y, by = NULL, na_by = NULL, ...) {
+#' @exportS3Method dplyr::full_join
+full_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   # Check arguments
   assert_data_like(x)
   assert_data_like(y)
   checkmate::assert_character(by, null.ok = TRUE)
-  checkmate::assert_character(na_by, null.ok = TRUE)
 
-  if (is.null(na_by)) {
+  .dots <- list(...)
+
+  if (!"na_by" %in% names(.dots)) {
     if (inherits(x, "tbl_dbi") || inherits(y, "tbl_dbi")) join_warn()
     return(dplyr::full_join(x, y, by = by, ...))
   } else {
     join_warn_experimental()
     # Full joins are hard...
-    out <- dplyr::union(left_join(x, y, by = by, na_by = na_by),
-                        right_join(x, y, by = by, na_by = na_by))
+    out <- dplyr::union(dplyr::left_join(x, y, by = by, na_by = .dots$na_by),
+                        dplyr::right_join(x, y, by = by, na_by = .dots$na_by))
     return(out)
   }
 }
 
 
-#' @export
 #' @rdname joins
-semi_join <- function(x, y, by = NULL, na_by = NULL, ...) {
+#' @exportS3Method dplyr::semi_join
+semi_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   # Check arguments
   assert_data_like(x)
   assert_data_like(y)
   checkmate::assert_character(by, null.ok = TRUE)
-  checkmate::assert_character(na_by, null.ok = TRUE)
 
-  if (is.null(na_by)) {
+  .dots <- list(...)
+
+  if (!"na_by" %in% names(.dots)) {
     if (inherits(x, "tbl_dbi") || inherits(y, "tbl_dbi")) join_warn()
     return(dplyr::semi_join(x, y, by = by, ...))
   } else {
@@ -265,17 +309,19 @@ semi_join <- function(x, y, by = NULL, na_by = NULL, ...) {
   }
 }
 
-#' @export
+
 #' @rdname joins
-anti_join <- function(x, y, by = NULL, na_by = NULL, ...) {
+#' @exportS3Method dplyr::anti_join
+anti_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   # Check arguments
   assert_data_like(x)
   assert_data_like(y)
   checkmate::assert_character(by, null.ok = TRUE)
-  checkmate::assert_character(na_by, null.ok = TRUE)
 
-  if (is.null(na_by)) {
+  .dots <- list(...)
+
+  if (!"na_by" %in% names(.dots)) {
     if (inherits(x, "tbl_dbi") || inherits(y, "tbl_dbi")) join_warn()
     return(dplyr::anti_join(x, y, by = by, ...))
   } else {

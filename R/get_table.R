@@ -195,8 +195,46 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temp = "never") {
   return(tables)
 }
 
+#' @importFrom rlang .data
 #' @export
-get_tables.default <- function(conn, pattern = NULL, show_temp = "never") {
+`get_tables.Microsoft SQL Server` <- function(conn, pattern = NULL, show_temp = "never") {
+  if (show_temp != "never") {
+    rlang::warn("Temporary tables are currently not supported for Microsoft SQL Server")
+  }
+
+  tables <- NextMethod("get_tables") |>
+    dplyr::mutate(schema = dplyr::na_if(.data$schema, "dbo"))
+
+
+  if (!is.null(pattern)) {
+    tables <- tables |>
+      tidyr::unite("db_table_str", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
+      dplyr::filter(grepl(pattern, .data$db_table_str)) |>
+      dplyr::select(!"db_table_str")
+  }
+
+  if (nrow(tables) == 0) warning("No tables found. Check user privileges / database configuration")
+
+  return(tables)
+}
+
+#' @export
+get_tables.OdbcConnection <- function(conn, pattern = NULL, show_temp = "never") {
+  query <- paste("SELECT",
+                 "s.name AS [schema],",
+                 "t.name AS [table]",
+                 "FROM sys.tables t",
+                 "INNER JOIN sys.schemas s",
+                 "ON t.schema_id = s.schema_id")
+
+  tables <- DBI::dbGetQuery(conn, query) |>
+    dplyr::mutate(schema = dplyr::na_if(.data$schema, "dbo"))
+
+  return(tables)
+}
+
+#' @export
+get_tables.DBIConnection <- function(conn, pattern = NULL, show_temp = "never") {
   if (show_temp != "never") {
     rlang::warn("show_temp must be 'never' for unsupported backends!")
   }
@@ -374,7 +412,7 @@ table_exists.SQLiteConnection <- function(conn, db_table_id) {
 #' @rdname table_exists
 #' @importFrom rlang .data
 #' @export
-table_exists.default <- function(conn, db_table_id) {
+table_exists.DBIConnection <- function(conn, db_table_id) {
   assert_id_like(db_table_id)
 
   db_table_id <- id(db_table_id, conn = conn)

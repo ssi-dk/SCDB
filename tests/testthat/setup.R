@@ -6,7 +6,8 @@ conflicted::conflict_prefer("id", "SCDB")
 conn_list <- list(
   # Backend string = package::function
   "SQLite"     = "RSQLite::SQLite",
-  "PostgreSQL" = "RPostgres::Postgres"
+  "PostgreSQL" = "RPostgres::Postgres",
+  "MSSQL"      = "odbc::odbc"
 )
 
 get_driver <- function(x = character(), ...) {
@@ -29,6 +30,18 @@ get_driver <- function(x = character(), ...) {
 
 conns <- lapply(conn_list, get_driver) |>
   unlist()
+
+# Access any arguments to
+odbc_json <- Sys.getenv("SCDB_ODBC_JSON")
+if (odbc_json != "" && rlang::is_installed("jsonlite")) {
+  conns <- jsonlite::fromJSON(odbc_json) |>
+    lapply(\(.x) {
+      .x$drv <- odbc::odbc()
+
+      return(do.call(DBI::dbConnect, args = .x))
+    }) |>
+    append(conns, x = _)
+}
 
 if (length(conns[names(conns) != "SQLite"]) == 0) {
   message("No useful drivers (other than SQLite) were found!")

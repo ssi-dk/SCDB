@@ -72,6 +72,16 @@ get_schema.SQLiteConnection <- function(.x) {
 }
 
 #' @export
+`get_schema.Microsoft SQL Server` <- function(.x) {
+  query <- paste("SELECT ISNULL((SELECT",
+                 "COALESCE(default_schema_name, 'dbo') AS default_schema",
+                 "FROM sys.database_principals",
+                 "WHERE [name] = CURRENT_USER), 'dbo') default_schema")
+
+  return(DBI::dbGetQuery(.x, query)$default_schema)
+}
+
+#' @export
 get_schema.NULL <- function(.x) {
   return(NULL)
 }
@@ -105,7 +115,7 @@ schema_exists.SQLiteConnection <- function(conn, schema) {
 }
 
 #' @export
-schema_exists.PqConnection <- function(conn, schema) {
+schema_exists.DBIConnection <- function(conn, schema) {
   query <- paste0("SELECT schema_name FROM INFORMATION_SCHEMA.SCHEMATA WHERE schema_name = '", schema, "'")
   result <- DBI::dbGetQuery(conn, query)
 

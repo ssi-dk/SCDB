@@ -28,33 +28,44 @@
 #' @importFrom rlang .data
 #' @export
 filter_keys <- function(.data, filters, by = NULL, na_by = NULL) {
-
-  # Check arguments
-  assert_data_like(.data)
-  assert_data_like(filters, null.ok = TRUE)
-  checkmate::assert_character(by, null.ok = TRUE)
-  checkmate::assert_character(na_by, null.ok = TRUE)
-
   if (is.null(filters)) {
     return(.data)
-  } else {
-    if (is.null(by) && is.null(na_by)) {
-      # Determine key types
-      key_types <- filters |>
-        dplyr::ungroup() |>
-        dplyr::summarise(dplyr::across(.cols = tidyselect::everything(), .fns = ~ any(is.na(.), na.rm = TRUE))) |>
-        tidyr::pivot_longer(tidyselect::everything(), names_to = "column_name", values_to = "is_na")
-
-      by    <- key_types |> dplyr::filter(!.data$is_na) |> dplyr::pull("column_name")
-      na_by <- key_types |> dplyr::filter(.data$is_na)  |> dplyr::pull("column_name")
-
-      if (length(by) == 0)    by    <- NULL
-      if (length(na_by) == 0) na_by <- NULL
-    }
-    return(inner_join(.data, filters, by = by, na_by = na_by))
   }
+
+  assert_data_like(.data)
+  assert_data_like(filters, null.ok = TRUE)
+  checkmate::assert_subset(c(by, na_by), colnames(filters))
+
+  UseMethod("filter_keys")
 }
 
+#' @export
+filter_keys.tbl_sql <- function(.data, filters, by = NULL, na_by = NULL) {
+
+  if (is.null(by) && is.null(na_by)) {
+    # Determine key types
+    key_types <- filters |>
+      dplyr::ungroup() |>
+      dplyr::summarise(dplyr::across(
+        .cols = tidyselect::everything(),
+        .fns = ~ sum(ifelse(is.na(.), 0, 1), na.rm = TRUE)
+      )) |>
+      tidyr::pivot_longer(tidyselect::everything(), names_to = "column_name", values_to = "is_na")
+
+    by    <- key_types |> dplyr::filter(.data$is_na > 0) |> dplyr::pull("column_name")
+    na_by <- key_types |> dplyr::filter(.data$is_na == 0)  |> dplyr::pull("column_name")
+
+    if (length(by) == 0)    by    <- NULL
+    if (length(na_by) == 0) na_by <- NULL
+  }
+  return(dplyr::inner_join(.data, filters, by = by, na_by = na_by))
+}
+
+#' @export
+filter_keys.data.frame <- function(.data, filters, by = NULL, na_by = NULL) {
+  if (is.null(by) && is.null(na_by)) by <- colnames(filters)
+  return(dplyr::inner_join(.data, filters, by = c(by, na_by)))
+}
 
 #' tidyr::unite for tbl_dbi
 #'
@@ -92,7 +103,7 @@ unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALS
   rlang::check_dots_unnamed()
 
   if (rlang::dots_n(...) == 0) {
-    from_vars <- rlang::set_names(seq_along(data), names(data))
+    from_vars <- colnames(data)
   } else {
     from_vars <- colnames(dplyr::select(data, ...))
   }
@@ -105,8 +116,14 @@ unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALS
   # We need to determine where col should be placed
   first_from <- which(colnames(data) %in% from_vars)[1]
 
-  out <- data |>
-    dplyr::mutate({{col}} := NULLIF(paste(!!!col_symbols, sep = sep), ""), .before = !!first_from)
+  # CONCAT_WS does not exist in SQLite
+  if (inherits(data, "tbl_SQLiteConnection")) {
+    out <- data |>
+      dplyr::mutate({{col}} := NULLIF(paste(!!!col_symbols, sep = sep), ""), .before = !!first_from)
+  } else {
+    out <- data |>
+      dplyr::mutate({{col}} := NULLIF(CONCAT_WS(sep, !!!col_symbols), ""), .before = !!first_from)
+  }
 
   if (remove) out <- out |> dplyr::select(!tidyselect::all_of(from_vars))
 
