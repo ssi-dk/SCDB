@@ -16,7 +16,7 @@ jobs:
         id: pr_detect
         run: |
           pr_branches=$(gh pr list --json headRefName --repo $GITHUB_REPOSITORY)
-          if [[ $(echo "$pr_branches" | jq -r --arg GITHUB_REF '.[].headRefName | select(. == $GITHUB_REF)') ]]; then
+          if [[ $(echo "$pr_branches" | jq -r --arg GITHUB_REF_NAME $GITHUB_REF_NAME '.[].headRefName | select(. == $GITHUB_REF_NAME)') ]]; then
             echo "This push is associated with a pull request. Skipping the job."
             echo "abort=true" >> "$GITHUB_OUTPUT"
           fi
