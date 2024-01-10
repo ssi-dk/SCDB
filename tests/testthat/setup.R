@@ -2,89 +2,131 @@
 # We here explicitly prefer our implementation for our tests
 conflicted::conflict_prefer("id", "SCDB")
 
-# Define list of connections to check
-conn_list <- list(
-  # Backend string = package::function
-  "SQLite"     = "RSQLite::SQLite",
-  "PostgreSQL" = "RPostgres::Postgres",
-  "MSSQL"      = "odbc::odbc"
-)
+#' Get a list of data base connections to test on
+#' @return
+#'   If you run your tests locally, it returns a list of connections corresponding to conn_list and conn_args
+#'   If you run your tests on GitHub, it return a list of connection corresponding to the environment variables.
+#'   i.e. the GitHub workflows will configure the testing back ends
+#' @importFrom rlang `:=`
+#' @noRd
+get_test_conns <- function() {
 
-get_driver <- function(x = character(), ...) {
-  if (!grepl(".*::.*", x)) stop("Package must be specified with namespace (e.g. RSQLite::SQLite)!\n",
-                                "Received: ", x)
-  parts <- strsplit(x, "::")[[1]]
+  # Locally use rlang's (without this, it may not be bound)
+  `:=` <- rlang::`:=`
 
-  # Skip unavailable packages
-  if (!requireNamespace(parts[1], quietly = TRUE)) {
-    return()
+  # Check if we run remotely
+  running_locally <- !identical(Sys.getenv("CI"), "true")
+
+  # Define list of connections to check
+  if (running_locally) {
+
+    # Define our local connection backends
+    conn_list <- list(
+      # Backend string = package::function
+      "SQLite"           = "RSQLite::SQLite",
+      "SQLite - schemas" = "RSQLite::SQLite"
+    )
+
+    # Define our local connection arguments
+    conn_args <- list(
+      # Backend string = list(named args)
+      "SQLite"           = list(dbname = file.path(tempdir(), "SQLite")),
+      "SQLite - schemas" = list(dbname = file.path(tempdir(), "SQLite_schemas"))
+    )
+
+    # Define post connection commands to run
+    conn_post_connect <- list(
+      # Backend string = list(named args)
+      "SQLite - schemas" = list(paste0("ATTACH '", file.path(tempdir(), "SQLite_test"), "' AS 'test'"),
+                                paste0("ATTACH '", file.path(tempdir(), "SQLite_test_one"), "' AS 'test.one'"))
+    )
+
+  } else {
+
+    # Use the connection configured by the remote
+    conn_list <- tibble::lst(!!Sys.getenv("BACKEND") := !!Sys.getenv("BACKEND_DRV"))                                    # nolint: object_name_linter
+
+    # Use the connection configured by the remote
+    conn_args <- tibble::lst(!!Sys.getenv("BACKEND") := Sys.getenv("BACKEND_ARGS")) |>                                  # nolint: object_name_linter
+      purrr::discard(~ identical(., "")) |>
+      purrr::map(~ eval(parse(text = .)))
+
+    # Use the connection configured by the remote
+    conn_post_connect <- tibble::lst(!!Sys.getenv("BACKEND") := Sys.getenv("BACKEND_POST_CONNECT")) |>                                  # nolint: object_name_linter
+      purrr::discard(~ identical(., "")) |>
+      purrr::map(~ eval(parse(text = .)))
+
   }
 
-  drv <- getExportedValue(parts[1], parts[2])
+  # Parse any conn_args stored in CONN_ARGS_JSON
+  conn_args_json <- jsonlite::fromJSON(Sys.getenv("CONN_ARGS_JSON", unset = "{}"))
 
-  tryCatch(suppressWarnings(get_connection(drv = drv(), ...)),  # We expect a warning if no tables are found
-           error = function(e) {
-             NULL # Return NULL, if we cannot connect
-           })
+  # Combine all arguments
+  backends <- unique(c(names(conn_list), names(conn_args), names(conn_args_json)))
+  conn_args <- backends |>
+    purrr::map(~ c(purrr::pluck(conn_args, .), purrr::pluck(conn_args_json, .))) |>
+    stats::setNames(backends)
+
+
+  get_driver <- function(x = character(), ...) {                                                                        # nolint: object_usage_linter
+    if (!grepl(".*::.*", x)) stop("Package must be specified with namespace (e.g. RSQLite::SQLite)!\n",
+                                  "Received: ", x)
+    parts <- strsplit(x, "::", fixed = TRUE)[[1]]
+
+    # Skip unavailable packages
+    if (!requireNamespace(parts[1], quietly = TRUE)) {
+      return()
+    }
+
+    drv <- getExportedValue(parts[1], parts[2])
+
+    conn <- tryCatch(
+      SCDB::get_connection(drv = drv(), ...),
+      error = function(e) {
+        return(NULL) # Return NULL, if we cannot connect
+      }
+    )
+
+    # SQLite back end gives an error in SCDB if there are no tables (it assumes a bad configuration)
+    # We create a table to suppress this warning
+    if (checkmate::test_class(conn, "SQLiteConnection")) {
+      DBI::dbWriteTable(conn, "iris", iris, overwrite = TRUE)
+    }
+
+    return(conn)
+  }
+
+  # Check all conn_args have associated entry in conn_list
+  checkmate::assert_subset(names(conn_args), names(conn_list))
+
+  test_conns <- names(conn_list) |>
+    purrr::map(~ do.call(get_driver, c(list(x = purrr::pluck(conn_list, .)), purrr::pluck(conn_args, .)))) |>
+    stats::setNames(names(conn_list))
+
+  purrr::walk2(test_conns, names(conn_list),
+               \(conn, conn_name) purrr::walk(purrr::pluck(conn_post_connect, conn_name), ~ DBI::dbExecute(conn, .)))
+
+  return(test_conns)
 }
 
-conns <- lapply(conn_list, get_driver) |>
-  unlist()
 
-# Access any arguments to
-odbc_json <- Sys.getenv("SCDB_ODBC_JSON")
-if (odbc_json != "" && rlang::is_installed("jsonlite")) {
-  conns <- jsonlite::fromJSON(odbc_json) |>
-    lapply(\(.x) {
-      .x$drv <- odbc::odbc()
+# Ensure the target conns are empty and configured correctly
+for (conn in get_test_conns()) {
 
-      return(do.call(DBI::dbConnect, args = .x))
-    }) |>
-    append(conns, x = _)
-}
-
-if (length(conns[names(conns) != "SQLite"]) == 0) {
-  message("No useful drivers (other than SQLite) were found!")
-}
-
-message("#####\n",
-        "Following drivers will be tested:\n",
-        paste0(sprintf("  %s (%s)",
-                       conn_list[names(conns)],
-                       names(conns)), collapse = "\n"))
-
-unavailable_drv <-
-  conn_list[which(!names(conn_list) %in% names(conns))]
-if (length(unavailable_drv) > 0) {
-  message(
-    "\n",
-    "Following drivers were not found and will NOT be tested:\n",
-    paste0(sprintf(
-      "  %s (%s)",
-      conn_list[names(unavailable_drv)],
-      names(unavailable_drv)
-    ), collapse = "\n")
-  )
-}
-message("#####")
-
-# Attach tempfile as schema for SQLite
-for (conn in conns) {
-  if (!inherits(conn, "SQLiteConnection")) next
-  DBI::dbExecute(conn, paste0("ATTACH '", tempfile(), "' AS 'test'"))
-}
-
-# Start with some clean up
-for (conn in conns) {
-  if (!schema_exists(conn, "test")) {
+  # Check schemas are configured correctly
+  if (!schema_exists(conn, "test") && !inherits(conn, "SQLiteConnection")) {
     stop("Tests require the schema 'test' to exist in all available connections")
   }
 
+  if (!schema_exists(conn, "test.one") && !inherits(conn, "SQLiteConnection")) {
+    stop("Tests require the schema 'test.one' to exist in all available connections")
+  }
+
+  # Start with some clean up
   purrr::walk(c("test.mtcars", "__mtcars",
                 "test.scdb_logs", "test.scdb_tmp1", "test.scdb_tmp2", "test.SCDB_tmp3",
                 "test.SCDB_t0", "test.SCDB_t1", "test.SCDB_t2"),
               ~ if (DBI::dbExistsTable(conn, id(., conn))) DBI::dbRemoveTable(conn, id(., conn)))
-
 
   # Copy mtcars to conn
   dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
@@ -99,4 +141,21 @@ for (conn in conns) {
                    dplyr::mutate(from_ts = as.POSIXct("2020-01-01 09:00:00"),
                                  until_ts = as.POSIXct(NA)),
                  name = id("__mtcars_historical", conn),    temporary = FALSE, overwrite = TRUE)
+
+  # Disconnect
+  DBI::dbDisconnect(conn)
 }
+
+# Report testing environment to the user
+message(
+  "#####\n\n",
+  "Following backends will be tested:",
+  sep = ""
+)
+
+conns <- get_test_conns()
+message(sprintf("  %s\n", names(conns)))
+message("#####")
+
+# Disconnect
+purrr::walk(conns, DBI::dbDisconnect)
