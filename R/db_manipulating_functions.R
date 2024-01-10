@@ -38,8 +38,6 @@ filter_keys <- function(.data, filters, by = NULL, na_by = NULL) {
 #' @export
 filter_keys.tbl_sql <- function(.data, filters, by = NULL, na_by = NULL) {
 
-  if (is.null(filters)) return(.data)
-
   if (is.null(by) && is.null(na_by)) {
     # Determine key types
     key_types <- filters |>
