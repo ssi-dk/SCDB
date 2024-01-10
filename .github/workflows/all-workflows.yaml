@@ -31,7 +31,7 @@ jobs:
       # We pass information about the triggering event
       event_name: ${{ github.event_name }}
       run_id: ${{ github.run_id }}
-      main_branches: main
+      main_branches: feature/mssql_tests
 
       # code-coverage creates data bases for the tests. Here you can specify the schemas you need for the workflow
       schemas: test,test.one
