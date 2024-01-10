@@ -4,10 +4,10 @@ Title: Easily Access and Maintain Time-Based Versioned Data (Slowly-Changing-Dim
 Version: 0.2.1.9000
 Authors@R:
 	  c(person("Rasmus Skytte", "Randl\U00F8v", , "rske@ssi.dk",
-	           role = c("aut"),
+	           role = c("aut", "cre"),
 	           comment = c(ORCID = "0000-0002-5860-3838")),
 	    person("Marcus Munch", "Gr\U00FCnewald", , "mmgr@ssi.dk",
-	           role = c("aut", "cre"),
+	           role = c("aut"),
 	           comment = c(ORCID = "0009-0006-8090-406X")),
 	    person("Statens Serum Institut",
 	           role = c("cph", "fnd")))

@@ -16,6 +16,10 @@
 
 * Added `show_temp` option to `get_tables()` to allow retrieving temporary tables.
 
+## Other news
+
+* Maintainer changed to Rasmus Skytte Randløv (@RasmusSkytte).
+
 # SCDB 0.2.1
 
 ## Minor Improvements and Fixes
