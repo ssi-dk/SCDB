@@ -1,21 +1,10 @@
-## Resubmission
-
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
 
-This is a resubmission. This version seeks to address the errors
-raised in incoming checks of previous submission.
+In addition to code changes, this submission of SCDB also transfers the
+maintainer role to Rasmus Skytte Randløv (rske@ssi.dk).
 
-Additionally, it was found that the maintainer change was not properly
-reflected in man/SCDB-package.Rd.
-
-## Previous cran-comments
-
-## R CMD check results
-
-0 errors | 0 warnings | 0 notes
-
-In this submission of SCDB, the maintainer changes to Marcus Munch Grünewald.
-You should have received prior confirmation by email on 2023-11-28 from the current
-maintainer (Rasmus Skytte Randløv, rske@ssi.dk), if not please confirm.
+You should have received a notice by email on January 10, 2024 from
+Marcus Munch Grünewald (mmgr@ssi.dk), the current maintainer. If you have not
+received the email, please let me know.
