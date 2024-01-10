@@ -74,22 +74,9 @@ test_that("id() is consistent for DBI connections", {
 test_that("close_connection() works", {
   for (conn in get_test_conns()) {
 
-    # ODBC connections require arguments and therefore cannot be used in this test
-    if (inherits(conn, "OdbcConnection")) next
-
-    # Identify driver of conn within conn_list
-    conn_drv <- purrr::keep(conns, \(.x) identical(.x, conn)) |>
-      names() |>
-      (\(.) purrr::pluck(conn_list, .))()
-
-    conn2 <- get_driver(conn_drv)
-
-    expect_identical(class(conn), class(conn2))
-    expect_true(DBI::dbIsValid(conn2))
-
-    close_connection(conn2)
-
-    expect_false(DBI::dbIsValid(conn2))
-    rm(conn2)
+    # Check that we can close the connection
+    expect_true(DBI::dbIsValid(conn))
+    close_connection(conn)
+    expect_false(DBI::dbIsValid(conn))
   }
 })
