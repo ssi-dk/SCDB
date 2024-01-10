@@ -66,21 +66,32 @@ test_that("interlace_sql() works", {
     t1 <- data.frame(key = c("A", "A", "B"),
                     obs_1   = c(1, 2, 2),
                     valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-01-01")),
-                    valid_until = as.Date(c("2021-02-01", "2021-03-01", NA))) %>%
-      dplyr::copy_to(conn, ., id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+                    valid_until = as.Date(c("2021-02-01", "2021-03-01", NA)))
+
 
     t2 <- data.frame(key = c("A", "B"),
                     obs_2 = c("a", "b"),
                     valid_from  = as.Date(c("2021-01-01", "2021-01-01")),
-                    valid_until = as.Date(c("2021-04-01", NA))) %>%
-      dplyr::copy_to(conn, ., id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
+                    valid_until = as.Date(c("2021-04-01", NA)))
+
 
     t_ref <- data.frame(key = c("A", "A", "A", "B"),
                         obs_1   = c(1, 2, NA, 2),
                         obs_2   = c("a", "a", "a", "b"),
                         valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-03-01", "2021-01-01")),
-                        valid_until = as.Date(c("2021-02-01", "2021-03-01", "2021-04-01", NA))) %>%
-      dplyr::copy_to(conn, ., id("test.SCDB_tmp3", conn), overwrite = TRUE, temporary = FALSE)
+                        valid_until = as.Date(c("2021-02-01", "2021-03-01", "2021-04-01", NA)))
+
+
+    # Copy t1, t2 and t_ref to conn (and suppress check_from message)
+    t1 <- suppressMessages(
+      dplyr::copy_to(conn, t1, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE))
+
+    t2 <- suppressMessages(
+      dplyr::copy_to(conn, t2, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE))
+
+    t_ref <- suppressMessages(
+      dplyr::copy_to(conn, t_ref, name = id("test.SCDB_tmp3", conn), overwrite = TRUE, temporary = FALSE))
+
 
     expect_identical(interlace_sql(list(t1, t2), by = "key") |> dplyr::collect(),
                     t_ref |> dplyr::collect())
@@ -123,9 +134,10 @@ test_that("digest_to_checksum() works", {
     expect_false(checksums[1] == checksums[2])
 
     # .. and on the remote
-    checksums <- dplyr::copy_to(conn, x, id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE) |>
-      digest_to_checksum() |>
-      dplyr::pull("checksum")
+    x <- suppressMessages(
+      dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE))
+
+    checksums <- x |> digest_to_checksum() |> dplyr::pull("checksum")
     expect_false(checksums[1] == checksums[2])
 
     DBI::dbDisconnect(conn)
@@ -135,6 +147,7 @@ test_that("digest_to_checksum() works", {
 
 test_that("digest_to_checksum() warns works correctly when overwriting", {
   for (conn in get_test_conns()) {
+
     checksum_vector <- mtcars |>
       digest_to_checksum() |>
       dplyr::pull(checksum)

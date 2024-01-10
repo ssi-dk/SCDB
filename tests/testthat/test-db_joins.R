@@ -27,12 +27,17 @@ test_that("*_join() works", {
 
     # First test case
     x <- data.frame(number = c("1", "2", NA),
-                    t = c("strA", NA, "strB")) %>%
-      dplyr::copy_to(conn, ., name = id("test.SCDB_tmp1", conn), overwrite =  TRUE, temporary = FALSE)
+                    t = c("strA", NA, "strB"))
 
     y <- data.frame(letter = c("A", "B", "A", "B"),
-                    number = c(NA, "2", "1", "1")) %>%
-      dplyr::copy_to(conn, ., name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
+                    number = c(NA, "2", "1", "1"))
+
+    # Copy x and y to conn (and suppress check_from message)
+    x <- suppressMessages(
+      dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE))
+
+    y <- suppressMessages(
+      dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE))
 
 
     q  <- dplyr::left_join(x, y, na_by = "number") |>
@@ -60,12 +65,19 @@ test_that("*_join() works", {
     # Second test case
     x <- data.frame(date = as.Date(c("2022-05-01", "2022-05-01", "2022-05-02", "2022-05-02")),
                     region_id = c("1", NA, NA, "1"),
-                    n_start = c(3, NA, NA, NA)) %>%
-      dplyr::copy_to(conn, ., name = id("test.SCDB_tmp1", conn), overwrite =  TRUE, temporary = FALSE)
+                    n_start = c(3, NA, NA, NA))
+
     y <- data.frame(date = as.Date("2022-05-02"),
                     region_id = "1",
-                    n_add = 4) %>%
-      dplyr::copy_to(conn, ., name = id("test.SCDB_tmp2", conn), overwrite =  TRUE, temporary = FALSE)
+                    n_add = 4)
+
+    # Copy x and y to conn (and suppress check_from message)
+    x <- suppressMessages(
+      dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE))
+
+    y <- suppressMessages(
+      dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE))
+
 
     q  <- dplyr::full_join(x, y, by = "date", na_by = "region_id") |>
       dplyr::collect() |>

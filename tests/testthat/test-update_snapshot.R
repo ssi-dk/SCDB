@@ -8,8 +8,11 @@ test_that("update_snapshot() works", {
       dplyr::copy_to(conn, df = _, name = "temp", overwrite = TRUE) |>
       digest_to_checksum(col = "checksum", warn = FALSE) |>
       dplyr::mutate(from_ts  = !!db_timestamp("2022-10-01 09:00:00", conn),
-                    until_ts = !!db_timestamp(NA, conn)) %>%
-      dplyr::copy_to(conn, ., id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+                    until_ts = !!db_timestamp(NA, conn))
+
+    # Copy target to conn (and suppress check_from message)
+    target <- suppressMessages(
+      dplyr::copy_to(conn, target, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE))
 
 
     # For some reason dplyr::copy_to(overwrite = TRUE) does not work as expected for MSSQL
@@ -139,9 +142,14 @@ test_that("update_snapshot() works", {
     t1 <- data.frame(col1 = c("A", "B", "C"), col2 = c(1,        NA_real_, NA_real_))
     t2 <- data.frame(col1 = c("A", "B", "C"), col2 = c(1,        2,        3))
 
-    t0 <- dplyr::copy_to(conn, t0, id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE)
-    t1 <- dplyr::copy_to(conn, t1, id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE)
-    t2 <- dplyr::copy_to(conn, t2, id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE)
+    # Copy t0, t1, and t2 to conn (and suppress check_from message)
+    t0 <- suppressMessages(
+      dplyr::copy_to(conn, t0, name = id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE))
+    t1 <- suppressMessages(
+      dplyr::copy_to(conn, t1, name = id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE))
+    t2 <- suppressMessages(
+      dplyr::copy_to(conn, t2, name = id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE))
+
 
     utils::capture.output(update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01",
                                           logger = logger))
