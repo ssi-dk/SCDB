@@ -1,6 +1,6 @@
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors v | 0 warnings v | 1 note x
 
 In addition to code changes, this submission of SCDB also transfers the
 maintainer role to Rasmus Skytte Randløv (rske@ssi.dk).
