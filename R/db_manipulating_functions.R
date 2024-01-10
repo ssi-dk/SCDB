@@ -32,6 +32,10 @@ filter_keys <- function(.data, filters, by = NULL, na_by = NULL) {
     return(.data)
   }
 
+  assert_data_like(.data)
+  assert_data_like(filters, null.ok = TRUE)
+  checkmate::assert_subset(c(by, na_by), colnames(filters))
+
   UseMethod("filter_keys")
 }
 
