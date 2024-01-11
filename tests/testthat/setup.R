@@ -113,16 +113,32 @@ get_test_conns <- function() {
 
 
 # Ensure the target conns are empty and configured correctly
-for (conn in get_test_conns()) {
+coll <- checkmate::makeAssertCollection()
+conns <- get_test_conns()
+for (conn_id in seq_along(conns)) {
+
+  conn <- conns[[conn_id]]
+
+  # Ensure connections are valid
+  if (!DBI::dbIsValid(conn)) {
+    coll$push(glue::glue("Connection could not be made to backend ({names(conns)[[conn_id]]})."))
+  }
+
 
   # Check schemas are configured correctly
-  if (!schema_exists(conn, "test") && !inherits(conn, "SQLiteConnection")) {
-    stop("Tests require the schema 'test' to exist in all available connections")
+  if (!schema_exists(conn, "test") && names(conns)[conn_id] != "SQLite") {
+    coll$push(glue::glue("Tests require the schema 'test' to exist in connection ({names(conns)[[conn_id]]})."))
   }
 
-  if (!schema_exists(conn, "test.one") && !inherits(conn, "SQLiteConnection")) {
-    stop("Tests require the schema 'test.one' to exist in all available connections")
+  if (!schema_exists(conn, "test.one") && names(conns)[conn_id] != "SQLite") {
+    coll$push(glue::glue("Tests require the schema 'test.one' to exist in connection ({names(conns)[[conn_id]]})."))
   }
+}
+checkmate::reportAssertions(coll)
+
+
+# Configure the data bases
+for (conn in get_test_conns()) {
 
   # Start with some clean up
   purrr::walk(c("test.mtcars", "__mtcars", "__mtcars_historical", "test.mtcars_modified", "mtcars_modified",
@@ -142,7 +158,7 @@ for (conn in get_test_conns()) {
   )
 
   dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
-                 name = id("__mtcars", conn),    temporary = FALSE, overwrite = TRUE)
+                 name = id("__mtcars", conn), temporary = FALSE, overwrite = TRUE)
 
   dplyr::copy_to(conn,
                  mtcars |>
@@ -150,11 +166,13 @@ for (conn in get_test_conns()) {
                    digest_to_checksum() |>
                    dplyr::mutate(from_ts = as.POSIXct("2020-01-01 09:00:00"),
                                  until_ts = as.POSIXct(NA)),
-                 name = id("__mtcars_historical", conn),    temporary = FALSE, overwrite = TRUE)
+                 name = id("__mtcars_historical", conn), temporary = FALSE, overwrite = TRUE)
+
 
   # Disconnect
   DBI::dbDisconnect(conn)
 }
+
 
 # Report testing environment to the user
 message(
