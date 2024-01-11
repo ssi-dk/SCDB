@@ -112,7 +112,7 @@ get_test_conns <- function() {
 }
 
 
-# Ensure the target conns are empty and configured correctly
+# Ensure the target connections are empty and configured correctly
 coll <- checkmate::makeAssertCollection()
 conns <- get_test_conns()
 for (conn_id in seq_along(conns)) {
