@@ -26,7 +26,7 @@ test_that("id() works", {
     expect_identical(id("test.mtcars"), DBI::Id(schema = "test", table = "mtcars"))
 
     expect_identical(id("test.mtcars", conn = conn, allow_table_only = FALSE),
-                    DBI::Id(schema = "test", table = "mtcars"))
+                     DBI::Id(schema = "test", table = "mtcars"))
 
     DBI::dbDisconnect(conn)
   }
