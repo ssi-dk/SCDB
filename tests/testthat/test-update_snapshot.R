@@ -12,7 +12,8 @@ test_that("update_snapshot() works", {
 
     # Copy target to conn (and suppress check_from message)
     target <- suppressMessages(
-      dplyr::copy_to(conn, target, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE))
+      dplyr::copy_to(conn, target, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+    )
 
 
     # For some reason dplyr::copy_to(overwrite = TRUE) does not work as expected for MSSQL
@@ -44,20 +45,20 @@ test_that("update_snapshot() works", {
                                           logger = logger))
 
     expect_identical(slice_time(target, "2022-10-01 09:00:00") |>
-                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
-                      dplyr::collect() |>
-                      dplyr::arrange(wt, qsec),
-                    mtcars |> dplyr::arrange(wt, qsec) |> tibble::tibble())
+                       dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
+                       dplyr::collect() |>
+                       dplyr::arrange(wt, qsec),
+                     mtcars |> dplyr::arrange(wt, qsec) |> tibble::tibble())
     expect_equal(nrow(slice_time(target, "2022-10-01 09:00:00")),
-                nrow(mtcars))
+                 nrow(mtcars))
 
     expect_identical(slice_time(target, "2022-10-03 09:00:00") |>
-                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
-                      dplyr::collect() |>
-                      dplyr::arrange(wt, qsec),
-                    .data |> dplyr::collect() |> dplyr::arrange(wt, qsec))
+                       dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
+                       dplyr::collect() |>
+                       dplyr::arrange(wt, qsec),
+                     .data |> dplyr::collect() |> dplyr::arrange(wt, qsec))
     expect_equal(nrow(slice_time(target, "2022-10-03 09:00:00")),
-                nrow(mtcars))
+                 nrow(mtcars))
 
     # Check log outputs exists
     log_pattern <- paste(stringr::str_replace_all(as.Date(timestamp), "-", "_"), "test.SCDB_tmp1.log", sep = ".")
@@ -66,7 +67,7 @@ test_that("update_snapshot() works", {
     expect_true(file.info(file.path(log_path, log_file))$size > 0)
     expect_true(nrow(get_table(conn, "test.SCDB_logs")) == 1)
     expect_true(nrow(dplyr::filter(get_table(conn, "test.SCDB_logs"),
-                                  dplyr::if_any(.cols = !c(log_file), .fns = ~ !is.na(.)))) == 1)
+                                   dplyr::if_any(.cols = !c(log_file), .fns = ~ !is.na(.)))) == 1)
 
     if (inherits(conn, "Microsoft SQL Server")) {
       DBI::dbExecute(conn, "DROP TABLE #temp")
@@ -82,20 +83,20 @@ test_that("update_snapshot() works", {
 
     # Even though we insert twice on the same date, we expect the data to be minimal (compacted)
     expect_identical(slice_time(target, "2022-10-01 09:00:00") |>
-                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
-                      dplyr::collect() |>
-                      dplyr::arrange(wt, qsec),
-                    mtcars |> dplyr::arrange(wt, qsec) |> tibble::tibble())
+                       dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
+                       dplyr::collect() |>
+                       dplyr::arrange(wt, qsec),
+                     mtcars |> dplyr::arrange(wt, qsec) |> tibble::tibble())
     expect_equal(nrow(slice_time(target, "2022-10-01 09:00:00")),
-                nrow(mtcars))
+                 nrow(mtcars))
 
     expect_identical(slice_time(target, "2022-10-03 09:00:00") |>
-                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
-                      dplyr::collect() |>
-                      dplyr::arrange(wt, qsec),
-                    .data |> dplyr::collect() |> dplyr::arrange(wt, qsec))
+                       dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
+                       dplyr::collect() |>
+                       dplyr::arrange(wt, qsec),
+                     .data |> dplyr::collect() |> dplyr::arrange(wt, qsec))
     expect_equal(nrow(slice_time(target, "2022-10-03 09:00:00")),
-                nrow(mtcars))
+                 nrow(mtcars))
 
 
     if (inherits(conn, "Microsoft SQL Server")) {
@@ -108,9 +109,10 @@ test_that("update_snapshot() works", {
       dplyr::copy_to(conn, df = _, name = "temp", overwrite = TRUE)
 
     # This should fail if we do not specify "enforce_chronological_order = FALSE"
-    expect_error(utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-02 09:00:00",
-                                                      logger = logger)),
-                regexp = "Given timestamp 2022-10-02 09:00:00 is earlier")
+    expect_error(
+      utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-02 09:00:00", logger = logger)),
+      regexp = "Given timestamp 2022-10-02 09:00:00 is earlier"
+    )
 
     # But not with the variable set
     utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-02 09:00:00",
@@ -118,20 +120,20 @@ test_that("update_snapshot() works", {
                                           enforce_chronological_order = FALSE))
 
     expect_identical(slice_time(target, "2022-10-01 09:00:00") |>
-                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
-                      dplyr::collect() |>
-                      dplyr::arrange(wt, qsec),
-                    mtcars |> dplyr::arrange(wt, qsec) |> tibble::tibble())
+                       dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
+                       dplyr::collect() |>
+                       dplyr::arrange(wt, qsec),
+                     mtcars |> dplyr::arrange(wt, qsec) |> tibble::tibble())
     expect_equal(nrow(slice_time(target, "2022-10-01 09:00:00")),
-                nrow(mtcars))
+                 nrow(mtcars))
 
     expect_identical(slice_time(target, "2022-10-02 09:00:00") |>
-                      dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
-                      dplyr::collect() |>
-                      dplyr::arrange(wt, qsec),
-                    .data |> dplyr::collect() |> dplyr::arrange(wt, qsec))
+                       dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
+                       dplyr::collect() |>
+                       dplyr::arrange(wt, qsec),
+                     .data |> dplyr::collect() |> dplyr::arrange(wt, qsec))
     expect_equal(nrow(slice_time(target, "2022-10-02 09:00:00")),
-                nrow(mtcars))
+                 nrow(mtcars))
 
 
     if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
@@ -144,27 +146,30 @@ test_that("update_snapshot() works", {
 
     # Copy t0, t1, and t2 to conn (and suppress check_from message)
     t0 <- suppressMessages(
-      dplyr::copy_to(conn, t0, name = id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE))
+      dplyr::copy_to(conn, t0, name = id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE)
+    )
     t1 <- suppressMessages(
-      dplyr::copy_to(conn, t1, name = id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE))
+      dplyr::copy_to(conn, t1, name = id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE)
+    )
     t2 <- suppressMessages(
-      dplyr::copy_to(conn, t2, name = id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE))
+      dplyr::copy_to(conn, t2, name = id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE)
+    )
 
 
     utils::capture.output(update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01",
                                           logger = logger))
     expect_identical(dplyr::collect(t0) |> dplyr::arrange(col1),
-                    dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
+                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
     utils::capture.output(update_snapshot(t1, conn, "test.SCDB_tmp1", "2022-02-01",
                                           logger = logger))
     expect_identical(dplyr::collect(t1) |> dplyr::arrange(col1),
-                    dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
+                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
     utils::capture.output(update_snapshot(t2, conn, "test.SCDB_tmp1", "2022-02-01",
                                           logger = logger))
     expect_identical(dplyr::collect(t2) |> dplyr::arrange(col1),
-                    dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
+                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
     t <- list(t0, t1, t2) |>
       purrr::reduce(union) |>
@@ -189,33 +194,33 @@ test_that("update_snapshot() works", {
     utils::capture.output(update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01",
                                           logger = logger))
     expect_identical(dplyr::collect(t0) |> dplyr::arrange(col1),
-                    dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
+                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
     utils::capture.output(update_snapshot(t2, conn, "test.SCDB_tmp1", "2022-03-01",
                                           logger = logger))
     expect_identical(dplyr::collect(t2) |> dplyr::arrange(col1),
-                    dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
+                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
     utils::capture.output(update_snapshot(t1, conn, "test.SCDB_tmp1", "2022-02-01",
                                           logger = logger,
                                           enforce_chronological_order = FALSE))
     expect_identical(dplyr::collect(t1) |> dplyr::arrange(col1),
-                    dplyr::collect(get_table(conn, "test.SCDB_tmp1", slice_ts = "2022-02-01")) |> dplyr::arrange(col1))
+                     dplyr::collect(get_table(conn, "test.SCDB_tmp1", slice_ts = "2022-02-01")) |> dplyr::arrange(col1))
 
     t_ref <-
       tibble::tibble(col1     = c("A",          "B",          "A",          "C",          "B",          "C"),
-                    col2     = c(NA_real_,     NA_real_,     1,            NA_real_,     2,            3),
-                    from_ts  = c("2022-01-01", "2022-01-01", "2022-02-01", "2022-02-01", "2022-03-01", "2022-03-01"),
-                    until_ts = c("2022-02-01", "2022-03-01", NA,           "2022-03-01", NA,           NA))
+                     col2     = c(NA_real_,     NA_real_,     1,            NA_real_,     2,            3),
+                     from_ts  = c("2022-01-01", "2022-01-01", "2022-02-01", "2022-02-01", "2022-03-01", "2022-03-01"),
+                     until_ts = c("2022-02-01", "2022-03-01", NA,           "2022-03-01", NA,           NA))
 
     expect_identical(get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
-                      dplyr::select(!"checksum") |>
-                      dplyr::collect() |>
-                      dplyr::mutate(from_ts  = strftime(from_ts),
-                                    until_ts = strftime(until_ts)) |>
-                      dplyr::arrange(col1, from_ts),
-                    t_ref |>
-                      dplyr::arrange(col1, from_ts))
+                       dplyr::select(!"checksum") |>
+                       dplyr::collect() |>
+                       dplyr::mutate(from_ts  = strftime(from_ts),
+                                     until_ts = strftime(until_ts)) |>
+                       dplyr::arrange(col1, from_ts),
+                     t_ref |>
+                       dplyr::arrange(col1, from_ts))
 
     if (file.exists(logger$log_realpath)) file.remove(logger$log_realpath)
 
