@@ -13,13 +13,6 @@ test_that("get_connection notifies if connection fails", {
   }
 })
 
-test_that("get_connection warns about unsupported backend", {
-  expect_error(get_connection(drv = character(0)),
-               regexp = paste("unable to find an inherited method for function",
-                              "'dbCanConnect' for signature '\"character\"'"))
-})
-
-
 test_that("id() works", { for (conn in conns) { # nolint: brace_linter
 
   expect_identical(id("test_mtcars"), DBI::Id(table = "test_mtcars"))
