@@ -227,21 +227,11 @@ test_that("update_snapshot() works", {
 
 
 test_that("update_snapshot works with Id objects", {
+  withr::local_options("SCDB.log_path" = tempdir())
+
   for (conn in get_test_conns()) {
 
-    old <- options(
-      SCDB.log_path = tempdir()
-    )
-
-    target_table <- DBI::Id(schema = "test", table = "mtcars_modified")
-
-    on.exit({
-      options(old)
-      if (DBI::dbExistsTable(conn, "mtcars_modified")) DBI::dbRemoveTable(conn, "mtcars_modified")
-      if (DBI::dbExistsTable(conn, target_table)) DBI::dbRemoveTable(conn, target_table)
-
-      rm(list = c("target_table", "old"))
-    })
+    target_table <- id("test.mtcars_modified", conn)
 
     logger <- Logger$new(output_to_console = FALSE,
                          ts = Sys.time(),
