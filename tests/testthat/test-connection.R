@@ -59,11 +59,11 @@ test_that('id() returns table = "schema.table" if schema does not exist', {
 test_that("id() is consistent for DBI connections", {
   for (conn in get_test_conns()) {
 
-    expectation <- id(dplyr::tbl(conn, DBI::Id(schema = "test", table = "mtcars")))
+    expectation <- id(dplyr::tbl(conn, id("test.mtcars", conn), check_from = FALSE))
 
     expect_identical(
       expectation,
-      id.tbl_dbi(dplyr::tbl(conn, DBI::Id(schema = "test", table = "mtcars")))
+      id.tbl_dbi(dplyr::tbl(conn, id("test.mtcars", conn), check_from = FALSE))
     )
 
     DBI::dbDisconnect(conn)
