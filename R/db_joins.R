@@ -167,14 +167,14 @@ inner_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   join_warn_experimental()
 
-  sql_on <- join_na_sql(x, by, .dots$na_by)
+  args <- as.list(rlang::current_env()) |>
+    append(.dots)
+
   .renamer <- select_na_sql(x, y, by, .dots$na_by)
 
   # Remove na_by from args to avoid infinite loops
-  .dots$na_by <- NULL
-
-  args <- as.list(rlang::current_env()) |>
-    append(.dots)
+  args$na_by <- NULL
+  args$sql_on <- join_na_sql(x, by, .dots$na_by)
 
   join_result <- do.call(dplyr::inner_join, args = args) |>
     dplyr::rename(!!.renamer) |>
@@ -202,14 +202,14 @@ left_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   join_warn_experimental()
 
-  sql_on <- join_na_sql(x, by, .dots$na_by)
+  args <- as.list(rlang::current_env()) |>
+    append(.dots)
+
   .renamer <- select_na_sql(x, y, by, .dots$na_by)
 
   # Remove na_by from args to avoid infinite loops
-  .dots$na_by <- NULL
-
-  args <- as.list(rlang::current_env()) |>
-    append(.dots)
+  args$na_by <- NULL
+  args$sql_on <- join_na_sql(x, by, .dots$na_by)
 
   join_result <- do.call(dplyr::left_join, args = args) |>
     dplyr::rename(!!.renamer) |>
@@ -237,14 +237,14 @@ right_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   join_warn_experimental()
 
-  sql_on <- join_na_sql(x, by, .dots$na_by)
-  .renamer <- select_na_sql(x, y, by, .dots$na_by, left = FALSE)
-
-  # Remove na_by from args to avoid infinite loops
-  .dots$na_by <- NULL
-
   args <- as.list(rlang::current_env()) |>
     append(.dots)
+
+  .renamer <- select_na_sql(x, y, by, .dots$na_by)
+
+  # Remove na_by from args to avoid infinite loops
+  args$na_by <- NULL
+  args$sql_on <- join_na_sql(x, by, .dots$na_by)
 
   join_result <- do.call(dplyr::right_join, args = args) |>
     dplyr::rename(!!.renamer) |>
