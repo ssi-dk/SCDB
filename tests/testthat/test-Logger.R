@@ -15,11 +15,11 @@ test_that("Logger works", {
 
     ts_str <- stringr::str_replace(format(logger$start_time, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
     expect_equal(utils::capture.output(logger$log_info("test", tic = logger$start_time)),
-                glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test"))
+                 glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test"))
     expect_warning(utils::capture.output(logger$log_warn("test", tic = logger$start_time)),
-                  regexp = glue::glue("{ts_str} - {Sys.info()[['user']]} - WARNING - test"))
+                   regexp = glue::glue("{ts_str} - {Sys.info()[['user']]} - WARNING - test"))
     expect_error(utils::capture.output(logger$log_error("test", tic = logger$start_time)),
-                regexp = glue::glue("{ts_str} - {Sys.info()[['user']]} - ERROR - test"))
+                 regexp = glue::glue("{ts_str} - {Sys.info()[['user']]} - ERROR - test"))
 
 
 
@@ -37,7 +37,7 @@ test_that("Logger works", {
     expect_equal(logger$log_path, log_path)
     expect_null(logger$log_tbl)
     expect_equal(logger$log_filename,
-                glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
+                 glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
                             "{format(as.POSIXct(ts), '%Y_%m_%d')}.",
                             "{db_tablestring}.log"))
     tic <- Sys.time()
@@ -45,7 +45,7 @@ test_that("Logger works", {
     ts_str <- stringr::str_replace(format(tic, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
     expect_true(logger$log_filename %in% dir(log_path))
     expect_equal(readLines(file.path(log_path, logger$log_filename)),
-                glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test - filewriting"))
+                 glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test - filewriting"))
 
 
     # Test file logging - with posix ts
@@ -54,7 +54,7 @@ test_that("Logger works", {
     expect_equal(logger$log_path, log_path)
     expect_null(logger$log_tbl)
     expect_equal(logger$log_filename,
-                glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
+                 glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
                             "{format(as.POSIXct(ts), '%Y_%m_%d')}.",
                             "{db_tablestring}.log"))
 
@@ -64,10 +64,10 @@ test_that("Logger works", {
     # Test db logging
     if (DBI::dbExistsTable(conn, id("test.SCDB_logs", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_logs", conn))
     logger <- Logger$new(db_tablestring = db_tablestring,
-                        ts = ts,
-                        log_table_id = "test.SCDB_logs",
-                        log_conn = conn,
-                        warn = FALSE)
+                         ts = ts,
+                         log_table_id = "test.SCDB_logs",
+                         log_conn = conn,
+                         warn = FALSE)
     log_table_id <- dplyr::tbl(conn, id("test.SCDB_logs", conn))
     expect_equal(logger$log_tbl, log_table_id)
     logger$log_to_db(n_insertions = 42)
@@ -88,11 +88,11 @@ test_that("Logger works", {
 
     # set warn = FALSE as we've already tested this
     logger <- Logger$new(db_tablestring = db_tablestring, ts = ts, log_path = log_path,
-                        log_table_id = "test.SCDB_logs", log_conn = conn, warn = FALSE)
+                         log_table_id = "test.SCDB_logs", log_conn = conn, warn = FALSE)
     expect_equal(logger$log_path, log_path)
     expect_equal(logger$log_tbl, log_table_id)
     expect_equal(logger$log_filename,
-                glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
+                 glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
                             "{format(as.POSIXct(ts), '%Y_%m_%d')}.",
                             "{db_tablestring}.log"))
     tic <- Sys.time()
@@ -100,7 +100,7 @@ test_that("Logger works", {
     ts_str <- stringr::str_replace(format(tic, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
     expect_true(logger$log_filename %in% dir(log_path))
     expect_equal(readLines(file.path(log_path, logger$log_filename)),
-                glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test - filewriting"))
+                 glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test - filewriting"))
 
     logger$log_to_db(n_insertions = 13)
     expect_equal(nrow(log_table_id), 2)
