@@ -293,7 +293,7 @@ test_that("update_snapshot checks table formats", {
     expect_error(
       utils::capture.output(
         update_snapshot(
-          dplyr::tbl(conn, id("test.mtcars", conn = conn), mtcars),
+          dplyr::tbl(conn, id("test.mtcars", conn = conn), mtcars, check_from = FALSE),
           conn,
           dplyr::tbl(conn, "__mtcars"),
           timestamp = timestamp,
