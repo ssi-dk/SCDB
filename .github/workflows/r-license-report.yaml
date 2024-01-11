@@ -1,13 +1,13 @@
-# Workflow frrom https://github.com/marketplace/actions/r-dependency-license-report
+# Workflow from https://github.com/marketplace/actions/r-dependency-license-report
 
 ---
 name: License Report
 
 on:
   push:
-    branches-ignore: [main]
+    branches: [rc-*]
   pull_request:
-    branches: [main]
+    branches: [rc-*]
 
 jobs:
   license-report:
