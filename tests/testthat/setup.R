@@ -23,22 +23,24 @@ get_test_conns <- function() {
     # Define our local connection backends
     conn_list <- list(
       # Backend string = package::function
-      "SQLite"           = "RSQLite::SQLite",
-      "SQLite - schemas" = "RSQLite::SQLite"
+      "SQLite"              = "RSQLite::SQLite",
+      "SQLite - w. schemas" = "RSQLite::SQLite"
     )
 
     # Define our local connection arguments
     conn_args <- list(
       # Backend string = list(named args)
-      "SQLite"           = list(dbname = file.path(tempdir(), "SQLite.SQLite")),
-      "SQLite - schemas" = list(dbname = file.path(tempdir(), "SQLite_schemas.SQLite"))
+      "SQLite"              = list(dbname = file.path(tempdir(), "SQLite.SQLite")),
+      "SQLite - w. schemas" = list(dbname = file.path(tempdir(), "SQLite_schemas.SQLite"))
     )
 
     # Define post connection commands to run
     conn_post_connect <- list(
       # Backend string = list(named args)
-      "SQLite - schemas" = list(paste0("ATTACH '", file.path(tempdir(), "SQLite_test.SQLite"), "' AS 'test'"),
-                                paste0("ATTACH '", file.path(tempdir(), "SQLite_test_one.SQLite"), "' AS 'test.one'"))
+      "SQLite - w. schemas" = list(
+        paste0("ATTACH '", file.path(tempdir(), "SQLite_test.SQLite"), "' AS 'test'"),
+        paste0("ATTACH '", file.path(tempdir(), "SQLite_test_one.SQLite"), "' AS 'test.one'")
+      )
     )
 
   } else {
@@ -52,7 +54,7 @@ get_test_conns <- function() {
       purrr::map(~ eval(parse(text = .)))
 
     # Use the connection configured by the remote
-    conn_post_connect <- tibble::lst(!!Sys.getenv("BACKEND") := Sys.getenv("BACKEND_POST_CONNECT")) |>                                  # nolint: object_name_linter
+    conn_post_connect <- tibble::lst(!!Sys.getenv("BACKEND") := Sys.getenv("BACKEND_POST_CONNECT")) |>                  # nolint: object_name_linter
       purrr::discard(~ identical(., "")) |>
       purrr::map(~ eval(parse(text = .)))
 
