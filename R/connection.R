@@ -41,7 +41,9 @@ get_connection <- function(drv = RPostgres::Postgres(),
                            password = NULL,
                            timezone = NULL,
                            timezone_out = NULL,
-                           ...) {
+                           ...,
+                           bigint = "integer",
+                           check_interrupts = TRUE) {
 
   # Check arguments
   checkmate::assert_character(host, pattern = r"{^\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}$}", null.ok = TRUE)
@@ -61,25 +63,20 @@ get_connection <- function(drv = RPostgres::Postgres(),
   # Default SQLite connections to temporary on-disk database
   if (inherits(drv, "SQLiteDriver") && is.null(dbname)) dbname <- ""
 
+  args <- list(...) |>
+    append(as.list(rlang::current_env())) |>
+    unlist()
+
+  args <- args[match(unique(names(args)), names(args))]
+
   # Check if connection can be established given these settings
   tryCatch({
-    args <- append(list(...), as.list(environment()))
     status <- do.call(DBI::dbCanConnect, args = args)
 
     if (!status) rlang::abort(attr(status, "reason"))
   })
 
-  conn <- DBI::dbConnect(drv = drv,
-                         dbname = dbname,
-                         host = host,
-                         port = port,
-                         user = user,
-                         password = password,
-                         timezone = timezone,
-                         timezone_out = timezone_out,
-                         ...,
-                         bigint = "integer", # R has poor integer64 integration, which is the default return
-                         check_interrupts = TRUE)
+  conn <- do.call(DBI::dbConnect, args = args)
 
   .supported <- c(
     "PqConnection",

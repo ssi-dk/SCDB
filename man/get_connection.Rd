@@ -13,7 +13,9 @@ get_connection(
   password = NULL,
   timezone = NULL,
   timezone_out = NULL,
-  ...
+  ...,
+  bigint = "integer",
+  check_interrupts = TRUE
 )
 }
 \arguments{
