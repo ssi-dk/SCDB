@@ -162,16 +162,19 @@ inner_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   if (!"na_by" %in% names(.dots)) {
     if (inherits(x, "tbl_dbi") || inherits(y, "tbl_dbi")) join_warn()
-
     return(NextMethod("inner_join"))
   }
 
   join_warn_experimental()
 
-  # Modify arguments for new dplyr call
-  args <- as.list(rlang::current_env())
-  args$sql_on <- join_na_sql(x, by, .dots$na_by)
+  sql_on <- join_na_sql(x, by, .dots$na_by)
   .renamer <- select_na_sql(x, y, by, .dots$na_by)
+
+  # Remove na_by from args to avoid infinite loops
+  .dots$na_by <- NULL
+
+  args <- as.list(rlang::current_env()) |>
+    append(.dots)
 
   join_result <- do.call(dplyr::inner_join, args = args) |>
     dplyr::rename(!!.renamer) |>
@@ -193,6 +196,7 @@ left_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   if (!"na_by" %in% names(.dots)) {
     if (inherits(x, "tbl_dbi") || inherits(y, "tbl_dbi")) join_warn()
+
     return(NextMethod("left_join"))
   }
 
