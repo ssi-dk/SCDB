@@ -36,6 +36,14 @@ get_connection(
 \item{timezone_out}{Sets the timezone_out of DBI::dbConnect()}
 
 \item{...}{Additional parameters sent to DBI::dbConnect()}
+
+\item{bigint}{The R type that 64-bit integer types should be mapped to,
+default is \link[bit64:bit64-package]{bit64::integer64}, which allows the full range of 64 bit
+integers.}
+
+\item{check_interrupts}{Should user interrupts be checked during the query execution (before
+first row of data is available)? Setting to \code{TRUE} allows interruption of queries
+running too long.}
 }
 \value{
 An object that inherits from DBIConnection driver specified in drv
