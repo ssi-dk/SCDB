@@ -30,15 +30,15 @@ get_test_conns <- function() {
     # Define our local connection arguments
     conn_args <- list(
       # Backend string = list(named args)
-      "SQLite"           = list(dbname = file.path(tempdir(), "SQLite")),
-      "SQLite - schemas" = list(dbname = file.path(tempdir(), "SQLite_schemas"))
+      "SQLite"           = list(dbname = file.path(tempdir(), "SQLite.SQLite")),
+      "SQLite - schemas" = list(dbname = file.path(tempdir(), "SQLite_schemas.SQLite"))
     )
 
     # Define post connection commands to run
     conn_post_connect <- list(
       # Backend string = list(named args)
-      "SQLite - schemas" = list(paste0("ATTACH '", file.path(tempdir(), "SQLite_test"), "' AS 'test'"),
-                                paste0("ATTACH '", file.path(tempdir(), "SQLite_test_one"), "' AS 'test.one'"))
+      "SQLite - schemas" = list(paste0("ATTACH '", file.path(tempdir(), "SQLite_test.SQLite"), "' AS 'test'"),
+                                paste0("ATTACH '", file.path(tempdir(), "SQLite_test_one.SQLite"), "' AS 'test.one'"))
     )
 
   } else {
