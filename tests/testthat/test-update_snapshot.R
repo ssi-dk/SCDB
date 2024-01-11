@@ -266,7 +266,7 @@ test_that("update_snapshot works with Id objects", {
 
 test_that("update_snapshot checks table formats", {
 
-  ops <- options(SCDB.log_path = tempdir())
+  withr::local_options("SCDB.log_path" = tempdir())
 
   for (conn in get_test_conns()) {
 
@@ -305,6 +305,4 @@ test_that("update_snapshot checks table formats", {
 
     DBI::dbDisconnect(conn)
   }
-
-  options(ops)
 })
