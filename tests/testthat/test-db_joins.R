@@ -34,10 +34,12 @@ test_that("*_join() works", {
 
     # Copy x and y to conn (and suppress check_from message)
     x <- suppressMessages(
-      dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE))
+      dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+    )
 
     y <- suppressMessages(
-      dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE))
+      dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
+    )
 
 
     q  <- dplyr::left_join(x, y, na_by = "number") |>
@@ -73,10 +75,12 @@ test_that("*_join() works", {
 
     # Copy x and y to conn (and suppress check_from message)
     x <- suppressMessages(
-      dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE))
+      dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+    )
 
     y <- suppressMessages(
-      dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE))
+      dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
+    )
 
 
     q  <- dplyr::full_join(x, y, by = "date", na_by = "region_id") |>
@@ -102,19 +106,19 @@ test_that("*_join() works", {
     # Using by should give 1 mismatch
     # Using na_by should give no mismatch
     expect_equal(dplyr::left_join(xx, xx, by    = "name") |>
-                  dplyr::summarize(n = sum(dplyr::if_else(is.na(cyl.y), 1, 0), na.rm = TRUE)) |>
-                  dplyr::pull(n), 1)
+                   dplyr::summarize(n = sum(dplyr::if_else(is.na(cyl.y), 1, 0), na.rm = TRUE)) |>
+                   dplyr::pull(n), 1)
     expect_equal(dplyr::left_join(xx, xx, na_by = "name") |>
-                  dplyr::summarize(n = sum(dplyr::if_else(is.na(cyl.y), 1, 0), na.rm = TRUE)) |>
-                  dplyr::pull(n), 0)
+                   dplyr::summarize(n = sum(dplyr::if_else(is.na(cyl.y), 1, 0), na.rm = TRUE)) |>
+                   dplyr::pull(n), 0)
 
     # And they should be identical with the simple case
     expect_equal(dplyr::left_join(xx, xx, na_by = "name") |>
-                  dplyr::select(!"name") |>
-                  dplyr::collect(),
-                dplyr::left_join(x,  x,  na_by = "name") |>
-                  dplyr::select(!"name") |>
-                  dplyr::collect())
+                   dplyr::select(!"name") |>
+                   dplyr::collect(),
+                 dplyr::left_join(x,  x,  na_by = "name") |>
+                   dplyr::select(!"name") |>
+                   dplyr::collect())
 
     DBI::dbDisconnect(conn)
   }
