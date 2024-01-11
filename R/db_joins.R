@@ -195,10 +195,17 @@ left_join.tbl_sql <- function(x, y, by = NULL, ...) {
     if (inherits(x, "tbl_dbi") || inherits(y, "tbl_dbi")) join_warn()
     return(NextMethod("left_join"))
   }
+
   join_warn_experimental()
-  args <- as.list(rlang::current_env())
-  args$sql_on <- join_na_sql(x, by, .dots$na_by)
+
+  sql_on <- join_na_sql(x, by, .dots$na_by)
   .renamer <- select_na_sql(x, y, by, .dots$na_by)
+
+  # Remove na_by from args to avoid infinite loops
+  .dots$na_by <- NULL
+
+  args <- as.list(rlang::current_env()) |>
+    append(.dots)
 
   join_result <- do.call(dplyr::left_join, args = args) |>
     dplyr::rename(!!.renamer) |>
@@ -217,24 +224,25 @@ right_join.tbl_sql <- function(x, y, by = NULL, ...) {
   checkmate::assert_character(by, null.ok = TRUE)
 
   .dots <- list(...)
-  args <- as.list(rlang::current_env())
 
   if (!"na_by" %in% names(.dots)) {
     if (inherits(x, "tbl_dbi") || inherits(y, "tbl_dbi")) join_warn()
 
-    .renamer <- select_na_sql(x, y, by, na_by = NULL, left = FALSE)
-  } else {
-    join_warn_experimental()
-    args$sql_on <- join_na_sql(x, by, .dots$na_by)
-    .renamer <- select_na_sql(x, y, by, .dots$na_by, left = FALSE)
+    return(NextMethod("right_join"))
   }
 
-  # Swap x and y and proceed with left_join
-  args$x <- y
-  args$y <- x
-  args$keep <- TRUE
+  join_warn_experimental()
 
-  join_result <- do.call(dplyr::left_join, args = args) |>
+  sql_on <- join_na_sql(x, by, .dots$na_by)
+  .renamer <- select_na_sql(x, y, by, .dots$na_by, left = FALSE)
+
+  # Remove na_by from args to avoid infinite loops
+  .dots$na_by <- NULL
+
+  args <- as.list(rlang::current_env()) |>
+    append(.dots)
+
+  join_result <- do.call(dplyr::right_join, args = args) |>
     dplyr::rename(!!.renamer) |>
     dplyr::select(tidyselect::all_of(names(.renamer)))
 
