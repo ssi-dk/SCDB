@@ -53,7 +53,7 @@ test_that("unite.tbl_dbi() works", {
     # Unite places cols in a particular way, lets be sure we match
     qq <- dplyr::mutate(q, dplyr::across(tidyselect::everything(), as.character)) # we convert to character since SQLite
     expect_identical(qq |> tidyr::unite("test_col", vs, am) |> dplyr::collect(),
-                    qq |> dplyr::collect() |> tidyr::unite("test_col", vs, am))
+                     qq |> dplyr::collect() |> tidyr::unite("test_col", vs, am))
 
     DBI::dbDisconnect(conn)
   }
@@ -64,15 +64,15 @@ test_that("interlace_sql() works", {
   for (conn in get_test_conns()) {
 
     t1 <- data.frame(key = c("A", "A", "B"),
-                    obs_1   = c(1, 2, 2),
-                    valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-01-01")),
-                    valid_until = as.Date(c("2021-02-01", "2021-03-01", NA)))
+                     obs_1   = c(1, 2, 2),
+                     valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-01-01")),
+                     valid_until = as.Date(c("2021-02-01", "2021-03-01", NA)))
 
 
     t2 <- data.frame(key = c("A", "B"),
-                    obs_2 = c("a", "b"),
-                    valid_from  = as.Date(c("2021-01-01", "2021-01-01")),
-                    valid_until = as.Date(c("2021-04-01", NA)))
+                     obs_2 = c("a", "b"),
+                     valid_from  = as.Date(c("2021-01-01", "2021-01-01")),
+                     valid_until = as.Date(c("2021-04-01", NA)))
 
 
     t_ref <- data.frame(key = c("A", "A", "A", "B"),
@@ -84,17 +84,20 @@ test_that("interlace_sql() works", {
 
     # Copy t1, t2 and t_ref to conn (and suppress check_from message)
     t1 <- suppressMessages(
-      dplyr::copy_to(conn, t1, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE))
+      dplyr::copy_to(conn, t1, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+    )
 
     t2 <- suppressMessages(
-      dplyr::copy_to(conn, t2, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE))
+      dplyr::copy_to(conn, t2, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
+    )
 
     t_ref <- suppressMessages(
-      dplyr::copy_to(conn, t_ref, name = id("test.SCDB_tmp3", conn), overwrite = TRUE, temporary = FALSE))
+      dplyr::copy_to(conn, t_ref, name = id("test.SCDB_tmp3", conn), overwrite = TRUE, temporary = FALSE)
+    )
 
 
     expect_identical(interlace_sql(list(t1, t2), by = "key") |> dplyr::collect(),
-                    t_ref |> dplyr::collect())
+                     t_ref |> dplyr::collect())
 
     expect_mapequal(interlace_sql(list(t1, t2), by = "key") |> dplyr::collect(),
                     interlace_sql(list(t2, t1), by = "key") |> dplyr::collect())
@@ -118,11 +121,11 @@ test_that("digest_to_checksum() works", {
 
     # Check that col argument works
     expect_equal(mtcars |> digest_to_checksum(col = "checky") |> dplyr::pull("checky"),
-                mtcars |> digest_to_checksum()               |> dplyr::pull("checksum"))
+                 mtcars |> digest_to_checksum()               |> dplyr::pull("checksum"))
 
 
     expect_equal(mtcars |> dplyr::mutate(name = rownames(mtcars)) |> digest_to_checksum() |> colnames(),
-                get_table(conn, "__mtcars") |> digest_to_checksum() |> colnames())
+                 get_table(conn, "__mtcars") |> digest_to_checksum() |> colnames())
 
 
     # Check that NA's generate unique checksums
@@ -135,7 +138,8 @@ test_that("digest_to_checksum() works", {
 
     # .. and on the remote
     x <- suppressMessages(
-      dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE))
+      dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+    )
 
     checksums <- x |> digest_to_checksum() |> dplyr::pull("checksum")
     expect_false(checksums[1] == checksums[2])
@@ -153,9 +157,9 @@ test_that("digest_to_checksum() warns works correctly when overwriting", {
       dplyr::pull(checksum)
 
     expect_warning(checksum_vector2 <- mtcars |>
-                    digest_to_checksum(col = "checksum") |>
-                    digest_to_checksum(col = "checksum", warn = TRUE) |>
-                    dplyr::pull(checksum))
+                     digest_to_checksum(col = "checksum") |>
+                     digest_to_checksum(col = "checksum", warn = TRUE) |>
+                     dplyr::pull(checksum))
 
     expect_identical(checksum_vector, checksum_vector2)
 
@@ -187,23 +191,23 @@ test_that("filter_keys() works", {
     x <- get_table(conn, "__mtcars")
 
     expect_equal(x,
-                x |> filter_keys(NULL))
+                 x |> filter_keys(NULL))
 
     filter <- x |> utils::head(10) |> dplyr::select(name)
     expect_equal(x |>
-                  dplyr::filter(name %in% !!dplyr::pull(filter, name)) |>
-                  dplyr::collect(),
-                x |>
-                  filter_keys(filter) |>
-                  dplyr::collect())
+                   dplyr::filter(name %in% !!dplyr::pull(filter, name)) |>
+                   dplyr::collect(),
+                 x |>
+                   filter_keys(filter) |>
+                   dplyr::collect())
 
     filter <- x |> utils::head(10) |> dplyr::select(vs, am) |> dplyr::distinct()
     expect_equal(x |>
-                  dplyr::inner_join(filter, by = c("vs", "am")) |>
-                  dplyr::collect(),
-                x |>
-                  filter_keys(filter) |>
-                  dplyr::collect())
+                   dplyr::inner_join(filter, by = c("vs", "am")) |>
+                   dplyr::collect(),
+                 x |>
+                   filter_keys(filter) |>
+                   dplyr::collect())
 
     # Filtering with null means no filtering is done
     m <- mtcars
