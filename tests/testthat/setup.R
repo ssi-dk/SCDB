@@ -120,7 +120,7 @@ for (conn_id in seq_along(conns)) {
   conn <- conns[[conn_id]]
 
   # Ensure connections are valid
-  if (!DBI::dbIsValid(conn)) {
+  if (is.null(conn) || !DBI::dbIsValid(conn)) {
     coll$push(glue::glue("Connection could not be made to backend ({names(conns)[[conn_id]]})."))
   }
 
