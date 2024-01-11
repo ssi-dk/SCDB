@@ -68,7 +68,7 @@ test_that("Logger works", {
                          log_table_id = "test.SCDB_logs",
                          log_conn = conn,
                          warn = FALSE)
-    log_table_id <- dplyr::tbl(conn, id("test.SCDB_logs", conn))
+    log_table_id <- dplyr::tbl(conn, id("test.SCDB_logs", conn), check_from = FALSE)
     expect_equal(logger$log_tbl, log_table_id)
     logger$log_to_db(n_insertions = 42)
     expect_equal(nrow(log_table_id), 1)
