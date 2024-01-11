@@ -70,11 +70,8 @@ get_connection <- function(drv = RPostgres::Postgres(),
   args <- args[match(unique(names(args)), names(args))]
 
   # Check if connection can be established given these settings
-  tryCatch({
-    status <- do.call(DBI::dbCanConnect, args = args)
-
-    if (!status) rlang::abort(attr(status, "reason"))
-  })
+  status <- do.call(DBI::dbCanConnect, args = args)
+  if (!status) rlang::abort(attr(status, "reason"))
 
   conn <- do.call(DBI::dbConnect, args = args)
 
