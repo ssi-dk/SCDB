@@ -363,13 +363,6 @@ table_exists <- function(conn, db_table_id) {
     return(exists)
   }
 
-  db_table_id <- id(db_table_id, conn = conn)
-
-  # Add default schema if none could be found
-  if (!is.null(conn) && !"schema" %in% names(db_table_id@name)) {
-    db_table_id@name["schema"] <- get_schema(conn)
-  }
-
   UseMethod("table_exists", conn)
 }
 
@@ -414,8 +407,6 @@ table_exists.SQLiteConnection <- function(conn, db_table_id) {
 #' @export
 table_exists.DBIConnection <- function(conn, db_table_id) {
   assert_id_like(db_table_id)
-
-  db_table_id <- id(db_table_id, conn = conn)
 
   if (inherits(db_table_id, "Id")) {
     db_name <- attr(db_table_id, "name")
