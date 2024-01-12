@@ -218,6 +218,7 @@ test_that("Logger sets log_file to NULL in DB if not writing to file", {
     logger$finalize()
 
     gc()
+    DBI::dbDisconnect(conn)
   }
 })
 
@@ -234,5 +235,6 @@ test_that("Logger$finalize handles log table is at some point deleted", {
     expect_no_error(logger$finalize())
 
     gc()
+    DBI::dbDisconnect(conn)
   }
 })

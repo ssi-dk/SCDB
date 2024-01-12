@@ -133,6 +133,8 @@ for (conn_id in seq_along(conns)) {
   if (!schema_exists(conn, "test.one") && names(conns)[conn_id] != "SQLite") {
     coll$push(glue::glue("Tests require the schema 'test.one' to exist in connection ({names(conns)[[conn_id]]})."))
   }
+
+  DBI::dbDisconnect(conn)
 }
 checkmate::reportAssertions(coll)
 
@@ -168,8 +170,6 @@ for (conn in get_test_conns()) {
                                  until_ts = as.POSIXct(NA)),
                  name = id("__mtcars_historical", conn), temporary = FALSE, overwrite = TRUE)
 
-
-  # Disconnect
   DBI::dbDisconnect(conn)
 }
 
