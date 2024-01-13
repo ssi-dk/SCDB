@@ -49,7 +49,7 @@ Suggests:
     testthat (>= 3.0.0),
     tibble
 Language: en-US
-URL: https://github.com/ssi-dk/SCDB
+URL: https://github.com/ssi-dk/SCDB, https://ssi-dk.github.io/SCDB/
 Config/testthat/edition: 3
 BugReports: https://github.com/ssi-dk/SCDB/issues
 VignetteBuilder: knitr
