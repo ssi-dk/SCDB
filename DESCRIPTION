@@ -44,7 +44,6 @@ Suggests:
     odbc,
     rmarkdown,
     RPostgres,
-    roxygen2,
     spelling,
     testthat (>= 3.0.0),
     tibble
