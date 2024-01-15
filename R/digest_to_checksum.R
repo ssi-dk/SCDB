@@ -46,6 +46,7 @@ digest_to_checksum_internal <- function(.data, col) {
   UseMethod("digest_to_checksum_internal")
 }
 
+#' @noRd
 digest_to_checksum_internal.default <- function(.data, col) {
 
   # Compute checksums locally then join back onto original data
@@ -71,6 +72,7 @@ digest_to_checksum_internal.default <- function(.data, col) {
 md5 <- openssl::md5
 
 # Some backends have native md5 support, these use this function
+#' @noRd
 digest_to_checksum_native_md5 <- function(.data, col) {
 
   .data <- .data |>

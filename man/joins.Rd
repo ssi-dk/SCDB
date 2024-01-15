@@ -10,17 +10,17 @@
 \alias{anti_join.tbl_sql}
 \title{SQL Joins}
 \usage{
-inner_join.tbl_sql(x, y, by = NULL, ...)
+\method{inner_join}{tbl_sql}(x, y, by = NULL, ...)
 
-left_join.tbl_sql(x, y, by = NULL, ...)
+\method{left_join}{tbl_sql}(x, y, by = NULL, ...)
 
-right_join.tbl_sql(x, y, by = NULL, ...)
+\method{right_join}{tbl_sql}(x, y, by = NULL, ...)
 
-full_join.tbl_sql(x, y, by = NULL, ...)
+\method{full_join}{tbl_sql}(x, y, by = NULL, ...)
 
-semi_join.tbl_sql(x, y, by = NULL, ...)
+\method{semi_join}{tbl_sql}(x, y, by = NULL, ...)
 
-anti_join.tbl_sql(x, y, by = NULL, ...)
+\method{anti_join}{tbl_sql}(x, y, by = NULL, ...)
 }
 \arguments{
 \item{x, y}{A pair of lazy data frames backed by database queries.}
