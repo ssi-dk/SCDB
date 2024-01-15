@@ -10,7 +10,6 @@
 #' digest_to_checksum(mtcars)
 #'
 #' @return .data with an checksum column added
-#' @importFrom rlang `:=`
 #' @export
 digest_to_checksum <- function(.data, col = "checksum", exclude = NULL, warn = TRUE) {
 
@@ -47,7 +46,6 @@ digest_to_checksum_internal <- function(.data, col) {
   UseMethod("digest_to_checksum_internal")
 }
 
-#' @importFrom rlang `:=` .data
 digest_to_checksum_internal.default <- function(.data, col) {
 
   # Compute checksums locally then join back onto original data
@@ -73,7 +71,6 @@ digest_to_checksum_internal.default <- function(.data, col) {
 md5 <- openssl::md5
 
 # Some backends have native md5 support, these use this function
-#' @importFrom rlang `:=`
 digest_to_checksum_native_md5 <- function(.data, col) {
 
   .data <- .data |>
