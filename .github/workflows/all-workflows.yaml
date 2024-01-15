@@ -1,0 +1,37 @@
+on: [push, pull_request, release, workflow_dispatch]
+
+name: CI tests
+jobs:
+
+  context:
+    name: ⚙️ Context
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: $
+    outputs:
+      abort: $
+    steps:
+      - name: Detect PR on current branch
+        if: github.event_name == 'push'
+        id: pr_detect
+        run: |
+          pr_branches=$(gh pr list --json headRefName --repo $GITHUB_REPOSITORY)
+          if [[ $(echo "$pr_branches" | jq -r --arg GITHUB_REF_NAME $GITHUB_REF_NAME '.[].headRefName | select(. == $GITHUB_REF_NAME)') ]]; then
+            echo "This push is associated with a pull request. Skipping the job."
+            echo "abort=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  # We call the reusable workflow that triggers all AEF-DDF workflows
+  run-all-AEF-DFF-workflows:
+    name: ⚙️ Dispatch
+    needs: context
+    if: needs.context.outputs.abort != 'true' || contains('main,master', github.ref_name)
+    uses: ssi-dk/AEF-DDF/.github/workflows/workflow-dispatcher.yaml@main
+    with:
+      # We pass information about the triggering event
+      event_name: $
+      run_id: $
+
+      # code-coverage creates data bases for the tests. Here you can specify the schemas you need for the workflow
+      schemas: test,test.one
+    secrets: inherit
