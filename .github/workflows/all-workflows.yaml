@@ -26,7 +26,7 @@ jobs:
     name: ⚙️ Dispatch
     needs: context
     if: needs.context.outputs.abort != 'true' || github.ref_name == 'main'
-    uses: ssi-dk/AEF-DDF/.github/workflows/workflow-dispatcher.yaml@feature/mssql_code_coverage
+    uses: ssi-dk/AEF-DDF/.github/workflows/workflow-dispatcher.yaml@main
     with:
       # We pass information about the triggering event
       event_name: ${{ github.event_name }}
