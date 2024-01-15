@@ -1,3 +1,5 @@
+# SCDB (development version)
+
 # SCDB 0.3
 
 * Added support for Microsoft SQL Server using ODBC (#77).
