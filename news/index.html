@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">SCDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,25 @@
       <small>Source: <a href="https://github.com/ssi-dk/SCDB/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3" id="scdb-03">SCDB 0.3<a class="anchor" aria-label="anchor" href="#scdb-03"></a></h2><p class="text-muted">CRAN release: 2024-01-13</p>
+<ul><li>Added support for Microsoft SQL Server using ODBC (<a href="https://github.com/ssi-dk/SCDB/issues/77" class="external-link">#77</a>).</li>
+</ul><div class="section level3">
+<h3 id="minor-improvements-and-fixes-0-3">Minor Improvements and Fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-fixes-0-3"></a></h3>
+<ul><li><p>Implementation of <code>*_join</code>s improved, now extending <code>dplyr::*_join</code>s rather than masking them (<a href="https://github.com/ssi-dk/SCDB/issues/77" class="external-link">#77</a>).</p></li>
+<li>
+<p>Added S3 method for <code>id.tbl_dbi</code>, returning a <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">DBI::Id()</a></code> instance matching the table (<a href="https://github.com/ssi-dk/SCDB/issues/72" class="external-link">#72</a>).</p>
+<ul><li>Calling <code>id</code> on a <code>tbl_dbi</code> thus allows to retrieve a <code>schema</code> even when not initially given.</li>
+</ul></li>
+<li><p>Fixed <code><a href="../reference/update_snapshot.html">update_snapshot()</a></code> not working with a <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">DBI::Id()</a></code> instance as <code>db_table</code> argument (<a href="https://github.com/ssi-dk/SCDB/issues/72" class="external-link">#72</a>).</p></li>
+<li><p>Suppressed recurring messages from dbplyr &gt;= 2.4.0 about table names containing <code>.</code>.</p></li>
+<li><p>Added <code>show_temp</code> option to <code><a href="../reference/get_tables.html">get_tables()</a></code> to allow retrieving temporary tables.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-news-0-3">Other news<a class="anchor" aria-label="anchor" href="#other-news-0-3"></a></h3>
+<ul><li>Maintainer changed to Rasmus Skytte Randløv (<a href="https://github.com/RasmusSkytte" class="external-link">@RasmusSkytte</a>).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="scdb-021">SCDB 0.2.1<a class="anchor" aria-label="anchor" href="#scdb-021"></a></h2><p class="text-muted">CRAN release: 2023-11-30</p>
 <div class="section level3">
@@ -165,7 +184,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Rasmus Skytte Randløv, Marcus Munch Grünewald.</p>
+  <p></p><p>Developed by Rasmus Skytte Randløv, Marcus Munch Grünewald, Statens Serum Institut.</p>
 </div>
 
 <div class="pkgdown-footer-right">

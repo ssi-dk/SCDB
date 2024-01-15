@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">SCDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,11 @@ If set TRUE, the history columns "checksum", "from_ts", "until_ts" are returned 
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A "lazy" dataframe (tbl_lazy) generated using dbplyr</p>
+<p>A "lazy" dataframe (tbl_lazy) generated using dbplyr.</p>
+
+
+<p>Note that a temporary table will be preferred over ordinary tables in the default schema (see <code><a href="get_schema.html">get_schema()</a></code>) with
+an identical name.</p>
     </div>
 
     <div class="section level2">
@@ -97,26 +101,11 @@ If set TRUE, the history columns "checksum", "from_ts", "until_ts" are returned 
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">get_table</span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Select one of the following tables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   schema  table</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   &lt;NA&gt; mtcars</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] schema table </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;0 rows&gt; (or 0-length row.names)</span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="table_exists.html">table_exists</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"mtcars"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="fu">get_table</span><span class="op">(</span><span class="va">conn</span>, <span class="st">"mtcars"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:   table&lt;mtcars&gt; [?? x 11]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: sqlite 3.43.2 []</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>  21       6  160    110  3.9   2.62  16.5     0     1     4     4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>  21       6  160    110  3.9   2.88  17.0     0     1     4     4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>  18.1     6  225    105  2.76  3.46  20.2     1     0     3     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>  24.4     4  147.    62  3.69  3.19  20       1     0     4     2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ more rows</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="close_connection.html">close_connection</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span></span>
 </code></pre></div>
@@ -126,7 +115,7 @@ If set TRUE, the history columns "checksum", "from_ts", "until_ts" are returned 
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Rasmus Skytte Randløv, Marcus Munch Grünewald.</p>
+  <p></p><p>Developed by Rasmus Skytte Randløv, Marcus Munch Grünewald, Statens Serum Institut.</p>
 </div>
 
 <div class="pkgdown-footer-right">

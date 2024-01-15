@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">SCDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,7 @@
 
 
 <dt>db_table</dt>
-<dd><p>Either a dplyr connection to target table or a specification of 'schema.table'</p></dd>
+<dd><p>An object that inherits from <code>tbl_dbi</code>, a <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">DBI::Id()</a></code> object or a character string readable by <a href="id.html">id</a>.</p></dd>
 
 
 <dt>timestamp</dt>
@@ -131,30 +131,18 @@
 <span class="r-in"><span>                conn <span class="op">=</span> <span class="va">conn</span>,</span></span>
 <span class="r-in"><span>                db_table <span class="op">=</span> <span class="st">"test.mtcars"</span>,</span></span>
 <span class="r-in"><span>                timestamp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> It looks like you tried to incorrectly use a table in a schema as source.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> If you want to specify a schema use `in_schema()` or `in_catalog()`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> If your table actually contains <span style="color: #0000BB;">"."</span> in the name use `check_from = FALSE` to</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   silence this message.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>log_path and log_table_id are both NULL and therefore NO LOGGING WILL BE DONE.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-11-30 11:46:53,366 - runner - INFO - Started</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-11-30 11:46:53,366 - runner - INFO - Parsing data for table test.mtcars started</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-11-30 11:46:53,366 - runner - INFO - Given timestamp for table is 2023-11-30 11:46:53.366019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-11-30 11:46:53,853 - runner - INFO - Deactivating records</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-11-30 11:46:53,854 - runner - INFO - After to_remove</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-11-30 11:46:53,956 - runner - INFO - After to_add</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-11-30 11:46:53,957 - runner - INFO - Deactivate records count: 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-11-30 11:46:53,957 - runner - INFO - Adding new records</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> It looks like you tried to incorrectly use a table in a schema as source.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> If you want to specify a schema use `in_schema()` or `in_catalog()`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> If your table actually contains <span style="color: #0000BB;">"."</span> in the name use `check_from = FALSE` to</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   silence this message.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-11-30 11:46:54,036 - runner - INFO - Insert records count: 32</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> It looks like you tried to incorrectly use a table in a schema as source.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> If you want to specify a schema use `in_schema()` or `in_catalog()`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> If your table actually contains <span style="color: #0000BB;">"."</span> in the name use `check_from = FALSE` to</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   silence this message.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2023-11-30 11:46:54,121 - runner - INFO - Finished processing for table test.mtcars</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-01-15 09:42:52,502 - runner - INFO - Started</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-01-15 09:42:52,502 - runner - INFO - Parsing data for table test.mtcars started</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-01-15 09:42:52,502 - runner - INFO - Given timestamp for table is 2024-01-15 09:42:52.501927</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-01-15 09:42:53,036 - runner - INFO - Deactivating records</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-01-15 09:42:53,037 - runner - INFO - After to_remove</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-01-15 09:42:53,138 - runner - INFO - After to_add</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-01-15 09:42:53,139 - runner - INFO - Deactivate records count: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-01-15 09:42:53,139 - runner - INFO - Adding new records</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-01-15 09:42:53,201 - runner - INFO - Insert records count: 32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2024-01-15 09:42:53,274 - runner - INFO - Finished processing for table test.mtcars</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="close_connection.html">close_connection</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span></span>
@@ -165,7 +153,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Rasmus Skytte Randløv, Marcus Munch Grünewald.</p>
+  <p></p><p>Developed by Rasmus Skytte Randløv, Marcus Munch Grünewald, Statens Serum Institut.</p>
 </div>
 
 <div class="pkgdown-footer-right">
