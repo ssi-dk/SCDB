@@ -84,6 +84,7 @@ filter_keys.data.frame <- function(.data, filters, by = NULL, na_by = NULL) {
 #'   unite("xy", x:y) %>%
 #'   separate(xy, c("x", "y"))
 # (but note `x` and `y` contain now "NA" not NA)
+#' @importFrom rlang :=
 #' @return A tbl_dbi with the specified columns united into a new column named according to "col"
 #' @exportS3Method tidyr::unite tbl_dbi
 unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALSE) { # nolint: object_name_linter
