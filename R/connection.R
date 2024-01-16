@@ -56,8 +56,8 @@ get_connection <- function(drv = RPostgres::Postgres(),
   checkmate::assert_character(dbname,   null.ok = TRUE)
   checkmate::assert_character(user,     null.ok = TRUE)
   checkmate::assert_character(password, null.ok = TRUE)
-  checkmate::assert_subset(timezone, OlsonNames(), empty.ok = TRUE)
-  checkmate::assert_subset(timezone_out, OlsonNames(), empty.ok = TRUE)
+  checkmate::assert_choice(timezone, OlsonNames(), empty.ok = TRUE)
+  checkmate::assert_choice(timezone_out, OlsonNames(), empty.ok = TRUE)
 
   # Set PostgreSQL-specific options
   if (inherits(drv, "PqDriver")) {
