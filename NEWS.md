@@ -1,5 +1,14 @@
 # SCDB (development version)
 
+## Minor Improvements and Fixes
+
+* Improved checks on `get_connection()`:
+  - If given, `host` does not need to look like an IP address (e.g. "localhost" is not unrealistic).
+  - A `character` input for `port` is allowed if it is a string of digits.
+  - Now checks if `timezone` and `timezone_out` is an IANA time zone.
+
+* `get_connection()` now checks the value of any `timezone` and `timezone_out` arguments.
+
 # SCDB 0.3
 
 * Added support for Microsoft SQL Server using ODBC (#77).

@@ -8,7 +8,7 @@
 #' @param host
 #'   Character string giving the ip of the host to connect to
 #' @param port
-#'   Host port to connect to (numeric)
+#'   Host port to connect to. Must be a number or a numeric string.
 #' @param dbname
 #'   Name of the database located at the host
 #' @param user
@@ -16,9 +16,9 @@
 #' @param password
 #'   Password to login with
 #' @param timezone
-#'   Sets the timezone of DBI::dbConnect()
+#'   Sets the timezone of DBI::dbConnect(). Must be in [OlsonNames()].
 #' @param timezone_out
-#'   Sets the timezone_out of DBI::dbConnect()
+#'   Sets the timezone_out of DBI::dbConnect(). Must be in [OlsonNames()].
 #' @param ...
 #'  Additional parameters sent to DBI::dbConnect()
 #' @inheritParams RPostgres::dbConnect_PqDriver
@@ -47,13 +47,17 @@ get_connection <- function(drv = RPostgres::Postgres(),
                            check_interrupts = TRUE) {
 
   # Check arguments
-  checkmate::assert_character(host, pattern = r"{^\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}$}", null.ok = TRUE)
+  checkmate::assert_character(host, null.ok = TRUE)
+  if (is.character(port)) {
+    checkmate::assert_character(port, pattern = "^[:digit:]*$")
+    port <- as.numeric(port) # nocov
+  }
   checkmate::assert_numeric(port, null.ok = TRUE)
   checkmate::assert_character(dbname,   null.ok = TRUE)
   checkmate::assert_character(user,     null.ok = TRUE)
   checkmate::assert_character(password, null.ok = TRUE)
-  checkmate::assert_character(timezone, null.ok = TRUE)
-  checkmate::assert_character(timezone_out, null.ok = TRUE)
+  checkmate::assert_choice(timezone, OlsonNames(), null.ok = TRUE)
+  checkmate::assert_choice(timezone_out, OlsonNames(), null.ok = TRUE)
 
   # Set PostgreSQL-specific options
   if (inherits(drv, "PqDriver")) {
