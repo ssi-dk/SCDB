@@ -23,7 +23,7 @@ get_connection(
 
 \item{host}{Character string giving the ip of the host to connect to}
 
-\item{port}{Host port to connect to (numeric)}
+\item{port}{Host port to connect to. Must be a number or a numeric string.}
 
 \item{dbname}{Name of the database located at the host}
 
