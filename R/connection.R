@@ -16,9 +16,9 @@
 #' @param password
 #'   Password to login with
 #' @param timezone
-#'   Sets the timezone of DBI::dbConnect()
+#'   Sets the timezone of DBI::dbConnect(). Must be in [OlsonNames()].
 #' @param timezone_out
-#'   Sets the timezone_out of DBI::dbConnect()
+#'   Sets the timezone_out of DBI::dbConnect(). Must be in [OlsonNames()].
 #' @param ...
 #'  Additional parameters sent to DBI::dbConnect()
 #' @inheritParams RPostgres::dbConnect_PqDriver
@@ -56,8 +56,8 @@ get_connection <- function(drv = RPostgres::Postgres(),
   checkmate::assert_character(dbname,   null.ok = TRUE)
   checkmate::assert_character(user,     null.ok = TRUE)
   checkmate::assert_character(password, null.ok = TRUE)
-  checkmate::assert_character(timezone, null.ok = TRUE)
-  checkmate::assert_character(timezone_out, null.ok = TRUE)
+  checkmate::assert_subset(timezone, OlsonNames(), empty.ok = TRUE)
+  checkmate::assert_subset(timezone_out, OlsonNames(), empty.ok = TRUE)
 
   # Set PostgreSQL-specific options
   if (inherits(drv, "PqDriver")) {

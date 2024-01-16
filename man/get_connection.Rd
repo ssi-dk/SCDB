@@ -31,9 +31,9 @@ get_connection(
 
 \item{password}{Password to login with}
 
-\item{timezone}{Sets the timezone of DBI::dbConnect()}
+\item{timezone}{Sets the timezone of DBI::dbConnect(). Must be in \code{\link[=OlsonNames]{OlsonNames()}}.}
 
-\item{timezone_out}{Sets the timezone_out of DBI::dbConnect()}
+\item{timezone_out}{Sets the timezone_out of DBI::dbConnect(). Must be in \code{\link[=OlsonNames]{OlsonNames()}}.}
 
 \item{...}{Additional parameters sent to DBI::dbConnect()}
 
