@@ -14,6 +14,7 @@ A collection of functions that enable easy access and updating of a database of 
 Useful links:
 \itemize{
   \item \url{https://github.com/ssi-dk/SCDB}
+  \item \url{https://ssi-dk.github.io/SCDB/}
   \item Report bugs at \url{https://github.com/ssi-dk/SCDB/issues}
 }
 
