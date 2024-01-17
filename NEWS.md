@@ -9,6 +9,8 @@
 
 * `get_connection()` now checks the value of any `timezone` and `timezone_out` arguments.
 
+* `table_exists()` now correctly gives ambiguity warning on Microsoft SQL Server and PostgreSQL backends (#80).
+
 # SCDB 0.3
 
 * Added support for Microsoft SQL Server using ODBC (#77).
