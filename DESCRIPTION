@@ -43,6 +43,7 @@ Suggests:
     knitr,
     odbc,
     rmarkdown,
+    roxygen2,
     RPostgres,
     spelling,
     testthat (>= 3.0.0),
