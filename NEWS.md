@@ -2,7 +2,7 @@
 
 ## Minor Improvements and Fixes
 
-* Improved checks on `get_connection()`:
+* Improved checks on `get_connection()` (#83):
   - If given, `host` does not need to look like an IP address (e.g. "localhost" is not unrealistic).
   - A `character` input for `port` is allowed if it is a string of digits.
   - Now checks if `timezone` and `timezone_out` is an IANA time zone.
