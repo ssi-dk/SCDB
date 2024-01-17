@@ -5,9 +5,10 @@ name: License Report
 
 on:
   push:
-    branches: [rc-*]
+    branches: [main, rc-*]
   pull_request:
-    branches: [rc-*]
+    branches: [main, rc-*]
+    workflow_call:
 
 jobs:
   license-report:
