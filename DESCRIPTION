@@ -47,7 +47,8 @@ Suggests:
     roxygen2,
     spelling,
     testthat (>= 3.0.0),
-    tibble
+    tibble,
+    withr
 Language: en-US
 URL: https://github.com/ssi-dk/SCDB
 Config/testthat/edition: 3
