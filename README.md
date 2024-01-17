@@ -7,7 +7,8 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/SCDB)](https://CRAN.R-project.org/package=SCDB)
-[![R-CMD-check](https://github.com/ssi-dk/SCDB/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ssi-dk/SCDB/actions/workflows/R-CMD-check.yaml)
+[![CI
+tests](https://github.com/ssi-dk/SCDB/actions/workflows/all-workflows.yaml/badge.svg)](https://github.com/ssi-dk/SCDB/actions/workflows/all-workflows.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/ssi-dk/SCDB/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ssi-dk/SCDB?branch=main)
 
