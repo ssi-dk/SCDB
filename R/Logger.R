@@ -168,12 +168,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
           temporary = TRUE,
           overwrite = FALSE
         )
-
-      on.exit({
-        if (DBI::dbIsValid(private$log_conn) && table_exists(conn = private$log_conn, patch)) {
-          DBI::dbRemoveTable(private$log_conn, id(patch, conn = private$log_conn, allow_table_only = FALSE))
-        }
-      })
+      defer_db_cleanup(patch) # Clean up on exit
 
       # Mutating after copying ensures consistency in SQL translation
       dplyr::rows_patch(
