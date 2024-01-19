@@ -18,7 +18,7 @@ get_test_conns <- function() {
 
     # Define our local connection backends
     conn_list <- list(
-      # Backend string = package::function
+      # Backend string = list(named args)
       "SQLite"              = "RSQLite::SQLite",
       "SQLite - w. schemas" = "RSQLite::SQLite"
     )
