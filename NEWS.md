@@ -30,11 +30,16 @@
 
 * The `%notin%` operator has been removed from the package
 
-## Features
+## New features
 
 * The S3 method `as.character.Id()` is added which converts `DBI::Id()` to `character` (#93).
 
 * A new `get_catalog()` function is added to give more specific table identification (#99).
+
+* A new clean up function, `defer_db_cleanup()`, is added (#89).
+
+  By passing a `tbl_sql` object to this function, the corresponding table will be deleted once
+  the parent function exits.
 
 ## Improvements and Fixes
 
@@ -59,6 +64,8 @@
 * `id()` now includes information of catalog in more cases (#99).
 
 * Fixed dplyr joins failing if `testthat` is not installed (#90).
+
+* The footprint of `update_snapshot()` is reduced by cleaning up intermediate tables with `defer_db_cleanup()` (#89)
 
 ## Testing
 

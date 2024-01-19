@@ -46,6 +46,41 @@ is.historical <- function(.data) { # nolint: object_name_linter
 }
 
 
+#' Delete table at function exit
+#' @description
+#'   This function marks a table for deletion once the current function exits.
+#' @param tbl_sql A "bare" reference to a sql table
+#' @examples
+#' conn <- get_connection(drv = RSQLite::SQLite())
+#'
+#' mt <- dplyr::copy_to(conn, mtcars)
+#'
+#' defer_db_cleanup(mt)
+#'
+#' DBI::dbExistsTable(conn, id(mt)) # TRUE
+#'
+#' withr::deferred_run()
+#'
+#' DBI::dbExistsTable(conn, id(mt)) # FALSE
+#'
+#' close_connection(conn)
+#' @return NULL (called for side effects)
+#' @export
+defer_db_cleanup <- function(tbl_sql) {
+
+  # Determine table info
+  conn <- dbplyr::remote_con(tbl_sql)
+  db_table_id <- id(tbl_sql)
+
+  # Remove table on exit
+  withr::defer_parent(
+    if (DBI::dbIsValid(conn) && DBI::dbExistsTable(conn, db_table_id)) {
+      DBI::dbRemoveTable(conn, db_table_id)
+    }
+  )
+}
+
+
 #' checkmate helper: Assert "generic" data.table/data.frame/tbl/tibble type
 #' @param .data Object to test if is data.table, data.frame, tbl or tibble
 #' @param ...   Parameters passed to checkmate::check_*
