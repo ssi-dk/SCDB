@@ -56,6 +56,11 @@ get_test_conns <- function() {
 
   }
 
+  # Early return if no connections are defined
+  if (length(conn_list) == 0) {
+    return(list())
+  }
+
   # Parse any conn_args stored in CONN_ARGS_JSON
   conn_args_json <- jsonlite::fromJSON(Sys.getenv("CONN_ARGS_JSON", unset = "{}"))
 
