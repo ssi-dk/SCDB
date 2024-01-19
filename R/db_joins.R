@@ -92,7 +92,7 @@ select_na_sql <- function(x, y, by, na_by, left = TRUE) {
 #' @return A warning that *_joins on SQL backends does not match NA by default
 #' @noRd
 join_warn <- function() {
-  if (testthat::is_testing() || !interactive()) return()
+  if (requireNamespace("testthat", quietly = TRUE) && testthat::is_testing() || !interactive()) return()
   if (identical(parent.frame(n = 2), globalenv())) {
     rlang::warn(paste("*_joins in database-backend does not match NA by default.\n",
                       "If your data contains NA, the columns with NA values must be supplied to \"na_by\",",
@@ -106,7 +106,7 @@ join_warn <- function() {
 #' @return A warning that *_joins are still experimental
 #' @noRd
 join_warn_experimental <- function() {
-  if (testthat::is_testing() || !interactive()) return()
+  if (requireNamespace("testthat", quietly = TRUE) && testthat::is_testing() || !interactive()) return()
   if (identical(parent.frame(n = 2), globalenv())) {
     rlang::warn("*_joins with na_by is stil experimental. Please report issues to rassky",
                 .frequency = "once", .frequency_id = "*_join NA warning")

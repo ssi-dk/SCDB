@@ -11,6 +11,8 @@
 
 * `table_exists()` now correctly gives ambiguity warning on Microsoft SQL Server and PostgreSQL backends (#80).
 
+* Fixed dplyr joins failing if `testthat` is not installed.
+
 # SCDB 0.3
 
 * Added support for Microsoft SQL Server using ODBC (#77).
