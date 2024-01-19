@@ -121,19 +121,30 @@ close_connection <- function(conn) {
 #' @param allow_table_only
 #'  logical. If `TRUE`, allows for returning an `DBI::Id` with `table` = `myschema.table` if schema `myschema`
 #'  is not found in `conn`.
-#' @details The given db_table_id is parsed using an assumption of "schema.table" syntax into
-#'  a DBI::Id object with corresponding schema (if the conn supports it) and table values.
-#' @return A DBI::Id object parsed from db_table_id
+#'  If `FALSE`, the function will raise an error if the implied schema cannot be found in `conn`
+#' @details The given `db_table_id` is parsed to a DBI::Id depending on the type of input:
+#'  * `character`: db_table_id is parsed to a DBI::Id object using an assumption of "schema.table" syntax
+#'     with corresponding schema (if found in `conn`) and table values.
+#'     If no schema is implied, the default schema of `conn` will be used.
+#'
+#'  * `DBI::Id`: if schema is not specified in `Id`, the schema is set to the default schema for `conn` (if given).
+#'
+#'  * `tbl_sql`: the remote name is used to resolve the table identification.
+#'
+#' @return A DBI::Id object parsed from db_table_id (see details)
 #' @examples
 #' id("schema.table")
 #' @seealso [DBI::Id] which this function wraps.
 #' @export
 id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
   if (inherits(db_table_id, "Id")) {
-    return(db_table_id)
+    return(DBI::Id(schema = purrr::pluck(db_table_id, "name", "schema", .default = SCDB::get_schema(conn)),
+                   table = purrr::pluck(db_table_id, "name", "table")))
   }
 
-  if (!allow_table_only) checkmate::check_class(conn, "DBIConnection")
+  if (!allow_table_only && !checkmate::test_class(conn, "DBIConnection") && !DBI::dbIsValid(conn)) {
+    stop("When allow_table_only is FALSE, a valid `conn` must be supplied!")
+  }
 
   UseMethod("id")
 }
@@ -147,11 +158,11 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
     db_table  <- db_name[2]
 
     # If no matching implied schema is found, return the unmodified db_table_id
-    if (allow_table_only && !is.null(conn) && !schema_exists(conn, db_schema)) {
-      return(DBI::Id(table = db_table_id))
+    if (allow_table_only && !schema_exists(conn, db_schema)) {
+      return(DBI::Id(schema = get_schema(conn), table = db_table_id))
     }
   } else {
-    db_schema <- NULL
+    db_schema <- get_schema(conn)
     db_table <- db_table_id
   }
 

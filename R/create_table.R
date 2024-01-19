@@ -24,9 +24,6 @@ create_table <- function(.data, conn = NULL, db_table_id, temporary = TRUE, ...)
   # Assert unique column names (may cause unexpected getTableSignature results)
   checkmate::assert_character(names(.data), unique = TRUE)
 
-  # Convert db_table_id to id (id() returns early if this is the case)
-  db_table_id <- id(db_table_id, conn = conn)
-
   if (is.historical(.data)) {
     stop("checksum/from_ts/until_ts column(s) already exist(s) in .data!")
   }
@@ -42,7 +39,15 @@ create_table <- function(.data, conn = NULL, db_table_id, temporary = TRUE, ...)
   if (is.null(conn)) return(invisible(.data))
 
   # Create the table on the remote and return the table
-  stopifnot("Table already exists!" = !table_exists(conn, db_table_id))
+  if (!temporary) {
+    # Convert db_table_id to id if not already
+    db_table_id <- id(db_table_id, conn = conn)
+
+    if (table_exists(conn, db_table_id)) {
+      rlang::abort(glue::glue("Table {capture.output(print(db_table_id))} already exists!"))
+    }
+  }
+
   DBI::dbCreateTable(conn = conn,
                      name = db_table_id,
                      fields = getTableSignature(.data = .data, conn = conn),

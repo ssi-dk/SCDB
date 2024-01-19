@@ -29,7 +29,7 @@ nrow <- function(.data) {
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' dplyr::copy_to(conn, mtcars, name = id("mtcars", conn))
+#' dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
 #' create_table(mtcars, conn, db_table_id = id("mtcars_historical", conn))
 #'
 #' is.historical(get_table(conn, "mtcars")) # FALSE

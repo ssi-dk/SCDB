@@ -30,7 +30,7 @@ m <- mtcars |>
                                          as.Date("2021-01-01")),
                 until_ts = as.Date(NA))
 
-dplyr::copy_to(conn, m, name = "mtcars")
+dplyr::copy_to(conn, m, name = "mtcars", temporary = FALSE)
 
 q <- dplyr::tbl(conn, id("mtcars", conn))
 

@@ -1,5 +1,14 @@
 # SCDB (development version)
 
+## BREAKING CHANGES:
+
+* Table identification is now more specific:
+  Most SCDB functions allow for tables to be specified by a character representation of "schema.table".
+  Before, if no schema was implied in this context, SCDB would attempt to match the table among both
+  permanent and temporary tables.
+  Now, it will always assume that a lack of schema means the default schema should be used.
+  This is also the case if `DBI::Id()` is used without a schema specification.
+
 ## Minor Improvements and Fixes
 
 * Improved checks on `get_connection()` (#83):

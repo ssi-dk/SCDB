@@ -17,7 +17,7 @@
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' dplyr::copy_to(conn, mtcars, name = "mtcars")
+#' dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
 #'
 #' get_table(conn)
 #' if (table_exists(conn, "mtcars")) {
@@ -41,14 +41,12 @@ get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_inf
     return(get_tables(conn))
   }
 
-  if (is.character(db_table_id)) db_table_id <- id(db_table_id, conn = conn)
+  # Ensure id is fully qualified
+  db_table_id <- id(db_table_id, conn = conn)
 
   # Ensure existence of table
   if (!table_exists(conn, db_table_id)) {
-    db_table_name_str <- paste(c(purrr::pluck(db_table_id, "name", "schema"),
-                                 purrr::pluck(db_table_id, "name", "table")),
-                               collapse = ".")
-    stop(glue::glue("Table {db_table_name_str} is not found!"))
+    rlang::abort(glue::glue("Table {capture.output(print(db_table_id))} could not be found!"))
   }
 
   # Look-up table in DB
@@ -90,7 +88,8 @@ get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_inf
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' dplyr::copy_to(conn, datasets::mtcars, name = DBI::Id(table = "my_test_table"))
+#' dplyr::copy_to(conn, mtcars, name = "my_test_table_1", temporary = FALSE)
+#' dplyr::copy_to(conn, mtcars, name = "my_test_table_2")
 #'
 #' get_tables(conn, pattern = "my_[th]est")
 #' get_tables(conn, pattern = "my_[th]est", show_temp = "always")
@@ -155,7 +154,6 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temp = "never") {
                  "OR schemaname = 'information_schema'",
                  "OR tablename LIKE 'dbplyr_%')")
 
-  default_schema <- get_schema(conn)
   tables <- DBI::dbGetQuery(conn, query) |>
     dplyr::mutate(is_temporary = stringr::str_detect(.data$schema, "^pg_temp_[[:digit:]]+$"))
 
@@ -308,7 +306,7 @@ get_tables.DBIConnection <- function(conn, pattern = NULL, show_temp = "never") 
 #'                                          as.Date("2021-01-01")),
 #'                 until_ts = as.Date(NA))
 #'
-#' dplyr::copy_to(conn, m, name = "mtcars")
+#' dplyr::copy_to(conn, m, name = "mtcars", temporary = FALSE)
 #'
 #' q <- dplyr::tbl(conn, id("mtcars", conn))
 #'

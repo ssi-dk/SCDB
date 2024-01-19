@@ -30,7 +30,7 @@ Gets a named table from a given schema
 \examples{
 conn <- get_connection(drv = RSQLite::SQLite())
 
-dplyr::copy_to(conn, mtcars, name = "mtcars")
+dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
 
 get_table(conn)
 if (table_exists(conn, "mtcars")) {

@@ -39,7 +39,7 @@ A return value of \code{NA} means that no tables exist within the connection and
 \examples{
 conn <- get_connection(drv = RSQLite::SQLite())
 
-dplyr::copy_to(conn, mtcars, name = "mtcars")
+dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
 
 get_schema(conn)
 get_schema(get_table(conn, id("mtcars", conn = conn)))
