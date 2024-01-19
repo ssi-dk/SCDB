@@ -2,13 +2,10 @@
 % Please edit documentation in R/get_table.R
 \name{table_exists}
 \alias{table_exists}
-\alias{table_exists.SQLiteConnection}
 \alias{table_exists.DBIConnection}
 \title{Test if a table exists in database}
 \usage{
 table_exists(conn, db_table_id)
-
-\method{table_exists}{SQLiteConnection}(conn, db_table_id)
 
 \method{table_exists}{DBIConnection}(conn, db_table_id)
 }

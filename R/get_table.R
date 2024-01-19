@@ -369,59 +369,36 @@ table_exists <- function(conn, db_table_id) {
 #' @rdname table_exists
 #' @importFrom rlang .data
 #' @export
-table_exists.SQLiteConnection <- function(conn, db_table_id) {
+table_exists.DBIConnection <- function(conn, db_table_id) {
   tables <- get_tables(conn, show_temp = "fallback")
 
   if (inherits(db_table_id, "Id")) {
-    exact_match <- dplyr::filter(tables, .data$table == db_table_id@name["table"])
+    db_table_id <- id(db_table_id, conn) # Ensure Id is fully qualified (has schema)
 
-    if ("schema" %in% names(db_table_id@name)) {
-      exact_match <- dplyr::filter(exact_match, .data$schema == db_table_id@name["schema"])
-    }
+    exact_match <- tables |>
+      dplyr::filter(.data$table == db_table_id@name["table"], .data$schema == db_table_id@name["schema"])
 
     if (nrow(exact_match) == 1) {
       return(TRUE)
+    } else {
+      return(FALSE)
     }
 
-    db_table_id <- paste(db_table_id@name, collapse = ".")
+  } else {
+
+    matches <- tables |>
+      dplyr::mutate(schema = ifelse(.data$schema == "main", NA_character_, .data$schema)) |>
+      tidyr::unite("table_str", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
+      dplyr::filter(.data$table_str == !!db_table_id) |>
+      dplyr::select(!"table_str")
+
+    if (nrow(matches) <= 1) {
+      return(nrow(matches) == 1)
+    } else {
+      rlang::abort(
+        message = paste0("More than one table matching '", db_table_id, "' was found!"),
+        matches = matches
+      )
+    }
   }
-
-  matches <- tables |>
-    dplyr::mutate(schema = ifelse(.data$schema == "main", NA_character_, .data$schema)) |>
-    tidyr::unite("table_str", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
-    dplyr::filter(.data$table_str == !!db_table_id) |>
-    dplyr::select(!"table_str")
-
-  if (nrow(matches) <= 1) {
-    return(nrow(matches) == 1)
-  }
-
-  rlang::abort(
-    message = paste0("More than one table matching '", db_table_id, "' was found!"),
-    matches = matches
-  )
-}
-
-#' @rdname table_exists
-#' @importFrom rlang .data
-#' @export
-table_exists.DBIConnection <- function(conn, db_table_id) {
-  assert_id_like(db_table_id)
-
-  if (inherits(db_table_id, "Id")) {
-    db_name <- attr(db_table_id, "name")
-    db_schema <- purrr::pluck(db_name, "schema", .default = NA_character_)
-    db_table  <- purrr::pluck(db_name, "table")
-    db_table_id <- paste0(purrr::discard(c(db_schema, db_table), is.na), collapse = ".")
-  }
-
-  # Determine matches in the existing tables
-  n_matches <- get_tables(conn) |>
-    dplyr::mutate(schema = ifelse(.data$schema == get_schema(conn), NA_character_, .data$schema)) |>
-    tidyr::unite("db_table_id", "schema", "table", sep = ".", na.rm = TRUE) |>
-    dplyr::filter(db_table_id == !!db_table_id) |>
-    nrow()
-
-  if (n_matches > 1) stop("More than one table matching '", db_table_id, "' was found!")
-  return(n_matches == 1)
 }
