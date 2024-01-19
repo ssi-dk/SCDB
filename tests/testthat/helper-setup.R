@@ -118,7 +118,7 @@ get_test_conns <- function() {
   # Message the user only once within this session
   rlang::inform(
     message = msg,
-    .frequency = c("once"),
+    .frequency = "once",
     .frequency_id = msg
   )
 

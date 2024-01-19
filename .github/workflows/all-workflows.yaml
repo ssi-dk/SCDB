@@ -25,13 +25,12 @@ jobs:
   run-all-AEF-DFF-workflows:
     name: ⚙️ Dispatch
     needs: context
-    if: needs.context.outputs.abort != 'true' || github.ref_name == 'main'
+    if: needs.context.outputs.abort != 'true' || contains('main,master', github.ref_name)
     uses: ssi-dk/AEF-DDF/.github/workflows/workflow-dispatcher.yaml@main
     with:
       # We pass information about the triggering event
       event_name: ${{ github.event_name }}
       run_id: ${{ github.run_id }}
-      main_branches: main
 
       # code-coverage creates data bases for the tests. Here you can specify the schemas you need for the workflow
       schemas: test,test.one
