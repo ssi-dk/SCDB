@@ -65,12 +65,13 @@ is.historical <- function(.data) { # nolint: object_name_linter
 #' @inherit checkmate::assert return
 #' @noRd
 assert_data_like <- function(.data, ..., add = NULL) {
-  checkmate::assert( # nolint start: indentation_linter
+  checkmate::assert(
     checkmate::check_class(.data, "tbl_dbi", ...),
     checkmate::check_data_frame(.data, ...),
     checkmate::check_data_table(.data, ...),
     checkmate::check_tibble(.data, ...),
-    add = add) # nolint end
+    add = add
+  )
 }
 
 
@@ -81,11 +82,12 @@ assert_data_like <- function(.data, ..., add = NULL) {
 #' @inherit checkmate::assert return
 #' @noRd
 assert_timestamp_like <- function(timestamp, ..., add = NULL) {
-  checkmate::assert( # nolint start: indentation_linter
+  checkmate::assert(
     checkmate::check_posixct(timestamp, ...),
     checkmate::check_character(timestamp, ...),
     checkmate::check_date(timestamp, ...),
-    add = add) # nolint end
+    add = add
+  )
 }
 
 
@@ -96,11 +98,12 @@ assert_timestamp_like <- function(timestamp, ..., add = NULL) {
 #' @inherit checkmate::assert return
 #' @noRd
 assert_dbtable_like <- function(db_table, ..., add = NULL) {
-  checkmate::assert( # nolint start: indentation_linter
+  checkmate::assert(
     checkmate::check_character(db_table, pattern = r"{^\w*.\w*$}", ...),
     checkmate::check_class(db_table, "Id", ...),
     checkmate::check_class(db_table, "tbl_dbi", ...),
-    add = add) # nolint end
+    add = add
+  )
 }
 
 
@@ -111,9 +114,10 @@ assert_dbtable_like <- function(db_table, ..., add = NULL) {
 #' @inherit checkmate::assert return
 #' @noRd
 assert_id_like <- function(id, ..., add = NULL) {
-  checkmate::assert( # nolint start: indentation_linter
+  checkmate::assert(
     checkmate::check_character(id, ...),
     checkmate::check_class(id, "Id", ...),
     checkmate::check_class(id, "tbl_dbi", ...),
-    add = add) # nolint end
+    add = add
+  )
 }
