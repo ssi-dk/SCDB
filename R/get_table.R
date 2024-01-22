@@ -76,13 +76,8 @@ get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_inf
 #'
 #' @template conn
 #' @param pattern A regex pattern with which to subset the returned tables
-#' @param show_temp
-#' A string specifying how to handle temporary tables.
-#'
-#' - `"never"`, the default, will never return any temporary tables.
-#' - `"always"`, lists temporary tables as well as ordinary tables.
-#'   Note that this may return duplicate tables.
-#' - `"fallback"` lists temporary tables, but only if no ordinary table with the same name exists
+#' @param show_temporary (`logical`)\cr
+#'   Should temporary tables be listed?
 #'
 #' @return A data.frame containing table names in the DB
 #' @examples
@@ -92,41 +87,31 @@ get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_inf
 #' dplyr::copy_to(conn, mtcars, name = "my_test_table_2")
 #'
 #' get_tables(conn, pattern = "my_[th]est")
-#' get_tables(conn, pattern = "my_[th]est", show_temp = "always")
+#' get_tables(conn, pattern = "my_[th]est", show_temporary = FALSE)
 #'
 #' close_connection(conn)
 #' @importFrom rlang .data
 #' @export
-get_tables <- function(conn, pattern = NULL, show_temp = "never") {
+get_tables <- function(conn, pattern = NULL, show_temporary = TRUE) {
 
-  checkmate::check_character(pattern, null.ok = TRUE)
-  checkmate::check_choice(show_temp, c("always", "fallback", "never"))
+  checkmate::assert_character(pattern, null.ok = TRUE)
+  checkmate::assert_logical(show_temporary)
 
   UseMethod("get_tables")
 }
 
 #' @importFrom rlang .data
 #' @export
-get_tables.SQLiteConnection <- function(conn, pattern = NULL, show_temp = "never") {
+get_tables.SQLiteConnection <- function(conn, pattern = NULL, show_temporary = TRUE) {
   query <- paste("SELECT schema, name 'table' FROM pragma_table_list",
                  "WHERE NOT name IN ('sqlite_schema', 'sqlite_temp_schema')",
                  "AND NOT name LIKE 'sqlite_stat%'")
 
   tables <- DBI::dbGetQuery(conn, query)
 
-  if (show_temp == "never") {
+  if (!show_temporary) {
     tables <- tables |>
       dplyr::filter(.data$schema != "temp")
-  }
-  if (show_temp == "fallback") {
-    tables <- tables |>
-      dplyr::filter(
-        .data$schema != "temp" | !.data$table %in% .data$table[.data$schema == "main"]
-      )
-  }
-  if (show_temp != "always") {
-    tables <- tables |>
-      dplyr::mutate(schema = ifelse(.data$schema == "main", NA_character_, .data$schema))
   }
 
   if (!is.null(pattern)) {
@@ -148,7 +133,7 @@ get_tables.SQLiteConnection <- function(conn, pattern = NULL, show_temp = "never
 
 #' @export
 #' @importFrom rlang .data
-get_tables.PqConnection <- function(conn, pattern = NULL, show_temp = "never") {
+get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE) {
   query <- paste('SELECT schemaname "schema", tablename "table" FROM pg_tables',
                  "WHERE NOT (schemaname LIKE 'pg_%'",
                  "OR schemaname = 'information_schema'",
@@ -157,24 +142,12 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temp = "never") {
   tables <- DBI::dbGetQuery(conn, query) |>
     dplyr::mutate(is_temporary = stringr::str_detect(.data$schema, "^pg_temp_[[:digit:]]+$"))
 
-  if (show_temp == "never") {
+  if (!show_temporary) {
     tables <- tables |>
       dplyr::filter(!.data$is_temporary)
   }
-  if (show_temp == "fallback") {
-    tables <- tables |>
-      dplyr::filter(
-        !.data$is_temporary |
-          !.data$table %in% .data$table[.data$schema == default_schema]
-      )
-  }
-  if (show_temp != "always") {
-    tables <- tables |>
-      dplyr::mutate(schema = ifelse(.data$schema == default_schema | .data$is_temporary, NA_character_, .data$schema))
-  }
 
   tables <- tables |>
-    dplyr::mutate(schema = ifelse(.data$schema == default_schema, NA_character_, .data$schema)) |>
     dplyr::select(!"is_temporary")
 
 
@@ -195,8 +168,8 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temp = "never") {
 
 #' @importFrom rlang .data
 #' @export
-`get_tables.Microsoft SQL Server` <- function(conn, pattern = NULL, show_temp = "never") {
-  if (show_temp != "never") {
+`get_tables.Microsoft SQL Server` <- function(conn, pattern = NULL, show_temporary = TRUE) {
+  if (show_temporary) {
     rlang::warn("Temporary tables are currently not supported for Microsoft SQL Server")
   }
 
@@ -217,7 +190,7 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temp = "never") {
 }
 
 #' @export
-get_tables.OdbcConnection <- function(conn, pattern = NULL, show_temp = "never") {
+get_tables.OdbcConnection <- function(conn, pattern = NULL, show_temporary = TRUE) {
   query <- paste("SELECT",
                  "s.name AS [schema],",
                  "t.name AS [table]",
@@ -232,9 +205,9 @@ get_tables.OdbcConnection <- function(conn, pattern = NULL, show_temp = "never")
 }
 
 #' @export
-get_tables.DBIConnection <- function(conn, pattern = NULL, show_temp = "never") {
-  if (show_temp != "never") {
-    rlang::warn("show_temp must be 'never' for unsupported backends!")
+get_tables.DBIConnection <- function(conn, pattern = NULL, show_temporary = TRUE) {
+  if (isFALSE(show_temporary)) {
+    rlang::warn("show_temporary must be 'FALSE' for unsupported backends!")
   }
 
   # Check arguments
@@ -268,15 +241,6 @@ get_tables.DBIConnection <- function(conn, pattern = NULL, show_temp = "never") 
 
   # Skip dbplyr temporary tables
   tables <- dplyr::filter(tables, !startsWith(.data$table, "dbplyr_"))
-
-  # Skip PostgreSQL metadata tables
-  if (inherits(conn, "PqConnection")) {
-    tables <- dplyr::filter(tables,
-                            dplyr::case_when(is.na(schema) ~ TRUE,
-                                             .data$schema == "information_schema" ~ FALSE,
-                                             grepl("^pg_.*", .data$schema) ~ FALSE,
-                                             TRUE ~ TRUE))
-  }
 
   # Subset if pattern is given
   if (!is.null(pattern)) {
@@ -376,7 +340,7 @@ table_exists <- function(conn, db_table_id) {
 #' @importFrom rlang .data
 #' @export
 table_exists.DBIConnection <- function(conn, db_table_id) {
-  tables <- get_tables(conn, show_temp = "fallback")
+  tables <- get_tables(conn, show_temporary = TRUE)
 
   if (inherits(db_table_id, "Id")) {
     db_table_id <- id(db_table_id, conn) # Ensure Id is fully qualified (has schema)
@@ -399,7 +363,6 @@ table_exists.DBIConnection <- function(conn, db_table_id) {
 
     # Then heuristically match with tables in conn
     matches <- tables |>
-      dplyr::mutate(schema = ifelse(.data$schema == "main", NA_character_, .data$schema)) |>
       tidyr::unite("table_str", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
       dplyr::filter(.data$table_str == !!db_table_id) |>
       dplyr::select(!"table_str")

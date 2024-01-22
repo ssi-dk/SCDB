@@ -9,6 +9,9 @@
   Now, it will always assume that a lack of schema means the default schema should be used.
   This is also the case if `DBI::Id()` is used without a schema specification.
 
+* The `show_temporary` argument of `get_tables()` is now a simple logical.
+  In addition, schema is always returned in the list of table (no longer NA for default schema).
+
 * If a `SQLiteConnection` is passed to `get_schema()`, the returned schema will always be "main".
 
 ## Minor Improvements and Fixes
