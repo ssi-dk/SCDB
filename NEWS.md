@@ -9,6 +9,8 @@
   Now, it will always assume that a lack of schema means the default schema should be used.
   This is also the case if `DBI::Id()` is used without a schema specification.
 
+* If a `SQLiteConnection` is passed to `get_schema()`, the returned schema will always be "main".
+
 ## Minor Improvements and Fixes
 
 * Improved checks on `get_connection()` (#83):

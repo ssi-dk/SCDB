@@ -32,8 +32,7 @@ For SQLite databases, a \code{temp} schema for temporary tables always exists as
 tables.
 Additional databases may be attached to the connection with a named schema, but as the attachment must be made after
 the connection is established, \code{get_schema} will never return any of these, as the default schema will always be
-one of \code{main} or \code{temp} (if \code{main} contains no tables).
-A return value of \code{NA} means that no tables exist within the connection and no default schema therefore exists.
+\code{main}.
 }
 
 \examples{
