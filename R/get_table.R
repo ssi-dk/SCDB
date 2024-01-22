@@ -347,6 +347,8 @@ slice_time <- function(.data, slice_ts, from_ts = from_ts, until_ts = until_ts) 
 #' close_connection(conn)
 #' @export
 table_exists <- function(conn, db_table_id) {
+  checkmate::assert(DBI::dbIsValid(conn))
+  assert_id_like(db_table_id)
 
   # Check arguments
   if (inherits(db_table_id, "tbl_dbi")) {

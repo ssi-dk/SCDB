@@ -142,23 +142,21 @@ id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
                    table = purrr::pluck(db_table_id, "name", "table")))
   }
 
-  if (!allow_table_only && !checkmate::test_class(conn, "DBIConnection") && !DBI::dbIsValid(conn)) {
-    stop("When allow_table_only is FALSE, a valid `conn` must be supplied!")
-  }
-
   UseMethod("id")
 }
 
 #' @export
 id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
 
+  checkmate::assert(is.null(conn), DBI::dbIsValid(conn), combine = "or")
+
   if (stringr::str_detect(db_table_id, "\\.")) {
     db_name <- stringr::str_split_1(db_table_id, "\\.")
     db_schema <- db_name[1]
     db_table  <- db_name[2]
 
-    # If no matching implied schema is found, return the unmodified db_table_id
-    if (allow_table_only && !schema_exists(conn, db_schema)) {
+    # If no matching implied schema is found, return the unmodified db_table_id in the default schema
+    if (allow_table_only && !is.null(conn) && !schema_exists(conn, db_schema)) {
       return(DBI::Id(schema = get_schema(conn), table = db_table_id))
     }
   } else {

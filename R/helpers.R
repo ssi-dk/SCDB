@@ -114,5 +114,6 @@ assert_id_like <- function(id, ..., add = NULL) {
   checkmate::assert( # nolint start: indentation_linter
     checkmate::check_character(id, ...),
     checkmate::check_class(id, "Id", ...),
+    checkmate::check_class(id, "tbl_dbi", ...),
     add = add) # nolint end
 }

@@ -52,6 +52,9 @@ test_that('id() returns table = "schema.table" if schema does not exist', {
                      DBI::Id(schema = schema_name, table = "mtcars"))
 
     DBI::dbDisconnect(conn)
+
+    # When connection is closed, the existence of the schema cannot be validated and an error should be given
+    expect_error(id(table_name, conn = conn), r"{DBI::dbIsValid\(conn\): FALSE}")
   }
 })
 
