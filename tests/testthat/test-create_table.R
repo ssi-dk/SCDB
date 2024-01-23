@@ -77,7 +77,7 @@ test_that("create_table() does not overwrite tables", {
 
     expect_error(
       create_table(utils::head(cars, 20), db_table_id = "cars", conn = conn, temporary = TRUE),
-      "Table `cars` exists in database"
+      'Table (<Id> )?["`]#?cars["`] exists in database'
     )
 
     expect_equal(nrow(table), 10)
