@@ -26,6 +26,8 @@
 ## Features
 * The S3 method `as.character.Id()` is added which converts `DBI::Id()` to `character` (#93).
 
+* The `%notin%` operator has been removed from the package
+
 ## Improvements and Fixes
 
 * Improvements for `create_table()` (#93):
