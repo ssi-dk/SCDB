@@ -17,7 +17,10 @@
 
 * If a `SQLiteConnection` is passed to `get_schema()`, the returned schema will always be "main".
 
-## Minor Improvements and Fixes
+## Improvements and Fixes
+
+* `create_table()` now writes the table if a remote connection is given. Before, it would only create the
+  table with corresponding columns.
 
 * Improved checks on `get_connection()` (#83):
   - If given, `host` does not need to look like an IP address (e.g. "localhost" is not unrealistic).

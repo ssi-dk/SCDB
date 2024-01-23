@@ -45,10 +45,13 @@ create_table <- function(.data, conn = NULL, db_table_id, ...) {
     rlang::abort(glue::glue("Table {capture.output(print(db_table_id))} already exists!"))
   }
 
-  DBI::dbCreateTable(conn = conn,
-                     name = db_table_id,
-                     fields = getTableSignature(.data = .data, conn = conn),
-                     ...)
+  DBI::dbWriteTable(
+    conn = conn,
+    name = db_table_id,
+    value = .data,
+    fields = getTableSignature(.data = .data, conn = conn),
+    ...
+  )
 
   return(invisible(dplyr::tbl(conn, db_table_id, check_from = FALSE)))
 }
