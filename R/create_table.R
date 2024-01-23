@@ -5,17 +5,16 @@
 #' @template .data
 #' @template conn
 #' @template db_table_id
-#' @param temporary Should the table be created as a temporary table?
 #' @param ... Other arguments passed to [DBI::dbCreateTable()]
 #' @return Invisibly returns the table as it looks on the destination (or locally if conn is NULL)
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' create_table(mtcars, conn = conn, db_table_id = "mtcars_tmp")
+#' create_table(mtcars, conn = conn, db_table_id = "mtcars")
 #'
 #' close_connection(conn)
 #' @export
-create_table <- function(.data, conn = NULL, db_table_id, temporary = TRUE, ...) {
+create_table <- function(.data, conn = NULL, db_table_id, ...) {
 
   checkmate::assert_class(.data, "data.frame")
   checkmate::assert_class(conn, "DBIConnection", null.ok = TRUE)
@@ -38,20 +37,17 @@ create_table <- function(.data, conn = NULL, db_table_id, temporary = TRUE, ...)
   # Early return if there is no connection to push to
   if (is.null(conn)) return(invisible(.data))
 
-  # Create the table on the remote and return the table
-  if (!temporary) {
-    # Convert db_table_id to id if not already
-    db_table_id <- id(db_table_id, conn = conn)
+  # Ensure id is fully qualified
+  if (inherits(db_table_id, "Id")) db_table_id <- id(db_table_id, conn = conn)
 
-    if (table_exists(conn, db_table_id)) {
-      rlang::abort(glue::glue("Table {capture.output(print(db_table_id))} already exists!"))
-    }
+  # Create the table on the remote and return the table
+  if (table_exists(conn, db_table_id)) {
+    rlang::abort(glue::glue("Table {capture.output(print(db_table_id))} already exists!"))
   }
 
   DBI::dbCreateTable(conn = conn,
                      name = db_table_id,
                      fields = getTableSignature(.data = .data, conn = conn),
-                     temporary = temporary,
                      ...)
 
   return(invisible(dplyr::tbl(conn, db_table_id, check_from = FALSE)))
