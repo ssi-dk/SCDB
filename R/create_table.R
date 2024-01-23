@@ -37,8 +37,19 @@ create_table <- function(.data, conn = NULL, db_table_id, ...) {
   # Early return if there is no connection to push to
   if (is.null(conn)) return(invisible(.data))
 
+  # Check db_table_id conforms to requirements
   # Ensure id is fully qualified
   if (inherits(db_table_id, "Id")) db_table_id <- id(db_table_id, conn = conn)
+
+  # Temporary tables on SQL Server needs to begin with #
+  if (inherits(conn, "Microsoft SQL Server") && "temporary" %in% names(list(...)) && isTRUE(temporary)) {
+    if (inherits(db_table_id, "character") && !startsWith(db_table_id, "#")) {
+      db_table_id <- paste0("#", db_table_id)
+    } else if (inherits(db_table_id, "Id") && !startsWith(db_table_id@name["table"], "#")) {
+      db_table_id@name["table"] <- paste0("#", db_table_id)
+    }
+  }
+
 
   # Create the table on the remote and return the table
   if (table_exists(conn, db_table_id)) {
