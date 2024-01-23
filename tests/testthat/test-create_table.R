@@ -36,7 +36,7 @@ test_that("create_table() can create tables in default schema", {
     )
 
 
-    DBI::dbRemoveTable(conn, "cars")
+    DBI::dbRemoveTable(conn, id(table))
     DBI::dbDisconnect(conn)
   }
 })
