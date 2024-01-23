@@ -19,8 +19,10 @@
 
 ## Improvements and Fixes
 
-* `create_table()` now writes the table if a remote connection is given. Before, it would only create the
+* Improvements for `create_table()`:
+  - now writes the table if a remote connection is given. Before, it would only create the
   table with corresponding columns.
+  - can now create temporary tables for Microsoft SQL Server.
 
 * Improved checks on `get_connection()` (#83):
   - If given, `host` does not need to look like an IP address (e.g. "localhost" is not unrealistic).
@@ -30,6 +32,8 @@
 * `get_connection()` now checks the value of any `timezone` and `timezone_out` arguments.
 
 * `table_exists()` now correctly gives ambiguity warning on Microsoft SQL Server and PostgreSQL backends (#80).
+
+* `get_tables()` now supports temporary tables for Microsoft SQL Server.
 
 * Fixed dplyr joins failing if `testthat` is not installed (#90).
 

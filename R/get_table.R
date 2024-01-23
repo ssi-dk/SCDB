@@ -169,13 +169,27 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE)
 #' @importFrom rlang .data
 #' @export
 `get_tables.Microsoft SQL Server` <- function(conn, pattern = NULL, show_temporary = TRUE) {
-  if (show_temporary) {
-    rlang::warn("Temporary tables are currently not supported for Microsoft SQL Server")
+  query <- paste("SELECT",
+                 "s.name AS [schema],",
+                 "t.name AS [table],",
+                 "t.is_temporary",
+                 "FROM (",
+                 "SELECT *, is_temporary = 0 FROM sys.tables",
+                 "UNION ALL",
+                 "SELECT *, is_temporary = 1 FROM tempdb.sys.tables WHERE name LIKE '#%'",
+                 ") AS t",
+                 "INNER JOIN sys.schemas AS s",
+                 "ON t.schema_id = s.schema_id")
+
+  tables <- DBI::dbGetQuery(conn, query)
+
+  if (!show_temporary) {
+    tables <- tables |>
+      dplyr::filter(.data$is_temporary == 0)
   }
 
-  tables <- NextMethod("get_tables") |>
-    dplyr::mutate(schema = dplyr::na_if(.data$schema, "dbo"))
-
+  tables <- tables |>
+    dplyr::select(!"is_temporary")
 
   if (!is.null(pattern)) {
     tables <- tables |>
