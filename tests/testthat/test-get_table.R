@@ -225,7 +225,7 @@ test_that("get_table() works when tables does not exist in non existing schema",
 })
 
 
-test_that("table_exists fails when multiple matches are found", {
+test_that("table_exists() fails when multiple matches are found", {
   conns <- get_test_conns()
   for (conn_id in seq_along(conns)) {
 
@@ -234,7 +234,7 @@ test_that("table_exists fails when multiple matches are found", {
     # Not all data bases support schemas.
     # Here we filter out the data bases that do not support schema
     # NOTE: SQLite does support schema, but we test both with and without attaching schemas
-    if (names(conns)[[conn_id]] != "SQLite") {
+    if (schema_exists(conn, "test") && schema_exists(conn, "test.one")) {
 
       DBI::dbExecute(conn, 'CREATE TABLE "test"."one.two"(a TEXT)')
       DBI::dbExecute(conn, 'CREATE TABLE "test.one"."two"(b TEXT)')
