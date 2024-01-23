@@ -331,6 +331,10 @@ slice_time <- function(.data, slice_ts, from_ts = from_ts, until_ts = until_ts) 
 
 #' Test if a table exists in database
 #'
+#' @description
+#'   This functions attempts to determine the existence of a given table.
+#'   If a character input is given, matching is done heuristically assuming a "schema.table" notation.
+#'   If no schema is implied in this case, the default schema is assumed.
 #' @template conn
 #' @template db_table_id
 #' @return TRUE if db_table_id can be parsed to a table found in conn
@@ -339,10 +343,12 @@ slice_time <- function(.data, slice_ts, from_ts = from_ts, until_ts = until_ts) 
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' dplyr::copy_to(conn, mtcars, name = "mtcars")
+#' dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
+#' dplyr::copy_to(conn, iris, name = "iris")
 #'
-#' table_exists(conn, "mtcars") # TRUE
-#' table_exists(conn, "iris") # FALSE
+#' table_exists(conn, "mtcars")    # TRUE
+#' table_exists(conn, "iris")      # FALSE
+#' table_exists(conn, "temp.iris") # TRUE
 #'
 #' close_connection(conn)
 #' @export
@@ -384,8 +390,14 @@ table_exists.DBIConnection <- function(conn, db_table_id) {
       return(FALSE)
     }
 
-  } else {
+  } else if (inherits(db_table_id, "character")) {
 
+    # Check if schema is implied -- use default if not implied
+    if (!stringr::str_detect(db_table_id, r"{\w*\.\w*}")) {
+      db_table_id <- paste(get_schema(conn), db_table_id, sep = ".")
+    }
+
+    # Then heuristically match with tables in conn
     matches <- tables |>
       dplyr::mutate(schema = ifelse(.data$schema == "main", NA_character_, .data$schema)) |>
       tidyr::unite("table_str", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
@@ -400,5 +412,7 @@ table_exists.DBIConnection <- function(conn, db_table_id) {
         matches = matches
       )
     }
+  } else {
+    rlang::abort("Only character or DBI::Id inputs to table_exists is allowed!")
   }
 }
