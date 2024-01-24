@@ -19,7 +19,7 @@ test_that("create_table() can create temporary tables", {
       dplyr::collect(dplyr::copy_to(conn, cars, "cars_ref"))
     )
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -37,7 +37,7 @@ test_that("create_table() can create tables in default schema", {
 
 
     DBI::dbRemoveTable(conn, id(table))
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -54,7 +54,7 @@ test_that("create_table() can create tables in non default schema", {
     )
 
     DBI::dbRemoveTable(conn, id("test.cars", conn))
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -82,6 +82,6 @@ test_that("create_table() does not overwrite tables", {
 
     expect_equal(nrow(table), 10)
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })

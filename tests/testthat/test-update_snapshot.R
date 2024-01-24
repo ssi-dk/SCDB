@@ -226,7 +226,7 @@ test_that("update_snapshot() works", {
 
     if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -259,7 +259,7 @@ test_that("update_snapshot works with Id objects", {
     )
 
     unlink(logger$log_realpath)
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -303,6 +303,6 @@ test_that("update_snapshot checks table formats", {
       )
     )
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })

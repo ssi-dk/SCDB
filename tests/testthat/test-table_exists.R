@@ -30,7 +30,7 @@ test_that("table_exists() works for default schema", {
       warning("Non-existing table in default schema could not be generated!")
     }
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -68,7 +68,7 @@ test_that("table_exists() works for non-default schema", {
       warning("Non-existing schema could not be generated!")
     }
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -91,6 +91,6 @@ test_that("table_exists() fails when multiple matches are found", {
 
     }
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })

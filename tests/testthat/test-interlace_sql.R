@@ -40,7 +40,7 @@ test_that("interlace_sql() works", {
     expect_mapequal(interlace_sql(list(t1, t2), by = "key") |> dplyr::collect(),
                     interlace_sql(list(t2, t1), by = "key") |> dplyr::collect())
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 

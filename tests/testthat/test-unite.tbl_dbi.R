@@ -55,6 +55,6 @@ test_that("unite.tbl_dbi() works", {
     expect_identical(qq |> tidyr::unite("test_col", vs, am) |> dplyr::collect(),
                      qq |> dplyr::collect() |> tidyr::unite("test_col", vs, am))
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })

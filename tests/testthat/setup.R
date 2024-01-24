@@ -63,3 +63,18 @@ for (conn in get_test_conns()) {
 
   DBI::dbDisconnect(conn)
 }
+
+
+#' Clean up and test function
+#' @description
+#'   This function checks for the existence of "dbplyr_###" tables on the connection before closing the connection
+#' @param conn The connection to test
+#' @return NULL (called for side effects)
+#' @import rlang .data
+#' @noRd
+connection_clean_up <- function(conn) {
+  if (nrow(dplyr::filter(get_tables(conn, show_temporary = TRUE), stringr::str_detect(.data$table, "^#?dbplyr_")))) {
+    warning("Temporary dbplyr tables ('dbplyr_###') are not cleaned up!")
+  }
+  DBI::dbDisconnect(conn)
+}

@@ -9,7 +9,7 @@ test_that("id() works for character input without implied schema", {
     # .. the defaults schema if conn is given
     expect_identical(id("test_mtcars", conn), DBI::Id(schema = SCDB::get_schema(conn), table = "test_mtcars"))
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -32,7 +32,7 @@ test_that("id() works for character input with implied schema", {
       expect_identical(id("test.mtcars", conn), DBI::Id(schema = "test", table = "mtcars"))
     }
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -65,7 +65,7 @@ test_that("id() works for character input with implied schema when schema does n
       warning("Non-existing schema could not be generated!")
     }
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
 
     # When connection is closed, the existence of the schema cannot be validated and an error should be given
     expect_error(id(table_name, conn = conn), r"{DBI::dbIsValid\(conn\): FALSE}")
@@ -82,7 +82,7 @@ test_that("id() works for DBI::Id inputs", {
       DBI::Id(schema = get_schema(conn), table = "mtcars")
     )
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -97,7 +97,7 @@ test_that("id() is consistent for tbl_dbi inputs", {
       id.tbl_dbi(dplyr::tbl(conn, id("test.mtcars", conn), check_from = FALSE))
     )
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 

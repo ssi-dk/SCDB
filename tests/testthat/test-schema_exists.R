@@ -14,6 +14,6 @@ test_that("schema_exists() works", {
       expect_false(schema_exists(conn, random_string))
     }
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
