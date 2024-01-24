@@ -78,7 +78,8 @@ digest_to_checksum.default <- function(
     dplyr::transmute(
       id__ = dplyr::row_number(),
       dplyr::across(tidyselect::all_of(col), openssl::md5)
-    )
+    ) |>
+    dplyr::copy_to(dbplyr::remote_con(.data), df = _, name = unique_table_name())
 
   .data <- .data |>
     dplyr::mutate(id__ = dplyr::row_number()) |>
