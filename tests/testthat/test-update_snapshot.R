@@ -5,7 +5,7 @@ test_that("update_snapshot() works", {
     if (DBI::dbExistsTable(conn, id("test.SCDB_logs", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_logs", conn))
 
     target <- mtcars |>
-      dplyr::copy_to(conn, df = _, name = "temp", overwrite = TRUE) |>
+      dplyr::copy_to(conn, df = _, name = unique_table_name()) |>
       digest_to_checksum(col = "checksum") |>
       dplyr::mutate(from_ts  = !!db_timestamp("2022-10-01 09:00:00", conn),
                     until_ts = !!db_timestamp(NA, conn))
@@ -15,14 +15,9 @@ test_that("update_snapshot() works", {
       dplyr::copy_to(conn, target, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
     )
 
-
-    # For some reason dplyr::copy_to(overwrite = TRUE) does not work as expected for MSSQL
-    if (inherits(conn, "Microsoft SQL Server")) {
-      DBI::dbExecute(conn, "DROP TABLE #temp")
-    }
     .data <- mtcars |>
       dplyr::mutate(hp = dplyr::if_else(hp > 130, hp - 10, hp)) |>
-      dplyr::copy_to(conn, df = _, name = "temp", overwrite = TRUE)
+      dplyr::copy_to(conn, df = _, name = unique_table_name())
 
     # This is a simple update where 23 rows are replaced with 23 new ones on the given date
     db_table <- "test.SCDB_tmp1"
@@ -69,14 +64,10 @@ test_that("update_snapshot() works", {
     expect_true(nrow(dplyr::filter(get_table(conn, "test.SCDB_logs"),
                                    dplyr::if_any(.cols = !c(log_file), .fns = ~ !is.na(.)))) == 1)
 
-    if (inherits(conn, "Microsoft SQL Server")) {
-      DBI::dbExecute(conn, "DROP TABLE #temp")
-    }
-
     # We now attempt to do another update on the same date
     .data <- mtcars |>
       dplyr::mutate(hp = dplyr::if_else(hp > 100, hp - 10, hp)) |>
-      dplyr::copy_to(conn, df = _, name = "temp", overwrite = TRUE)
+      dplyr::copy_to(conn, df = _, name = unique_table_name())
 
     utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-03 09:00:00",
                                           logger = logger))
@@ -99,14 +90,10 @@ test_that("update_snapshot() works", {
                  nrow(mtcars))
 
 
-    if (inherits(conn, "Microsoft SQL Server")) {
-      DBI::dbExecute(conn, "DROP TABLE #temp")
-    }
-
     # We now attempt to an update between these two updates
     .data <- mtcars |>
       dplyr::mutate(hp = dplyr::if_else(hp > 150, hp - 10, hp)) |>
-      dplyr::copy_to(conn, df = _, name = "temp", overwrite = TRUE)
+      dplyr::copy_to(conn, df = _, name = unique_table_name())
 
     # This should fail if we do not specify "enforce_chronological_order = FALSE"
     expect_error(
