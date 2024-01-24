@@ -95,7 +95,7 @@ interlace_sql <- function(tables, by = NULL, colnames = NULL) {
                         by = c(by, ".row")) |>
     dplyr::select(!".row") |>
     dplyr::ungroup() |>
-    dplyr::compute()
+    dplyr::compute(name = unique_table_name())
 
 
   # Merge data onto the new validities using non-equi joins
