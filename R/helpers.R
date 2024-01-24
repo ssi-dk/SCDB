@@ -81,6 +81,27 @@ defer_db_cleanup <- function(tbl_sql) {
 }
 
 
+#' Create a name for a temporary table
+#' @description
+#'   This function is heavily inspired by the unexported dbplyr function unique_table_name
+#' @param scope A naming scope to generate the table name within.
+#' @examples
+#'   print(unique_table_name()) # SCDB_001
+#'   print(unique_table_name()) # SCDB_002
+#'
+#'   print(unique_table_name("test")) # test_001
+#'   print(unique_table_name("test")) # test_002
+#'
+#' @return A character string for a table name based on the given scope parameter
+#' @export
+unique_table_name <- function(scope = "SCDB") {
+  option <- paste(scope, "table_name", sep = "_")
+  index <- getOption(option, default = 0) + 1
+  options(tibble::lst(!!option := index))
+  return(glue::glue("{scope}_{sprintf('%03i', index)}"))
+}
+
+
 #' checkmate helper: Assert "generic" data.table/data.frame/tbl/tibble type
 #' @param .data Object to test if is data.table, data.frame, tbl or tibble
 #' @param ...   Parameters passed to checkmate::check_*
