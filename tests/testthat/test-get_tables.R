@@ -36,6 +36,18 @@ test_that("get_tables() works", {
 
 
     # Now test with temporary tables
+    tmp <- dplyr::copy_to(conn, mtcars, unique_table_name(), temporary = TRUE)
+    tmp_id <- id(tmp)
+    tmp_name <- paste(tmp_id@name["schema"], tmp_id@name["table"], sep = ".")
+
+    db_table_names <- get_tables(conn, show_temporary = TRUE) |>
+      tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
+      dplyr::pull(db_table_name)
+
+    checkmate::expect_subset(c(table_1, table_2, tmp_name), db_table_names)
+
+
+    # Now test with temporary tables
     tmp <- dplyr::copy_to(conn, mtcars, "__mtcars_2", temporary = TRUE)
     tmp_id <- id(tmp)
     tmp_name <- paste(tmp_id@name["schema"], tmp_id@name["table"], sep = ".")
