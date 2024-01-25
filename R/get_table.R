@@ -136,8 +136,7 @@ get_tables.SQLiteConnection <- function(conn, pattern = NULL, show_temporary = T
 get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE) {
   query <- paste('SELECT schemaname "schema", tablename "table" FROM pg_tables',
                  "WHERE NOT (schemaname LIKE 'pg_%'",
-                 "OR schemaname = 'information_schema'",
-                 "OR tablename LIKE 'dbplyr_%')")
+                 "OR schemaname = 'information_schema')")
 
   tables <- DBI::dbGetQuery(conn, query) |>
     dplyr::mutate(is_temporary = stringr::str_detect(.data$schema, "^pg_temp_[[:digit:]]+$"))
