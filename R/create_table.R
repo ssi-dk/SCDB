@@ -59,12 +59,7 @@ create_table <- function(.data, conn = NULL, db_table_id, ...) {
 
   }
 
-
   # Create the table on the remote and return the table
-  if (table_exists(conn, db_table_id)) {
-    rlang::abort(glue::glue("Table {capture.output(print(db_table_id))} already exists!"))
-  }
-
   DBI::dbWriteTable(
     conn = conn,
     name = db_table_id,
