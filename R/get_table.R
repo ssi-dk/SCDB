@@ -180,9 +180,9 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE)
                  "t.name AS [table],",
                  "t.is_temporary",
                  "FROM (",
-                 "SELECT *, is_temporary = 0 FROM sys.tables",
+                 "SELECT *, 0 AS is_temporary FROM sys.tables WHERE NOT name  LIKE '#%'",
                  "UNION ALL",
-                 "SELECT *, is_temporary = 1 FROM tempdb.sys.tables WHERE name LIKE '#%'",
+                 "SELECT *, 1 AS is_temporary FROM tempdb.sys.tables WHERE name LIKE '#%'",
                  ") AS t",
                  "INNER JOIN sys.schemas AS s",
                  "ON t.schema_id = s.schema_id")
