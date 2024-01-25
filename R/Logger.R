@@ -98,7 +98,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
         query <- dbplyr::build_sql(
           "UPDATE ",
-          dbplyr::as.sql(id(self$log_tbl, conn = private$log_conn), con = private$log_conn),
+          dbplyr::as.sql(id(self$log_tbl), con = private$log_conn),
           " SET ",
           dbplyr::ident("log_file"),
           " = NULL WHERE ",
@@ -170,8 +170,8 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
         )
 
       on.exit({
-        if (DBI::dbIsValid(private$log_conn) && table_exists(conn = private$log_conn, patch)) {
-          DBI::dbRemoveTable(private$log_conn, id(patch, conn = private$log_conn, allow_table_only = FALSE))
+        if (DBI::dbIsValid(private$log_conn) && table_exists(private$log_conn, id(patch))) {
+          DBI::dbRemoveTable(private$log_conn, id(patch))
         }
       })
 

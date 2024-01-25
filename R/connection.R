@@ -137,13 +137,16 @@ close_connection <- function(conn) {
 #' @seealso [DBI::Id] which this function wraps.
 #' @export
 id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
-  if (inherits(db_table_id, "Id")) {
-    return(DBI::Id(schema = purrr::pluck(db_table_id, "name", "schema", .default = SCDB::get_schema(conn)),
-                   table = purrr::pluck(db_table_id, "name", "table")))
-  }
-
   UseMethod("id")
 }
+
+
+#' @export
+id.Id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+  return(DBI::Id(schema = purrr::pluck(db_table_id, "name", "schema", .default = SCDB::get_schema(conn)),
+                 table = purrr::pluck(db_table_id, "name", "table")))
+}
+
 
 #' @export
 id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
@@ -167,21 +170,44 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
   return(DBI::Id(schema = db_schema, table = db_table))
 }
 
+
 #' @export
 id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
-  table_ident <- dbplyr::remote_table(db_table_id)
 
-  id <- with(table_ident, {
-    list(catalog = catalog,
-         schema = schema,
-         table = table) |>
-      (\(.x) subset(.x, !is.na(.x)))() |>
-      do.call(DBI::Id, args = _)
-  })
+  # If table identification is fully qualified extract Id from remote_Table
+  if (!is.na(purrr::pluck(dbplyr::remote_table(db_table_id), unclass, "schema"))) {
 
-  if (!is.null(conn) && !identical(conn, dbplyr::remote_con(db_table_id))) {
-    rlang::warn("Table connection is different than conn")
+    table_ident <- dbplyr::remote_table(db_table_id) |>
+      unclass() |>
+      purrr::discard(is.na)
+
+    table_conn <- dbplyr::remote_con(db_table_id)
+
+    return(
+      DBI::Id(
+        catalog = purrr::pluck(table_ident, "catalog"),
+        schema = purrr::pluck(table_ident, "schema", .default = get_schema(table_conn)),
+        table = purrr::pluck(table_ident, "table")
+      )
+    )
+
+  } else {
+
+    # If not attempt to resolve the table from existing tables.
+    # For SQLite, there should only be one table in main/temp matching the table
+    # In some cases, tables may have been added to the DB that makes the id ambiguous.
+    schema <- get_tables(dbplyr::remote_con(db_table_id), show_temporary = TRUE) |>
+      dplyr::filter(.data$table == dbplyr::remote_name(db_table_id)) |>
+      dplyr::pull("schema")
+
+    if (length(schema) > 1)  {
+      stop(
+        "Table identification has been corrupted! ",
+        "This table does not contain information about its schema and ",
+        "multiple tables with this name were found across schemas."
+      )
+    }
+
+    return(DBI::Id(schema = schema, table = dbplyr::remote_name(db_table_id)))
   }
-
-  return(id)
 }

@@ -38,18 +38,25 @@ create_table <- function(.data, conn = NULL, db_table_id, ...) {
   if (is.null(conn)) return(invisible(.data))
 
   # Check db_table_id conforms to requirements
-  # 1) ids should be fully qualified
-  db_table_id <- id(db_table_id, conn)
-
-  # 2) Temporary tables on some backends must to begin with "#"
+  # Temporary tables on some back ends must to begin with "#"
   if (purrr::pluck(list(...), "temporary", .default = formals(DBI::dbCreateTable)$temporary)) {
 
+    db_table_schema <- purrr::pluck(db_table_id, "name", "schema")
+    db_table_name <- purrr::pluck(db_table_id, "name", "table", .default = db_table_id)
+
     db_table_id <- DBI::Id(
+      schema = db_table_schema,
       table = paste0(
-        ifelse(inherits(conn, "Microsoft SQL Server") && !startsWith(db_table_id@name["table"], "#"), "#", ""),
-        db_table_id@name["table"]
+        ifelse(inherits(conn, "Microsoft SQL Server") && !startsWith(db_table_name, "#"), "#", ""),
+        db_table_name
       )
     )
+
+  } else {
+
+    # Non-temporary tables must be fully qualified
+    db_table_id <- id(db_table_id, conn)
+
   }
 
 
