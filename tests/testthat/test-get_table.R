@@ -15,6 +15,10 @@ test_that("get_tables() works", {
     table_1 <- paste(c(switch(!schema_exists(conn, "test"), get_schema(conn)), "test.mtcars"), collapse = ".")
     table_2 <- paste(c(get_schema(conn), "__mtcars"), collapse = ".")
 
+    # We should not get tables twice
+    expect_setequal(db_table_names, unique(db_table_names))
+
+    # Our test tables should be present
     checkmate::expect_subset(c(table_1, table_2), db_table_names)
 
 
@@ -23,6 +27,10 @@ test_that("get_tables() works", {
       tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
       dplyr::pull(db_table_name)
 
+    # We should not get tables twice
+    expect_setequal(db_table_names, unique(db_table_names))
+
+    # Our test table that matches the pattern should be present
     expect_false(table_1 %in% db_table_names)
     expect_true(table_2 %in% db_table_names)
 
@@ -36,6 +44,11 @@ test_that("get_tables() works", {
       tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
       dplyr::pull(db_table_name)
 
+
+    # We should not get tables twice
+    expect_setequal(db_table_names, unique(db_table_names))
+
+    # Our test tables should be present
     checkmate::expect_subset(c(table_1, table_2, tmp_name), db_table_names)
 
     DBI::dbDisconnect(conn)
