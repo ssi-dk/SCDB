@@ -134,12 +134,19 @@ get_tables.SQLiteConnection <- function(conn, pattern = NULL, show_temporary = T
 #' @export
 #' @importFrom rlang .data
 get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE) {
-  query <- paste('SELECT schemaname "schema", tablename "table" FROM pg_tables',
-                 "WHERE NOT (schemaname LIKE 'pg_%'",
-                 "OR schemaname = 'information_schema')")
+  query <- paste("SELECT",
+                 "schemaname AS schema,",
+                 "tablename AS table,",
+                 "is_temporary",
+                 "FROM (",
+                 "SELECT *, 0 AS is_temporary FROM pg_tables",
+                 "WHERE NOT (schemaname LIKE 'pg_%' OR schemaname = 'information_schema')",
+                 "UNION ALL",
+                 "SELECT *, 1 AS is_temporary FROM pg_tables",
+                 "WHERE schemaname LIKE 'pg_temp_%'",
+                 ")")
 
-  tables <- DBI::dbGetQuery(conn, query) |>
-    dplyr::mutate(is_temporary = stringr::str_detect(.data$schema, "^pg_temp_[[:digit:]]+$"))
+  tables <- DBI::dbGetQuery(conn, query)
 
   if (!show_temporary) {
     tables <- tables |>
