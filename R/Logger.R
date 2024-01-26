@@ -52,7 +52,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
       coll <- checkmate::makeAssertCollection()
       checkmate::assert_character(db_tablestring, null.ok = TRUE, add = coll)
       assert_id_like(log_table_id, null.ok = TRUE, add = coll)
-      checkmate::assert_class(log_conn, "DBIConnection", null.ok = TRUE, add = coll)
+      checkmate::assert_class(log_conn, "DBIConnection", null.ok = is.null(log_table_id), add = coll)
       checkmate::assert_character(log_path, null.ok = TRUE, add = coll)
       assert_timestamp_like(ts, null.ok = TRUE, add = coll)
       checkmate::assert_posixct(start_time, add = coll)
