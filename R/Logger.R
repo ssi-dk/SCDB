@@ -162,7 +162,9 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     #' @description Write or update log table
     #' @param ... Name-value pairs with which to update the log table
     log_to_db = function(...) {
-      if (is.null(self$log_tbl)) return()
+      if (is.null(self$log_tbl)) {
+        return(NULL)
+      }
 
       patch <- data.frame(log_file = self$log_filename) |>
         dplyr::copy_to(
@@ -193,7 +195,9 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
     generate_log_entry = function() {
       # Create a row for log in question
-      if (is.null(self$log_tbl)) return()
+      if (is.null(self$log_tbl)) {
+        return(NULL)
+      }
 
       patch <- data.frame(log_file = self$log_filename) |>
         dplyr::copy_to(
@@ -224,7 +228,9 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     #' The filename (basename) of the file that the `Logger` instance will output to
     log_filename = function() {
       # If we are not producing a file log, we provide a random string to key by
-      if (!is.null(private$.log_filename)) return(private$.log_filename)
+      if (!is.null(private$.log_filename)) {
+        return(private$.log_filename)
+      }
       if (is.null(self$log_path)) {
         private$.log_filename <- basename(tempfile(tmpdir = "", pattern = ""))
         return(private$.log_filename)
