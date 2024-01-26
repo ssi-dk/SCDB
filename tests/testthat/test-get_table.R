@@ -107,15 +107,10 @@ test_that("table_exists() works for non-default schema", {
 
     if (k < 100) {
 
-      # With a given schema, table_exists should still determine existence correctly
-      # NOTE: # Not all connections support schemas
+      # With an implied schema, table_exists should still determine existence correctly
 
       # Character inputs
-      if (schema_exists(conn, "test")) {
-        expect_true(!schema_exists(conn, "test") || table_exists(conn, "test.mtcars"))
-      } else {
-        expect_false(table_exists(conn, "test.mtcars"))
-      }
+      expect_true(table_exists(conn, "test.mtcars"))
       expect_false(table_exists(conn, paste(invalid_schema_name, "mtcars", sep = ".")))
 
 

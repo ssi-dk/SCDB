@@ -386,7 +386,10 @@ table_exists.DBIConnection <- function(conn, db_table_id) {
     }
 
     # Then heuristically match with tables in conn
-    matches <- tables |>
+    matches <- dplyr::union_all(
+      tables,
+      dplyr::mutate(dplyr::filter(tables, .data$schema == get_schema(conn)), schema = NA)
+    ) |>
       tidyr::unite("table_str", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
       dplyr::filter(.data$table_str == !!db_table_id) |>
       dplyr::select(!"table_str")
