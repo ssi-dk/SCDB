@@ -131,6 +131,9 @@ Write a line to log file
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Returns}{
+Returns the log message invisibly
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Logger-log_warn"></a>}}

@@ -29,15 +29,15 @@ test_that("update_snapshot() works", {
       ts = timestamp,
       log_path = log_path,
       log_table_id = "test.SCDB_logs",
-      log_conn = conn
+      log_conn = conn,
+      output_to_console = FALSE
     )
 
     dir(log_path) |>
       purrr::keep(~ endsWith(., ".log")) |>
       purrr::walk(~ unlink(file.path(log_path, .)))
 
-    utils::capture.output(update_snapshot(.data, conn, db_table, timestamp,
-                                          logger = logger))
+    update_snapshot(.data, conn, db_table, timestamp, logger = logger)
 
     expect_identical(slice_time(target, "2022-10-01 09:00:00") |>
                        dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
@@ -69,8 +69,7 @@ test_that("update_snapshot() works", {
       dplyr::mutate(hp = dplyr::if_else(hp > 100, hp - 10, hp)) |>
       dplyr::copy_to(conn, df = _, name = unique_table_name())
 
-    utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-03 09:00:00",
-                                          logger = logger))
+    update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-03 09:00:00", logger = logger)
 
     # Even though we insert twice on the same date, we expect the data to be minimal (compacted)
     expect_identical(slice_time(target, "2022-10-01 09:00:00") |>
@@ -97,14 +96,13 @@ test_that("update_snapshot() works", {
 
     # This should fail if we do not specify "enforce_chronological_order = FALSE"
     expect_error(
-      utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-02 09:00:00", logger = logger)),
+      update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-02 09:00:00", logger = logger),
       regexp = "Given timestamp 2022-10-02 09:00:00 is earlier"
     )
 
     # But not with the variable set
-    utils::capture.output(update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-02 09:00:00",
-                                          logger = logger,
-                                          enforce_chronological_order = FALSE))
+    update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-02 09:00:00",
+                    logger = logger, enforce_chronological_order = FALSE)
 
     expect_identical(slice_time(target, "2022-10-01 09:00:00") |>
                        dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
@@ -143,18 +141,15 @@ test_that("update_snapshot() works", {
     )
 
 
-    utils::capture.output(update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01",
-                                          logger = logger))
+    update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01", logger = logger)
     expect_identical(dplyr::collect(t0) |> dplyr::arrange(col1),
                      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
-    utils::capture.output(update_snapshot(t1, conn, "test.SCDB_tmp1", "2022-02-01",
-                                          logger = logger))
+    update_snapshot(t1, conn, "test.SCDB_tmp1", "2022-02-01", logger = logger)
     expect_identical(dplyr::collect(t1) |> dplyr::arrange(col1),
                      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
-    utils::capture.output(update_snapshot(t2, conn, "test.SCDB_tmp1", "2022-02-01",
-                                          logger = logger))
+    update_snapshot(t2, conn, "test.SCDB_tmp1", "2022-02-01", logger = logger)
     expect_identical(dplyr::collect(t2) |> dplyr::arrange(col1),
                      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
@@ -178,19 +173,15 @@ test_that("update_snapshot() works", {
 
 
     # Check non-chronological insertion
-    utils::capture.output(update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01",
-                                          logger = logger))
+    update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01", logger = logger)
     expect_identical(dplyr::collect(t0) |> dplyr::arrange(col1),
                      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
-    utils::capture.output(update_snapshot(t2, conn, "test.SCDB_tmp1", "2022-03-01",
-                                          logger = logger))
+    update_snapshot(t2, conn, "test.SCDB_tmp1", "2022-03-01", logger = logger)
     expect_identical(dplyr::collect(t2) |> dplyr::arrange(col1),
                      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
-    utils::capture.output(update_snapshot(t1, conn, "test.SCDB_tmp1", "2022-02-01",
-                                          logger = logger,
-                                          enforce_chronological_order = FALSE))
+    update_snapshot(t1, conn, "test.SCDB_tmp1", "2022-02-01", logger = logger, enforce_chronological_order = FALSE)
     expect_identical(dplyr::collect(t1) |> dplyr::arrange(col1),
                      dplyr::collect(get_table(conn, "test.SCDB_tmp1", slice_ts = "2022-02-01")) |> dplyr::arrange(col1))
 
@@ -260,34 +251,37 @@ test_that("update_snapshot checks table formats", {
     mtcars_table <- dplyr::tbl(conn, id("__mtcars_historical", conn = conn))
     timestamp <- Sys.time()
 
+    expect_warning(
+      logger <- Logger$new(log_path = NULL, log_table_id = NULL, output_to_console = FALSE),
+      "NO LOGGING WILL BE DONE"
+    )
+
     # Test columns not matching
     broken_table <- dplyr::copy_to(conn, dplyr::select(mtcars, -"mpg"), name = "mtcars_broken", overwrite = TRUE)
 
-    expect_error(utils::capture.output(
+    expect_error(
       update_snapshot(
         .data = broken_table,
         conn = conn,
         db_table = mtcars_table,
         timestamp = timestamp,
-        message = "Test a broken input table"
+        logger = logger
       ),
-      regex = "Columns do not match!"
-    ))
+      "Columns do not match!"
+    )
 
     file.remove(list.files(getOption("SCDB.log_path"), pattern = format(timestamp, "^%Y%m%d.%H%M"), full.names = TRUE))
 
     # Test target table not being a historical table
     expect_error(
-      utils::capture.output(
-        update_snapshot(
-          dplyr::tbl(conn, id("test.mtcars", conn = conn), mtcars, check_from = FALSE),
-          conn,
-          dplyr::tbl(conn, "__mtcars"),
-          timestamp = timestamp,
-          message = "Test target table not being historical"
-        ),
-        regex = "Table does not seem like a historical table"
-      )
+      update_snapshot(
+        dplyr::tbl(conn, id("__mtcars", conn = conn)),
+        conn,
+        id("__mtcars", conn = conn),
+        timestamp = timestamp,
+        logger = logger
+      ),
+      "Table does not seem like a historical table"
     )
 
     connection_clean_up(conn)

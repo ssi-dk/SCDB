@@ -70,6 +70,9 @@
 
 * The footprint of `update_snapshot()` is reduced by cleaning up intermediate tables with `defer_db_cleanup()` (#89)
 
+* `Logger$log_info()` now uses `message()` instead of `cat()` to write to console (#98).
+  The message written is now also returned invisibly.
+
 ## Testing
 
 * Added missing tests for `create_logs_if_missing()` (#93).

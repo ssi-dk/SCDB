@@ -13,7 +13,7 @@ test_that("Logger: logging to console works", {
 
   # Test logging to console has the right formatting and message type
   ts_str <- stringr::str_replace(format(logger$start_time, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
-  expect_output(
+  expect_message(
     logger$log_info("test console", tic = logger$start_time),
     glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test console")
   )
@@ -41,10 +41,7 @@ test_that("Logger: all (non-warning, non-error) logging to console can be disabl
 
   # Test INFO-logging to console is disabled
   ts_str <- stringr::str_replace(format(logger$start_time, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
-  expect_identical(
-    capture.output(logger$log_info("test", tic = logger$start_time, TRUE)),
-    character(0)
-  )
+  expect_no_message(logger$log_info("test", tic = logger$start_time, TRUE))
 
   rm(logger)
   invisible(gc())
@@ -92,7 +89,7 @@ test_that("Logger: logging to file works", {
 
 
   # Test logging to file has the right formatting and message type
-  capture.output(logger$log_info("test filewriting", tic = logger$start_time))
+  suppressMessages(logger$log_info("test filewriting", tic = logger$start_time))
   tryCatch(logger$log_warn("test filewriting", tic = logger$start_time), warning = \(w) NULL)
   tryCatch(logger$log_error("test filewriting", tic = logger$start_time), error = \(e) NULL)
 
@@ -127,7 +124,7 @@ test_that("Logger: logging to file works", {
 
 
   # Test logging to file still works
-  capture.output(logger$log_info("test filewriting", tic = logger$start_time))
+  suppressMessages(logger$log_info("test filewriting", tic = logger$start_time))
 
   ts_str <- stringr::str_replace(format(logger$start_time, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
   expect_true(logger$log_filename %in% dir(log_path))
@@ -226,7 +223,7 @@ test_that("Logger: all logging simultanously works", {
 
     # Test logging to console has the right formatting and message type
     ts_str <- stringr::str_replace(format(logger$start_time, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
-    expect_output(
+    expect_message(
       logger$log_info("test console and filewriting", tic = logger$start_time),
       glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test console and filewriting")
     )
@@ -322,43 +319,28 @@ test_that("Logger: console output may be disabled", {
     regexp = "NO LOGGING WILL BE DONE"
   )
 
-  # In lieu of testthat::expect_no_output...
-  expect_identical(
-    utils::capture.output(logger$log_info("Whoops! This should not have been printed!"), type = "message"),
-    character(0)
-  )
-  expect_identical(
-    utils::capture.output(logger$log_info("Whoops! This should not have been printed either!",
-                                          output_to_console = FALSE),
-                          type = "message"),
-    character(0)
-  )
+  expect_no_message(logger$log_info("Whoops! This should not have been printed!"))
 
-  expect_output(
-    logger$log_info("This line should be printed",
-                    output_to_console = TRUE),
+  expect_no_message(logger$log_info("Whoops! This should not have been printed either!", output_to_console = FALSE))
+
+  expect_message(
+    logger$log_info("This line should be printed", output_to_console = TRUE),
     "This line should be printed"
   )
 
   # ...and now, only suppress printing when explicitly stated
   logger$output_to_console <- TRUE
 
-  expect_output(
+  expect_message(
     logger$log_info("This line should be printed"),
     "This line should be printed"
   )
-  expect_output(
-    logger$log_info("This line should also be printed",
-                    output_to_console = TRUE),
+  expect_message(
+    logger$log_info("This line should also be printed", output_to_console = TRUE),
     "This line should also be printed"
   )
 
-  expect_identical(
-    utils::capture.output(logger$log_info("Whoops! This should not have been printed at all!",
-                                          output_to_console = FALSE),
-                          type = "message"),
-    character(0)
-  )
+  expect_no_message(logger$log_info("Whoops! This should not have been printed at all!", output_to_console = FALSE))
 })
 
 

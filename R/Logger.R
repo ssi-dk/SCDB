@@ -125,34 +125,38 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     #' @param tic The timestamp used by the log entry (default Sys.time())
     #' @param output_to_console Should the line be written to console?
     #' @param log_type `r log_type <- "A character string which describes the severity of the log message"; log_type`
+    #' @return
+    #'   Returns the log message invisibly
     log_info = function(..., tic = Sys.time(), output_to_console = self$output_to_console, log_type = "INFO") {
 
       format_str <- private$log_format(..., tic = tic, log_type = log_type)
 
-      sink(
-        file = self$log_realpath,
-        split = isTRUE(output_to_console),
-        append = TRUE,
-        type = "output"
-      )
-      cat(private$log_format(..., tic = tic, log_type = log_type), "\n", sep = "")
-      sink()
+      msg <- private$log_format(..., tic = tic, log_type = log_type)
+
+      # Write message to console and file
+      if (isTRUE(output_to_console) && identical(log_type, "INFO")) {
+        message(msg)
+      }
+      if (!is.null(self$log_path)) {
+        write(msg, self$log_realpath, append = TRUE)
+      }
+
+      return(invisible(msg))
+
     },
 
     #' @description Write a warning to log file and generate warning.
     #' @param ... `r log_dots`
     #' @param log_type `r log_type`
     log_warn = function(..., log_type = "WARNING") {
-      self$log_info(..., log_type = log_type)
-      warning(private$log_format(..., log_type = log_type))
+      warning(self$log_info(..., log_type = log_type))
     },
 
     #' @description Write an error to log file and stop execution
     #' @param ... `r log_dots`
     #' @param log_type `r log_type`
     log_error = function(..., log_type = "ERROR") {
-      self$log_info(..., log_type = log_type)
-      stop(private$log_format(..., log_type = log_type))
+      stop(self$log_info(..., log_type = log_type))
     },
 
     #' @description Write or update log table
