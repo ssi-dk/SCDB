@@ -17,6 +17,9 @@
 
 * If a `SQLiteConnection` is passed to `get_schema()`, the returned schema will always be "main".
 
+## Features
+* The S3 method `as.character.Id()` is added which converts `DBI::Id()` to `character` (#??).
+
 ## Improvements and Fixes
 
 * Improvements for `create_table()`:

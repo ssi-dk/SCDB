@@ -187,15 +187,15 @@ test_that("get_table() works when tables does not exist in default schema", {
 
       expect_error(
         get_table(conn, invalid_table_name),
-        regexp = glue::glue("Table {capture.output(print(id(invalid_table_name, conn)))} could not be found!")
+        regexp = glue::glue("Table {as.character(id(invalid_table_name, conn))} could not be found!")
       )
       expect_error(
         get_table(conn, id(invalid_table_name, conn)),
-        regexp = glue::glue("Table {capture.output(print(id(invalid_table_name, conn)))} could not be found!")
+        regexp = glue::glue("Table {as.character(id(invalid_table_name, conn))} could not be found!")
       )
       expect_error(
         get_table(conn, id(invalid_table_name)),
-        regexp = glue::glue("Table {capture.output(print(id(invalid_table_name, conn)))} could not be found!")
+        regexp = glue::glue("Table {as.character(id(invalid_table_name, conn))} could not be found!")
       )
 
     } else {
@@ -226,15 +226,15 @@ test_that("get_table() works when tables does not exist in non existing schema",
 
       expect_error(
         get_table(conn, invalid_table_name),
-        regexp = glue::glue("Table {capture.output(print(id(invalid_table_name, conn)))} could not be found!")
+        regexp = glue::glue("Table {as.character(id(invalid_table_name, conn))} could not be found!")
       )
       expect_error(
         get_table(conn, id(invalid_table_name, conn)),
-        regexp = glue::glue("Table {capture.output(print(id(invalid_table_name, conn)))} could not be found!")
+        regexp = glue::glue("Table {as.character(id(invalid_table_name, conn))} could not be found!")
       )
       expect_error(
         get_table(conn, id(invalid_table_name)),
-        regexp = glue::glue("Table {capture.output(print(id(invalid_table_name)))} could not be found!")
+        regexp = glue::glue("Table {as.character(id(invalid_table_name))} could not be found!")
       )
 
     } else {

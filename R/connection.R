@@ -211,3 +211,21 @@ id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
     return(DBI::Id(schema = schema, table = dbplyr::remote_name(db_table_id)))
   }
 }
+
+
+#' @export
+as.character.Id <- function(x, ...) {
+
+  info <- x@name |>
+    purrr::discard(is.na)
+
+  id_representation <- list(
+    catalog = purrr::pluck(info, "catalog"),
+    schema = purrr::pluck(info, "schema"),
+    table = purrr::pluck(info, "table")
+  ) |>
+    purrr::discard(is.null) |>
+    do.call(purrr::partial(paste, sep = "."), args = _)
+
+  return(id_representation)
+}

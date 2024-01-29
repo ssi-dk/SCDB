@@ -46,7 +46,7 @@ get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_inf
 
   # Ensure existence of table
   if (!table_exists(conn, db_table_id)) {
-    rlang::abort(glue::glue("Table {capture.output(print(db_table_id))} could not be found!"))
+    rlang::abort(glue::glue("Table {as.character(db_table_id)} could not be found!"))
   }
 
   # Look-up table in DB

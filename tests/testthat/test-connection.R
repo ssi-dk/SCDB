@@ -123,6 +123,18 @@ test_that("id() is consistent for tbl_dbi inputs", {
 })
 
 
+test_that("as.character.id works", {
+  expect_identical(as.character(DBI::Id(table = "table")), "table")
+  expect_identical(as.character(DBI::Id(schema = "schema", table = "table")), "schema.table")
+  expect_identical(as.character(DBI::Id(catalog = "catalog", schema = "schema", table = "table")),
+                   "catalog.schema.table")
+
+  expect_identical(as.character(DBI::Id(table = "table", schema = "schema")), "schema.table")
+  expect_identical(as.character(DBI::Id(table = "table", schema = "schema", catalog = "catalog")),
+                   "catalog.schema.table")
+})
+
+
 test_that("close_connection() works", {
   for (conn in get_test_conns()) {
 
