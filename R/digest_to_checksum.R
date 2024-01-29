@@ -58,7 +58,7 @@ digest_to_checksum_internal <- function(.data, col) {
       {{ col }} := dbplyr::sql_call2("HashBytes", "SHA2_256", col_ident, con = con)
     ) |>
     dplyr::mutate(
-      {{ col }} := dbplyr::sql_expr(CONVERT(VARCHAR(1000L), !!col_ident, 2L), con = con)
+      {{ col }} := dbplyr::sql_expr(CONVERT(VARCHAR(1000L), !!col_ident, 2L), con = con)  # nolint: object_usage_linter
     )
 
   return(.data)
