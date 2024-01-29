@@ -2,7 +2,7 @@
 
 ## BREAKING CHANGES:
 
-* Table identification is now more specific (#??):
+* Table identification is now more specific (#93):
 
   Most SCDB functions allow for tables to be specified by a character representation of "schema.table".
 
@@ -12,23 +12,23 @@
   Now, it will always assume that a lack of schema means the default schema should be used.
   This is also the case if `DBI::Id()` is used without a schema specification.
 
-* The `show_temporary` argument of `get_tables()` is now a simple logical (#??).
+* The `show_temporary` argument of `get_tables()` is now a simple logical (#93).
 
   In addition, schema is always returned in the list of table (no longer NA for default schema).
 
 * Tables created with `create_table()` will now be temporary or permanent dependent on the default value of
-  `DBI::dbWriteTable()` (#??).
+  `DBI::dbWriteTable()` (#93).
 
   If you wish to overwrite this, use `...` arguments which are passed to `DBI::dbWriteTable()`.
 
-* If a `SQLiteConnection` is passed to `get_schema()`, the returned schema will always be "main" (#??).
+* If a `SQLiteConnection` is passed to `get_schema()`, the returned schema will always be "main" (#93).
 
 ## Features
-* The S3 method `as.character.Id()` is added which converts `DBI::Id()` to `character` (#??).
+* The S3 method `as.character.Id()` is added which converts `DBI::Id()` to `character` (#93).
 
 ## Improvements and Fixes
 
-* Improvements for `create_table()` (#??):
+* Improvements for `create_table()` (#93):
   - now writes the table if a remote connection is given. Before, it would only create the
   table with corresponding columns.
   - can now create temporary tables for Microsoft SQL Server.
@@ -42,15 +42,15 @@
 
 * `table_exists()` now correctly gives ambiguity warning on Microsoft SQL Server and PostgreSQL backends (#80).
 
-* `get_tables()` now supports temporary tables for Microsoft SQL Server (#??).
+* `get_tables()` now supports temporary tables for Microsoft SQL Server (#93).
 
 * Fixed dplyr joins failing if `testthat` is not installed (#90).
 
 ## Testing
 
-Added missing tests for `create_logs_if_missing()` (#??).
+Added missing tests for `create_logs_if_missing()` (#93).
 
-Improved tests for `get_tables()`, `table_exists()`, and `create_table()` (#??).
+Improved tests for `get_tables()`, `table_exists()`, and `create_table()` (#93).
 
 # SCDB 0.3
 
