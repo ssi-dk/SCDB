@@ -17,9 +17,9 @@
   In addition, schema is always returned in the list of table (no longer NA for default schema).
 
 * Tables created with `create_table()` will now be temporary or permanent dependent on the default value of
-  `DBI::dbWriteTable()` (#93).
+  `DBI::dbCreateTable()` (#93).
 
-  If you wish to overwrite this, use `...` arguments which are passed to `DBI::dbWriteTable()`.
+  If you wish to overwrite this, use `...` arguments which are passed to `DBI::dbCreateTable()`.
 
 * If a `SQLiteConnection` is passed to `get_schema()`, the returned schema will always be "main" (#93).
 
