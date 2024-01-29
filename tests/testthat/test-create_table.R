@@ -131,7 +131,8 @@ test_that("create_logs_if_missing() can create logs in default and test schema",
           duration = NA_character_,
           success = NA,
           message = NA_character_,
-          log_file = NA_character_) |>
+          log_file = NA_character_
+        ) |>
           dplyr::copy_to(conn, df = _, "SCDB_tmp", overwrite = TRUE) |>
           utils::head(0) |>
           dplyr::collect()
