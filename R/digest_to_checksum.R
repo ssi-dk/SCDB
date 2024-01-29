@@ -47,6 +47,24 @@ digest_to_checksum_internal <- function(.data, col) {
 }
 
 #' @noRd
+`digest_to_checksum_internal.tbl_Microsoft SQL Server` <- function(.data, col) {
+  con <- dbplyr::remote_con(.data)
+
+  # Define an identified variable for easier escaping
+  col_ident <- dbplyr::ident(col)
+  .data <- .data |>
+    tidyr::unite({{ col }}, tidyselect::all_of(tidyselect::ends_with("__chr"))) |>
+    dplyr::mutate(
+      {{ col }} := dbplyr::sql_call2("HashBytes", "SHA2_256", col_ident, con = con)
+    ) |>
+    dplyr::mutate(
+      {{ col }} := dbplyr::sql_expr(CONVERT(VARCHAR(1000L), !!col_ident, 2L), con = con)
+    )
+
+  return(.data)
+}
+
+#' @noRd
 digest_to_checksum_internal.default <- function(.data, col) {
 
   # Compute checksums locally then join back onto original data
