@@ -148,7 +148,7 @@ create_logs_if_missing <- function(log_table, conn) {
                                 message = NA_character_,
                                 log_file = NA_character_)
 
-    DBI::dbCreateTable(conn, id(log_table, conn), log_signature, temporary = FALSE)
+    DBI::dbCreateTable(conn, id(log_table, conn), log_signature)
   }
 
   return(dplyr::tbl(conn, id(log_table, conn), check_from = FALSE))
