@@ -126,6 +126,9 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     filter_keys(filters) |>
     dplyr::compute()
 
+  if (!identical(dbplyr::remote_con(.data), conn)) {
+    .data <- dplyr::copy_to(conn, .data, name = "update_snapshot_patch", temporary = TRUE, overwrite = FALSE)
+  }
 
   # Apply filter to current records
   db_table <- filter_keys(db_table, filters)
