@@ -19,7 +19,7 @@ methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
       until_ts = "TEXT"
     ),
     "Microsoft SQL Server" = c(
-      checksum = "varchar(32)",
+      checksum = "varchar(40)",
       from_ts  = "DATETIME2",
       until_ts = "DATETIME2"
     )
