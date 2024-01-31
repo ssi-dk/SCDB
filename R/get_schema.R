@@ -20,13 +20,12 @@
 #' tables.
 #' Additional databases may be attached to the connection with a named schema, but as the attachment must be made after
 #' the connection is established, `get_schema` will never return any of these, as the default schema will always be
-#' one of `main` or `temp` (if `main` contains no tables).
-#' A return value of `NA` means that no tables exist within the connection and no default schema therefore exists.
+#' `main`.
 #'
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' dplyr::copy_to(conn, mtcars, name = "mtcars")
+#' dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
 #'
 #' get_schema(conn)
 #' get_schema(get_table(conn, id("mtcars", conn = conn)))
@@ -55,20 +54,7 @@ get_schema.PqConnection <- function(.x) {
 #' @importFrom rlang .data
 #' @export
 get_schema.SQLiteConnection <- function(.x) {
-  schemata <-
-    DBI::dbGetQuery(.x, "PRAGMA table_list") |>
-    dplyr::filter(!.data$name %in% c("sqlite_schema", "sqlite_temp_schema"),
-                  !grepl("^sqlite_stat", .data$name)) |>
-    dplyr::pull(.data$schema) |>
-    unique()
-
-  if ("main" %in% schemata) {
-    return("main")
-  } else if ("temp" %in% schemata) {
-    return("temp")
-  } else {
-    return(NA_character_)
-  }
+  return("main")
 }
 
 #' @export

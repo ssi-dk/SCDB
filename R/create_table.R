@@ -5,17 +5,16 @@
 #' @template .data
 #' @template conn
 #' @template db_table_id
-#' @param temporary Should the table be created as a temporary table?
 #' @param ... Other arguments passed to [DBI::dbCreateTable()]
 #' @return Invisibly returns the table as it looks on the destination (or locally if conn is NULL)
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' create_table(mtcars, conn = conn, db_table_id = "mtcars_tmp")
+#' create_table(mtcars, conn = conn, db_table_id = "mtcars")
 #'
 #' close_connection(conn)
 #' @export
-create_table <- function(.data, conn = NULL, db_table_id, temporary = TRUE, ...) {
+create_table <- function(.data, conn = NULL, db_table_id, ...) {
 
   checkmate::assert_class(.data, "data.frame")
   checkmate::assert_class(conn, "DBIConnection", null.ok = TRUE)
@@ -23,9 +22,6 @@ create_table <- function(.data, conn = NULL, db_table_id, temporary = TRUE, ...)
 
   # Assert unique column names (may cause unexpected getTableSignature results)
   checkmate::assert_character(names(.data), unique = TRUE)
-
-  # Convert db_table_id to id (id() returns early if this is the case)
-  db_table_id <- id(db_table_id, conn = conn)
 
   if (is.historical(.data)) {
     stop("checksum/from_ts/until_ts column(s) already exist(s) in .data!")
@@ -41,13 +37,36 @@ create_table <- function(.data, conn = NULL, db_table_id, temporary = TRUE, ...)
   # Early return if there is no connection to push to
   if (is.null(conn)) return(invisible(.data))
 
+  # Check db_table_id conforms to requirements
+  # Temporary tables on some back ends must to begin with "#"
+  if (purrr::pluck(list(...), "temporary", .default = formals(DBI::dbCreateTable)$temporary)) {
+
+    db_table_schema <- purrr::pluck(db_table_id, "name", "schema")
+    db_table_name <- purrr::pluck(db_table_id, "name", "table", .default = db_table_id)
+
+    db_table_id <- DBI::Id(
+      schema = db_table_schema,
+      table = paste0(
+        ifelse(inherits(conn, "Microsoft SQL Server") && !startsWith(db_table_name, "#"), "#", ""),
+        db_table_name
+      )
+    )
+
+  } else {
+
+    # Non-temporary tables must be fully qualified
+    db_table_id <- id(db_table_id, conn)
+
+  }
+
   # Create the table on the remote and return the table
-  stopifnot("Table already exists!" = !table_exists(conn, db_table_id))
-  DBI::dbCreateTable(conn = conn,
-                     name = db_table_id,
-                     fields = getTableSignature(.data = .data, conn = conn),
-                     temporary = temporary,
-                     ...)
+  DBI::dbWriteTable(
+    conn = conn,
+    name = db_table_id,
+    value = .data,
+    fields = getTableSignature(.data = .data, conn = conn),
+    ...
+  )
 
   return(invisible(dplyr::tbl(conn, db_table_id, check_from = FALSE)))
 }
@@ -127,10 +146,9 @@ create_logs_if_missing <- function(log_table, conn) {
                                 duration = NA_character_,
                                 success = NA,
                                 message = NA_character_,
-                                log_file = NA_character_) |>
-      utils::head(0)
+                                log_file = NA_character_)
 
-    DBI::dbWriteTable(conn, id(log_table, conn), log_signature)
+    DBI::dbCreateTable(conn, id(log_table, conn), log_signature)
   }
 
   return(dplyr::tbl(conn, id(log_table, conn), check_from = FALSE))
