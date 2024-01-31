@@ -63,7 +63,7 @@ test_that("id() works for character input with implied schema when schema does n
 
     # Generate schema that does not exist
     k <- 0
-    while (TRUE && k < 100) {
+    while (k < 100) {
       invalid_schema_name <- paste(sample(letters, size = 16, replace = TRUE), collapse = "")
       k <- k + 1
       if (schema_exists(conn, invalid_schema_name)) next

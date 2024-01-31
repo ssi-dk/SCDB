@@ -61,7 +61,7 @@ test_that("table_exists() works for default schema", {
 
     # Generate table in default schema that does not exist
     k <- 0
-    while (TRUE && k < 100) {
+    while (k < 100) {
       invalid_table_name <- paste(sample(letters, size = 16, replace = TRUE), collapse = "")
       k <- k + 1
       if (DBI::dbExistsTable(conn, id(invalid_table_name, conn))) next
@@ -98,7 +98,7 @@ test_that("table_exists() works for non-default schema", {
 
     # Generate schema that does not exist
     k <- 0
-    while (TRUE && k < 100) {
+    while (k < 100) {
       invalid_schema_name <- paste(sample(letters, size = 16, replace = TRUE), collapse = "")
       k <- k + 1
       if (schema_exists(conn, invalid_schema_name)) next
@@ -176,7 +176,7 @@ test_that("get_table() works when tables does not exist in default schema", {
 
     # Generate table in default schema that does not exist
     k <- 0
-    while (TRUE && k < 100) {
+    while (k < 100) {
       invalid_table_name <- paste(sample(letters, size = 16, replace = TRUE), collapse = "")
       k <- k + 1
       if (DBI::dbExistsTable(conn, id(invalid_table_name, conn))) next
@@ -212,7 +212,7 @@ test_that("get_table() works when tables does not exist in non existing schema",
 
     # Generate schema that does not exist
     k <- 0
-    while (TRUE && k < 100) {
+    while (k < 100) {
       invalid_schema_name <- paste(sample(letters, size = 16, replace = TRUE), collapse = "")
       k <- k + 1
       if (schema_exists(conn, invalid_schema_name)) next

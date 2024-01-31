@@ -230,8 +230,8 @@ get_tables.OdbcConnection <- function(conn, pattern = NULL, show_temporary = TRU
 
 #' @export
 get_tables.DBIConnection <- function(conn, pattern = NULL, show_temporary = TRUE) {
-  if (isFALSE(show_temporary)) {
-    rlang::warn("show_temporary must be 'FALSE' for unsupported backends!")
+  if (isFALSE(show_temporary)) { # nocov start
+    rlang::warn("show_temporary must be 'FALSE' for unsupported backends!") # nocov end
   }
 
   # Check arguments

@@ -101,7 +101,7 @@ test_that("create_logs_if_missing() can create logs in default and test schema",
 
       # Generate table in schema that does not exist
       k <- 0
-      while (TRUE && k < 100) {
+      while (k < 100) {
         logs_id <- paste(c(schema, paste(sample(letters, size = 16, replace = TRUE), collapse = "")), collapse = ".")
         k <- k + 1
         if (DBI::dbExistsTable(conn, id(logs_id, conn))) next
