@@ -131,6 +131,9 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   }
 
   # Apply filter to current records
+  if (!is.null(filters) && !identical(dbplyr::remote_con(filters), conn)) {
+    filters <- dplyr::copy_to(conn, filters, name = "SCDB_update_snapshot_filters", temporary = TRUE)
+  }
   db_table <- filter_keys(db_table, filters)
 
   # Determine the next timestamp in the data (can be NA if none is found)
