@@ -1,4 +1,8 @@
-#' Computes an MD5 checksum from columns
+#' Computes an checksum from columns
+#'
+#' @details
+#'   In most cases, the md5 algorithm is used to compute the checksums.
+#'   For Microsoft SQL Server, the SHA_256 algorithm is used.
 #'
 #' @name digest_to_checksum
 #'
