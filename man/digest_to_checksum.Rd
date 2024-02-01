@@ -23,7 +23,7 @@ Computes an checksum from columns
 }
 \details{
 In most cases, the md5 algorithm is used to compute the checksums.
-For Microsoft SQL Server, the SHA_256 algorithm is used.
+For Microsoft SQL Server, the SHA-256 algorithm is used.
 }
 \examples{
 digest_to_checksum(mtcars)
