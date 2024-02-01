@@ -13,7 +13,7 @@ get_schema(.x)
 For \code{DBIConnection} objects, the current schema of the connection. See "default schema" for more.
 
 For \code{tbl_dbi} objects, the schema as retrieved from the lazy_query.
-If the lazy_query does not specify a schema, \code{NA} is returned.
+If the lazy_query does not specify a schema, \code{NULL} is returned.
 Note that lazy queries are sensitive to server-side changes and may therefore return entirely different tables
 if changes are made server-side.
 }

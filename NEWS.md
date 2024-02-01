@@ -23,6 +23,8 @@
 
 * If a `SQLiteConnection` is passed to `get_schema()`, the returned schema will always be "main" (#93).
 
+* `get_schema()` now returns `NULL` instead of `NA` if schema is undefined (#??).
+
 ## Features
 * The S3 method `as.character.Id()` is added which converts `DBI::Id()` to `character` (#93).
 

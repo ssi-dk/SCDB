@@ -5,7 +5,7 @@
 #' For `DBIConnection` objects, the current schema of the connection. See "default schema" for more.
 #'
 #' For `tbl_dbi` objects, the schema as retrieved from the lazy_query.
-#' If the lazy_query does not specify a schema, `NA` is returned.
+#' If the lazy_query does not specify a schema, `NULL` is returned.
 #' Note that lazy queries are sensitive to server-side changes and may therefore return entirely different tables
 #' if changes are made server-side.
 #'
@@ -38,12 +38,17 @@ get_schema <- function(.x) {
 
 #' @export
 get_schema.tbl_dbi <- function(.x) {
-  return(unclass(dbplyr::remote_table(.x))$schema)
+  schema <- dbplyr::remote_table(.x) |>
+    unclass() |>
+    purrr::discard(is.na) |>
+    purrr::pluck("schema")
+
+  return(schema)
 }
 
 #' @export
 get_schema.Id <- function(.x) {
-  return(unname(.x@name["schema"]))
+  return(purrr::pluck(.x@name, "schema"))
 }
 
 #' @export
@@ -51,7 +56,6 @@ get_schema.PqConnection <- function(.x) {
   return(DBI::dbGetQuery(.x, "SELECT CURRENT_SCHEMA()")$current_schema)
 }
 
-#' @importFrom rlang .data
 #' @export
 get_schema.SQLiteConnection <- function(.x) {
   return("main")
