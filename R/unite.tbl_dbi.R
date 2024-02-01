@@ -1,3 +1,6 @@
+# Resolve visible binding warning for SQL commands
+utils::globalVariables(c("NULLIF", "CONCAT_WS"))
+
 #' tidyr::unite for tbl_dbi
 #'
 #' @inheritParams tidyr::unite

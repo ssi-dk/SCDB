@@ -46,6 +46,9 @@ digest_to_checksum_internal <- function(.data, col) {
   UseMethod("digest_to_checksum_internal")
 }
 
+# Resolve visible binding warning for SQL commands
+utils::globalVariables(c("CONVERT", "VARCHAR"))
+
 #' @noRd
 `digest_to_checksum_internal.tbl_Microsoft SQL Server` <- function(.data, col) {
   con <- dbplyr::remote_con(.data)
