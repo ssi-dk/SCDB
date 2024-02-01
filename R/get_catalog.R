@@ -1,6 +1,5 @@
 #' @rdname get_schema
-#' @param temporary (`logical(1)`) \cr
-#'   Is the table in the temporary database?
+#' @param ... Further arguments passed to methods.
 #' @return
 #' For `get_catalog.Microsoft SQL Server`, the current database context of the connection or "tempdb" if
 #' `temorary = TRUE`.
@@ -12,7 +11,7 @@ get_catalog <- function(.x, ...) {
 }
 
 #' @export
-get_catalog.tbl_dbi <- function(.x) {
+get_catalog.tbl_dbi <- function(.x, ...) {
   catalog <- dbplyr::remote_table(.x) |>
     unclass() |>
     purrr::discard(is.na) |>
@@ -22,12 +21,15 @@ get_catalog.tbl_dbi <- function(.x) {
 }
 
 #' @export
-get_catalog.Id <- function(.x) {
+get_catalog.Id <- function(.x, ...) {
   return(purrr::pluck(.x@name, "catalog"))
 }
 
+#' @rdname get_schema
+#' @param temporary (`logical(1)`) \cr
+#'   Is the table in the temporary database?
 #' @export
-`get_catalog.Microsoft SQL Server` <- function(.x, temporary = FALSE) {
+`get_catalog.Microsoft SQL Server` <- function(.x, temporary = FALSE, ...) {
   checkmate::assert_logical(temporary)
 
   if (temporary) {
@@ -39,6 +41,6 @@ get_catalog.Id <- function(.x) {
 }
 
 #' @export
-get_catalog.default <- function(.x) {
+get_catalog.default <- function(.x, ...) {
   return(NULL)
 }

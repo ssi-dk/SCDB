@@ -2,15 +2,20 @@
 % Please edit documentation in R/get_catalog.R, R/get_schema.R
 \name{get_catalog}
 \alias{get_catalog}
+\alias{get_catalog.Microsoft SQL Server}
 \alias{get_schema}
 \title{Get the current schema / catalog of a database-related objects}
 \usage{
 get_catalog(.x, ...)
 
+\method{get_catalog}{`Microsoft SQL Server`}(.x, temporary = FALSE, ...)
+
 get_schema(.x)
 }
 \arguments{
 \item{.x}{The object from which to retrieve a schema}
+
+\item{...}{Further arguments passed to methods.}
 
 \item{temporary}{(\code{logical(1)}) \cr
 Is the table in the temporary database?}
