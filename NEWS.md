@@ -48,9 +48,12 @@
 
 ## Testing
 
-Added missing tests for `create_logs_if_missing()` (#93).
+* Added missing tests for `create_logs_if_missing()` (#93).
 
-Improved tests for `get_tables()`, `table_exists()`, and `create_table()` (#93).
+* Added missing tests for `get_schema()` (#??).
+
+* Improved tests for `get_tables()`, `table_exists()`, and `create_table()` (#93).
+
 
 # SCDB 0.3
 
