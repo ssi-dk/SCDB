@@ -38,6 +38,8 @@
   - A `character` input for `port` is allowed if it is a string of digits.
   - Now checks if `timezone` and `timezone_out` is an IANA time zone.
 
+* `digest_to_checksum()` has improved performance on SQL Server by use of the built-in `HashBytes` function (#97).
+
 * `get_connection()` now checks the value of any `timezone` and `timezone_out` arguments (#83).
 
 * `table_exists()` now correctly gives ambiguity warning on Microsoft SQL Server and PostgreSQL backends (#80).
