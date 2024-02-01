@@ -41,7 +41,7 @@
   By passing a `tbl_sql` object to this function, the corresponding table will be deleted once
   the parent function exits.
 
-* A new function, `unique_table_name()`, to generate unique table names is added (#??).
+* A new function, `unique_table_name()`, to generate unique table names is added (#89).
   This function is heavily inspired by the unexported `dbplyr:::unique_table_name()`.
 
 ## Improvements and Fixes
