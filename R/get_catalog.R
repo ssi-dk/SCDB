@@ -2,7 +2,7 @@
 #' @param ... Further arguments passed to methods.
 #' @return
 #' For `get_catalog.Microsoft SQL Server`, the current database context of the connection or "tempdb" if
-#' `temorary = TRUE`.
+#' `temporary = TRUE`.
 #'
 #' For `get_catalog.*`, `NULL` is returned.
 #' @export

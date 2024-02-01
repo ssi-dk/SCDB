@@ -22,7 +22,7 @@ Is the table in the temporary database?}
 }
 \value{
 For \verb{get_catalog.Microsoft SQL Server}, the current database context of the connection or "tempdb" if
-\code{temorary = TRUE}.
+\code{temporary = TRUE}.
 
 For \verb{get_catalog.*}, \code{NULL} is returned.
 
