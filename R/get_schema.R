@@ -1,10 +1,11 @@
-#' Get the current schema of a database-related objects
+#' Get the current schema / catalog of a database-related objects
 #'
+#' @name get_schema
 #' @param .x The object from which to retrieve a schema
 #' @return
-#' For `DBIConnection` objects, the current schema of the connection. See "default schema" for more.
+#' For `get_schema.DBIConnection`, the current schema of the connection. See "Default schema" for more.
 #'
-#' For `tbl_dbi` objects, the schema as retrieved from the lazy_query.
+#' For `get_schema.tbl_dbi` the schema as retrieved from the lazy_query.
 #' If the lazy_query does not specify a schema, `NULL` is returned.
 #' Note that lazy queries are sensitive to server-side changes and may therefore return entirely different tables
 #' if changes are made server-side.

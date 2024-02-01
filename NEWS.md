@@ -26,7 +26,10 @@
 * `get_schema()` now returns `NULL` instead of `NA` if schema is undefined (#??).
 
 ## Features
+
 * The S3 method `as.character.Id()` is added which converts `DBI::Id()` to `character` (#93).
+
+* A new `get_catalog()` function is added to give more specific table identification (#??).
 
 ## Improvements and Fixes
 
