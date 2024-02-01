@@ -49,6 +49,8 @@
 
 * `get_tables()` now supports temporary tables for Microsoft SQL Server (#93).
 
+* `id()` now includes information of catalog in more cases (#??).
+
 * Fixed dplyr joins failing if `testthat` is not installed (#90).
 
 ## Testing
