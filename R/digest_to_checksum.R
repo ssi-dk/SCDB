@@ -82,10 +82,9 @@ digest_to_checksum_internal.default <- function(.data, col) {
   return(.data)
 }
 
-#'
 # It seems we need to do more hacking since
-# @importFrom openssl md5 does not work in the below usecase.
-# defining md5 here succesfully causes local objects to use the openssl md5 function
+# @importFrom openssl md5 does not work in the below use case.
+# defining md5 here successfully causes local objects to use the openssl md5 function
 # and remote objects to use their own md5 functions.
 md5 <- openssl::md5
 
