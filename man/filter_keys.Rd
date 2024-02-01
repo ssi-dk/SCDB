@@ -2,7 +2,7 @@
 % Please edit documentation in R/filter_keys.R
 \name{filter_keys}
 \alias{filter_keys}
-\title{Filters .data according to all records in the filter}
+\title{Filters data according to all records in the filter}
 \usage{
 filter_keys(.data, filters, by = NULL, na_by = NULL)
 }

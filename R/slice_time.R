@@ -1,4 +1,4 @@
-#' Slices a data object based on time / date
+#' Slices a historical table based on time / date
 #'
 #' @template .data
 #' @param slice_ts The time / date to slice by

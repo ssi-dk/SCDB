@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_tables.R
 \name{get_tables}
 \alias{get_tables}
-\title{Gets the available tables}
+\title{List the available tables in the database}
 \usage{
 get_tables(conn, pattern = NULL, show_temporary = TRUE)
 }
@@ -18,7 +18,7 @@ Should temporary tables be listed?}
 A data.frame containing table names in the DB
 }
 \description{
-Gets the available tables
+List the available tables in the database
 }
 \examples{
 conn <- get_connection(drv = RSQLite::SQLite())

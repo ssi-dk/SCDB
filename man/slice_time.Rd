@@ -2,7 +2,7 @@
 % Please edit documentation in R/slice_time.R
 \name{slice_time}
 \alias{slice_time}
-\title{Slices a data object based on time / date}
+\title{Slices a historical table based on time / date}
 \usage{
 slice_time(.data, slice_ts, from_ts = from_ts, until_ts = until_ts)
 }
@@ -19,7 +19,7 @@ slice_time(.data, slice_ts, from_ts = from_ts, until_ts = until_ts)
 An object similar to .data
 }
 \description{
-Slices a data object based on time / date
+Slices a historical table based on time / date
 }
 \examples{
 conn <- get_connection(drv = RSQLite::SQLite())

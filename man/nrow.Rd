@@ -2,7 +2,7 @@
 % Please edit documentation in R/helpers.R
 \name{nrow}
 \alias{nrow}
-\title{nrow() but also works on remote tables}
+\title{base::nrow() but also works on remote tables}
 \usage{
 nrow(.data)
 }
@@ -13,7 +13,7 @@ nrow(.data)
 The number of records in the object
 }
 \description{
-nrow() but also works on remote tables
+base::nrow() but also works on remote tables
 }
 \examples{
 conn <- get_connection(drv = RSQLite::SQLite())

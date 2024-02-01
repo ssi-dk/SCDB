@@ -2,8 +2,7 @@
 % Please edit documentation in R/interlace_sql.R
 \name{interlace_sql}
 \alias{interlace_sql}
-\title{Combine any number of SQL queries, where each has their own time axis of
-validity (valid_from and valid_until)}
+\title{Join temporal tables}
 \usage{
 interlace_sql(tables, by = NULL, colnames = NULL)
 }

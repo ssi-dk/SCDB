@@ -1,13 +1,18 @@
 #' Get the current schema of a database-related objects
 #'
-#' @param .x The object from which to retrieve a schema
-#' @return
-#' For `DBIConnection` objects, the current schema of the connection. See "default schema" for more.
+#' @name get_schema
+#' @param .x The object from which to retrieve a schema.
+#' @details
+#' The schema is determined depending on the type of input:
 #'
-#' For `tbl_dbi` objects, the schema as retrieved from the lazy_query.
+#' * For `DBIConnection` objects, the current schema of the connection. See "default schema" for more.
+#'
+#' * For `tbl_dbi` objects, the schema as retrieved from the lazy_query.
 #' If the lazy_query does not specify a schema, `NA` is returned.
 #' Note that lazy queries are sensitive to server-side changes and may therefore return entirely different tables
 #' if changes are made server-side.
+#'
+#' * For `Id` objects, the schema is extracted from the object.
 #'
 #' @section Default schema:
 #'
@@ -22,6 +27,7 @@
 #' the connection is established, `get_schema` will never return any of these, as the default schema will always be
 #' `main`.
 #'
+#' @return The schema inferred from the object.
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
@@ -36,14 +42,23 @@ get_schema <- function(.x) {
   UseMethod("get_schema")
 }
 
+#' @rdname get_schema
 #' @export
 get_schema.tbl_dbi <- function(.x) {
   return(unclass(dbplyr::remote_table(.x))$schema)
 }
 
+#' @rdname get_schema
 #' @export
 get_schema.Id <- function(.x) {
   return(unname(.x@name["schema"]))
+}
+
+# This method is not exported and included to act as a common entry in the references for the three methods below:
+# PqConnection, SQLiteConnection and `Microsoft SQL Server` which are all DBIConnections.
+#' @rdname get_schema
+get_schema.DBIConnection <- function(.x) {
+  NextMethod()
 }
 
 #' @export

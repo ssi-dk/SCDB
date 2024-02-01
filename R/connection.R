@@ -1,7 +1,9 @@
-#' Opens connection to the database
+#' Open and close connections to the database
 #'
-#' Connects to the specified dbname of host:port using user and password from given arguments.
-#' Certain drivers may use credentials stored in a file, such as ~/.pgpass (PostgreSQL)
+#' @name connections
+#' @description
+#'   Connects to the specified dbname of host:port using user and password from given arguments.
+#'   Certain drivers may use credentials stored in a file, such as ~/.pgpass (PostgreSQL)
 #'
 #' @param drv
 #'   An object that inherits from DBIDriver or an existing DBIConnection (default: RPostgres::Postgres())
@@ -96,8 +98,7 @@ get_connection <- function(drv = RPostgres::Postgres(),
 }
 
 
-#' Close connection to the DB
-#'
+#' @rdname connections
 #' @template conn
 #' @inherit DBI::dbDisconnect return
 #' @examples

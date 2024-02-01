@@ -1,4 +1,4 @@
-#' Gets the available tables
+#' List the available tables in the database
 #'
 #' @template conn
 #' @param pattern A regex pattern with which to subset the returned tables

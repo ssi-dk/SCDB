@@ -1,5 +1,4 @@
-#' Combine any number of SQL queries, where each has their own time axis of
-#' validity (valid_from and valid_until)
+#' Join temporal tables
 #'
 #' @description
 #' The function "interlaces" the queries and combines their validity time axes

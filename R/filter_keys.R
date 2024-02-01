@@ -1,4 +1,4 @@
-#' Filters .data according to all records in the filter
+#' Filters data according to all records in the filter
 #'
 #' @description
 #' If filter = NULL, not filtering is done

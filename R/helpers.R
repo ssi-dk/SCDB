@@ -1,7 +1,7 @@
 #' @import tidyverse dbplyr lubridate
 NULL
 
-#' nrow() but also works on remote tables
+#' base::nrow() but also works on remote tables
 #'
 #' @param .data lazy_query to parse
 #' @return The number of records in the object

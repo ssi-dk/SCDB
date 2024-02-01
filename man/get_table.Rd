@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_table.R
 \name{get_table}
 \alias{get_table}
-\title{Gets a named table from a given schema}
+\title{Flexibly gets tables from the database}
 \usage{
 get_table(conn, db_table_id = NULL, slice_ts = NA, include_slice_info = FALSE)
 }
@@ -25,7 +25,7 @@ Note that a temporary table will be preferred over ordinary tables in the defaul
 an identical name.
 }
 \description{
-Gets a named table from a given schema
+Flexibly gets tables from the database
 }
 \examples{
 conn <- get_connection(drv = RSQLite::SQLite())

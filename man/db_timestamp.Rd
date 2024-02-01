@@ -2,26 +2,20 @@
 % Please edit documentation in R/db_timestamps.R
 \name{db_timestamp}
 \alias{db_timestamp}
-\alias{db_timestamp.default}
-\alias{db_timestamp.SQLiteConnection}
-\title{Determine the type of timestamps the DB supports}
+\title{Translate timestamps to formats the database supports}
 \usage{
 db_timestamp(timestamp, conn = NULL)
-
-\method{db_timestamp}{default}(timestamp, conn)
-
-\method{db_timestamp}{SQLiteConnection}(timestamp, conn)
 }
 \arguments{
 \item{timestamp}{The timestamp to be transformed to the DB type. Can be character.}
 
-\item{conn}{A \code{DBIConnection} to the DB where the timestamp should be stored}
+\item{conn}{A \code{DBIConnection} to the DB where the timestamp should be stored.}
 }
 \value{
-The given timestamp converted to a SQL-backend dependent timestamp
+The given timestamp converted to a SQL-backend dependent timestamp.
 }
 \description{
-Determine the type of timestamps the DB supports
+Translate timestamps to formats the database supports
 }
 \examples{
 conn <- get_connection(drv = RSQLite::SQLite())

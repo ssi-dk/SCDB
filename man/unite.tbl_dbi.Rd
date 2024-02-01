@@ -2,7 +2,7 @@
 % Please edit documentation in R/unite.tbl_dbi.R
 \name{unite.tbl_dbi}
 \alias{unite.tbl_dbi}
-\title{tidyr::unite for tbl_dbi}
+\title{tidyr::unite for tbl_dbi objects}
 \usage{
 unite.tbl_dbi(data, col, ..., sep = "_", remove = TRUE, na.rm = FALSE)
 }
@@ -31,7 +31,7 @@ each value.}
 A tbl_dbi with the specified columns united into a new column named according to "col"
 }
 \description{
-tidyr::unite for tbl_dbi
+tidyr::unite for tbl_dbi objects
 }
 \examples{
 library(tidyr, warn.conflicts = FALSE)

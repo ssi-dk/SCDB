@@ -1,4 +1,4 @@
-#' tidyr::unite for tbl_dbi
+#' tidyr::unite for tbl_dbi objects
 #'
 #' @inheritParams tidyr::unite
 #' @examples

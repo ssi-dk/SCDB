@@ -114,7 +114,7 @@ join_warn_experimental <- function() {
 }
 
 
-#' SQL Joins
+#' Faster SQL Joins when NA should match NA
 #'
 #' @name joins
 #'

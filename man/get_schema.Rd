@@ -2,23 +2,38 @@
 % Please edit documentation in R/get_schema.R
 \name{get_schema}
 \alias{get_schema}
+\alias{get_schema.tbl_dbi}
+\alias{get_schema.Id}
+\alias{get_schema.DBIConnection}
 \title{Get the current schema of a database-related objects}
 \usage{
 get_schema(.x)
+
+\method{get_schema}{tbl_dbi}(.x)
+
+\method{get_schema}{Id}(.x)
+
+\method{get_schema}{DBIConnection}(.x)
 }
 \arguments{
-\item{.x}{The object from which to retrieve a schema}
+\item{.x}{The object from which to retrieve a schema.}
 }
 \value{
-For \code{DBIConnection} objects, the current schema of the connection. See "default schema" for more.
-
-For \code{tbl_dbi} objects, the schema as retrieved from the lazy_query.
-If the lazy_query does not specify a schema, \code{NA} is returned.
-Note that lazy queries are sensitive to server-side changes and may therefore return entirely different tables
-if changes are made server-side.
+The schema inferred from the object.
 }
 \description{
 Get the current schema of a database-related objects
+}
+\details{
+The schema is determined depending on the type of input:
+\itemize{
+\item For \code{DBIConnection} objects, the current schema of the connection. See "default schema" for more.
+\item For \code{tbl_dbi} objects, the schema as retrieved from the lazy_query.
+If the lazy_query does not specify a schema, \code{NA} is returned.
+Note that lazy queries are sensitive to server-side changes and may therefore return entirely different tables
+if changes are made server-side.
+\item For \code{Id} objects, the schema is extracted from the object.
+}
 }
 \section{Default schema}{
 

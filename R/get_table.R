@@ -1,4 +1,4 @@
-#' Gets a named table from a given schema
+#' Flexibly gets tables from the database
 #'
 #' @template conn
 #' @templateVar miss TRUE

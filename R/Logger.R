@@ -1,6 +1,7 @@
-#' @title Logger
+#' Configurable logging object
+#'
 #' @description
-#' Create an object for logging database operations
+#'   Create an object for logging database operations
 #'
 #' @importFrom R6 R6Class
 #' @param db_tablestring A string specifying the table being updated
@@ -9,9 +10,10 @@
 #' @param ts A timestamp describing the data being processed (not the current time)
 #' @param start_time The time at which data processing was started (defaults to [Sys.time()])
 #' @examples
-#' logger <- Logger$new(db_tablestring = "test.table",
-#'                      ts = "2020-01-01 09:00:00")
-#' @return A new instance of the `Logger` [R6][R6::R6Class] class.
+#'   logger <- Logger$new(db_tablestring = "test.table",
+#'                        ts = "2020-01-01 09:00:00")
+#' @return
+#'   A new instance of the `Logger` [R6][R6::R6Class] class.
 #' @export
 Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
   classname  = "Logger",

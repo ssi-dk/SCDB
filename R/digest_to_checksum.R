@@ -3,13 +3,13 @@
 #' @name digest_to_checksum
 #'
 #' @template .data
-#' @param col Name of the column to put the checksums in
-#' @param warn Flag to warn if target column already exists in data
-#' @param exclude Columns to exclude from the checksum generation
+#' @param col Name of the column to put the checksums in.
+#' @param warn Flag to warn if target column already exists in data.
+#' @param exclude Columns to exclude from the checksum generation.
 #' @examples
 #' digest_to_checksum(mtcars)
 #'
-#' @return .data with an checksum column added
+#' @return .data with an checksum column added.
 #' @export
 digest_to_checksum <- function(.data, col = "checksum", exclude = NULL, warn = TRUE) {
 

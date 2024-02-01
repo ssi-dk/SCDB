@@ -1,39 +1,45 @@
-#' Convenience function for DBI::Id
+#' Flexibly generate `DBI::Id`'s
 #'
+#' @name id
 #' @template db_table_id
 #' @template conn
-#' @param allow_table_only
-#'  logical. If `TRUE`, allows for returning an `DBI::Id` with `table` = `myschema.table` if schema `myschema`
-#'  is not found in `conn`.
-#'  If `FALSE`, the function will raise an error if the implied schema cannot be found in `conn`
-#' @details The given `db_table_id` is parsed to a DBI::Id depending on the type of input:
+#' @details
+#' The given `db_table_id` is parsed to a DBI::Id depending on the type of input:
+#'
 #'  * `character`: db_table_id is parsed to a DBI::Id object using an assumption of "schema.table" syntax
 #'     with corresponding schema (if found in `conn`) and table values.
 #'     If no schema is implied, the default schema of `conn` will be used.
 #'
 #'  * `DBI::Id`: if schema is not specified in `Id`, the schema is set to the default schema for `conn` (if given).
 #'
-#'  * `tbl_sql`: the remote name is used to resolve the table identification.
+#'  * `tbl_dbi`: the remote name is used to resolve the table identification.
 #'
-#' @return A DBI::Id object parsed from db_table_id (see details)
-#' @examples
-#' id("schema.table")
+#' @return
+#'   A DBI::Id object parsed from db_table_id (see details)
 #' @seealso [DBI::Id] which this function wraps.
 #' @export
-id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+id <- function(db_table_id, conn = NULL, ...) {
   UseMethod("id")
 }
 
 
+#' @rdname id
 #' @export
-id.Id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+id.Id <- function(db_table_id, conn = NULL, ...) {
   return(DBI::Id(schema = purrr::pluck(db_table_id, "name", "schema", .default = SCDB::get_schema(conn)),
                  table = purrr::pluck(db_table_id, "name", "table")))
 }
 
 
+#' @rdname id
+#' @param allow_table_only (`logical(1)`)\cr
+#'  If `TRUE`, allows for returning an `DBI::Id` with `table` = `myschema.table` if schema `myschema`
+#'  is not found in `conn`.
+#'  If `FALSE`, the function will raise an error if the implied schema cannot be found in `conn`
+#' @examples
+#'   id("schema.table")
 #' @export
-id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE, ...) {
 
   checkmate::assert(is.null(conn), DBI::dbIsValid(conn), combine = "or")
 
@@ -55,8 +61,9 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
 }
 
 
+#' @rdname id
 #' @export
-id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+id.tbl_dbi <- function(db_table_id, conn = NULL, ...) {
 
   # If table identification is fully qualified extract Id from remote_Table
   if (!is.na(purrr::pluck(dbplyr::remote_table(db_table_id), unclass, "schema"))) {

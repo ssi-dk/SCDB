@@ -8,7 +8,7 @@
 \alias{full_join.tbl_sql}
 \alias{semi_join.tbl_sql}
 \alias{anti_join.tbl_sql}
-\title{SQL Joins}
+\title{Faster SQL Joins when NA should match NA}
 \usage{
 \method{inner_join}{tbl_sql}(x, y, by = NULL, ...)
 

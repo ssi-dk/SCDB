@@ -9,14 +9,14 @@ digest_to_checksum(.data, col = "checksum", exclude = NULL, warn = TRUE)
 \arguments{
 \item{.data}{A data frame, a tibble, a data.table or a tbl.}
 
-\item{col}{Name of the column to put the checksums in}
+\item{col}{Name of the column to put the checksums in.}
 
-\item{exclude}{Columns to exclude from the checksum generation}
+\item{exclude}{Columns to exclude from the checksum generation.}
 
-\item{warn}{Flag to warn if target column already exists in data}
+\item{warn}{Flag to warn if target column already exists in data.}
 }
 \value{
-.data with an checksum column added
+.data with an checksum column added.
 }
 \description{
 Computes an MD5 checksum from columns
