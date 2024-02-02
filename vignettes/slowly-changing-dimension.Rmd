@@ -199,8 +199,8 @@ slice_timestamp <- "2021-03-02"
 
 addresses %>%
   filter(ID == 1,
-         ValidFrom < !!slice_timestamp &
-           (ValidUntil >= !!slice_timestamp | is.na(ValidUntil))) %>%
+         ValidFrom < !!slice_timestamp,
+         ValidUntil >= !!slice_timestamp | is.na(ValidUntil)) %>%
   select(!c("ValidFrom", "ValidUntil"))
 ```
 In other words, even though Alice's address was subsequently updated in the registry, we can still see that she *was* registered as living in Donut Plains at this time.
@@ -222,8 +222,8 @@ slice_timestamp <- "2022-03-04"
 addresses2 %>%
   filter(Address == "Rainbow Road 8",
          is.na(MovedOut),
-         ValidFrom < !!slice_timestamp &
-           (ValidUntil >= !!slice_timestamp | is.na(ValidUntil))) %>%
+         ValidFrom < !!slice_timestamp,
+         ValidUntil >= !!slice_timestamp || is.na(ValidUntil)) %>%
   select(ID, GivenName, Surname, MovedIn, MovedOut)
 
 slice_timestamp <- "2023-09-29"
@@ -231,8 +231,8 @@ slice_timestamp <- "2023-09-29"
 addresses2 %>%
   filter(Address == "Rainbow Road 8",
          is.na(MovedOut),
-         ValidFrom < !!slice_timestamp &
-           (ValidUntil >= !!slice_timestamp | is.na(ValidUntil))) %>%
+         ValidFrom < !!slice_timestamp,
+         ValidUntil >= !!slice_timestamp || is.na(ValidUntil)) %>%
   select(ID, GivenName, Surname, MovedIn, MovedOut)
 ```
 
