@@ -8,83 +8,82 @@
 #'
 #' @template .data
 #' @param col Name of the column to put the checksums in
-#' @param warn Flag to warn if target column already exists in data
 #' @param exclude Columns to exclude from the checksum generation
 #' @examples
 #' digest_to_checksum(mtcars)
 #'
 #' @return .data with an checksum column added
 #' @export
-digest_to_checksum <- function(.data, col = "checksum", exclude = NULL, warn = TRUE) {
+digest_to_checksum <- function(.data, col = "checksum", exclude = NULL) {
 
   # Check arguments
+  assert_data_like(.data)
   checkmate::assert_character(col)
-  checkmate::assert_logical(warn)
+  checkmate::assert_character(exclude, null.ok = TRUE)
 
-  if (as.character(dplyr::ensym(col)) %in% colnames(.data) && warn) {
-    warning("Column ",
-            as.character(dplyr::ensym(col)),
-            " already exists in data and will be overwritten!")
+  if (as.character(dplyr::ensym(col)) %in% colnames(.data)) {
+    warning(glue::glue("Column {as.character(dplyr::ensym(col))} already exists in data and will be overwritten!"))
   }
 
-  colnames <- .data |>
-    dplyr::select(!tidyselect::any_of(c(col, exclude))) |>
-    colnames()
-
-  .data <- .data |>
-    dplyr::select(!tidyselect::any_of(col)) |>
-    dplyr::mutate(dplyr::across(
-      tidyselect::all_of(colnames),
-      ~ dplyr::coalesce(as.character(.), ""),
-      .names = "{.col}.__chr"
-    ))
-
-  return(digest_to_checksum_internal(.data, col))
+  UseMethod("digest_to_checksum", .data)
 }
 
-#' @template .data
-#' @param col The name of column the checksums will be placed in
-#' @inherit digest_to_checksum return
-#' @noRd
-digest_to_checksum_internal <- function(.data, col) {
-  UseMethod("digest_to_checksum_internal")
-}
 
 # Resolve visible binding warning for SQL commands
 utils::globalVariables(c("CONVERT", "VARCHAR"))
 
 #' @noRd
-`digest_to_checksum_internal.tbl_Microsoft SQL Server` <- function(.data, col) {
-  con <- dbplyr::remote_con(.data)
+`digest_to_checksum.tbl_Microsoft SQL Server` <- function(
+    .data,
+    col = formals(digest_to_checksum)$col,
+    exclude = formals(digest_to_checksum)$exclude) {
 
-  # Define an identified variable for easier escaping
-  col_ident <- dbplyr::ident(col)
+  conn <- dbplyr::remote_con(.data)
+
+  hash_cols <- dbplyr::ident(setdiff(colnames(.data), c(col, exclude)))
+
   .data <- .data |>
-    tidyr::unite({{ col }}, tidyselect::all_of(tidyselect::ends_with("__chr"))) |>
     dplyr::mutate(
-      {{ col }} := dbplyr::sql_call2("HashBytes", "SHA2_256", col_ident, con = con)
-    ) |>
-    dplyr::mutate(
-      {{ col }} := dbplyr::sql_expr(CONVERT(VARCHAR(40L), !!col_ident, 2L), con = con)  # nolint: object_usage_linter
+      {{ col }} := !!dbplyr::sql_call2(
+        "HashBytes",
+        "SHA2_256",
+        dbplyr::build_sql("(SELECT ", hash_cols, " FOR XML RAW)", con = conn),
+        con = conn
+      )
     )
 
   return(.data)
 }
 
-#' @noRd
-digest_to_checksum_internal.default <- function(.data, col) {
+#' @export
+digest_to_checksum.default <- function(
+    .data,
+    col = formals(digest_to_checksum)$col,
+    exclude = formals(digest_to_checksum)$exclude) {
+
+  hash_cols <- setdiff(colnames(.data), c(col, exclude))
+
+  # The md5 algorithm needs character inputs, so we convert the hash columns to character and concatenate
+  checksums <- .data |>
+    dplyr::mutate(dplyr::across(
+      tidyselect::all_of(hash_cols),
+      ~ dplyr::coalesce(as.character(.), ""),
+      .names = "{.col}.__chr"
+    ))
 
   # Compute checksums locally then join back onto original data
-  checksums <- .data |>
+  checksums <- checksums |>
     dplyr::collect() |>
-    tidyr::unite(col, tidyselect::ends_with(".__chr")) |>
-    dplyr::transmute(id__ = dplyr::row_number(),
-                     checksum = openssl::md5({{ col }}))
+    tidyr::unite(!!col, tidyselect::ends_with(".__chr"), remove = FALSE) |>
+    dplyr::transmute(
+      id__ = dplyr::row_number(),
+      {{ col }} := openssl::md5( .data[[col]] )
+    )
 
   .data <- .data |>
     dplyr::mutate(id__ = dplyr::row_number()) |>
     dplyr::left_join(checksums, by = "id__", copy = TRUE) |>
-    dplyr::select(!c(tidyselect::ends_with(".__chr"), "id__"))
+    dplyr::select(!"id__")
 
   return(.data)
 }
@@ -95,19 +94,30 @@ digest_to_checksum_internal.default <- function(.data, col) {
 # and remote objects to use their own md5 functions.
 md5 <- openssl::md5
 
-# Some backends have native md5 support, these use this function
+# Some backends have native md5 support, these use this function.
 #' @noRd
-digest_to_checksum_native_md5 <- function(.data, col) {
+digest_to_checksum_native_md5 <- function(
+    .data,
+    col = formals(digest_to_checksum)$col,
+    exclude = formals(digest_to_checksum)$exclude) {
 
+  hash_cols <- setdiff(colnames(.data), c(col, exclude))
+
+  # The md5 algorithm needs character inputs, so we convert the hash columns to character and concatenate
   .data <- .data |>
+    dplyr::mutate(dplyr::across(
+      tidyselect::all_of(hash_cols),
+      ~ dplyr::coalesce(as.character(.), ""),
+      .names = "{.col}.__chr"
+    )) |>
     tidyr::unite(!!col, tidyselect::ends_with(".__chr"), remove = TRUE) |>
     dplyr::mutate(dplyr::across(tidyselect::all_of(col), md5))
 
   return(.data)
 }
 
-digest_to_checksum_internal.tbl_PqConnection <- digest_to_checksum_native_md5
+#' @export
+digest_to_checksum.tbl_PqConnection <- digest_to_checksum_native_md5
 
-digest_to_checksum_internal.data.frame       <- digest_to_checksum_native_md5
-
-digest_to_checksum_internal.tibble           <- digest_to_checksum_native_md5
+#' @export
+digest_to_checksum.data.frame       <- digest_to_checksum_native_md5

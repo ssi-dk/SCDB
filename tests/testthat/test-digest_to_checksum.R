@@ -44,7 +44,7 @@ test_that("digest_to_checksum() warns works correctly when overwriting", {
 
     expect_warning(checksum_vector2 <- mtcars |>
                      digest_to_checksum(col = "checksum") |>
-                     digest_to_checksum(col = "checksum", warn = TRUE) |>
+                     digest_to_checksum(col = "checksum") |>
                      dplyr::pull(checksum))
 
     expect_identical(checksum_vector, checksum_vector2)

@@ -122,7 +122,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     dplyr::select(
       colnames(dplyr::select(db_table, !tidyselect::any_of(c("checksum", "from_ts", "until_ts"))))
     ) |>
-    digest_to_checksum(col = "checksum", warn = TRUE) |>
+    digest_to_checksum(col = "checksum") |>
     filter_keys(filters) |>
     dplyr::compute()
 
