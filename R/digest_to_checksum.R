@@ -77,7 +77,7 @@ digest_to_checksum.default <- function(
     tidyr::unite(!!col, tidyselect::ends_with(".__chr"), remove = FALSE) |>
     dplyr::transmute(
       id__ = dplyr::row_number(),
-      {{ col }} := openssl::md5( .data[[col]] )
+      {{ col }} := openssl::md5(.data[[col]])
     )
 
   .data <- .data |>
