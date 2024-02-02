@@ -15,7 +15,7 @@ NULL
 #' @export
 nrow <- function(.data) {
   if (inherits(.data, "tbl_dbi")) {
-    return(dplyr::pull(dplyr::count(dplyr::ungroup(.data))))
+    return(as.numeric(dplyr::pull(dplyr::count(dplyr::ungroup(.data)))))
   } else {
     return(base::nrow(.data))
   }
