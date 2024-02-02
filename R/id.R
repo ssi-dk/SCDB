@@ -41,7 +41,7 @@ id.Id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
   fully_qualified_id <- DBI::Id(
     catalog = purrr::pluck(db_table_id, "name", "catalog", .default = catalog),
     schema = purrr::pluck(db_table_id, "name", "schema", .default = SCDB::get_schema(conn)),
-    table = purrr::pluck(db_table_id, "name", "table")
+    table = table_name
   )
 
   return(fully_qualified_id)
