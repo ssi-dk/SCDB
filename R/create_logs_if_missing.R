@@ -6,11 +6,11 @@
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #' log_table_id <- id("test.logs", conn = conn, allow_table_only = TRUE)
 #'
-#' create_logs_if_missing(log_table_id, conn)
+#' create_logs_if_missing(conn, log_table_id)
 #'
 #' close_connection(conn)
 #' @export
-create_logs_if_missing <- function(log_table, conn) {
+create_logs_if_missing <- function(conn, log_table) {
 
   checkmate::assert_class(conn, "DBIConnection")
 

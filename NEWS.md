@@ -25,6 +25,11 @@
 
 * `get_schema()` now returns `NULL` instead of `NA` if schema is undefined (#99).
 
+* The order of arguments in `create_logs_if_missing()` has been swapped to match the rest of the package (#??).
+  The `conn` argument is now before the `log_table` argument.
+
+* The `%notin%` operator has been removed from the package
+
 ## Features
 
 * The S3 method `as.character.Id()` is added which converts `DBI::Id()` to `character` (#93).

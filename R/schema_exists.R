@@ -45,16 +45,20 @@ schema_exists.default <- function(conn, schema) {
 
   if (any(matches)) return(TRUE)
 
-  tryCatch({
-    DBI::dbCreateTable(
-      conn,
-      name = DBI::Id(schema = schema, table = "SCDB_schema_test"),
-      fields = data.frame(name = character()),
-      temporary = FALSE
-    )
+  tryCatch(
+    {
+      DBI::dbCreateTable(
+        conn,
+        name = DBI::Id(schema = schema, table = "SCDB_schema_test"),
+        fields = data.frame(name = character()),
+        temporary = FALSE
+      )
 
-    DBI::dbRemoveTable(conn, DBI::Id(schema = schema, table = "SCDB_schema_test"))
-    TRUE
-  },
-  error = function(e) FALSE)
+      DBI::dbRemoveTable(conn, DBI::Id(schema = schema, table = "SCDB_schema_test"))
+      return(TRUE)
+    },
+    error = function(e) {
+      return(FALSE)
+    }
+  )
 }

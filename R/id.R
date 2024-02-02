@@ -78,6 +78,13 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
 #' @export
 id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
 
+  if (is.null(dbplyr::remote_table(db_table_id))) {
+    stop(
+      "Table identification can only be determined if the lazy query is unmodified ",
+      "(i.e. no dplyr manipulation steps can be made)!"
+    )
+  }
+
   # If table identification is fully qualified extract Id from remote_Table
   if (!is.na(purrr::pluck(dbplyr::remote_table(db_table_id), unclass, "schema"))) {
 

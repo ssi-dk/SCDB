@@ -92,8 +92,7 @@ select_na_sql <- function(x, y, by, na_by, left = TRUE) {
 #' @return A warning that *_joins on SQL backends does not match NA by default
 #' @noRd
 join_warn <- function() {
-  if (requireNamespace("testthat", quietly = TRUE) && testthat::is_testing() || !interactive()) return()
-  if (identical(parent.frame(n = 2), globalenv())) {
+  if (interactive() && identical(parent.frame(n = 2), globalenv())) {
     rlang::warn(paste("*_joins in database-backend does not match NA by default.\n",
                       "If your data contains NA, the columns with NA values must be supplied to \"na_by\",",
                       "or you must specifiy na_matches = \"na\""),
@@ -106,9 +105,8 @@ join_warn <- function() {
 #' @return A warning that *_joins are still experimental
 #' @noRd
 join_warn_experimental <- function() {
-  if (requireNamespace("testthat", quietly = TRUE) && testthat::is_testing() || !interactive()) return()
-  if (identical(parent.frame(n = 2), globalenv())) {
-    rlang::warn("*_joins with na_by is stil experimental. Please report issues to rassky",
+  if (interactive() && identical(parent.frame(n = 2), globalenv())) {
+    rlang::warn("*_joins with na_by is still experimental. Please report issues.",
                 .frequency = "once", .frequency_id = "*_join NA warning")
   }
 }
@@ -129,27 +127,31 @@ join_warn_experimental <- function() {
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(dbplyr, warn.conflicts = FALSE)
+#'
 #' band_db <- tbl_memdb(dplyr::band_members)
 #' instrument_db <- tbl_memdb(dplyr::band_instruments)
-#' band_db %>% left_join(instrument_db) %>% show_query()
+#'
+#' left_join(band_db, instrument_db) |>
+#'   show_query()
 #'
 #' # Can join with local data frames by setting copy = TRUE
-#' band_db %>%
-#'   left_join(dplyr::band_instruments, copy = TRUE)
+#' left_join(band_db, dplyr::band_instruments, copy = TRUE)
 #'
 #' # Unlike R, joins in SQL don't usually match NAs (NULLs)
 #' db <- memdb_frame(x = c(1, 2, NA))
 #' label <- memdb_frame(x = c(1, NA), label = c("one", "missing"))
-#' db %>% left_join(label, by = "x")
+#' left_join(db, label, by = "x")
+#'
 #' # But you can activate R's usual behaviour with the na_matches argument
-#' db %>% left_join(label, by = "x", na_matches = "na")
+#' left_join(db, label, by = "x", na_matches = "na")
 #'
 #' # By default, joins are equijoins, but you can use `sql_on` to
 #' # express richer relationships
 #' db1 <- memdb_frame(x = 1:5)
 #' db2 <- memdb_frame(x = 1:3, y = letters[1:3])
-#' db1 %>% left_join(db2) %>% show_query()
-#' db1 %>% left_join(db2, sql_on = "LHS.x < RHS.x") %>% show_query()
+#'
+#' left_join(db1, db2) |> show_query()
+#' left_join(db1, db2, sql_on = "LHS.x < RHS.x") |> show_query()
 #' @seealso [dplyr::mutate-joins] which this function wraps.
 #' @seealso [dbplyr::join.tbl_sql] which this function wraps.
 #' @exportS3Method dplyr::inner_join
