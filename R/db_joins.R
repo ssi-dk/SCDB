@@ -79,8 +79,8 @@ select_na_sql <- function(x, y, by, na_by, left = TRUE) {
   cy  <- dplyr::setdiff(colnames(y), colnames(x)) # Variables only in y
 
   sql_select <-
-    c(paste0(colnames(x), ifelse(!colnames(x) %in% cx, ".x", "")),
-      paste0(colnames(y), ifelse(!colnames(y) %in% cy, ".y", ""))[!colnames(y) %in% all_by]) |>
+    c(paste0(colnames(x), ifelse(colnames(x) %in% cx, "", ".x")),
+      paste0(colnames(y), ifelse(colnames(y) %in% cy, "", ".y"))[!colnames(y) %in% all_by]) |>
     stats::setNames(c(colnames(x),
                       paste0(colnames(y), ifelse(colnames(y) %in% colnames(x), ".y", ""))[!colnames(y) %in% all_by]))
 
@@ -269,15 +269,15 @@ full_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   .dots <- list(...)
 
-  if (!"na_by" %in% names(.dots)) {
-    if (inherits(x, "tbl_dbi") || inherits(y, "tbl_dbi")) join_warn()
-    return(dplyr::full_join(x, y, by = by, ...))
-  } else {
+  if ("na_by" %in% names(.dots)) {
     join_warn_experimental()
     # Full joins are hard...
     out <- dplyr::union(dplyr::left_join(x, y, by = by, na_by = .dots$na_by),
                         dplyr::right_join(x, y, by = by, na_by = .dots$na_by))
     return(out)
+  } else {
+    if (inherits(x, "tbl_dbi") || inherits(y, "tbl_dbi")) join_warn()
+    return(dplyr::full_join(x, y, by = by, ...))
   }
 }
 
@@ -293,11 +293,11 @@ semi_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   .dots <- list(...)
 
-  if (!"na_by" %in% names(.dots)) {
+  if ("na_by" %in% names(.dots)) {
+    stop("Not implemented")
+  } else {
     if (inherits(x, "tbl_dbi") || inherits(y, "tbl_dbi")) join_warn()
     return(dplyr::semi_join(x, y, by = by, ...))
-  } else {
-    stop("Not implemented")
   }
 }
 
@@ -313,10 +313,10 @@ anti_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   .dots <- list(...)
 
-  if (!"na_by" %in% names(.dots)) {
+  if ("na_by" %in% names(.dots)) {
+    stop("Not implemented")
+  } else {
     if (inherits(x, "tbl_dbi") || inherits(y, "tbl_dbi")) join_warn()
     return(dplyr::anti_join(x, y, by = by, ...))
-  } else {
-    stop("Not implemented")
   }
 }
