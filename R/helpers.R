@@ -37,7 +37,7 @@ nrow <- function(.data) {
 #'
 #' close_connection(conn)
 #' @export
-is.historical <- function(.data) { # nolint: object_name_linter
+is.historical <- function(.data) {                                                                                      # nolint: object_name_linter
 
   # Check arguments
   assert_data_like(.data)

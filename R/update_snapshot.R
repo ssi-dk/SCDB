@@ -29,7 +29,7 @@
 #' @seealso filter_keys
 #' @importFrom rlang .data
 #' @export
-update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, message = NULL, tic = Sys.time(), # nolint: cyclocomp_linter, line_length_linter
+update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, message = NULL, tic = Sys.time(),
                             logger = NULL,
                             enforce_chronological_order = TRUE) {
 
