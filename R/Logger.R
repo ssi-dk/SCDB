@@ -66,7 +66,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
       if (!is.null(log_table_id)) {
         log_table_id <- id(log_table_id, log_conn)
-        self$log_tbl <- create_logs_if_missing(log_table_id, log_conn)
+        self$log_tbl <- create_logs_if_missing(log_conn, log_table_id)
       }
       private$log_conn <- log_conn
 
