@@ -48,7 +48,7 @@ filter_keys.tbl_sql <- function(.data, filters, by = NULL, na_by = NULL) {
       dplyr::ungroup() |>
       dplyr::summarise(dplyr::across(
         .cols = tidyselect::everything(),
-        .fns = ~ sum(ifelse(is.na(.), 0, 1), na.rm = TRUE)
+        .fns = ~ sum(as.numeric(is.na(.)), na.rm = TRUE)
       )) |>
       tidyr::pivot_longer(tidyselect::everything(), names_to = "column_name", values_to = "is_na")
 
