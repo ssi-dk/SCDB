@@ -127,13 +127,14 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     dplyr::compute()
 
   if (!identical(dbplyr::remote_con(.data), conn)) {
-    if (!table_exists(conn, "update_snapshot_patch")) DBI::dbRemoveTable(conn, "update_snapshot_patch")
+    if (table_exists(conn, "update_snapshot_patch")) DBI::dbRemoveTable(conn, "update_snapshot_patch")
     .data <- dplyr::copy_to(conn, .data, name = "SCDB_update_snapshot_patch", temporary = TRUE)
   }
 
   # Apply filter to current records
   if (!is.null(filters) && !identical(dbplyr::remote_con(filters), conn)) {
-    if (!table_exists(conn, "update_snapshot_patch")) DBI::dbRemoveTable(conn, "update_snapshot_patch")
+    if (table_exists(conn, "update_snapshot_patch_filters")) DBI::dbRemoveTable(conn, "update_snapshot_patch_filters")
+
     filters <- dplyr::copy_to(conn, filters, name = "SCDB_update_snapshot_filters", temporary = TRUE)
   }
   db_table <- filter_keys(db_table, filters)
