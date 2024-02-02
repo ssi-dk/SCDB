@@ -86,7 +86,7 @@ interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
     dbplyr::window_order(.data$valid_from) |>
     dplyr::mutate(.row = dplyr::if_else(is.na(.data$valid_from),  # Some DB backends considers NULL to be the
                                         dplyr::n(),               # smallest, so we need to adjust for that
-                                        dplyr::row_number() - ifelse(is.na(dplyr::first(.data$valid_from)), 1, 0)))
+                                        dplyr::row_number() - ifelse(is.na(dplyr::first(.data$valid_from)), 1, 0)))     # nolint: redundant_ifelse_linter
 
   t <- dplyr::left_join(t |>
                           dplyr::filter(.data$.row < dplyr::n()),
