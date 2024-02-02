@@ -58,11 +58,13 @@ test_that("update_snapshot() works", {
     # Check file log outputs exists
     log_pattern <- glue::glue("{stringr::str_replace_all(as.Date(timestamp), '-', '_')}.{id(db_table, conn)}.log")
     log_file <- purrr::keep(dir(log_path), ~stringr::str_detect(., log_pattern))
-    expect_true(length(log_file) == 1)
-    expect_true(file.info(file.path(log_path, log_file))$size > 0)
-    expect_true(nrow(get_table(conn, "test.SCDB_logs")) == 1)
-    expect_true(nrow(dplyr::filter(get_table(conn, "test.SCDB_logs"),
-                                   dplyr::if_any(.cols = !c(log_file), .fns = ~ !is.na(.)))) == 1)
+    expect_length(log_file, 1)
+    expect_gt(file.info(file.path(log_path, log_file))$size, 0)
+    expect_identical(nrow(get_table(conn, "test.SCDB_logs")), 1)
+
+    db_logs_with_log_file <- get_table(conn, "test.SCDB_logs") |>
+      dplyr::filter(!is.na(.data$log_file))
+    expect_identical(nrow(db_logs_with_log_file), 1)
 
     # Check db log output exists
     logs <- get_table(conn, "test.SCDB_logs") |> dplyr::collect()
