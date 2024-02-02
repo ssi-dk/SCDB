@@ -102,6 +102,19 @@ test_that("id() is consistent for tbl_dbi inputs", {
 })
 
 
+test_that("id() is gives informative error for manipulated tbl_dbi inputs", {
+  for (conn in get_test_conns()) {
+
+    expect_error(
+      id(dplyr::mutate(dplyr::tbl(conn, "__mtcars"), a = 2)),
+      "Table identification can only be determined if the lazy query is unmodified"
+    )
+
+    DBI::dbDisconnect(conn)
+  }
+})
+
+
 test_that("as.character.id() works", {
   expect_identical(as.character(DBI::Id(table = "table")), "table")
   expect_identical(as.character(DBI::Id(schema = "schema", table = "table")), "schema.table")
