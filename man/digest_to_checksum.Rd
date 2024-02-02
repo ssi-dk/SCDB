@@ -2,9 +2,9 @@
 % Please edit documentation in R/digest_to_checksum.R
 \name{digest_to_checksum}
 \alias{digest_to_checksum}
-\title{Computes an MD5 checksum from columns}
+\title{Computes an checksum from columns}
 \usage{
-digest_to_checksum(.data, col = "checksum", exclude = NULL, warn = TRUE)
+digest_to_checksum(.data, col = "checksum", exclude = NULL)
 }
 \arguments{
 \item{.data}{A data frame, a tibble, a data.table or a tbl.}
@@ -12,14 +12,16 @@ digest_to_checksum(.data, col = "checksum", exclude = NULL, warn = TRUE)
 \item{col}{Name of the column to put the checksums in}
 
 \item{exclude}{Columns to exclude from the checksum generation}
-
-\item{warn}{Flag to warn if target column already exists in data}
 }
 \value{
 .data with an checksum column added
 }
 \description{
-Computes an MD5 checksum from columns
+Computes an checksum from columns
+}
+\details{
+In most cases, the md5 algorithm is used to compute the checksums.
+For Microsoft SQL Server, the SHA-256 algorithm is used.
 }
 \examples{
 digest_to_checksum(mtcars)

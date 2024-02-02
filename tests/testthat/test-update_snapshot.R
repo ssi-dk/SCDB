@@ -6,7 +6,7 @@ test_that("update_snapshot() works", {
 
     target <- mtcars |>
       dplyr::copy_to(conn, df = _, name = "temp", overwrite = TRUE) |>
-      digest_to_checksum(col = "checksum", warn = FALSE) |>
+      digest_to_checksum(col = "checksum") |>
       dplyr::mutate(from_ts  = !!db_timestamp("2022-10-01 09:00:00", conn),
                     until_ts = !!db_timestamp(NA, conn))
 
