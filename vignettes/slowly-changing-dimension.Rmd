@@ -223,7 +223,7 @@ addresses2 %>%
   filter(Address == "Rainbow Road 8",
          is.na(MovedOut),
          ValidFrom < !!slice_timestamp,
-         ValidUntil >= !!slice_timestamp || is.na(ValidUntil)) %>%
+         ValidUntil >= !!slice_timestamp | is.na(ValidUntil)) %>%
   select(ID, GivenName, Surname, MovedIn, MovedOut)
 
 slice_timestamp <- "2023-09-29"
@@ -232,7 +232,7 @@ addresses2 %>%
   filter(Address == "Rainbow Road 8",
          is.na(MovedOut),
          ValidFrom < !!slice_timestamp,
-         ValidUntil >= !!slice_timestamp || is.na(ValidUntil)) %>%
+         ValidUntil >= !!slice_timestamp | is.na(ValidUntil)) %>%
   select(ID, GivenName, Surname, MovedIn, MovedOut)
 ```
 
