@@ -7,14 +7,18 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
-```{r setup, include = FALSE}
+```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+```
 
+```{r library}
 library(tidyverse)
+```
+
+```{r setup, include = FALSE}
 
 forecasts_full <- tribble(
   ~City, ~Forecast, ~ForecastDate,
@@ -87,7 +91,6 @@ Managing historical data by inserting new data in this manner is often referred 
 
 Our table now provides much more information for the user through filtering:
 ```{r forecasts_full_examples}
-library(tidyverse)
 
 # Current forecasts
 forecasts_full %>%

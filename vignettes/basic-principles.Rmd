@@ -15,6 +15,10 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r library}
+library(SCDB)
+```
+
 ```{r setup, echo = FALSE, results = 'hide'}
 suppressPackageStartupMessages(library(SCDB))
 
@@ -58,7 +62,6 @@ See also the [PostgreSQL documentation](https://www.postgresql.org/docs/current/
 
 Our example data is `datasets::mtcars` reduced to only two columns: row names converted to a column `car`, and `hp`
 ```{r example_data}
-library(SCDB)
 if (!exists("conn")) conn <- get_connection(drv = RSQLite::SQLite())
 
 example_data <- dplyr::tbl(conn, DBI::Id(table = "example_data"))
