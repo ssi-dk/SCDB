@@ -43,6 +43,7 @@ Suggests:
     conflicted,
     jsonlite,
     knitr,
+    lintr,
     odbc,
     rmarkdown,
     roxygen2,
