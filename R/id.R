@@ -59,8 +59,8 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE, ...)
 
   checkmate::assert(is.null(conn), DBI::dbIsValid(conn), combine = "or")
 
-  if (stringr::str_detect(db_table_id, "\\.")) {
-    db_name <- stringr::str_split(db_table_id, "\\.")[[1]]
+  if (stringr::str_detect(db_table_id, stringr::fixed("."))) {
+    db_name <- stringr::str_split(db_table_id, stringr::fixed("."))[[1]]
     db_name <- db_name[rev(seq_along(db_name))] # Reverse order (table, schema?, catalog?)
 
     table <- purrr::pluck(db_name, 1)
