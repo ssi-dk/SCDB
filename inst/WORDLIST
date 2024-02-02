@@ -21,6 +21,8 @@ Donut
 dplyr
 drv
 
+Engbo
+
 funder
 
 IANA
@@ -28,6 +30,8 @@ Institut
 ip
 
 Kimball
+
+Lasse
 
 Margy
 md
@@ -57,6 +61,7 @@ Statens
 Sys
 
 tbl
+tempdb
 tibble
 tidyr
 tidyverse

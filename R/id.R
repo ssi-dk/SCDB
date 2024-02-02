@@ -27,8 +27,24 @@ id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
 
 #' @export
 id.Id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
-  return(DBI::Id(schema = purrr::pluck(db_table_id, "name", "schema", .default = SCDB::get_schema(conn)),
-                 table = purrr::pluck(db_table_id, "name", "table")))
+
+  # Store the table_name for computations down the line
+  table_name <- purrr::pluck(db_table_id, "name", "table")
+
+  # Determine if the table would be in a temporary database / catalog
+  if (inherits(conn, "Microsoft SQL Server")) {
+    catalog <- get_catalog(conn, temporary = startsWith(table_name, "#"))
+  } else {
+    catalog <- get_catalog(conn)
+  }
+
+  fully_qualified_id <- DBI::Id(
+    catalog = purrr::pluck(db_table_id, "name", "catalog", .default = catalog),
+    schema = purrr::pluck(db_table_id, "name", "schema", .default = SCDB::get_schema(conn)),
+    table = table_name
+  )
+
+  return(fully_qualified_id)
 }
 
 
@@ -38,20 +54,24 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
   checkmate::assert(is.null(conn), DBI::dbIsValid(conn), combine = "or")
 
   if (stringr::str_detect(db_table_id, "\\.")) {
-    db_name <- stringr::str_split_1(db_table_id, "\\.")
-    db_schema <- db_name[1]
-    db_table  <- db_name[2]
+    db_name <- stringr::str_split(db_table_id, "\\.")[[1]]
+    db_name <- db_name[rev(seq_along(db_name))] # Reverse order (table, schema?, catalog?)
+
+    db_table <- purrr::pluck(db_name, 1)
+    db_schema <- purrr::pluck(db_name, 2)
+    db_catalog <- purrr::pluck(db_name, 3)
 
     # If no matching implied schema is found, return the unmodified db_table_id in the default schema
     if (allow_table_only && !is.null(conn) && !schema_exists(conn, db_schema)) {
-      return(DBI::Id(schema = get_schema(conn), table = db_table_id))
+      return(DBI::Id(catalog = db_catalog, schema = get_schema(conn), table = db_table_id))
     }
   } else {
-    db_schema <- get_schema(conn)
     db_table <- db_table_id
+    db_schema <- get_schema(conn)
+    db_catalog <- get_catalog(conn)
   }
 
-  return(DBI::Id(schema = db_schema, table = db_table))
+  return(DBI::Id(catalog = db_catalog, schema = db_schema, table = db_table))
 }
 
 

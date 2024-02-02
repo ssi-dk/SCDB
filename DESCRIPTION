@@ -9,6 +9,8 @@ Authors@R:
 	    person("Marcus Munch", "Gr\U00FCnewald", , "mmgr@ssi.dk",
 	           role = c("aut"),
 	           comment = c(ORCID = "0009-0006-8090-406X")),
+        person("Lasse Engbo", "Christiansen", , "lsec@ssi.dk", role = c("ctb"),
+             comment = c(ORCID = "0000-0001-5019-1931")),
 	    person("Statens Serum Institut",
 	           role = c("cph", "fnd")))
 Description: A collection of functions that enable easy access and updating of a database of data over time.

@@ -23,13 +23,18 @@
 
 * If a `SQLiteConnection` is passed to `get_schema()`, the returned schema will always be "main" (#93).
 
+* `get_schema()` now returns `NULL` instead of `NA` if schema is undefined (#99).
+
 * The order of arguments in `create_logs_if_missing()` has been swapped to match the rest of the package (#??).
   The `conn` argument is now before the `log_table` argument.
 
+* The `%notin%` operator has been removed from the package
+
 ## Features
+
 * The S3 method `as.character.Id()` is added which converts `DBI::Id()` to `character` (#93).
 
-* The `%notin%` operator has been removed from the package
+* A new `get_catalog()` function is added to give more specific table identification (#99).
 
 ## Improvements and Fixes
 
@@ -51,13 +56,18 @@
 
 * `get_tables()` now supports temporary tables for Microsoft SQL Server (#93).
 
+* `id()` now includes information of catalog in more cases (#99).
+
 * Fixed dplyr joins failing if `testthat` is not installed (#90).
 
 ## Testing
 
-Added missing tests for `create_logs_if_missing()` (#93).
+* Added missing tests for `create_logs_if_missing()` (#93).
 
-Improved tests for `get_tables()`, `table_exists()`, and `create_table()` (#93).
+* Added missing tests for `get_schema()` (#99).
+
+* Improved tests for `get_tables()`, `table_exists()`, and `create_table()` (#93).
+
 
 # SCDB 0.3
 
