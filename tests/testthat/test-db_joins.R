@@ -106,10 +106,10 @@ test_that("*_join() works", {
     # Using by should give 1 mismatch
     # Using na_by should give no mismatch
     expect_equal(dplyr::left_join(xx, xx, by    = "name") |>
-                   dplyr::summarize(n = sum(as.numeric(is.na(cyl.y)), na.rm = TRUE)) |>
+                   dplyr::summarize(n = sum(dplyr::if_else(is.na(cyl.y), 1, 0), na.rm = TRUE)) |>
                    dplyr::pull(n), 1)
     expect_equal(dplyr::left_join(xx, xx, na_by = "name") |>
-                   dplyr::summarize(n = sum(as.numeric(is.na(cyl.y)), na.rm = TRUE)) |>
+                   dplyr::summarize(n = sum(dplyr::if_else(is.na(cyl.y), 1, 0), na.rm = TRUE)) |>
                    dplyr::pull(n), 0)
 
     # And they should be identical with the simple case
