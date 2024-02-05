@@ -4,16 +4,16 @@
 \alias{slice_time}
 \title{Slices a data object based on time / date}
 \usage{
-slice_time(.data, slice_ts, from_ts = from_ts, until_ts = until_ts)
+slice_time(.data, slice_ts, from_ts = "from_ts", until_ts = "until_ts")
 }
 \arguments{
 \item{.data}{A data frame, a tibble, a data.table or a tbl.}
 
-\item{slice_ts}{The time / date to slice by}
+\item{slice_ts}{(\code{POSIXct(1)}, \code{Date(1)}, or \code{character(1)})\cr
+The time / date to slice by}
 
-\item{from_ts}{The name of the column in .data specifying valid from time (note: must be unquoted)}
-
-\item{until_ts}{The name of the column in .data specifying valid until time (note: must be unquoted)}
+\item{from_ts, until_ts}{(\code{character(1)})\cr
+The name of the columns in .data specifying valid from and valid until time}
 }
 \value{
 An object similar to .data
@@ -22,20 +22,21 @@ An object similar to .data
 Slices a data object based on time / date
 }
 \examples{
-conn <- get_connection(drv = RSQLite::SQLite())
+  conn <- get_connection(drv = RSQLite::SQLite())
 
-m <- mtcars |>
-  dplyr::mutate(from_ts = dplyr::if_else(dplyr::row_number() > 10,
-                                         as.Date("2020-01-01"),
-                                         as.Date("2021-01-01")),
-                until_ts = as.Date(NA))
+  m <- mtcars |>
+    dplyr::mutate(
+      "from_ts" = dplyr::if_else(dplyr::row_number() > 10,
+                                 as.Date("2020-01-01"),
+                                 as.Date("2021-01-01")),
+      "until_ts" = as.Date(NA))
 
-dplyr::copy_to(conn, m, name = "mtcars", temporary = FALSE)
+  dplyr::copy_to(conn, m, name = "mtcars", temporary = FALSE)
 
-q <- dplyr::tbl(conn, id("mtcars", conn))
+  q <- dplyr::tbl(conn, id("mtcars", conn))
 
-nrow(slice_time(q, "2020-01-01")) # 10
-nrow(slice_time(q, "2021-01-01")) # nrow(mtcars)
+  nrow(slice_time(q, "2020-01-01")) # 10
+  nrow(slice_time(q, "2021-01-01")) # nrow(mtcars)
 
-close_connection(conn)
+  close_connection(conn)
 }
