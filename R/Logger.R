@@ -198,7 +198,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
           name = unique_table_name(),
           temporary = TRUE
         )
-      defer_db_cleanup(patch) # Clean up on exits
+      defer_db_cleanup(patch) # Clean up on exit
 
       dplyr::rows_append(
         x = self$log_tbl,
