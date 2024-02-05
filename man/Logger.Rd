@@ -10,7 +10,7 @@ A new instance of the \code{Logger} \link[R6:R6Class]{R6} class.
 Create an object for logging database operations
 }
 \examples{
-logger <- Logger$new(db_tablestring = "test.table",
+logger <- Logger$new(db_table = "test.table",
                      ts = "2020-01-01 09:00:00")
 }
 \section{Public fields}{
@@ -60,7 +60,7 @@ The full path to the logger's log file.}
 Create a new Logger object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logger$new(
-  db_tablestring = NULL,
+  db_table = NULL,
   log_table_id = getOption("SCDB.log_table_id"),
   log_conn = NULL,
   log_path = getOption("SCDB.log_path"),
@@ -74,7 +74,7 @@ Create a new Logger object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_tablestring}}{A string specifying the table being updated}
+\item{\code{db_table}}{An object that inherits from \code{tbl_dbi}, a \code{\link[DBI:Id]{DBI::Id()}} object or a character string readable by \link{id}.}
 
 \item{\code{log_table_id}}{A \code{\link[DBI:Id]{DBI::Id()}} object or a character string readable by \link{id}, specifying the location of the log table.}
 

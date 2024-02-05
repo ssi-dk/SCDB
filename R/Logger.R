@@ -3,13 +3,13 @@
 #' Create an object for logging database operations
 #'
 #' @importFrom R6 R6Class
-#' @param db_tablestring A string specifying the table being updated
+#' @param db_table An object that inherits from `tbl_dbi`, a [DBI::Id()] object or a character string readable by [id].
 #' @template log_table_id
 #' @template log_path
 #' @param ts A timestamp describing the data being processed (not the current time)
 #' @param start_time The time at which data processing was started (defaults to [Sys.time()])
 #' @examples
-#' logger <- Logger$new(db_tablestring = "test.table",
+#' logger <- Logger$new(db_table = "test.table",
 #'                      ts = "2020-01-01 09:00:00")
 #' @return A new instance of the `Logger` [R6][R6::R6Class] class.
 #' @export
@@ -39,7 +39,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     #' @param log_conn A database connection inheriting from `DBIConnection`
     #' @param warn Show a warning if neither log_table_id or log_path could be determined
     #' @param output_to_console Should the Logger output to console (TRUE/FALSE)?
-    initialize = function(db_tablestring = NULL,
+    initialize = function(db_table = NULL,
                           log_table_id   = getOption("SCDB.log_table_id"),
                           log_conn = NULL,
                           log_path = getOption("SCDB.log_path"),
@@ -50,7 +50,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
       # Initialize logger
       coll <- checkmate::makeAssertCollection()
-      checkmate::assert_character(db_tablestring, null.ok = TRUE, add = coll)
+      assert_id_like(db_table, null.ok = TRUE, add = coll)
       assert_id_like(log_table_id, null.ok = TRUE, add = coll)
       checkmate::assert_class(log_conn, "DBIConnection", null.ok = is.null(log_table_id), add = coll)
       checkmate::assert_character(log_path, null.ok = TRUE, add = coll)
@@ -76,7 +76,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
       }
 
       self$log_path <- log_path
-      private$db_tablestring <- db_tablestring
+      private$db_table <- db_table
 
       # Create a line in log DB for Logger
       private$generate_log_entry()
@@ -189,7 +189,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
   private = list(
 
     .log_filename = NULL,
-    db_tablestring = NULL,
+    db_table = NULL,
     log_conn = NULL,
     ts = NULL,
 
@@ -237,7 +237,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
       }
 
       coll <- checkmate::makeAssertCollection()
-      checkmate::assert_character(private$db_tablestring, null.ok = FALSE, add = coll)
+      checkmate::assert_character(private$db_table, null.ok = FALSE, add = coll)
       assert_timestamp_like(private$ts, null.ok = FALSE, add = coll)
       checkmate::reportAssertions(coll)
 
@@ -250,7 +250,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
         "%s.%s.%s.log",
         start_format,
         ts_format,
-        private$db_tablestring
+        private$db_table
       )
 
       private$.log_filename <- filename
