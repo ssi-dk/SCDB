@@ -38,10 +38,15 @@
 #' @export
 interlace <- function(tables, by = NULL, colnames = NULL) {
   # Check arguments
-  checkmate::assert_character(by)
-  # TODO: how to checkmate tables and colnames?
+  coll <- checkmate::makeAssertCollection()
+  checkmate::assert_list(tables, types = "tbl_dbi", add = coll)
+  checkmate::assert_character(by, null.ok = TRUE, add = coll)
+  checkmate::assert_character(colnames, null.ok = TRUE, add = coll)
+  checkmate::assert_character(names(colnames), pattern = r"{t\d+\.(from|until)}", null.ok = TRUE, add = coll)
+  checkmate::reportAssertions(coll)
 
-  # Check edgecase
+
+  # Check edge case
   if (length(tables) == 1) return(purrr::pluck(tables, 1))
 
   UseMethod("interlace", tables[[1]])
