@@ -46,7 +46,8 @@ test_that("lock helpers works in default and test schema", {
           "pid" = 0.5
         ),
         in_place = TRUE,
-        copy = TRUE)
+        copy = TRUE
+      )
       expect_identical(nrow(lock_table), 1)
 
 
