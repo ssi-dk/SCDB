@@ -41,7 +41,7 @@ test_that("Logger: all (non-warning, non-error) logging to console can be disabl
 
   # Test INFO-logging to console is disabled
   ts_str <- format(logger$start_time, "%F %R:%OS3")
-  expect_no_message(logger$log_info("test", tic = logger$start_time, TRUE))
+  expect_no_message(logger$log_info("test", tic = logger$start_time))
 
   rm(logger)
   invisible(gc())

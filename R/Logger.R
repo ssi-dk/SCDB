@@ -133,7 +133,6 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
                         timestamp_format = getOption("SCDB.log_timestamp_format", "%F %R:%OS3")) {
 
       coll <- checkmate::makeAssertCollection()
-      checkmate::assert_list(list(...), types = "character", add = coll)
       checkmate::assert_logical(output_to_console, add = coll)
       checkmate::assert_character(log_type, add = coll)
       checkmate::assert_character(timestamp_format, add = coll)
@@ -226,7 +225,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     },
 
 
-    log_format = function(..., tic = Sys.time(), timestamp_format = NULL) {
+    log_format = function(..., tic = Sys.time(), log_type = NULL, timestamp_format = NULL) {
       checkmate::assert_character(timestamp_format)
       checkmate::assert_posixct(tic)
 
