@@ -11,13 +11,16 @@ test_that("lock helpers works in default and test schema", {
       add_table_lock(conn, db_table = test_table_id, schema = schema)
       lock_table <- dplyr::tbl(conn, lock_table_id)
 
-      expect_named(lock_table, c("schema", "table", "lock_start", "pid"))
+      expect_identical(colnames(lock_table), c("schema", "table", "lock_start", "pid"))
 
       expect_identical(
         dplyr::collect(dplyr::select(lock_table, !"lock_start")),
-        data.frame("schema" = purrr::pluck(test_table_id, "name", "schema"),
-                   "table"  = purrr::pluck(test_table_id, "name", "table"),
-                   "pid" = Sys.getpid()))
+        tibble::tibble(
+          "schema" = purrr::pluck(test_table_id, "name", "schema"),
+          "table"  = purrr::pluck(test_table_id, "name", "table"),
+          "pid" = as.numeric(Sys.getpid())
+        )
+      )
 
 
 
@@ -29,8 +32,6 @@ test_that("lock helpers works in default and test schema", {
 
       ## Check we can remove locks
       remove_table_lock(conn, db_table = test_table_id, schema = schema)
-
-      expect_named(lock_table, c("schema", "table", "lock_start", "pid"))
       expect_identical(nrow(lock_table), 0)
 
 
@@ -38,10 +39,12 @@ test_that("lock helpers works in default and test schema", {
       ## Check locks with invalid PID are removed automatically
       dplyr::rows_append(
         lock_table,
-        data.frame("schema" = purrr::pluck(test_table_id, "name", "schema"),
-                   "table"  = purrr::pluck(test_table_id, "name", "table"),
-                   "start_time" = Sys.time(),
-                   "pid" = 0.5),
+        tibble::tibble(
+          "schema" = purrr::pluck(test_table_id, "name", "schema"),
+          "table"  = purrr::pluck(test_table_id, "name", "table"),
+          "lock_start" = Sys.time(),
+          "pid" = 0.5
+        ),
         in_place = TRUE,
         copy = TRUE)
       expect_identical(nrow(lock_table), 1)
@@ -72,7 +75,7 @@ test_that("lock helpers works in default and test schema", {
 
       Sys.sleep(1)
       withr::with_options(
-        "SCDB.lock_wait_max" = 0,
+        list("SCDB.lock_wait_max" = 0),
         remove_expired_locks(conn, schema = schema)
       )
       expect_identical(nrow(lock_table), 0)
