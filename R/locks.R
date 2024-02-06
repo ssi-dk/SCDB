@@ -31,6 +31,9 @@
 #'   DBI::dbDisconnect(conn)
 #' @export
 add_table_lock <- function(conn, db_table, schema = NULL) {
+  checkmate::assert_class(conn, "DBIConnection")
+  assert_id_like(db_table)
+  checkmate::assert_character(schema, null.ok = TRUE)
 
   # Determine lock table id
   lock_table_id <- id(paste(c(schema, "locks"), collapse = "."), conn)
@@ -78,6 +81,9 @@ add_table_lock <- function(conn, db_table, schema = NULL) {
 #' @rdname db_locks
 #' @export
 remove_table_lock <- function(conn, db_table, schema = NULL) {
+  checkmate::assert_class(conn, "DBIConnection")
+  assert_id_like(db_table)
+  checkmate::assert_character(schema, null.ok = TRUE)
 
   # Determine lock table id
   lock_table_id <- id(paste(c(schema, "locks"), collapse = "."), conn)
@@ -115,6 +121,9 @@ remove_table_lock <- function(conn, db_table, schema = NULL) {
 #' @rdname db_locks
 #' @export
 is_lock_owner <- function(conn, db_table, schema = NULL) {
+  checkmate::assert_class(conn, "DBIConnection")
+  assert_id_like(db_table)
+  checkmate::assert_character(schema, null.ok = TRUE)
 
   # Determine lock table id
   lock_table_id <- id(paste(c(schema, "locks"), collapse = "."), conn)
@@ -141,6 +150,9 @@ is_lock_owner <- function(conn, db_table, schema = NULL) {
 #' @import parallelly
 #' @export
 remove_expired_locks <- function(conn, schema = NULL, lock_wait_max = getOption("SCDB.lock_wait_max")) {
+  checkmate::assert_class(conn, "DBIConnection")
+  checkmate::assert_character(schema, null.ok = TRUE)
+  checkmate::assert_number(lock_wait_max, null.ok = TRUE)
 
   # Determine lock table id
   lock_table_id <- id(paste(c(schema, "locks"), collapse = "."), conn)
