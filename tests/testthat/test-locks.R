@@ -36,7 +36,7 @@ test_that("lock helpers works in default and test schema", {
 
 
 
-      ## Check locks with invalid PID are removed automatically
+      ## Check invalid lock owners are flagged
       dplyr::rows_append(
         lock_table,
         tibble::tibble(
@@ -48,39 +48,11 @@ test_that("lock helpers works in default and test schema", {
         in_place = TRUE,
         copy = TRUE
       )
-      expect_identical(nrow(lock_table), 1)
 
-
-      remove_expired_locks(conn, schema = schema)
-      expect_identical(nrow(lock_table), 0)
-
-
-
-
-      ## Check locks can be timed out automatically (directly)
-      add_table_lock(conn, db_table = test_table_id, schema = schema)
-      expect_identical(nrow(lock_table), 1)
-
-      # With long timer, lock should stay
-      remove_expired_locks(conn, schema = schema, lock_wait_max = 30)
-      expect_identical(nrow(lock_table), 1)
-
-      Sys.sleep(1)
-      remove_expired_locks(conn, schema = schema, lock_wait_max = 0)
-      expect_identical(nrow(lock_table), 0)
-
-
-      ## Check locks can be timed out automatically (through options)
-      add_table_lock(conn, db_table = test_table_id, schema = schema)
-      expect_identical(nrow(lock_table), 1)
-
-      Sys.sleep(1)
-      withr::with_options(
-        list("SCDB.lock_wait_max" = 0),
-        remove_expired_locks(conn, schema = schema)
+      expect_error(
+        is_lock_owner(conn, test_table_id, schema = schema),
+        "Lock owner is no longer a valid PID"
       )
-      expect_identical(nrow(lock_table), 0)
-
 
 
       # Clean up
