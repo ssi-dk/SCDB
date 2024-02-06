@@ -91,6 +91,8 @@
 
 * Improved tests for `get_tables()`, `table_exists()`, and `create_table()` (#93).
 
+* Improved tests for `Logger` (#98).
+
 
 # SCDB 0.3
 
