@@ -62,7 +62,7 @@
 
   * `LoggerNull` is "no-logging" logger that can be used to suppress all logging.
 
-* Added a set of helper functions to prevent race conditions when writing to data bases (#??).
+* Added a set of helper functions to prevent race conditions when writing to data bases (#104).
 
   See `add_table_lock()`, `remove_table_lock()`, `is_lock_owner()` and `remove_expired_locks()`.
 
@@ -97,6 +97,8 @@
 * Fixed dplyr joins failing if `testthat` is not installed (#90).
 
 * The footprint of `update_snapshot()` is reduced by cleaning up intermediate tables with `defer_db_cleanup()` (#89)
+
+* `update_snapshot()` now attempts to get a lock on the table being updated before updating (#104).
 
 * `Logger$log_info()` now uses `message()` instead of `cat()` to write to console (#98).
   The message written is now also returned invisibly.
