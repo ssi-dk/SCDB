@@ -62,6 +62,10 @@
 
   * `LoggerNull` is "no-logging" logger that can be used to suppress all logging.
 
+* Added a set of helper functions to prevent race conditions when writing to data bases (#??).
+
+  See `add_table_lock()`, `remove_table_lock()`, `is_lock_owner()` and `remove_expired_locks()`.
+
 ## Improvements and Fixes
 
 * Improvements for `create_table()` (#93):
