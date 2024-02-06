@@ -52,8 +52,8 @@ add_table_lock <- function(conn, db_table, schema = NULL) {
   # Get a reference to the table
   lock_table <- dplyr::tbl(conn, lock_table_id, check_from = FALSE)
 
-  # We then try to insert a lock, if none exists, our process ID (pid) will be assigned to the table
-  # if one already exists, our insert will fail.
+  # We then try to insert a lock, if none exists, our process ID (pid) will be assigned to the table-
+  # If one already exists, our insert will fail.
   tryCatch(
     {
       db_table_id <- id(db_table, conn)
