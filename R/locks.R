@@ -45,7 +45,7 @@ add_table_lock <- function(conn, db_table, schema = NULL) {
                      data.frame("db_table" = character(0),
                                 "lock_start" = numeric(0),
                                 "pid" = numeric(0)),
-                     lock_table_id, temporary = FALSE, unique_indexes = "db_table")
+                     lock_table_id, temporary = FALSE)
     )
   }
 
