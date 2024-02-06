@@ -29,6 +29,7 @@
 #'   is_lock_owner(conn, "test_table") # NULL
 #'
 #'   DBI::dbDisconnect(conn)
+#' @export
 add_table_lock <- function(conn, db_table, schema = NULL) {
 
   # Determine lock table id
@@ -75,6 +76,7 @@ add_table_lock <- function(conn, db_table, schema = NULL) {
 
 
 #' @rdname db_locks
+#' @export
 remove_table_lock <- function(conn, db_table, schema = NULL) {
 
   # Determine lock table id
@@ -111,6 +113,7 @@ remove_table_lock <- function(conn, db_table, schema = NULL) {
 
 
 #' @rdname db_locks
+#' @export
 is_lock_owner <- function(conn, db_table, schema = NULL) {
 
   # Determine lock table id
@@ -136,6 +139,7 @@ is_lock_owner <- function(conn, db_table, schema = NULL) {
 #'   The number of seconds to wait before marking lock as expired.
 #' @importFrom rlang .data
 #' @import parallelly
+#' @export
 remove_expired_locks <- function(conn, schema = NULL, lock_wait_max = getOption("SCDB.lock_wait_max")) {
 
   # Determine lock table id
