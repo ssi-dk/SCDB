@@ -48,6 +48,12 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   db_table_id <- id(db_table, conn)
 
   if (table_exists(conn, db_table_id)) {
+    # Obtain a lock on the table
+    add_table_lock(conn, db_table_id, schema = get_schema(db_table_id))
+    if (!is_lock_owner(conn, db_table_id, schema = get_schema(db_table_id))) {
+      stop("A lock could not be obtained on the table")
+    }
+
     db_table <- dplyr::tbl(conn, db_table_id, check_from = FALSE)
   } else {
     db_table <- create_table(dplyr::collect(utils::head(.data, 0)), conn, db_table_id, temporary = FALSE)
@@ -267,6 +273,9 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   toc <- Sys.time()
   logger$finalize_db_entry()
   logger$log_info("Finished processing for table", as.character(db_table_id), tic = toc)
+
+  # Release table lock
+  remove_table_lock(conn, db_table_id, get_schema(db_table_id))
 
   return()
 }
