@@ -114,7 +114,8 @@ Write a line to log file
   ...,
   tic = Sys.time(),
   output_to_console = self$output_to_console,
-  log_type = "INFO"
+  log_type = "INFO",
+  timestamp_format = getOption("SCDB.log_timestamp_format", "\%F \%R:\%OS3")
 )}\if{html}{\out{</div>}}
 }
 
@@ -128,6 +129,9 @@ Write a line to log file
 \item{\code{output_to_console}}{Should the line be written to console?}
 
 \item{\code{log_type}}{A character string which describes the severity of the log message}
+
+\item{\code{timestamp_format}}{(\code{character(1)})\cr
+Format string for timestamps in the logs. Must be parsable by \code{format()}.}
 }
 \if{html}{\out{</div>}}
 }

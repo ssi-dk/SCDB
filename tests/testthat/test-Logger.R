@@ -12,7 +12,7 @@ test_that("Logger: logging to console works", {
   expect_null(logger$log_tbl)
 
   # Test logging to console has the right formatting and message type
-  ts_str <- stringr::str_replace(format(logger$start_time, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
+  ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_message(
     logger$log_info("test console", tic = logger$start_time),
     glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test console")
@@ -40,7 +40,7 @@ test_that("Logger: all (non-warning, non-error) logging to console can be disabl
   )
 
   # Test INFO-logging to console is disabled
-  ts_str <- stringr::str_replace(format(logger$start_time, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
+  ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_no_message(logger$log_info("test", tic = logger$start_time, TRUE))
 
   rm(logger)
@@ -93,7 +93,7 @@ test_that("Logger: logging to file works", {
   tryCatch(logger$log_warn("test filewriting", tic = logger$start_time), warning = \(w) NULL)
   tryCatch(logger$log_error("test filewriting", tic = logger$start_time), error = \(e) NULL)
 
-  ts_str <- stringr::str_replace(format(logger$start_time, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
+  ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_true(logger$log_filename %in% dir(log_path))
   expect_equal(
     readLines(logger$log_realpath),
@@ -126,7 +126,7 @@ test_that("Logger: logging to file works", {
   # Test logging to file still works
   suppressMessages(logger$log_info("test filewriting", tic = logger$start_time))
 
-  ts_str <- stringr::str_replace(format(logger$start_time, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
+  ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_true(logger$log_filename %in% dir(log_path))
   expect_equal(
     readLines(logger$log_realpath),
@@ -222,7 +222,7 @@ test_that("Logger: all logging simultanously works", {
     )
 
     # Test logging to console has the right formatting and message type
-    ts_str <- stringr::str_replace(format(logger$start_time, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
+    ts_str <- format(logger$start_time, "%F %R:%OS3")
     expect_message(
       logger$log_info("test console and filewriting", tic = logger$start_time),
       glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test console and filewriting")
@@ -390,4 +390,36 @@ test_that("Logger: $finalize handles log table is at some point deleted", {
     rm(logger)
     invisible(gc())
   }
+})
+
+test_that("Logger: custom timestamp_format works", {
+
+  # Create logger and test configuration
+  expect_warning(
+    logger <- Logger$new(),
+    regexp = "NO LOGGING WILL BE DONE"
+  )
+
+  # Test logging to console has the right formatting and message type
+  ts_str <- format(logger$start_time, "%F %R:%OS3")
+  expect_message(
+    logger$log_info("test console", tic = logger$start_time),
+    glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test console")
+  )
+
+  ts_str <- format(logger$start_time, "%F %R")
+  expect_message(
+    logger$log_info("test console", tic = logger$start_time, timestamp_format = "%F %R"),
+    glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test console")
+  )
+
+  ts_str <- format(logger$start_time, "%F")
+  withr::local_options("SCDB.log_timestamp_format" = "%F")
+  expect_message(
+    logger$log_info("test console", tic = logger$start_time),
+    glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test console")
+  )
+
+  rm(logger)
+  invisible(gc())
 })

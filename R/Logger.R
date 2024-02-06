@@ -125,13 +125,22 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     #' @param tic The timestamp used by the log entry (default Sys.time())
     #' @param output_to_console Should the line be written to console?
     #' @param log_type `r log_type <- "A character string which describes the severity of the log message"; log_type`
+    #' @param timestamp_format (`character(1)`)\cr
+    #'   Format string for timestamps in the logs. Must be parsable by `format()`.
     #' @return
     #'   Returns the log message invisibly
-    log_info = function(..., tic = Sys.time(), output_to_console = self$output_to_console, log_type = "INFO") {
+    log_info = function(..., tic = Sys.time(), output_to_console = self$output_to_console, log_type = "INFO",
+                        timestamp_format = getOption("SCDB.log_timestamp_format", "%F %R:%OS3")) {
 
-      format_str <- private$log_format(..., tic = tic, log_type = log_type)
+      coll <- checkmate::makeAssertCollection()
+      checkmate::assert_list(list(...), types = "character", add = coll)
+      checkmate::assert_logical(output_to_console, add = coll)
+      checkmate::assert_character(log_type, add = coll)
+      checkmate::assert_character(timestamp_format, add = coll)
+      tryCatch(format(Sys.time(), timestamp_format), error = function(e) coll$push("timestamp_format not valid!"))
+      checkmate::reportAssertions(coll)
 
-      msg <- private$log_format(..., tic = tic, log_type = log_type)
+      msg <- private$log_format(..., tic = tic, log_type = log_type, timestamp_format = timestamp_format)
 
       # Write message to console and file
       if (isTRUE(output_to_console) && identical(log_type, "INFO")) {
@@ -216,10 +225,12 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
       )
     },
 
-    log_format = function(..., tic = self$start_time, log_type = NULL) {
-      ts_str <- stringr::str_replace(format(tic, "%F %H:%M:%OS3", locale = "en"), "[.]", ",")
 
-      return(paste(ts_str, Sys.info()[["user"]], log_type, paste(...), sep = " - "))
+    log_format = function(..., tic = Sys.time(), timestamp_format = NULL) {
+      checkmate::assert_character(timestamp_format)
+      checkmate::assert_posixct(tic)
+
+      return(paste(format(tic, timestamp_format), Sys.info()[["user"]], log_type, paste(...), sep = " - "))
     }
   ),
 
