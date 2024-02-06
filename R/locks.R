@@ -70,8 +70,7 @@ add_table_lock <- function(conn, db_table, schema = NULL) {
           "pid" = Sys.getpid(),
           "lock_start" = as.numeric(Sys.time())
         ),
-        name = paste0("ds_lock_", Sys.getpid()),
-        overwrite = TRUE
+        name = unique_table_name()
       )
 
       dplyr::rows_insert(lock_table, lock, by = c("schema", "table"), conflict = "ignore", in_place = TRUE)
@@ -116,8 +115,7 @@ remove_table_lock <- function(conn, db_table, schema = NULL) {
           "table" = purrr::pluck(db_table_id, "name", "table"),
           "pid" = Sys.getpid()
         ),
-        name = paste0("ds_lock_", Sys.getpid()),
-        overwrite = TRUE
+        name = unique_table_name()
       )
 
       dplyr::rows_delete(lock_table, lock, by = c("schema", "table", "pid"), unmatched = "ignore", in_place = TRUE)
