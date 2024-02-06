@@ -43,6 +43,7 @@ nrow
 ODBC
 ORCID
 
+parsable
 pgpass
 POSIXct
 Postgres
