@@ -133,13 +133,13 @@ is_lock_owner <- function(conn, db_table, schema = NULL) {
 
 #' @rdname db_locks
 #' @importFrom rlang .data
-#' @noRd
-remove_expired_locks <- function(conn, schema = NULL) {
+#' @import parallelly
+remove_expired_locks <- function(conn, schema = NULL, lock_wait_max = getOption("SCDB.lock_wait_max")) {
 
   # Determine lock table id
   lock_table_id <- SCDB::id(paste(schema, "locks", sep = "."), conn)
 
-  # Create lock table if missing
+  # Return early if missing
   if (!SCDB::table_exists(conn, lock_table_id)) {
     return(NULL)
   }
@@ -147,11 +147,43 @@ remove_expired_locks <- function(conn, schema = NULL) {
   # Get a reference to the table
   lock_table <- dplyr::tbl(conn, lock_table_id, check_from = FALSE)
 
-  # Detect and delete old locks
-  old_locks <- lock_table |>
-    dplyr::filter(.data$lock_start < !!as.numeric(Sys.time()) - !!diseasyoption("lock_wait_max")) |>
-    dplyr::select("db_table")
-  dplyr::rows_delete(lock_table, old_locks, by = "db_table", unmatched = "ignore", in_place = TRUE)
+  # Attempt to get the un-exported pid_exists() from parallelly
+  pid_exists <- tryCatch(
+    utils::getFromNamespace("pid_exists", "parallelly"),
+    error = function(e) FALSE
+  )
+
+
+  # If pid_exists is not available and lock_wait_max is NULL, we cannot determine invalid locks
+  # and we throw an error to prevent infinite looping
+  checkmate::assert(
+    checkmate::check_function(pid_exists),
+    checkmate::check_number(lock_wait_max, lower = 0, finite = TRUE)
+  )
+
+  ## Remove expired locks
+  if (!is.null(lock_wait_max)) {
+    expired_locks <- lock_table |>
+      dplyr::filter(.data$lock_start < !!as.numeric(Sys.time()) - lock_wait_max) |>
+      dplyr::select("schema", "table")
+
+    dplyr::rows_delete(lock_table, expired_locks, by = c("schema", "table"), unmatched = "ignore", in_place = TRUE)
+  }
+
+  ## Remove orphaned locks from crashed processes
+  if (is.function(pid_exists)) {
+    # Determine orphaned locks
+    crashed_pids <- lock_table |>
+      dplyr::distinct("pid") |>
+      dplyr::filter(.data$pid != Sys.getpid()) |>
+      dplyr::pull("pid") |>
+      purrr::discard(pid_exists)
+
+    # Remove orphaned locks
+    crashed_locks <- lock_table |>
+      dplyr::filter(.data$pid %in% crashed_pids)
+    dplyr::rows_delete(lock_table, crashed_locks, by = "db_table", unmatched = "ignore", in_place = TRUE)
+  }
 
   return(NULL)
 }

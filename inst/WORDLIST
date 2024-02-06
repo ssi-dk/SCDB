@@ -47,6 +47,7 @@ ORCID
 
 parsable
 pgpass
+pid
 POSIXct
 Postgres
 printf
