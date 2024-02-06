@@ -153,7 +153,7 @@ is_lock_owner <- function(conn, db_table, schema = NULL) {
     dplyr::pull("pid") |>
     as.integer()
 
-  return(lock_owner == Sys.getpid())
+  return(identical(lock_owner, Sys.getpid()))
 }
 
 
