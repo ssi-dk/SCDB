@@ -61,7 +61,7 @@ add_table_lock <- function(conn, db_table, schema = NULL) {
     {
       lock <- dplyr::copy_to(
         conn,
-        data.frame("db_table" = db_table, "pid" = Sys.getpid(), "lock_start" = as.numeric(Sys.time())),
+        data.frame("db_table" = as.character(db_table), "pid" = Sys.getpid(), "lock_start" = as.numeric(Sys.time())),
         name = paste0("ds_lock_", Sys.getpid()),
         overwrite = TRUE
       )
