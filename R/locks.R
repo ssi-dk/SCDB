@@ -40,13 +40,22 @@ add_table_lock <- function(conn, db_table, schema = NULL) {
   # Create lock table if missing
   if (!table_exists(conn, lock_table_id)) {
     suppressMessages(
-      dplyr::copy_to(conn,
-                     data.frame("schema" = character(0),
-                                "table" = character(0),
-                                "lock_start" = numeric(0),
-                                "pid" = numeric(0)),
-                     lock_table_id, temporary = FALSE)
+      dplyr::copy_to(
+        conn,
+        data.frame(
+          "schema" = character(0),
+          "table" = character(0),
+          "lock_start" = numeric(0),
+          "pid" = numeric(0)
+        ),
+        lock_table_id,
+        temporary = FALSE)
     )
+
+    if (inherits(conn, "PqConnection")) { # PostgreSQL needs an index for rows_insert
+      res <- DBI::dbSendQuery(conn, glue::glue("ALTER TABLE {lock_table_id} ADD PRIMARY KEY (\"schema\", \"table\");"))
+      DBI::dbClearResult(res)
+    }
   }
 
   # Get a reference to the table
@@ -70,7 +79,6 @@ add_table_lock <- function(conn, db_table, schema = NULL) {
       )
 
       dplyr::rows_insert(lock_table, lock, by = c("schema", "table"), conflict = "ignore", in_place = TRUE)
-
     },
     error = function(e) {
       print(e$message)
@@ -115,7 +123,6 @@ remove_table_lock <- function(conn, db_table, schema = NULL) {
       )
 
       dplyr::rows_delete(lock_table, lock, by = c("schema", "table", "pid"), unmatched = "ignore", in_place = TRUE)
-
     },
     error = function(e) {
       print(e$message)
