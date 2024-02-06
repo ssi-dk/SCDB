@@ -2,38 +2,40 @@
 #'
 #' @name db_locks
 #' @description
-#' This set of function adds a simple locking system to db tables.
-#' * `add_table_lock` adds a record in the target_schema.lock table with the current time and R-session process id.
-#' * `remove_table_lock` removes records in the target_schema.lock table with the target table and the
-#'    R-session process id.
-#' * `is_lock_owner` returns TRUE if the current process id (pid) matches the pid associated with the lock on db_table
-#'    in target_schema.lock. If no lock is found, NULL is returned.
-#' * `remove_expired_locks` removes locks that are timed out.
-#' @param conn `r rd_conn()`
+#'   This set of function adds a simple locking system to db tables.
+#'   * `add_table_lock()` adds a record in the schema.locks table with the current time and R-session process id.
+#'   * `remove_table_lock()` removes records in the schema.locks table with the target table and the
+#'      R-session process id.
+#'   * `is_lock_owner()` returns `TRUE` if the current process id (pid) matches the pid associated with the lock on
+#'      db_table in schema.locks. If no lock is found, `NULL` is returned.
+#'   * `remove_expired_locks()` removes locks that are timed out or where the process owning the lock is exited.
+#' @template conn
 #' @param db_table (`character(1)`)\cr
-#'   A specification of 'schema.table'.
-#' @param schema `r rd_schema()`
-#' @return Most return `r rd_side_effects`. `is_lock_owner` returns the TRUE if the process can modify the table.
+#'   A specification of "schema.table" to modify lock for.
+#' @param schema (`character(1)`)\cr
+#'   The schema where the "locks" table should be created.
+#' @return
+#'   Most have return value (called for side effects).
+#'   `is_lock_owner()` returns the TRUE if the process can modify the table.
 #' @examples
-#' conn <- DBI::dbConnect(RSQLite::SQLite())
+#'   conn <- DBI::dbConnect(RSQLite::SQLite())
 #'
-#' is_lock_owner(conn, "test_table") # NULL
+#'   is_lock_owner(conn, "test_table") # NULL
 #'
-#' add_table_lock(conn, "test_table")
-#' is_lock_owner(conn, "test_table") # TRUE
+#'   add_table_lock(conn, "test_table")
+#'   is_lock_owner(conn, "test_table") # TRUE
 #'
-#' remove_table_lock(conn, "test_table")
-#' is_lock_owner(conn, "test_table") # NULL
+#'   remove_table_lock(conn, "test_table")
+#'   is_lock_owner(conn, "test_table") # NULL
 #'
-#' DBI::dbDisconnect(conn)
-#' @noRd
+#'   DBI::dbDisconnect(conn)
 add_table_lock <- function(conn, db_table, schema = NULL) {
 
   # Determine lock table id
-  lock_table_id <- SCDB::id(paste(schema, "locks", sep = "."), conn)
+  lock_table_id <- id(paste(schema, "locks", sep = "."), conn)
 
   # Create lock table if missing
-  if (!SCDB::table_exists(conn, lock_table_id)) {
+  if (!table_exists(conn, lock_table_id)) {
     suppressMessages(
       dplyr::copy_to(conn,
                      data.frame("db_table" = character(0),
@@ -73,14 +75,13 @@ add_table_lock <- function(conn, db_table, schema = NULL) {
 
 
 #' @rdname db_locks
-#' @noRd
 remove_table_lock <- function(conn, db_table, schema = NULL) {
 
   # Determine lock table id
-  lock_table_id <- SCDB::id(paste(schema, "locks", sep = "."), conn)
+  lock_table_id <- id(paste(schema, "locks", sep = "."), conn)
 
   # Create lock table if missing
-  if (!SCDB::table_exists(conn, lock_table_id)) {
+  if (!table_exists(conn, lock_table_id)) {
     return(NULL)
   }
 
@@ -110,14 +111,13 @@ remove_table_lock <- function(conn, db_table, schema = NULL) {
 
 
 #' @rdname db_locks
-#' @noRd
 is_lock_owner <- function(conn, db_table, schema = NULL) {
 
   # Determine lock table id
-  lock_table_id <- SCDB::id(paste(schema, "locks", sep = "."), conn)
+  lock_table_id <- id(paste(schema, "locks", sep = "."), conn)
 
   # Create lock table if missing
-  if (!SCDB::table_exists(conn, lock_table_id)) {
+  if (!table_exists(conn, lock_table_id)) {
     return(NULL)
   }
 
@@ -132,15 +132,17 @@ is_lock_owner <- function(conn, db_table, schema = NULL) {
 
 
 #' @rdname db_locks
+#' @param lock_wait_max (`numeric(1)`)\cr
+#'   The number of seconds to wait before marking lock as expired.
 #' @importFrom rlang .data
 #' @import parallelly
 remove_expired_locks <- function(conn, schema = NULL, lock_wait_max = getOption("SCDB.lock_wait_max")) {
 
   # Determine lock table id
-  lock_table_id <- SCDB::id(paste(schema, "locks", sep = "."), conn)
+  lock_table_id <- id(paste(schema, "locks", sep = "."), conn)
 
   # Return early if missing
-  if (!SCDB::table_exists(conn, lock_table_id)) {
+  if (!table_exists(conn, lock_table_id)) {
     return(NULL)
   }
 
