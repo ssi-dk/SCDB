@@ -33,7 +33,7 @@
 add_table_lock <- function(conn, db_table, schema = NULL) {
 
   # Determine lock table id
-  lock_table_id <- id(paste(schema, "locks", sep = "."), conn)
+  lock_table_id <- id(paste(c(schema, "locks"), collapse = "."), conn)
 
   # Create lock table if missing
   if (!table_exists(conn, lock_table_id)) {
@@ -80,7 +80,7 @@ add_table_lock <- function(conn, db_table, schema = NULL) {
 remove_table_lock <- function(conn, db_table, schema = NULL) {
 
   # Determine lock table id
-  lock_table_id <- id(paste(schema, "locks", sep = "."), conn)
+  lock_table_id <- id(paste(c(schema, "locks"), collapse = "."), conn)
 
   # Create lock table if missing
   if (!table_exists(conn, lock_table_id)) {
@@ -117,7 +117,7 @@ remove_table_lock <- function(conn, db_table, schema = NULL) {
 is_lock_owner <- function(conn, db_table, schema = NULL) {
 
   # Determine lock table id
-  lock_table_id <- id(paste(schema, "locks", sep = "."), conn)
+  lock_table_id <- id(paste(c(schema, "locks"), collapse = "."), conn)
 
   # Create lock table if missing
   if (!table_exists(conn, lock_table_id)) {
@@ -143,7 +143,7 @@ is_lock_owner <- function(conn, db_table, schema = NULL) {
 remove_expired_locks <- function(conn, schema = NULL, lock_wait_max = getOption("SCDB.lock_wait_max")) {
 
   # Determine lock table id
-  lock_table_id <- id(paste(schema, "locks", sep = "."), conn)
+  lock_table_id <- id(paste(c(schema, "locks"), collapse = "."), conn)
 
   # Return early if missing
   if (!table_exists(conn, lock_table_id)) {
