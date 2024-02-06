@@ -42,7 +42,8 @@ add_table_lock <- function(conn, db_table, schema = NULL) {
   if (!table_exists(conn, lock_table_id)) {
     suppressMessages(
       dplyr::copy_to(conn,
-                     data.frame("db_table" = character(0),
+                     data.frame("schema" = character(0),
+                                "table" = character(0),
                                 "lock_start" = numeric(0),
                                 "pid" = numeric(0)),
                      lock_table_id, temporary = FALSE)
@@ -59,14 +60,21 @@ add_table_lock <- function(conn, db_table, schema = NULL) {
   # if one already exists, our insert will fail.
   tryCatch(
     {
+      db_table_id <- id(db_table, conn)
+
       lock <- dplyr::copy_to(
         conn,
-        data.frame("db_table" = as.character(db_table), "pid" = Sys.getpid(), "lock_start" = as.numeric(Sys.time())),
+        data.frame(
+          "schema" = purrr::pluck(db_table_id, "name", "schema"),
+          "table" = purrr::pluck(db_table_id, "name", "table"),
+          "pid" = Sys.getpid(),
+          "lock_start" = as.numeric(Sys.time())
+        ),
         name = paste0("ds_lock_", Sys.getpid()),
         overwrite = TRUE
       )
 
-      dplyr::rows_insert(lock_table, lock, by = "db_table", conflict = "ignore", in_place = TRUE)
+      dplyr::rows_insert(lock_table, lock, by = c("schema", "table"), conflict = "ignore", in_place = TRUE)
 
     },
     error = function(e) {
@@ -99,14 +107,20 @@ remove_table_lock <- function(conn, db_table, schema = NULL) {
   # Delete locks matching  our process ID (pid) and the given db_table
   tryCatch(
     {
+      db_table_id <- id(db_table, conn)
+
       lock <- dplyr::copy_to(
         conn,
-        data.frame("db_table" = db_table, "pid" = Sys.getpid()),
+        data.frame(
+          "schema" = purrr::pluck(db_table_id, "name", "schema"),
+          "table" = purrr::pluck(db_table_id, "name", "table"),
+          "pid" = Sys.getpid()
+        ),
         name = paste0("ds_lock_", Sys.getpid()),
         overwrite = TRUE
       )
 
-      dplyr::rows_delete(lock_table, lock, by = c("db_table", "pid"), unmatched = "ignore", in_place = TRUE)
+      dplyr::rows_delete(lock_table, lock, by = c("schema", "table", "pid"), unmatched = "ignore", in_place = TRUE)
 
     },
     error = function(e) {
@@ -134,8 +148,10 @@ is_lock_owner <- function(conn, db_table, schema = NULL) {
   }
 
   # Get a reference to the table
+  db_table_id <- id(db_table, conn)
   lock_owner <- dplyr::tbl(conn, lock_table_id, check_from = FALSE) |>
-    dplyr::filter(.data$db_table == !!db_table) |>
+    dplyr::filter(.data$schema == purrr::pluck(db_table_id, "name", "schema"),
+                  .data$table  == purrr::pluck(db_table_id, "name", "table")) |>
     dplyr::pull("pid") |>
     as.integer()
 
@@ -199,8 +215,10 @@ remove_expired_locks <- function(conn, schema = NULL, lock_wait_max = getOption(
 
     # Remove orphaned locks
     crashed_locks <- lock_table |>
-      dplyr::filter(.data$pid %in% crashed_pids)
-    dplyr::rows_delete(lock_table, crashed_locks, by = "db_table", unmatched = "ignore", in_place = TRUE)
+      dplyr::filter(.data$pid %in% crashed_pids) |>
+      dplyr::select(!"lock_start")
+    dplyr::rows_delete(lock_table, crashed_locks, by = c("schema", "table", "pid"),
+                       unmatched = "ignore", in_place = TRUE)
   }
 
   return(NULL)
