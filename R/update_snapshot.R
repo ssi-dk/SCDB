@@ -277,5 +277,5 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   # Release table lock
   remove_table_lock(conn, db_table_id, get_schema(db_table_id))
 
-  return()
+  return(NULL)
 }
