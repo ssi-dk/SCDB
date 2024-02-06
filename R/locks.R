@@ -204,10 +204,11 @@ remove_expired_locks <- function(conn, schema = NULL, lock_wait_max = getOption(
 
   ## Remove orphaned locks from crashed processes
   if (is.function(pid_exists)) {
+
     # Determine orphaned locks
     crashed_pids <- lock_table |>
-      dplyr::distinct("pid") |>
-      dplyr::filter(.data$pid != Sys.getpid()) |>
+      dplyr::distinct(.data$pid) |>
+      dplyr::filter(.data$pid != !!Sys.getpid()) |>
       dplyr::pull("pid") |>
       purrr::discard(pid_exists)
 
