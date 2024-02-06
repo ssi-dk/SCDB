@@ -42,7 +42,7 @@ test_that("lock helpers works in default and test schema", {
         tibble::tibble(
           "schema" = purrr::pluck(test_table_id, "name", "schema"),
           "table"  = purrr::pluck(test_table_id, "name", "table"),
-          "lock_start" = Sys.time(),
+          "lock_start" = as.numeric(Sys.time()),
           "pid" = 0.5
         ),
         in_place = TRUE,
