@@ -61,6 +61,10 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
       self$output_to_console <- output_to_console
 
+      if (!is.null(db_table)) {
+        private$db_table <- id(db_table, log_conn)
+      }
+
       private$ts <- ts
       private$.start_time <- start_time
 
@@ -70,13 +74,13 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
       }
       private$log_conn <- log_conn
 
+      self$log_path <- log_path
+
       if (warn && (is.null(log_path) & is.null(log_table_id))) {
         warning("log_path and log_table_id are both NULL and therefore NO LOGGING WILL BE DONE.\n",
                 "Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile")
       }
 
-      self$log_path <- log_path
-      private$db_table <- db_table
 
       # Create a line in log DB for Logger
       private$generate_log_entry()
@@ -262,7 +266,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
       }
 
       coll <- checkmate::makeAssertCollection()
-      checkmate::assert_character(private$db_table, null.ok = FALSE, add = coll)
+      assert_dbtable_like(private$db_table, add = coll)
       assert_timestamp_like(private$ts, null.ok = FALSE, add = coll)
       checkmate::reportAssertions(coll)
 

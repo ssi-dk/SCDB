@@ -218,7 +218,7 @@ test_that("Logger: all logging simultanously works", {
       logger$log_filename,
       glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
                  "{format(as.POSIXct(ts), '%Y_%m_%d')}.",
-                 "{db_table}.log")
+                 "{id(db_table, conn)}.log")
     )
 
     # Test logging to console has the right formatting and message type
