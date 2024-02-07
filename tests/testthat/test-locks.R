@@ -36,7 +36,7 @@ test_that("lock helpers works in default and test schema", {
 
 
 
-      ## Check invalid lock owners are flagged
+      # Add an (invalid) lock that we do not own
       dplyr::rows_append(
         lock_table,
         tibble::tibble(
@@ -49,11 +49,18 @@ test_that("lock helpers works in default and test schema", {
         copy = TRUE
       )
 
+      ## Check invalid lock owners are flagged
       expect_error(
         is_lock_owner(conn, test_table_id, schema = schema),
         "Lock owner is no longer a valid PID"
       )
 
+      ## Check that we cannot steal locks
+      add_table_lock(conn, db_table = test_table_id, schema = schema)
+      expect_error(
+        is_lock_owner(conn, test_table_id, schema = schema),
+        "Lock owner is no longer a valid PID"
+      )
 
       # Clean up
       DBI::dbRemoveTable(conn, lock_table_id)
