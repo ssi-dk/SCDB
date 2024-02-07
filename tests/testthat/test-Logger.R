@@ -175,12 +175,16 @@ test_that("Logger: logging to db works", {
     log_table_id <- dplyr::tbl(conn, id(db_table, conn), check_from = FALSE)
     expect_equal(logger$log_tbl, log_table_id)
 
+
     # Test Logger has pre-filled some information in the logs
     db_table_id <- id(db_table, conn)
     expect_identical(as.character(dplyr::pull(log_table_id, "date")), ts)
     expect_identical(dplyr::pull(log_table_id, "schema"), purrr::pluck(db_table_id, "name", "schema"))
     expect_identical(dplyr::pull(log_table_id, "table"), purrr::pluck(db_table_id, "name", "table"))
-    expect_identical(as.character(dplyr::pull(log_table_id, "start_time")), as.character(logger$start_time))
+    expect_identical( # Transferring start_time to DB can have some loss of information that we need to match
+      format(as.POSIXct(dplyr::pull(log_table_id, "start_time")), "%F %R:%S"),
+      format(logger$start_time, "%F %R:%S")
+    )
 
 
     # Test logging to db writes to the correct fields
@@ -201,7 +205,7 @@ test_that("Logger: logging to db works", {
 })
 
 
-test_that("Logger: all logging simultaneously works", {
+test_that("Logger: all logging simultanously works", {
   for (conn in get_test_conns()) {
 
     # Set options for the test
@@ -379,11 +383,11 @@ test_that("Logger: log_file is NULL in DB if not writing to file", {
 test_that("Logger: $finalize handles log table is at some point deleted", {
   for (conn in get_test_conns()) {
 
+    # Set options for the test
     db_table <- "test.SCDB_logger"
     ts <- "2022-06-01 09:00:00"
 
     log_table_id <- "expendable_log_table"
-
     logger <- Logger$new(db_table = db_table, ts = ts, log_conn = conn, log_table_id = log_table_id)
 
     DBI::dbRemoveTable(conn, log_table_id)

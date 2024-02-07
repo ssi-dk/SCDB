@@ -56,7 +56,7 @@ test_that("update_snapshot() works", {
                  nrow(mtcars))
 
     # Check log outputs exists
-    log_pattern <- paste(stringr::str_replace_all(as.Date(timestamp), "-", "_"), "test.SCDB_tmp1.log", sep = ".")
+    log_pattern <- glue::glue("{stringr::str_replace_all(as.Date(timestamp), '-', '_')}.{id(db_table, conn)}.log")
     log_file <- purrr::keep(dir(log_path), ~stringr::str_detect(., log_pattern))
     expect_true(length(log_file) == 1)
     expect_true(file.info(file.path(log_path, log_file))$size > 0)
