@@ -170,6 +170,11 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     },
 
 
+    #' @description
+    #'   Auto-fills "end_time" and "duration" for the log entry and clears the "log_file" field if no
+    #'   file is being written.
+    #' @param end_time (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
+    #'   The end time for the log entry.
     finalize_db_entry = function(end_time = Sys.time()) {
 
       assert_timestamp_like(self$start_time)

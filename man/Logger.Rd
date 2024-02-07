@@ -199,10 +199,20 @@ Write or update log table
 \if{html}{\out{<a id="method-Logger-finalize_db_entry"></a>}}
 \if{latex}{\out{\hypertarget{method-Logger-finalize_db_entry}{}}}
 \subsection{Method \code{finalize_db_entry()}}{
+Auto-fills "end_time" and "duration" for the log entry and clears the "log_file" field if no
+file is being written.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logger$finalize_db_entry(end_time = Sys.time())}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{end_time}}{(\code{POSIXct(1)}, \code{Date(1)}, or \code{character(1)})\cr
+The end time for the log entry.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Logger-clone"></a>}}
