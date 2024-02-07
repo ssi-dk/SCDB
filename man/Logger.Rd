@@ -21,9 +21,6 @@ A directory where log file is written (if this is not NULL). Defaults to \code{g
 
 \item{\code{log_tbl}}{The DB table used for logging. Class is connection-specific, but inherits from \code{tbl_dbi}.}
 
-\item{\code{start_time}}{(\code{POSIXct(1)})\cr
-The time at which data processing was started.}
-
 \item{\code{output_to_console}}{(\code{logical(1)})\cr
 Should the Logger output to console?
 This can always be overridden by Logger$log_info(..., output_to_console = FALSE).}
@@ -33,6 +30,9 @@ This can always be overridden by Logger$log_info(..., output_to_console = FALSE)
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
+\item{\code{start_time}}{(\code{POSIXct(1)})\cr
+The time at which data processing was started. Read only.}
+
 \item{\code{log_filename}}{\code{character(1)}\cr
 The filename (basename) of the file that the \code{Logger} instance will output to}
 

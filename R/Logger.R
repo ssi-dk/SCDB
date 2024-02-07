@@ -25,10 +25,6 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     #' The DB table used for logging. Class is connection-specific, but inherits from `tbl_dbi`.
     log_tbl = NULL,
 
-    #' @field start_time (`POSIXct(1)`)\cr
-    #' The time at which data processing was started.
-    start_time = NULL,
-
     #' @field output_to_console (`logical(1)`)\cr
     #' Should the Logger output to console?
     #' This can always be overridden by Logger$log_info(..., output_to_console = FALSE).
@@ -66,8 +62,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
       self$output_to_console <- output_to_console
 
       private$ts <- ts
-      self$start_time <- start_time
-      lockBinding("start_time", self)
+      private$.start_time <- start_time
 
       if (!is.null(log_table_id)) {
         log_table_id <- id(log_table_id, log_conn)
@@ -201,6 +196,10 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
   private = list(
 
+    # @field start_time (`POSIXct(1)`)\cr
+    # The time at which data processing was started.
+    .start_time = NULL,
+
     .log_filename = NULL,
     db_table = NULL,
     log_conn = NULL,
@@ -239,6 +238,17 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
   ),
 
   active = list(
+    #' @field start_time (`POSIXct(1)`)\cr
+    #' The time at which data processing was started. Read only.
+    start_time = function(value) {
+      if (missing(value)) {
+        return(private$.start_time)
+      } else {
+        stop(glue::glue("`$start_time` is read only"), call. = FALSE)
+      }
+    },
+
+
     #' @field log_filename `character(1)`\cr
     #' The filename (basename) of the file that the `Logger` instance will output to
     log_filename = function() {
