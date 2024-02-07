@@ -380,7 +380,7 @@ test_that("Logger: log_file is NULL in DB if not writing to file", {
 })
 
 
-test_that("Logger: $finalize handles log table is at some point deleted", {
+test_that("Logger: $finalize() handles log table is at some point deleted", {
   for (conn in get_test_conns()) {
 
     # Set options for the test
@@ -428,6 +428,28 @@ test_that("Logger: custom timestamp_format works", {
     logger$log_info("test console", tic = logger$start_time),
     glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test console")
   )
+
+  rm(logger)
+  invisible(gc())
+})
+
+
+test_that("NullLogger: no logging occurs", {
+
+  # Create logger and test configuration
+  expect_no_message(logger <- NullLogger$new())
+
+  expect_null(logger$log_info("test console", tic = logger$start_time))
+  expect_null(logger$log_warn("test console", tic = logger$start_time))
+  expect_null(logger$log_error("test console", tic = logger$start_time))
+  expect_null(logger$log_to_db(n_insertions = 42))
+  expect_null(logger$finalize_db_entry())
+
+  expect_no_message(logger$log_info("test console", tic = logger$start_time))
+  expect_no_warning(logger$log_warn("test console", tic = logger$start_time))
+  expect_no_error(logger$log_error("test console", tic = logger$start_time))
+  expect_no_message(logger$log_to_db(n_insertions = 42))
+  expect_no_message(logger$finalize_db_entry())
 
   rm(logger)
   invisible(gc())

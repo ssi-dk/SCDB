@@ -41,7 +41,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   checkmate::assert_class(filters, "tbl_dbi", null.ok = TRUE)
   checkmate::assert_character(message, null.ok = TRUE)
   assert_timestamp_like(tic)
-  checkmate::assert_class(logger, "Logger", null.ok = TRUE)
+  checkmate::assert_multi_class(logger, "Logger", null.ok = TRUE)
   checkmate::assert_logical(enforce_chronological_order)
 
   # Retrieve Id from any valid db_table inputs to correctly create a missing table

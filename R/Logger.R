@@ -336,3 +336,62 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     }
   )
 )
+
+
+#' No-logging Logger
+#'
+#' @description
+#'   Create a [Logger] object that does no logging.
+#'
+#' @importFrom R6 R6Class
+#' @examples
+#' logger <- NullLogger$new()
+#' @return A new instance of the `Logger` [R6][R6::R6Class] class where no logging will be done.
+#' @export
+NullLogger <- R6::R6Class(                                                                                              # nolint: object_name_linter
+  classname  = "NullLogger",
+  inherit = Logger,
+  public = list(
+
+    #' @description
+    #'   Create a new `NullLogger` object
+    #' @param ... Captures arguments given, but does nothing
+    initialize = function(...){
+    },
+
+    #' @description
+    #'   Matches the signature of `Logger$log_info()`, but does nothing.
+    #' @param ... Captures arguments given, but does nothing
+    log_info = function(...) {
+      return(invisible(NULL))
+    },
+
+    #' @description
+    #'   Matches the signature of `Logger$log_warn()`, but does nothing.
+    #' @param ... Captures arguments given, but does nothing
+    log_warn = function(...) {
+      return(invisible(NULL))
+    },
+
+    #' @description
+    #'   Matches the signature of `Logger$log_error()`, but does nothing.
+    #' @param ... Captures arguments given, but does nothing
+    log_error = function(...) {
+      return(invisible(NULL))
+    },
+
+    #' @description
+    #'   Matches the signature of `Logger$log_to_db()`, but does nothing.
+    #' @param ... Captures arguments given, but does nothing
+    log_to_db = function(...) {
+      return(invisible(NULL))
+    },
+
+    #' @description
+    #'   Matches the signature of `Logger$finalize_db_entry()`, but does nothing.
+    #' @param ... Captures arguments given, but does nothing
+    finalize_db_entry = function(...) {
+      return(invisible(NULL))
+    }
+  )
+)

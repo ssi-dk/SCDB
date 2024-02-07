@@ -27,8 +27,7 @@ withr::local_options("SCDB.log_table_id" = "logs")
 
 # Use a wrapper for update_snapshot which uses a quiet Logger
 if (!"update_snapshot" %in% ls(envir = globalenv())) {
-  logger <- Logger$new(output_to_console = FALSE, log_table_id = "logs", log_conn = conn)
-  update_snapshot <- function(...) return(invisible(SCDB::update_snapshot(logger = logger, ...)))
+  update_snapshot <- function(...) return(SCDB::update_snapshot(logger = NullLogger$new(), ...))
 }
 
 # Setup example_data table in conn
