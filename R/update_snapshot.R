@@ -265,8 +265,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   }
 
   toc <- Sys.time()
-  logger$log_to_db(end_time = !!db_timestamp(toc, conn),
-                   duration = !!format(round(difftime(toc, tic), digits = 2)), success = TRUE)
+  logger$finalize_db_entry()
   logger$log_info("Finished processing for table", as.character(db_table_id), tic = toc)
 
   return()

@@ -90,37 +90,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     #' @description
     #' Remove generated log_name from database if not writing to a file
     finalize = function() {
-      if (is.null(self$log_path) &&
-            !is.null(self$log_tbl) &&
-            DBI::dbIsValid(private$log_conn) &&
-            table_exists(private$log_conn, self$log_tbl)) {
-
-        expected_rows <- self$log_tbl |>
-          dplyr::filter(log_file == !!self$log_filename) |>
-          dplyr::count() |>
-          dplyr::pull()
-
-        query <- dbplyr::build_sql(
-          "UPDATE ",
-          dbplyr::as.sql(id(self$log_tbl, conn = private$log_conn), con = private$log_conn),
-          " SET ",
-          dbplyr::ident("log_file"),
-          " = NULL WHERE ",
-          dbplyr::ident("log_file"),
-          " = '",
-          sql(self$log_filename),
-          "'",
-          con = private$log_conn
-        )
-
-        affected_rows <- DBI::dbExecute(private$log_conn, query)
-        if (affected_rows != expected_rows) {
-          rlang::warn("Something went wrong while finalizing Logger",
-                      log_filename = self$log_filename,
-                      affected_rows = affected_rows,
-                      expected_rows = expected_rows)
-        }
-      }
+      self$finalize_db_entry()
     },
 
     #' @description
@@ -196,6 +166,51 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
           in_place = TRUE,
           unmatched = "ignore"
         )
+      }
+    },
+
+
+    finalize_db_entry = function(end_time = Sys.time()) {
+
+      assert_timestamp_like(self$start_time)
+      assert_timestamp_like(end_time)
+
+      # Auto-fill log with end time and duration
+      self$log_to_db(
+        end_time = !!db_timestamp(end_time, private$log_conn),
+        duration = !!format(round(difftime(as.POSIXct(end_time), as.POSIXct(self$start_time)), digits = 2))
+      )
+
+
+      # Remove the log_file from the log table if no actual file is being written
+      if (is.null(self$log_path) && !is.null(private$log_conn) &&
+          DBI::dbIsValid(private$log_conn) && table_exists(private$log_conn, self$log_tbl)) {
+
+        expected_rows <- self$log_tbl |>
+          dplyr::filter(log_file == !!self$log_filename) |>
+          dplyr::count() |>
+          dplyr::pull()
+
+        query <- dbplyr::build_sql(
+          "UPDATE ",
+          dbplyr::as.sql(id(self$log_tbl, conn = private$log_conn), con = private$log_conn),
+          " SET ",
+          dbplyr::ident("log_file"),
+          " = NULL WHERE ",
+          dbplyr::ident("log_file"),
+          " = '",
+          sql(self$log_filename),
+          "'",
+          con = private$log_conn
+        )
+
+        affected_rows <- DBI::dbExecute(private$log_conn, query)
+        if (affected_rows != expected_rows) {
+          rlang::warn("Something went wrong while finalizing Logger",
+                      log_filename = self$log_filename,
+                      affected_rows = affected_rows,
+                      expected_rows = expected_rows)
+        }
       }
     }
   ),
