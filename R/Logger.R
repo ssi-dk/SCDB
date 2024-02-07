@@ -174,27 +174,29 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     #' @description Write or update log table
     #' @param ... Name-value pairs with which to update the log table
     log_to_db = function(...) {
-      if (is.null(self$log_tbl)) {
-        return(NULL)
-      }
 
-      patch <- data.frame(log_file = self$log_filename) |>
-        dplyr::copy_to(
-          dest = private$log_conn,
-          df = _,
-          name = unique_table_name(),
-          temporary = TRUE
+      # Only write if we have a valid connection
+      if (!is.null(private$log_conn) && DBI::dbIsValid(private$log_conn) &&
+          table_exists(private$log_conn, self$log_tbl)) {
+
+        patch <- data.frame(log_file = self$log_filename) |>
+          dplyr::copy_to(
+            dest = private$log_conn,
+            df = _,
+            name = unique_table_name(),
+            temporary = TRUE
+          )
+        defer_db_cleanup(patch) # Clean up on exit
+
+        # Mutating after copying ensures consistency in SQL translation
+        dplyr::rows_patch(
+          x = self$log_tbl,
+          y = dplyr::mutate(patch, ...),
+          by = "log_file",
+          in_place = TRUE,
+          unmatched = "ignore"
         )
-      defer_db_cleanup(patch) # Clean up on exit
-
-      # Mutating after copying ensures consistency in SQL translation
-      dplyr::rows_patch(
-        x = self$log_tbl,
-        y = dplyr::mutate(patch, ...),
-        by = "log_file",
-        in_place = TRUE,
-        unmatched = "ignore"
-      )
+      }
     }
   ),
 
