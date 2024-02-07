@@ -50,6 +50,7 @@ The full path to the logger's log file.}
 \item \href{#method-Logger-log_warn}{\code{Logger$log_warn()}}
 \item \href{#method-Logger-log_error}{\code{Logger$log_error()}}
 \item \href{#method-Logger-log_to_db}{\code{Logger$log_to_db()}}
+\item \href{#method-Logger-finalize_db_entry}{\code{Logger$finalize_db_entry()}}
 \item \href{#method-Logger-clone}{\code{Logger$clone()}}
 }
 }
@@ -193,6 +194,15 @@ Write or update log table
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Logger-finalize_db_entry"></a>}}
+\if{latex}{\out{\hypertarget{method-Logger-finalize_db_entry}{}}}
+\subsection{Method \code{finalize_db_entry()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Logger$finalize_db_entry(end_time = Sys.time())}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Logger-clone"></a>}}
