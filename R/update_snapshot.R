@@ -63,7 +63,6 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     )
   }
 
-  logger$log_to_db(start_time = !!db_timestamp(tic, conn))
   logger$log_info("Started", tic = tic) # Use input time in log
 
   # Add message to log (if given)
@@ -90,9 +89,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
                      paste(colnames(.data), collapse = ", "), tic = tic) # Use input time in log
   }
 
-  logger$log_to_db(schema = purrr::pluck(db_table_id@name, "schema"), table = purrr::pluck(db_table_id@name, "table"))
   logger$log_info("Parsing data for table", as.character(db_table_id), "started", tic = tic) # Use input time in log
-  logger$log_to_db(date = !!db_timestamp(timestamp, conn))
   logger$log_info("Given timestamp for table is", timestamp, tic = tic) # Use input time in log
 
   # Check for current update status

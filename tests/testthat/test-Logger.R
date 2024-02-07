@@ -175,6 +175,13 @@ test_that("Logger: logging to db works", {
     log_table_id <- dplyr::tbl(conn, id(db_table, conn), check_from = FALSE)
     expect_equal(logger$log_tbl, log_table_id)
 
+    # Test Logger has pre-filled some information in the logs
+    db_table_id <- id(db_table, conn)
+    expect_identical(as.character(dplyr::pull(log_table_id, "date")), ts)
+    expect_identical(dplyr::pull(log_table_id, "schema"), purrr::pluck(db_table_id, "name", "schema"))
+    expect_identical(dplyr::pull(log_table_id, "table"), purrr::pluck(db_table_id, "name", "table"))
+    expect_identical(as.character(dplyr::pull(log_table_id, "start_time")), as.character(logger$start_time))
+
 
     # Test logging to db writes to the correct fields
     logger$log_to_db(n_insertions = 42)
@@ -185,11 +192,6 @@ test_that("Logger: logging to db works", {
     expect_equal(nrow(log_table_id), 1)
     expect_equal(dplyr::pull(log_table_id, "n_deactivations"), 60)
 
-    logger$log_to_db(schema = NULL, table = "foo")
-    expect_equal(nrow(log_table_id), 1)
-    expect_true(is.na(dplyr::pull(log_table_id, "schema")))
-    expect_equal(dplyr::pull(log_table_id, "table"), "foo")
-
 
     # Clean up
     connection_clean_up(conn)
@@ -199,7 +201,7 @@ test_that("Logger: logging to db works", {
 })
 
 
-test_that("Logger: all logging simultanously works", {
+test_that("Logger: all logging simultaneously works", {
   for (conn in get_test_conns()) {
 
     # Set options for the test
@@ -353,7 +355,7 @@ test_that("Logger: log_file is NULL in DB if not writing to file", {
     ts <- "2022-06-01 09:00:00"
 
     # Create logger and test configuration
-    logger <- Logger$new(log_conn = conn, log_table_id = "test.SCDB_logger")
+    logger <- Logger$new(db_table = db_table, ts = ts, log_conn = conn, log_table_id = "test.SCDB_logger")
 
     # While logger is active, log_file should be set as the random generated
     db_log_file <- dplyr::pull(dplyr::filter(logger$log_tbl, log_file == !!logger$log_filename))
@@ -377,9 +379,12 @@ test_that("Logger: log_file is NULL in DB if not writing to file", {
 test_that("Logger: $finalize handles log table is at some point deleted", {
   for (conn in get_test_conns()) {
 
+    db_table <- "test.SCDB_logger"
+    ts <- "2022-06-01 09:00:00"
+
     log_table_id <- "expendable_log_table"
-    logger <- Logger$new(log_conn = conn,
-                         log_table_id = log_table_id)
+
+    logger <- Logger$new(db_table = db_table, ts = ts, log_conn = conn, log_table_id = log_table_id)
 
     DBI::dbRemoveTable(conn, log_table_id)
 

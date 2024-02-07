@@ -215,7 +215,19 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
         return(NULL)
       }
 
-      patch <- data.frame(log_file = self$log_filename) |>
+      coll <- checkmate::makeAssertCollection()
+      assert_timestamp_like(private$ts, add = coll)
+      assert_id_like(private$db_table, add = coll)
+      assert_timestamp_like(self$start_time, add = coll)
+      checkmate::reportAssertions(coll)
+
+      patch <- data.frame(
+        log_file = self$log_filename,
+        date = db_timestamp(private$ts, private$log_conn),
+        schema = purrr::pluck(private$db_table, "name", "schema"),
+        table = purrr::pluck(private$db_table, "name", "table"),
+        start_time = db_timestamp(self$start_time, private$log_conn)
+      ) |>
         dplyr::copy_to(
           dest = private$log_conn,
           df = _,
