@@ -35,8 +35,10 @@
 * The order of arguments in `create_logs_if_missing()` has been swapped to match the rest of the package (#??).
   The `conn` argument is now before the `log_table` argument.
 
-* The `Logger()` argument `db_tablestring` is replaced with the `db_table` argument (#98).
+* The `Logger` argument `db_tablestring` is replaced with the `db_table` argument (#98).
   This argument takes any Id-like input instead of only allowing a character string.
+
+* The order of input arguments to `Logger` is changed (#98).
 
 * The `%notin%` operator has been removed from the package (#??).
 

@@ -39,23 +39,28 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     #' @param log_conn A database connection inheriting from `DBIConnection`
     #' @param warn Show a warning if neither log_table_id or log_path could be determined
     #' @param output_to_console Should the Logger output to console (TRUE/FALSE)?
-    initialize = function(db_table = NULL,
-                          log_table_id   = getOption("SCDB.log_table_id"),
-                          log_conn = NULL,
-                          log_path = getOption("SCDB.log_path"),
-                          output_to_console = TRUE,
-                          warn = TRUE,
-                          ts = NULL,
-                          start_time = Sys.time()) {
+    initialize = function(
+      db_table = NULL,
+      ts = NULL,
+      start_time = Sys.time(),
+      # DB
+      log_table_id = getOption("SCDB.log_table_id"),
+      log_conn = NULL,
+      # File
+      log_path = getOption("SCDB.log_path"),
+      # Console
+      output_to_console = TRUE,
+      warn = TRUE
+    ) {
 
       # Initialize logger
       coll <- checkmate::makeAssertCollection()
       assert_id_like(db_table, null.ok = TRUE, add = coll)
+      assert_timestamp_like(ts, null.ok = TRUE, add = coll)
+      checkmate::assert_posixct(start_time, add = coll)
       assert_id_like(log_table_id, null.ok = TRUE, add = coll)
       checkmate::assert_class(log_conn, "DBIConnection", null.ok = is.null(log_table_id), add = coll)
       checkmate::assert_character(log_path, null.ok = TRUE, add = coll)
-      assert_timestamp_like(ts, null.ok = TRUE, add = coll)
-      checkmate::assert_posixct(start_time, add = coll)
       checkmate::reportAssertions(coll)
 
       self$output_to_console <- output_to_console

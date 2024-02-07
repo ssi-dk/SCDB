@@ -61,13 +61,13 @@ Create a new Logger object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logger$new(
   db_table = NULL,
+  ts = NULL,
+  start_time = Sys.time(),
   log_table_id = getOption("SCDB.log_table_id"),
   log_conn = NULL,
   log_path = getOption("SCDB.log_path"),
   output_to_console = TRUE,
-  warn = TRUE,
-  ts = NULL,
-  start_time = Sys.time()
+  warn = TRUE
 )}\if{html}{\out{</div>}}
 }
 
@@ -75,6 +75,10 @@ Create a new Logger object
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{db_table}}{An object that inherits from \code{tbl_dbi}, a \code{\link[DBI:Id]{DBI::Id()}} object or a character string readable by \link{id}.}
+
+\item{\code{ts}}{A timestamp describing the data being processed (not the current time)}
+
+\item{\code{start_time}}{The time at which data processing was started (defaults to \code{\link[=Sys.time]{Sys.time()}})}
 
 \item{\code{log_table_id}}{A \code{\link[DBI:Id]{DBI::Id()}} object or a character string readable by \link{id}, specifying the location of the log table.}
 
@@ -86,10 +90,6 @@ If NULL, no file logs are created.}
 \item{\code{output_to_console}}{Should the Logger output to console (TRUE/FALSE)?}
 
 \item{\code{warn}}{Show a warning if neither log_table_id or log_path could be determined}
-
-\item{\code{ts}}{A timestamp describing the data being processed (not the current time)}
-
-\item{\code{start_time}}{The time at which data processing was started (defaults to \code{\link[=Sys.time]{Sys.time()}})}
 }
 \if{html}{\out{</div>}}
 }
