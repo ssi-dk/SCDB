@@ -83,7 +83,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
 
       # Create a line in log DB for Logger
-      private$generate_log_entry()
+      private$generate_db_entry()
 
     },
 
@@ -209,7 +209,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     log_conn = NULL,
     ts = NULL,
 
-    generate_log_entry = function() {
+    generate_db_entry = function() {
       # Create a row for log in question
       if (is.null(self$log_tbl)) {
         return(NULL)
