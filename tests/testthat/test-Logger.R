@@ -215,10 +215,10 @@ test_that("Logger sets log_file to NULL in DB if not writing to file", {
     expect_length(db_log_file, 1)
     expect_match(db_log_file, "^.+$")
 
-
-    connection_clean_up(conn)
     logger$finalize()
     gc()
+
+    connection_clean_up(conn)
   }
 })
 
@@ -234,5 +234,7 @@ test_that("Logger$finalize handles log table is at some point deleted", {
 
     expect_no_error(logger$finalize())
     gc()
+
+    connection_clean_up(conn)
   }
 })
