@@ -160,7 +160,7 @@ LoggerConsole <- R6::R6Class(                                                   
 #' @examples
 #'   logger <- Logger$new(
 #'     db_table = "test.table",
-#'     ts = "2020-01-01 09:00:00"
+#'     timestamp = "2020-01-01 09:00:00"
 #'   )
 #'
 #'   logger$log_info("This is an info message")
@@ -179,8 +179,9 @@ Logger <- R6::R6Class(                                                          
     #' @description
     #'   Create a new `Logger` object
     #' @param db_table (`character(1)`)\cr
-    #'  A string specifying the table being updated.
-    #' @param ts A timestamp describing the data being processed (not the current time)
+    #'   A string specifying the table being updated.
+    #' @param timestamp (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
+    #'   A timestamp describing the data being processed (not the current time)
     #' @param log_table_id (`id-like object`)\cr
     #'   A table specification (coercible by `id()`) specifying the location of the log table.
     #' @param log_conn (`DBIConnection`)\cr
@@ -191,7 +192,7 @@ Logger <- R6::R6Class(                                                          
     #' @param ... Additional arguments to be passed to `LoggerConsole$new()`.
     initialize = function(
       db_table = NULL,
-      ts = NULL,
+      timestamp = NULL,
       # DB
       log_table_id = getOption("SCDB.log_table_id"),
       log_conn = NULL,
@@ -204,7 +205,7 @@ Logger <- R6::R6Class(                                                          
       # Initialize logger
       coll <- checkmate::makeAssertCollection()
       assert_id_like(db_table, null.ok = TRUE, add = coll)
-      assert_timestamp_like(ts, null.ok = TRUE, add = coll)
+      assert_timestamp_like(timestamp, null.ok = TRUE, add = coll)
       assert_id_like(log_table_id, null.ok = TRUE, add = coll)
       checkmate::assert_class(log_conn, "DBIConnection", null.ok = is.null(log_table_id), add = coll)
       checkmate::assert_character(log_path, null.ok = TRUE, add = coll)
@@ -213,7 +214,7 @@ Logger <- R6::R6Class(                                                          
       if (!is.null(db_table)) {
         private$db_table <- id(db_table, log_conn)
       }
-      private$ts <- ts
+      private$timestamp <- timestamp
 
       if (!is.null(log_table_id)) {
         log_table_id <- id(log_table_id, log_conn)
@@ -348,7 +349,7 @@ Logger <- R6::R6Class(                                                          
     .log_filename = NULL,
     db_table = NULL,
     log_conn = NULL,
-    ts = NULL,
+    timestamp = NULL,
 
     generate_db_entry = function() {
       # Create a row for log in question
@@ -357,7 +358,7 @@ Logger <- R6::R6Class(                                                          
       }
 
       coll <- checkmate::makeAssertCollection()
-      assert_timestamp_like(private$ts, add = coll)
+      assert_timestamp_like(private$timestamp, add = coll)
       assert_id_like(private$db_table, add = coll)
       assert_timestamp_like(self$start_time, add = coll)
       checkmate::reportAssertions(coll)
@@ -379,7 +380,7 @@ Logger <- R6::R6Class(                                                          
         x = self$log_tbl,
         y = dplyr::mutate(
           patch,
-          date = !!db_timestamp(private$ts, private$log_conn),
+          date = !!db_timestamp(private$timestamp, private$log_conn),
           start_time = !!db_timestamp(self$start_time, private$log_conn)
         ),
         copy = TRUE,
@@ -432,14 +433,14 @@ Logger <- R6::R6Class(                                                          
 
       coll <- checkmate::makeAssertCollection()
       assert_dbtable_like(private$db_table, add = coll)
-      assert_timestamp_like(private$ts, null.ok = FALSE, add = coll)
+      assert_timestamp_like(private$timestamp, null.ok = FALSE, add = coll)
       checkmate::reportAssertions(coll)
 
       start_format <- format(self$start_time, "%Y%m%d.%H%M")
-      ts <- private$ts
+      timestamp <- private$timestamp
 
-      if (is.character(ts)) ts <- as.Date(ts)
-      ts_format <- format(ts, "%Y_%m_%d")
+      if (is.character(timestamp)) timestamp <- as.Date(timestamp)
+      ts_format <- format(timestamp, "%Y_%m_%d")
       filename <- sprintf(
         "%s.%s.%s.log",
         start_format,

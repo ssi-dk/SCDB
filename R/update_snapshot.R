@@ -58,7 +58,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     logger <- Logger$new(
       db_table = db_table_id,
       log_conn = conn,
-      ts = timestamp,
+      timestamp = timestamp,
       start_time = tic
     )
   }

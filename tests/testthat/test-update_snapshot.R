@@ -26,7 +26,7 @@ test_that("update_snapshot() works", {
 
     logger <- Logger$new(
       db_table = db_table,
-      ts = timestamp,
+      timestamp = timestamp,
       log_path = log_path,
       log_table_id = "test.SCDB_logs",
       log_conn = conn,
@@ -217,7 +217,7 @@ test_that("update_snapshot works with Id objects", {
     target_table <- id("test.mtcars_modified", conn)
 
     logger <- Logger$new(output_to_console = FALSE,
-                         ts = Sys.time(),
+                         timestamp = Sys.time(),
                          db_table = "test.mtcars_modified",
                          log_conn = NULL,
                          log_table_id = NULL)

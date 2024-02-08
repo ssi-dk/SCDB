@@ -18,7 +18,7 @@ Logging to the database must match the fields in the log table.
 \examples{
   logger <- Logger$new(
     db_table = "test.table",
-    ts = "2020-01-01 09:00:00"
+    timestamp = "2020-01-01 09:00:00"
   )
 
   logger$log_info("This is an info message")
@@ -74,7 +74,7 @@ Create a new \code{Logger} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logger$new(
   db_table = NULL,
-  ts = NULL,
+  timestamp = NULL,
   log_table_id = getOption("SCDB.log_table_id"),
   log_conn = NULL,
   log_path = getOption("SCDB.log_path"),
@@ -88,7 +88,8 @@ Create a new \code{Logger} object
 \item{\code{db_table}}{(\code{character(1)})\cr
 A string specifying the table being updated.}
 
-\item{\code{ts}}{A timestamp describing the data being processed (not the current time)}
+\item{\code{timestamp}}{(\code{POSIXct(1)}, \code{Date(1)}, or \code{character(1)})\cr
+A timestamp describing the data being processed (not the current time)}
 
 \item{\code{log_table_id}}{(\verb{id-like object})\cr
 A table specification (coercible by \code{id()}) specifying the location of the log table.}

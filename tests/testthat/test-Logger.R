@@ -69,11 +69,11 @@ test_that("Logger: logging to file works", {
   )
 
   # Create logger and test configuration
-  # Test file logging - with character ts
-  ts <- "2022-01-01 09:00:00"
+  # Test file logging - with character timestamp
+  timestamp <- "2022-01-01 09:00:00"
   logger <- Logger$new(
     db_table = db_table,
-    ts = ts,
+    timestamp = timestamp,
     log_path = log_path,
     output_to_console = FALSE,
     warn = FALSE
@@ -83,7 +83,7 @@ test_that("Logger: logging to file works", {
   expect_equal(
     logger$log_filename,
     glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
-               "{format(as.POSIXct(ts), '%Y_%m_%d')}.",
+               "{format(as.POSIXct(timestamp), '%Y_%m_%d')}.",
                "{db_table}.log")
   )
 
@@ -110,15 +110,15 @@ test_that("Logger: logging to file works", {
 
 
   # Create logger and test configuration
-  # Test file logging - with POSIX ts
-  ts <- as.POSIXct("2022-02-01 09:00:00")
-  logger <- Logger$new(db_table = db_table, ts = ts, log_path = log_path, warn = FALSE)
+  # Test file logging - with POSIX timestamp
+  timestamp <- as.POSIXct("2022-02-01 09:00:00")
+  logger <- Logger$new(db_table = db_table, timestamp = timestamp, log_path = log_path, warn = FALSE)
 
   expect_equal(logger$log_path, log_path)
   expect_equal(
     logger$log_filename,
     glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
-               "{format(as.POSIXct(ts), '%Y_%m_%d')}.",
+               "{format(as.POSIXct(timestamp), '%Y_%m_%d')}.",
                "{db_table}.log")
   )
 
@@ -145,11 +145,11 @@ test_that("Logger: log_tbl is not set when conn = NULL", {
 
   # Set options for the test
   db_table <- "test.SCDB_logger"
-  ts <- "2022-03-01 09:00:00"
+  timestamp <- "2022-03-01 09:00:00"
 
   # Create logger and test configuration
   # Empty logger should use default value
-  logger <- Logger$new(db_table = db_table, ts = ts, warn = FALSE)
+  logger <- Logger$new(db_table = db_table, timestamp = timestamp, warn = FALSE)
   expect_null(logger$log_tbl) # log_table_id is NOT defined here, despite the option existing
   # the logger does not have the connection, so cannot pull the table from conn
 
@@ -163,11 +163,11 @@ test_that("Logger: logging to db works", {
 
     # Set options for the test
     db_table <- "test.SCDB_logger"
-    ts <- "2022-04-01 09:00:00"
+    timestamp <- "2022-04-01 09:00:00"
 
     # Create logger and test configuration
     logger <- Logger$new(db_table = db_table,
-                         ts = ts,
+                         timestamp = timestamp,
                          log_table_id = db_table,
                          log_conn = conn,
                          warn = FALSE)
@@ -178,7 +178,7 @@ test_that("Logger: logging to db works", {
 
     # Test Logger has pre-filled some information in the logs
     db_table_id <- id(db_table, conn)
-    expect_identical(as.character(dplyr::pull(log_table_id, "date")), ts)
+    expect_identical(as.character(dplyr::pull(log_table_id, "date")), timestamp)
     expect_identical(dplyr::pull(log_table_id, "schema"), purrr::pluck(db_table_id, "name", "schema"))
     expect_identical(dplyr::pull(log_table_id, "table"), purrr::pluck(db_table_id, "name", "table"))
     expect_identical( # Transferring start_time to DB can have some loss of information that we need to match
@@ -211,10 +211,10 @@ test_that("Logger: all logging simultanously works", {
     # Set options for the test
     log_path <- tempdir(check = TRUE)
     db_table <- "test.SCDB_logger"
-    ts <- "2022-05-01 09:00:00"
+    timestamp <- "2022-05-01 09:00:00"
 
     # Create logger and test configuration
-    logger <- Logger$new(db_table = db_table, ts = ts, log_path = log_path,
+    logger <- Logger$new(db_table = db_table, timestamp = timestamp, log_path = log_path,
                          log_table_id = db_table, log_conn = conn, warn = FALSE)
 
     log_table_id <- dplyr::tbl(conn, id(db_table, conn), check_from = FALSE)
@@ -223,7 +223,7 @@ test_that("Logger: all logging simultanously works", {
     expect_equal(
       logger$log_filename,
       glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
-                 "{format(as.POSIXct(ts), '%Y_%m_%d')}.",
+                 "{format(as.POSIXct(timestamp), '%Y_%m_%d')}.",
                  "{id(db_table, conn)}.log")
     )
 
@@ -279,21 +279,21 @@ test_that("Logger: file logging stops if file exists", {
   # Set options for the test
   log_path <- tempdir(check = TRUE)
   db_table <- "test.SCDB_logger"
-  ts <- Sys.time()
+  timestamp <- Sys.time()
 
   # Create logger1 and logger2 which uses the same file
   # Since start_time is the same for both
   logger1 <- Logger$new(
     db_table = db_table,
-    ts = ts,
+    timestamp = timestamp,
     log_path = log_path,
     output_to_console = FALSE
   )
 
   logger2 <- Logger$new(
     db_table = db_table,
-    ts = ts,
-    start_time = ts,
+    timestamp = timestamp,
+    start_time = timestamp,
     log_path = log_path,
     output_to_console = FALSE
   )
@@ -360,10 +360,10 @@ test_that("Logger: log_file is NULL in DB if not writing to file", {
 
     # Set options for the test
     db_table <- "test.SCDB_logger"
-    ts <- "2022-06-01 09:00:00"
+    timestamp <- "2022-06-01 09:00:00"
 
     # Create logger and test configuration
-    logger <- Logger$new(db_table = db_table, ts = ts, log_conn = conn, log_table_id = "test.SCDB_logger")
+    logger <- Logger$new(db_table = db_table, timestamp = timestamp, log_conn = conn, log_table_id = "test.SCDB_logger")
 
     # While logger is active, log_file should be set as the random generated
     db_log_file <- dplyr::pull(dplyr::filter(logger$log_tbl, log_file == !!logger$log_filename))
@@ -389,10 +389,10 @@ test_that("Logger: $finalize() handles log table is at some point deleted", {
 
     # Set options for the test
     db_table <- "test.SCDB_logger"
-    ts <- "2022-06-01 09:00:00"
+    timestamp <- "2022-06-01 09:00:00"
 
     log_table_id <- "expendable_log_table"
-    logger <- Logger$new(db_table = db_table, ts = ts, log_conn = conn, log_table_id = log_table_id)
+    logger <- Logger$new(db_table = db_table, timestamp = timestamp, log_conn = conn, log_table_id = log_table_id)
 
     DBI::dbRemoveTable(conn, id(log_table_id, conn))
 
