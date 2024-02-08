@@ -19,6 +19,6 @@ test_that("db_timestamp produce consistent results", {
       db_timestamp.default(ts_str, conn = conn)
     )
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })

@@ -2,7 +2,7 @@ test_that("get_connection() works", {
   for (conn in get_test_conns()) {
     expect_true(DBI::dbIsValid(conn))
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 

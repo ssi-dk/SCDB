@@ -126,16 +126,17 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     filter_keys(filters) |>
     dplyr::compute()
 
+  defer_db_cleanup(.data)
+
   if (!identical(dbplyr::remote_con(.data), conn)) {
-    if (table_exists(conn, "update_snapshot_patch")) DBI::dbRemoveTable(conn, "update_snapshot_patch")
-    .data <- dplyr::copy_to(conn, .data, name = "SCDB_update_snapshot_patch", temporary = TRUE)
+    .data <- dplyr::copy_to(conn, .data, name = unique_table_name())
+    defer_db_cleanup(.data)
   }
 
   # Apply filter to current records
   if (!is.null(filters) && !identical(dbplyr::remote_con(filters), conn)) {
-    if (table_exists(conn, "update_snapshot_patch_filters")) DBI::dbRemoveTable(conn, "update_snapshot_patch_filters")
-
-    filters <- dplyr::copy_to(conn, filters, name = "SCDB_update_snapshot_filters", temporary = TRUE)
+    filters <- dplyr::copy_to(conn, filters, name = unique_table_name())
+    defer_db_cleanup(filters)
   }
   db_table <- filter_keys(db_table, filters)
 
@@ -164,6 +165,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
                                 dplyr::select(.data, "checksum")) |>
       dplyr::compute() # Something has changed in dbplyr (2.2.1) that makes this compute needed.
     # Code that takes 20 secs with can be more than 30 minutes to compute without...
+    defer_db_cleanup(to_remove)
 
     nrow_to_remove <- nrow(to_remove)
 
@@ -243,10 +245,12 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     redundant_rows_to_delete <- redundant_rows |>
       dplyr::transmute(.data$checksum, from_ts = .data$from_ts.p) |>
       dplyr::compute()
+    defer_db_cleanup(redundant_rows_to_delete)
 
     redundant_rows_to_update <- redundant_rows |>
       dplyr::transmute(.data$checksum, from_ts = .data$from_ts, until_ts = .data$until_ts.p) |>
       dplyr::compute()
+    defer_db_cleanup(redundant_rows_to_update)
 
     if (nrow(redundant_rows_to_delete) > 0) {
       dplyr::rows_delete(x = dplyr::tbl(conn, db_table_id, check_from = FALSE),

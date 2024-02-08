@@ -11,6 +11,6 @@ test_that("slice_time() works", {
     expect_equal(xx |> slice_time("2022-06-01") |> nrow(), 20)
     expect_equal(xx |> slice_time("2022-06-15") |> nrow(), nrow(mtcars))
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })

@@ -32,6 +32,6 @@ test_that("filter_keys() works", {
     filter <- data.frame(vs = 0)
     expect_mapequal(filter_keys(m, filter), dplyr::filter(m, vs == 0))
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })

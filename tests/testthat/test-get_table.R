@@ -64,7 +64,7 @@ test_that("get_table returns list of tables if no table is requested", {
       regexp = "Select one of the following tables:"
     )
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -91,7 +91,7 @@ test_that("get_table() works when tables exist", {
     t <- id("test.mtcars", conn)
     expect_equal(get_table(conn, t) |> dplyr::collect(), mtcars_t)
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -127,7 +127,7 @@ test_that("get_table() works when tables does not exist in default schema", {
       warning("Non-existing table in default schema could not be generated!")
     }
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -166,6 +166,6 @@ test_that("get_table() works when tables does not exist in non existing schema",
       warning("Non-existing schema could not be generated!")
     }
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })

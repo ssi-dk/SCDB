@@ -8,5 +8,5 @@ for (conn in get_test_conns()) {
   purrr::walk(c(DBI::Id(schema = "test", table = "one.two"), DBI::Id(schema = "test.one", table = "two")),
               ~ if (schema_exists(conn, .@name[["schema"]]) && DBI::dbExistsTable(conn, .)) DBI::dbRemoveTable(conn, .))
 
-  DBI::dbDisconnect(conn)
+  connection_clean_up(conn)
 }

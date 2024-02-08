@@ -164,16 +164,10 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
         dplyr::copy_to(
           dest = private$log_conn,
           df = _,
-          name = "SCDB_log_patch",
-          temporary = TRUE,
-          overwrite = FALSE
+          name = unique_table_name(),
+          temporary = TRUE
         )
-
-      on.exit({
-        if (DBI::dbIsValid(private$log_conn) && table_exists(conn = private$log_conn, patch)) {
-          DBI::dbRemoveTable(private$log_conn, id(patch, conn = private$log_conn, allow_table_only = FALSE))
-        }
-      })
+      defer_db_cleanup(patch) # Clean up on exit
 
       # Mutating after copying ensures consistency in SQL translation
       dplyr::rows_patch(
@@ -197,10 +191,21 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
       # Create a row for log in question
       if (is.null(self$log_tbl)) return()
 
-      dplyr::rows_append(x = self$log_tbl,
-                         y = data.frame(log_file = self$log_filename),
-                         copy = TRUE,
-                         in_place = TRUE)
+      patch <- data.frame(log_file = self$log_filename) |>
+        dplyr::copy_to(
+          dest = private$log_conn,
+          df = _,
+          name = unique_table_name(),
+          temporary = TRUE
+        )
+      defer_db_cleanup(patch) # Clean up on exit
+
+      dplyr::rows_append(
+        x = self$log_tbl,
+        y = patch,
+        copy = TRUE,
+        in_place = TRUE
+      )
     },
 
     log_format = function(..., tic = self$start_time, log_type = NULL) {

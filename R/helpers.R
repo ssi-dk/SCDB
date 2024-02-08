@@ -46,6 +46,62 @@ is.historical <- function(.data) { # nolint: object_name_linter
 }
 
 
+#' Delete table at function exit
+#' @description
+#'   This function marks a table for deletion once the current function exits.
+#' @param tbl_sql A "bare" reference to a sql table
+#' @examples
+#' conn <- get_connection(drv = RSQLite::SQLite())
+#'
+#' mt <- dplyr::copy_to(conn, mtcars)
+#'
+#' defer_db_cleanup(mt)
+#'
+#' DBI::dbExistsTable(conn, id(mt)) # TRUE
+#'
+#' withr::deferred_run()
+#'
+#' DBI::dbExistsTable(conn, id(mt)) # FALSE
+#'
+#' close_connection(conn)
+#' @return NULL (called for side effects)
+#' @export
+defer_db_cleanup <- function(tbl_sql) {
+
+  # Determine table info
+  conn <- dbplyr::remote_con(tbl_sql)
+  db_table_id <- id(tbl_sql)
+
+  # Remove table on exit
+  withr::defer_parent(
+    if (DBI::dbIsValid(conn) && DBI::dbExistsTable(conn, db_table_id)) {
+      DBI::dbRemoveTable(conn, db_table_id)
+    }
+  )
+}
+
+
+#' Create a name for a temporary table
+#' @description
+#'   This function is heavily inspired by the unexported dbplyr function unique_table_name
+#' @param scope A naming scope to generate the table name within.
+#' @examples
+#'   print(unique_table_name()) # SCDB_001
+#'   print(unique_table_name()) # SCDB_002
+#'
+#'   print(unique_table_name("test")) # test_001
+#'   print(unique_table_name("test")) # test_002
+#'
+#' @return A character string for a table name based on the given scope parameter
+#' @export
+unique_table_name <- function(scope = "SCDB") {
+  option <- paste(scope, "table_name", sep = "_")
+  index <- getOption(option, default = 0) + 1
+  options(tibble::lst(!!option := index))
+  return(glue::glue("{scope}_{sprintf('%03i', index)}"))
+}
+
+
 #' checkmate helper: Assert "generic" data.table/data.frame/tbl/tibble type
 #' @param .data Object to test if is data.table, data.frame, tbl or tibble
 #' @param ...   Parameters passed to checkmate::check_*

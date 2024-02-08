@@ -114,7 +114,7 @@ test_that("Logger works", {
       purrr::keep(~ endsWith(., ".log")) |>
       purrr::walk(~ unlink(file.path(log_path, .)))
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -216,9 +216,9 @@ test_that("Logger sets log_file to NULL in DB if not writing to file", {
     expect_match(db_log_file, "^.+$")
 
     logger$finalize()
-
     gc()
-    DBI::dbDisconnect(conn)
+
+    connection_clean_up(conn)
   }
 })
 
@@ -233,8 +233,8 @@ test_that("Logger$finalize handles log table is at some point deleted", {
     DBI::dbRemoveTable(conn, log_table_id)
 
     expect_no_error(logger$finalize())
-
     gc()
-    DBI::dbDisconnect(conn)
+
+    connection_clean_up(conn)
   }
 })

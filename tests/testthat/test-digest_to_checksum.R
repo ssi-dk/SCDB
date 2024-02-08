@@ -30,7 +30,7 @@ test_that("digest_to_checksum() works", {
     checksums <- x |> digest_to_checksum() |> dplyr::pull("checksum")
     expect_false(checksums[1] == checksums[2])
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -49,6 +49,6 @@ test_that("digest_to_checksum() warns works correctly when overwriting", {
 
     expect_identical(checksum_vector, checksum_vector2)
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })

@@ -120,6 +120,6 @@ test_that("*_join() works", {
                    dplyr::select(!"name") |>
                    dplyr::collect())
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })

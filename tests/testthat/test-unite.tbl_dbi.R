@@ -2,9 +2,12 @@ test_that("unite.tbl_dbi() works", {
   for (conn in get_test_conns()) {
 
     q <- get_table(conn, "__mtcars") |> utils::head(1)
-    qu_remove <- tidyr::unite(dplyr::select(q, mpg, hp), "new_column", mpg, hp) |> dplyr::compute()
-    qu        <- tidyr::unite(dplyr::select(q, mpg, hp), "new_column", mpg, hp, remove = FALSE) |> dplyr::compute()
-    qu_alt    <- tidyr::unite(dplyr::select(q, mpg, hp), "new_column", "mpg", "hp", remove = FALSE) |> dplyr::compute()
+    qu_remove <- tidyr::unite(dplyr::select(q, mpg, hp), "new_column", mpg, hp) |>
+      dplyr::compute(name = unique_table_name())
+    qu        <- tidyr::unite(dplyr::select(q, mpg, hp), "new_column", mpg, hp, remove = FALSE) |>
+      dplyr::compute(name = unique_table_name())
+    qu_alt    <- tidyr::unite(dplyr::select(q, mpg, hp), "new_column", "mpg", "hp", remove = FALSE) |>
+      dplyr::compute(name = unique_table_name())
 
     expect_s3_class(qu_remove, "tbl_dbi")
     expect_s3_class(qu,        "tbl_dbi")
@@ -55,6 +58,6 @@ test_that("unite.tbl_dbi() works", {
     expect_identical(qq |> tidyr::unite("test_col", vs, am) |> dplyr::collect(),
                      qq |> dplyr::collect() |> tidyr::unite("test_col", vs, am))
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
