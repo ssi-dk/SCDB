@@ -394,7 +394,7 @@ test_that("Logger: $finalize() handles log table is at some point deleted", {
     log_table_id <- "expendable_log_table"
     logger <- Logger$new(db_table = db_table, ts = ts, log_conn = conn, log_table_id = log_table_id)
 
-    DBI::dbRemoveTable(conn, log_table_id)
+    DBI::dbRemoveTable(conn, id(log_table_id, conn))
 
     expect_no_error(logger$finalize())
 
