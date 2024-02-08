@@ -19,7 +19,7 @@ db_timestamp <- function(timestamp, conn = NULL) {
 #' @export
 db_timestamp.default <- function(timestamp, conn) {
   if (inherits(timestamp, "POSIXt")) timestamp <- format(timestamp)
-  return(as.POSIXct(timestamp))
+  return(dbplyr::translate_sql(as.POSIXct(!!timestamp), con = conn))
 }
 
 #' @export
@@ -32,9 +32,9 @@ db_timestamp.NULL <- function(timestamp, conn) {
 #' @export
 db_timestamp.SQLiteConnection <- function(timestamp, conn) {
   if (is.na(timestamp)) {
-    return(NA_character_)
+    return(dbplyr::translate_sql(NA_character_, con = conn))
   } else {
     if (inherits(timestamp, "POSIXt")) timestamp <- format(timestamp)
-    return(strftime(timestamp))
+    return(dbplyr::translate_sql(!!strftime(timestamp), con = conn))
   }
 }
