@@ -6,7 +6,7 @@ Authors@R:
 	  c(person("Rasmus Skytte", "Randl\U00F8v", , "rske@ssi.dk",
 	           role = c("aut", "cre"),
 	           comment = c(ORCID = "0000-0002-5860-3838")),
-	    person("Marcus Munch", "Gr\U00FCnewald", , "mmgr@ssi.dk",
+	    person("Marcus Munch", "Gr\U00FCnewald", , ,
 	           role = c("aut"),
 	           comment = c(ORCID = "0009-0006-8090-406X")),
         person("Lasse Engbo", "Christiansen", , "lsec@ssi.dk", role = c("ctb"),

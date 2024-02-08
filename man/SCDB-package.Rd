@@ -24,7 +24,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Marcus Munch Grünewald \email{mmgr@ssi.dk} (\href{https://orcid.org/0009-0006-8090-406X}{ORCID})
+  \item Marcus Munch Grünewald (\href{https://orcid.org/0009-0006-8090-406X}{ORCID})
 }
 
 Other contributors:
