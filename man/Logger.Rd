@@ -7,11 +7,11 @@
 A new instance of the \code{Logger} \link[R6:R6Class]{R6} class.
 }
 \description{
-Create an object for logging database operations
+Create an object for logging database operations.
 }
 \examples{
-logger <- Logger$new(db_table = "test.table",
-                     ts = "2020-01-01 09:00:00")
+  logger <- Logger$new(db_table = "test.table",
+                       timestamp = "2020-01-01 09:00:00")
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -19,7 +19,8 @@ logger <- Logger$new(db_table = "test.table",
 \item{\code{log_path}}{(\code{character(1)})\cr
 A directory where log file is written (if this is not NULL). Defaults to \code{getOption("SCDB.log_path")}.}
 
-\item{\code{log_tbl}}{The DB table used for logging. Class is connection-specific, but inherits from \code{tbl_dbi}.}
+\item{\code{log_tbl}}{(\code{tbl_dbi})\cr
+The DB table used for logging. Class is connection-specific, but inherits from \code{tbl_dbi}.}
 
 \item{\code{output_to_console}}{(\code{logical(1)})\cr
 Should the Logger output to console?
@@ -75,22 +76,29 @@ Create a new Logger object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_table}}{An object that inherits from \code{tbl_dbi}, a \code{\link[DBI:Id]{DBI::Id()}} object or a character string readable by \link{id}.}
+\item{\code{db_table}}{(\code{character(1)})\cr
+A string specifying the table being updated.}
 
 \item{\code{ts}}{A timestamp describing the data being processed (not the current time)}
 
-\item{\code{start_time}}{The time at which data processing was started (defaults to \code{\link[=Sys.time]{Sys.time()}})}
+\item{\code{start_time}}{(\code{POSIXct(1)})\cr
+The time at which data processing was started (defaults to \code{\link[=Sys.time]{Sys.time()}}).}
 
-\item{\code{log_table_id}}{A \code{\link[DBI:Id]{DBI::Id()}} object or a character string readable by \link{id}, specifying the location of the log table.}
+\item{\code{log_table_id}}{(\verb{id-like object})\cr
+A table specification (coercible by \code{id()}) specifying the location of the log table.}
 
-\item{\code{log_conn}}{A database connection inheriting from \code{DBIConnection}}
+\item{\code{log_conn}}{(\code{DBIConnection})\cr
+A database connection where log table should exist.}
 
-\item{\code{log_path}}{The path where logs are stored.
-If NULL, no file logs are created.}
+\item{\code{log_path}}{(\code{character(1)})\cr
+The path where logs are stored.
+If \code{NULL}, no file logs are created.}
 
-\item{\code{output_to_console}}{Should the Logger output to console (TRUE/FALSE)?}
+\item{\code{output_to_console}}{(\code{logical(1)})\cr
+Should the Logger output to console?}
 
-\item{\code{warn}}{Show a warning if neither log_table_id or log_path could be determined}
+\item{\code{warn}}{(\code{logical(1)})\cr
+Should a warning be produced if neither log_table_id or log_path could be determined?}
 }
 \if{html}{\out{</div>}}
 }
@@ -109,7 +117,7 @@ Remove generated log_name from database if not writing to a file
 \if{html}{\out{<a id="method-Logger-log_info"></a>}}
 \if{latex}{\out{\hypertarget{method-Logger-log_info}{}}}
 \subsection{Method \code{log_info()}}{
-Write a line to log file
+Write a line to log file.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logger$log_info(
   ...,
@@ -125,14 +133,16 @@ Write a line to log file
 \describe{
 \item{\code{...}}{One or more character strings to be concatenated}
 
-\item{\code{tic}}{The timestamp used by the log entry (default Sys.time())}
+\item{\code{tic}}{start_time (\code{POSIXct(1)})\cr
+The timestamp used by the log entry (defaults to \code{\link[=Sys.time]{Sys.time()}}).}
 
-\item{\code{output_to_console}}{Should the line be written to console?}
+\item{\code{output_to_console}}{(\code{logical(1)})\cr
+Should the line be written to console?}
 
 \item{\code{log_type}}{A character string which describes the severity of the log message}
 
 \item{\code{timestamp_format}}{(\code{character(1)})\cr
-Format string for timestamps in the logs. Must be parsable by \code{format()}.}
+The format of the timestamp used in the log message (parsable by \code{\link[=strftime]{strftime()}}).}
 }
 \if{html}{\out{</div>}}
 }
@@ -163,7 +173,7 @@ Write a warning to log file and generate warning.
 \if{html}{\out{<a id="method-Logger-log_error"></a>}}
 \if{latex}{\out{\hypertarget{method-Logger-log_error}{}}}
 \subsection{Method \code{log_error()}}{
-Write an error to log file and stop execution
+Write an error to log file and stop execution.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logger$log_error(..., log_type = "ERROR")}\if{html}{\out{</div>}}
 }
@@ -182,7 +192,7 @@ Write an error to log file and stop execution
 \if{html}{\out{<a id="method-Logger-log_to_db"></a>}}
 \if{latex}{\out{\hypertarget{method-Logger-log_to_db}{}}}
 \subsection{Method \code{log_to_db()}}{
-Write or update log table
+Write or update log table.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logger$log_to_db(...)}\if{html}{\out{</div>}}
 }
@@ -190,7 +200,7 @@ Write or update log table
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{Name-value pairs with which to update the log table}
+\item{\code{...}}{Name-value pairs with which to update the log table.}
 }
 \if{html}{\out{</div>}}
 }

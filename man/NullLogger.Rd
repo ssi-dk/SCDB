@@ -10,7 +10,7 @@ A new instance of the \code{Logger} \link[R6:R6Class]{R6} class where no logging
 Create a \link{Logger} object that does no logging.
 }
 \examples{
-logger <- NullLogger$new()
+  logger <- NullLogger$new()
 }
 \section{Super class}{
 \code{\link[SCDB:Logger]{SCDB::Logger}} -> \code{NullLogger}

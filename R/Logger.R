@@ -1,40 +1,50 @@
-#' @title Logger
+#' Logger
+#'
 #' @description
-#' Create an object for logging database operations
+#'   Create an object for logging database operations.
 #'
 #' @importFrom R6 R6Class
-#' @param db_table An object that inherits from `tbl_dbi`, a [DBI::Id()] object or a character string readable by [id].
-#' @template log_table_id
-#' @template log_path
+#' @param db_table (`character(1)`)\cr
+#'  A string specifying the table being updated.
+#' @param log_table_id (`id-like object`)\cr
+#'   A table specification (coercible by `id()`) specifying the location of the log table.
+#' @param log_path (`character(1)`)\cr
+#'   The path where logs are stored.
+#'   If `NULL`, no file logs are created.
 #' @param ts A timestamp describing the data being processed (not the current time)
-#' @param start_time The time at which data processing was started (defaults to [Sys.time()])
+#' @param start_time (`POSIXct(1)`)\cr
+#'   The time at which data processing was started (defaults to [Sys.time()]).
+#' @return
+#'   A new instance of the `Logger` [R6][R6::R6Class] class.
 #' @examples
-#' logger <- Logger$new(db_table = "test.table",
-#'                      ts = "2020-01-01 09:00:00")
-#' @return A new instance of the `Logger` [R6][R6::R6Class] class.
+#'   logger <- Logger$new(db_table = "test.table",
+#'                        timestamp = "2020-01-01 09:00:00")
 #' @export
-Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
+Logger <- R6::R6Class(                                                                                                  #nolint: object_name_linter
   classname  = "Logger",
   public = list(
 
     #' @field log_path (`character(1)`)\cr
-    #' A directory where log file is written (if this is not NULL). Defaults to `getOption("SCDB.log_path")`.
+    #'   A directory where log file is written (if this is not NULL). Defaults to `getOption("SCDB.log_path")`.
     log_path = NULL,
 
-    #' @field log_tbl
-    #' The DB table used for logging. Class is connection-specific, but inherits from `tbl_dbi`.
+    #' @field log_tbl (`tbl_dbi`)\cr
+    #'   The DB table used for logging. Class is connection-specific, but inherits from `tbl_dbi`.
     log_tbl = NULL,
 
     #' @field output_to_console (`logical(1)`)\cr
-    #' Should the Logger output to console?
-    #' This can always be overridden by Logger$log_info(..., output_to_console = FALSE).
+    #'   Should the Logger output to console?
+    #'   This can always be overridden by Logger$log_info(..., output_to_console = FALSE).
     output_to_console = NULL,
 
     #' @description
-    #' Create a new Logger object
-    #' @param log_conn A database connection inheriting from `DBIConnection`
-    #' @param warn Show a warning if neither log_table_id or log_path could be determined
-    #' @param output_to_console Should the Logger output to console (TRUE/FALSE)?
+    #'   Create a new Logger object
+    #' @param log_conn (`DBIConnection`)\cr
+    #'   A database connection where log table should exist.
+    #' @param warn (`logical(1)`)\cr
+    #'   Should a warning be produced if neither log_table_id or log_path could be determined?
+    #' @param output_to_console (`logical(1)`)\cr
+    #'   Should the Logger output to console?
     initialize = function(
       db_table = NULL,
       ts = NULL,
@@ -94,13 +104,15 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     },
 
     #' @description
-    #' Write a line to log file
+    #'   Write a line to log file.
     #' @param ... `r log_dots <- "One or more character strings to be concatenated"; log_dots`
-    #' @param tic The timestamp used by the log entry (default Sys.time())
-    #' @param output_to_console Should the line be written to console?
+    #' @param tic  start_time (`POSIXct(1)`)\cr
+    #'   The timestamp used by the log entry (defaults to [Sys.time()]).
+    #' @param output_to_console (`logical(1)`)\cr
+    #'   Should the line be written to console?
     #' @param log_type `r log_type <- "A character string which describes the severity of the log message"; log_type`
     #' @param timestamp_format (`character(1)`)\cr
-    #'   Format string for timestamps in the logs. Must be parsable by `format()`.
+    #'   The format of the timestamp used in the log message (parsable by [strftime()]).
     #' @return
     #'   Returns the log message invisibly
     log_info = function(..., tic = Sys.time(), output_to_console = self$output_to_console, log_type = "INFO",
@@ -127,22 +139,26 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
     },
 
-    #' @description Write a warning to log file and generate warning.
+    #' @description
+    #'   Write a warning to log file and generate warning.
     #' @param ... `r log_dots`
     #' @param log_type `r log_type`
     log_warn = function(..., log_type = "WARNING") {
       warning(self$log_info(..., log_type = log_type))
     },
 
-    #' @description Write an error to log file and stop execution
+    #' @description
+    #'   Write an error to log file and stop execution.
     #' @param ... `r log_dots`
     #' @param log_type `r log_type`
     log_error = function(..., log_type = "ERROR") {
       stop(self$log_info(..., log_type = log_type))
     },
 
-    #' @description Write or update log table
-    #' @param ... Name-value pairs with which to update the log table
+    #' @description
+    #'   Write or update log table.
+    #' @param ...
+    #'   Name-value pairs with which to update the log table.
     log_to_db = function(...) {
 
       # Only write if we have a valid connection
@@ -223,7 +239,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
   private = list(
 
     # @field start_time (`POSIXct(1)`)\cr
-    # The time at which data processing was started.
+    #   The time at which data processing was started.
     .start_time = NULL,
 
     .log_filename = NULL,
@@ -279,7 +295,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
   active = list(
     #' @field start_time (`POSIXct(1)`)\cr
-    #' The time at which data processing was started. Read only.
+    #'   The time at which data processing was started. Read only.
     start_time = function(value) {
       if (missing(value)) {
         return(private$.start_time)
@@ -290,7 +306,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
 
     #' @field log_filename `character(1)`\cr
-    #' The filename (basename) of the file that the `Logger` instance will output to
+    #'   The filename (basename) of the file that the `Logger` instance will output to
     log_filename = function() {
       # If we are not producing a file log, we provide a random string to key by
       if (!is.null(private$.log_filename)) {
@@ -328,7 +344,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     },
 
     #' @field log_realpath `character(1)`\cr
-    #' The full path to the logger's log file.
+    #'   The full path to the logger's log file.
     log_realpath = function() {
       if (is.null(self$log_path)) {
         return(nullfile())
@@ -347,7 +363,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 #'
 #' @importFrom R6 R6Class
 #' @examples
-#' logger <- NullLogger$new()
+#'   logger <- NullLogger$new()
 #' @return A new instance of the `Logger` [R6][R6::R6Class] class where no logging will be done.
 #' @export
 NullLogger <- R6::R6Class(                                                                                              # nolint: object_name_linter
