@@ -56,6 +56,14 @@
 * A new function, `unique_table_name()`, to generate unique table names is added (#89).
   This function is heavily inspired by the unexported `dbplyr:::unique_table_name()`.
 
+* Two new loggers are introduced `LoggerConsole` and `LoggerNull` (#98).
+
+  * `LoggerConsole` is a simple logger that outputs to console via `$log_info()`, `$log_warn()` and `$log_error()`.
+
+  * `Logger` is now an extension of `LoggerConsole` which includes logging to file and logging to db.
+
+  * `LoggerNull` is "no-logging" logger that can be used to suppress all logging.
+
 ## Improvements and Fixes
 
 * Improvements for `create_table()` (#93):

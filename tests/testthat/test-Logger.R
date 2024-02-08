@@ -334,8 +334,13 @@ test_that("Logger: console output may be disabled", {
     "This line should be printed"
   )
 
+  rm(logger)
+
   # ...and now, only suppress printing when explicitly stated
-  logger$output_to_console <- TRUE
+  expect_warning(
+    logger <- Logger$new(output_to_console = TRUE),
+    regexp = "NO LOGGING WILL BE DONE"
+  )
 
   expect_message(
     logger$log_info("This line should be printed"),
@@ -354,7 +359,6 @@ test_that("Logger: log_file is NULL in DB if not writing to file", {
   for (conn in get_test_conns()) {
 
     # Set options for the test
-    log_path <- tempdir(check = TRUE)
     db_table <- "test.SCDB_logger"
     ts <- "2022-06-01 09:00:00"
 
@@ -434,20 +438,28 @@ test_that("Logger: custom timestamp_format works", {
 })
 
 
-test_that("NullLogger: no logging occurs", {
+test_that("LoggerNull: no logging occurs", {
 
   # Create logger and test configuration
-  expect_no_message(logger <- NullLogger$new())
+  expect_no_message(logger <- LoggerNull$new())
 
-  expect_null(logger$log_info("test console", tic = logger$start_time))
-  expect_null(logger$log_warn("test console", tic = logger$start_time))
-  expect_null(logger$log_error("test console", tic = logger$start_time))
-  expect_null(logger$log_to_db(n_insertions = 42))
-  expect_null(logger$finalize_db_entry())
-
+  ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_no_message(logger$log_info("test console", tic = logger$start_time))
-  expect_no_warning(logger$log_warn("test console", tic = logger$start_time))
-  expect_no_error(logger$log_error("test console", tic = logger$start_time))
+
+  # Test logging to console has the right formatting and message type
+  ts_str <- format(logger$start_time, "%F %R:%OS3")
+  expect_no_message(
+    logger$log_info("test console", tic = logger$start_time),
+  )
+  expect_warning(
+    logger$log_warn("test console", tic = logger$start_time),
+    glue::glue("{ts_str} - {Sys.info()[['user']]} - WARNING - test console")
+  )
+  expect_error(
+    logger$log_error("test console", tic = logger$start_time),
+    glue::glue("{ts_str} - {Sys.info()[['user']]} - ERROR - test console")
+  )
+
   expect_no_message(logger$log_to_db(n_insertions = 42))
   expect_no_message(logger$finalize_db_entry())
 
