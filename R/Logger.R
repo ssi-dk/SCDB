@@ -146,7 +146,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
     log_to_db = function(...) {
 
       # Only write if we have a valid connection
-      if (!is.null(private$log_conn) && DBI::dbIsValid(private$log_conn) &&
+      if (!is.null(private$log_conn) && !is.null(self$log_tbl) && DBI::dbIsValid(private$log_conn) &&
             table_exists(private$log_conn, self$log_tbl)) {
 
         patch <- data.frame(log_file = self$log_filename) |>
@@ -188,7 +188,7 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
 
       # Remove the log_file from the log table if no actual file is being written
-      if (is.null(self$log_path) && !is.null(private$log_conn) &&
+      if (is.null(self$log_path) && !is.null(private$log_conn) && !is.null(self$log_tbl) &&
             DBI::dbIsValid(private$log_conn) && table_exists(private$log_conn, self$log_tbl)) {
 
         expected_rows <- self$log_tbl |>
