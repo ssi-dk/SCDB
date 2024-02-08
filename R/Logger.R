@@ -245,10 +245,8 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
       patch <- data.frame(
         log_file = self$log_filename,
-        date = db_timestamp(private$ts, private$log_conn),
         schema = purrr::pluck(private$db_table, "name", "schema"),
-        table = purrr::pluck(private$db_table, "name", "table"),
-        start_time = db_timestamp(self$start_time, private$log_conn)
+        table = purrr::pluck(private$db_table, "name", "table")
       ) |>
         dplyr::copy_to(
           dest = private$log_conn,
@@ -260,7 +258,11 @@ Logger <- R6::R6Class( #nolint: object_name_linter, cyclocomp_linter
 
       dplyr::rows_append(
         x = self$log_tbl,
-        y = patch,
+        y = dplyr::mutate(
+          patch,
+          date = !!db_timestamp(private$ts, private$log_conn),
+          start_time = !!db_timestamp(self$start_time, private$log_conn)
+        ),
         copy = TRUE,
         in_place = TRUE
       )
