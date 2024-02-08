@@ -30,27 +30,18 @@ digest_to_checksum <- function(.data, col = "checksum", exclude = NULL) {
   UseMethod("digest_to_checksum", .data)
 }
 
-
-# Resolve visible binding warning for SQL commands
-utils::globalVariables(c("CONVERT", "VARCHAR"))
-
 #' @noRd
 `digest_to_checksum.tbl_Microsoft SQL Server` <- function(
     .data,
     col = formals(digest_to_checksum)$col,
     exclude = formals(digest_to_checksum)$exclude) {
 
-  conn <- dbplyr::remote_con(.data)
-
   hash_cols <- dbplyr::ident(setdiff(colnames(.data), c(col, exclude)))
 
   .data <- .data |>
     dplyr::mutate(
-      {{ col }} := !!dbplyr::sql_call2(
-        "HashBytes",
-        "SHA2_256",
-        dbplyr::build_sql("(SELECT ", hash_cols, " FOR XML RAW)", con = conn),
-        con = conn
+      {{ col }} := !!dplyr::sql(
+        glue::glue("CONVERT(CHAR(64), HashBytes('SHA2_256', (SELECT {toString(hash_cols)} FOR XML RAW)), 2)")
       )
     )
 

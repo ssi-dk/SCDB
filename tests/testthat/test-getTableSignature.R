@@ -83,7 +83,7 @@ for (conn in c(list(NULL), get_test_conns())) {
           "numeric"   = "DOUBLE PRECISION",
           "logical"   = "BOOLEAN",
           # ..
-          "checksum"  = "VARCHAR(32)",
+          "checksum"  = "CHAR(32)",
           "from_ts"   = "TIMESTAMP",
           "until_ts"  = "TIMESTAMP"
         )
@@ -103,7 +103,7 @@ for (conn in c(list(NULL), get_test_conns())) {
           "numeric"   = "FLOAT",
           "logical"   = "BIT",
           # ..
-          "checksum"  = "varchar(40)",
+          "checksum"  = "CHAR(64)",
           "from_ts"   = "DATETIME",
           "until_ts"  = "DATETIME"
         )
@@ -123,7 +123,7 @@ for (conn in c(list(NULL), get_test_conns())) {
           "numeric"   = "DOUBLE",
           "logical"   = "BOOLEAN",
           # ..
-          "checksum"  = "varchar(32)",
+          "checksum"  = "char(32)",
           "from_ts"   = "TIMESTAMP",
           "until_ts"  = "TIMESTAMP"
         )

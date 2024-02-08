@@ -26,17 +26,17 @@ methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
       until_ts = "TIMESTAMP"  # Stored internally as TEXT
     ),
     "PqConnection" = c(
-      checksum = "VARCHAR(32)",
+      checksum = "CHAR(32)",
       from_ts  = "TIMESTAMP",
       until_ts = "TIMESTAMP"
     ),
     "Microsoft SQL Server" = c(
-      checksum = "varchar(40)",
+      checksum = "CHAR(64)",
       from_ts  = "DATETIME",
       until_ts = "DATETIME"
     ),
     "duckdb_connection" = c(
-      checksum = "varchar(32)",
+      checksum = "char(32)",
       from_ts  = "TIMESTAMP",
       until_ts = "TIMESTAMP"
     )
