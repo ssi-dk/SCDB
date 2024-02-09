@@ -1,14 +1,16 @@
 #' Get the current schema / catalog of a database-related objects
 #'
 #' @name get_schema
-#' @param .x The object from which to retrieve a schema
+#' @param obj The object from which to retrieve a schema
+#' @param temporary (`logical(1)`) \cr
+#'   Should the reference be to the temporary schema/database?
+#' @param ... Further arguments passed to methods.
 #' @return
-#' For `get_schema.DBIConnection`, the current schema of the connection. See "Default schema" for more.
+#' For `get_schema.DBIConnection`, the current schema of the connection if `temporary = FALSE``.
+#' See "Default schema" for more.
+#' If `temporary = TRUE`, the temporary schema of the connection is returned.
 #'
-#' For `get_schema.tbl_dbi` the schema as retrieved from the lazy_query.
-#' If the lazy_query does not specify a schema, `NULL` is returned.
-#' Note that lazy queries are sensitive to server-side changes and may therefore return entirely different tables
-#' if changes are made server-side.
+#' For `get_schema.tbl_dbi` the schema is determined via `id()`.
 #'
 #' @section Default schema:
 #'
@@ -33,46 +35,51 @@
 #'
 #' close_connection(conn)
 #' @export
-get_schema <- function(.x) {
+get_schema <- function(obj, ...) {
   UseMethod("get_schema")
 }
 
 #' @export
-get_schema.tbl_dbi <- function(.x) {
-  schema <- dbplyr::remote_table(.x) |>
-    unclass() |>
-    purrr::discard(is.na) |>
-    purrr::pluck("schema")
-
-  return(schema)
+get_schema.tbl_dbi <- function(obj,  ...) {
+  return(purrr::pluck(id(obj), "name", "schema"))
 }
 
 #' @export
-get_schema.Id <- function(.x) {
-  return(purrr::pluck(.x@name, "schema"))
+get_schema.Id <- function(obj,  ...) {
+  return(purrr::pluck(obj@name, "schema"))
 }
 
 #' @export
-get_schema.PqConnection <- function(.x) {
-  return(DBI::dbGetQuery(.x, "SELECT CURRENT_SCHEMA()")$current_schema)
+#' @rdname get_schema
+get_schema.PqConnection <- function(obj, temporary = FALSE,  ...) {
+  if (isTRUE(temporary))  {
+    return("pg_temp")
+  } else {
+    return(DBI::dbGetQuery(obj, "SELECT CURRENT_SCHEMA()")$current_schema)
+  }
 }
 
 #' @export
-get_schema.SQLiteConnection <- function(.x) {
-  return("main")
+#' @rdname get_schema
+get_schema.SQLiteConnection <- function(obj, temporary = FALSE,  ...) {
+  if (isTRUE(temporary))  {
+    return("temp")
+  } else {
+    return("main")
+  }
 }
 
 #' @export
-`get_schema.Microsoft SQL Server` <- function(.x) {
+`get_schema.Microsoft SQL Server` <- function(obj, ...) {
   query <- paste("SELECT ISNULL((SELECT",
                  "COALESCE(default_schema_name, 'dbo') AS default_schema",
                  "FROM sys.database_principals",
                  "WHERE [name] = CURRENT_USER), 'dbo') default_schema")
 
-  return(DBI::dbGetQuery(.x, query)$default_schema)
+  return(DBI::dbGetQuery(obj, query)$default_schema)
 }
 
 #' @export
-get_schema.NULL <- function(.x) {
+get_schema.NULL <- function(obj, ...) {
   return(NULL)
 }

@@ -4,21 +4,27 @@
 \alias{get_catalog}
 \alias{get_catalog.Microsoft SQL Server}
 \alias{get_schema}
+\alias{get_schema.PqConnection}
+\alias{get_schema.SQLiteConnection}
 \title{Get the current schema / catalog of a database-related objects}
 \usage{
 get_catalog(.x, ...)
 
 \method{get_catalog}{`Microsoft SQL Server`}(.x, temporary = FALSE, ...)
 
-get_schema(.x)
+get_schema(obj, ...)
+
+\method{get_schema}{PqConnection}(obj, temporary = FALSE, ...)
+
+\method{get_schema}{SQLiteConnection}(obj, temporary = FALSE, ...)
 }
 \arguments{
-\item{.x}{The object from which to retrieve a schema}
-
 \item{...}{Further arguments passed to methods.}
 
 \item{temporary}{(\code{logical(1)}) \cr
-Is the table in the temporary database?}
+Should the reference be to the temporary schema/database?}
+
+\item{obj}{The object from which to retrieve a schema}
 }
 \value{
 For \verb{get_catalog.Microsoft SQL Server}, the current database context of the connection or "tempdb" if
@@ -26,12 +32,9 @@ For \verb{get_catalog.Microsoft SQL Server}, the current database context of the
 
 For \verb{get_catalog.*}, \code{NULL} is returned.
 
-For \code{get_schema.DBIConnection}, the current schema of the connection. See "Default schema" for more.
+For \code{get_schema.DBIConnection}, the current schema of the connection if \verb{temporary = FALSE``. See "Default schema" for more. If }temporary = TRUE`, the temporary schema of the connection is returned.
 
-For \code{get_schema.tbl_dbi} the schema as retrieved from the lazy_query.
-If the lazy_query does not specify a schema, \code{NULL} is returned.
-Note that lazy queries are sensitive to server-side changes and may therefore return entirely different tables
-if changes are made server-side.
+For \code{get_schema.tbl_dbi} the schema is determined via \code{id()}.
 }
 \description{
 Get the current schema / catalog of a database-related objects
