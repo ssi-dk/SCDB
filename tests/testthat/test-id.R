@@ -110,7 +110,7 @@ test_that("id() is gives informative error for manipulated tbl_dbi inputs", {
       "Table identification can only be determined if the lazy query is unmodified"
     )
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 

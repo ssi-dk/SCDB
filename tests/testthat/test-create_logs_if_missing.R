@@ -55,6 +55,6 @@ test_that("create_logs_if_missing() can create logs in default and test schema",
       }
 
     }
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })

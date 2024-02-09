@@ -9,7 +9,7 @@ test_that("get_schema() works for tbl_dbi", {
     mt <- dplyr::copy_to(conn, mtcars, unique_table_name(), temporary = TRUE)
     expect_identical(get_schema(mt), get_schema(conn, temporary = TRUE))
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 

@@ -51,7 +51,7 @@ test_that("get_tables() works", {
     # Our test tables should be present
     checkmate::expect_subset(c(table_1, table_2, tmp_name), db_table_names)
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
