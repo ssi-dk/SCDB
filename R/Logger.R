@@ -178,8 +178,8 @@ Logger <- R6::R6Class(                                                          
 
     #' @description
     #'   Create a new `Logger` object
-    #' @param db_table (`character(1)`)\cr
-    #'   A string specifying the table being updated.
+    #' @param db_table (`id-like object`)\cr
+    #'   A table specification (coercible by `id()`) specifying the table being updated.
     #' @param timestamp (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
     #'   A timestamp describing the data being processed (not the current time)
     #' @param log_table_id (`id-like object`)\cr
