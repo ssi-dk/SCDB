@@ -85,30 +85,26 @@ id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
     )
   }
 
-  # If table identification is fully qualified extract Id from remote_Table
-  if (!is.na(purrr::pluck(dbplyr::remote_table(db_table_id), unclass, "schema"))) {
+  # Store currently known information about table
+  table_conn <- dbplyr::remote_con(db_table_id)
+  table_ident <- dbplyr::remote_table(db_table_id) |>
+    unclass() |>
+    purrr::discard(is.na)
 
-    table_ident <- dbplyr::remote_table(db_table_id) |>
-      unclass() |>
-      purrr::discard(is.na)
+  table <- purrr::pluck(table_ident, "table")
+  schema <- purrr::pluck(table_ident, "schema")
+  catalog <- purrr::pluck(table_ident, "catalog")
 
-    table_conn <- dbplyr::remote_con(db_table_id)
+  # If only table is known, attempt to attempt to resolve the table from existing tables.
+  # For SQLite, there should only be one table in main/temp matching the table.
+  # In some cases, tables may have been added to the DB that makes the id ambiguous.
+  if (is.null(schema)) {
 
-    return(
-      DBI::Id(
-        catalog = purrr::pluck(table_ident, "catalog"),
-        schema = purrr::pluck(table_ident, "schema", .default = get_schema(table_conn)),
-        table = purrr::pluck(table_ident, "table")
-      )
-    )
-
-  } else {
-
-    # If not attempt to resolve the table from existing tables.
+    # If not, attempt to resolve the table from existing tables.
     # For SQLite, there should only be one table in main/temp matching the table
     # In some cases, tables may have been added to the DB that makes the id ambiguous.
-    schema <- get_tables(dbplyr::remote_con(db_table_id), show_temporary = TRUE) |>
-      dplyr::filter(.data$table == dbplyr::remote_name(db_table_id)) |>
+    schema <- get_tables(table_conn, show_temporary = TRUE) |>
+      dplyr::filter(.data$table == !!table) |>
       dplyr::pull("schema")
 
     if (length(schema) > 1)  {
@@ -118,9 +114,19 @@ id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
         "multiple tables with this name were found across schemas."
       )
     }
-
-    return(DBI::Id(schema = schema, table = dbplyr::remote_name(db_table_id)))
   }
+
+  # Is the table temporary?
+  if (is.null(catalog) &&
+        (inherits(table_conn, "Microsoft SQL Server") && startsWith(table, "#")) ||
+        identical(schema, get_schema(table_conn, temporary = TRUE))) {
+    catalog <- get_catalog(table_conn, temporary = TRUE)
+  } else {
+    catalog <- get_catalog(table_conn, temporary = FALSE)
+  }
+
+  # Return the inferred Id
+  return(DBI::Id(catalog = catalog, schema = schema, table = table))
 }
 
 
