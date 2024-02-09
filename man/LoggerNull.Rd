@@ -14,12 +14,12 @@ Errors and warnings are still produced.
   logger <- LoggerNull$new()
 
   logger$log_info("This message will not print!")
-  logger$log_to_db("This message will no be written in DB!")
+  logger$log_to_db(message = "This message will no be written in DB!")
   try(logger$log_warn("This is a warning!"))
   try(logger$log_error("This is an error!"))
 }
-\section{Super classes}{
-\code{\link[SCDB:LoggerConsole]{SCDB::LoggerConsole}} -> \code{\link[SCDB:Logger]{SCDB::Logger}} -> \code{LoggerNull}
+\section{Super class}{
+\code{\link[SCDB:Logger]{SCDB::Logger}} -> \code{LoggerNull}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -33,10 +33,10 @@ Errors and warnings are still produced.
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="SCDB" data-topic="LoggerConsole" data-id="log_error"><a href='../../SCDB/html/LoggerConsole.html#method-LoggerConsole-log_error'><code>SCDB::LoggerConsole$log_error()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="SCDB" data-topic="LoggerConsole" data-id="log_warn"><a href='../../SCDB/html/LoggerConsole.html#method-LoggerConsole-log_warn'><code>SCDB::LoggerConsole$log_warn()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="finalize"><a href='../../SCDB/html/Logger.html#method-Logger-finalize'><code>SCDB::Logger$finalize()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_error"><a href='../../SCDB/html/Logger.html#method-Logger-log_error'><code>SCDB::Logger$log_error()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_info"><a href='../../SCDB/html/Logger.html#method-Logger-log_info'><code>SCDB::Logger$log_info()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_warn"><a href='../../SCDB/html/Logger.html#method-Logger-log_warn'><code>SCDB::Logger$log_warn()</code></a></span></li>
 </ul>
 </details>
 }}
