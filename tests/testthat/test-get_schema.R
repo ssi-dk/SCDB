@@ -1,15 +1,39 @@
 test_that("get_schema() and get_catalog() works for tbl_dbi", {
   for (conn in get_test_conns()) {
 
-    # Check for permanent tables
+    # Check for permanent tables in default schema
     table <- dplyr::tbl(conn, "__mtcars")
     expect_identical(get_schema(table), get_schema(conn))
     expect_identical(get_catalog(table), get_catalog(conn))
 
+    table_id_inferred <- DBI::Id(
+      catalog = get_catalog(table),
+      schema = get_schema(table),
+      table = "__mtcars"
+    )
+
+    expect_identical(
+      dplyr::collect(dplyr::tbl(conn, table_id_inferred)),
+      dplyr::collect(table)
+    )
+
+
     # Check for temporary tables
-    mt <- dplyr::copy_to(conn, mtcars, unique_table_name(), temporary = TRUE)
-    expect_identical(get_schema(mt), get_schema(conn, temporary = TRUE))
-    expect_identical(get_catalog(mt), get_catalog(conn, temporary = TRUE))
+    table_name <- unique_table_name()
+    table <- dplyr::copy_to(conn, mtcars, table_name, temporary = TRUE)
+    expect_identical(get_schema(table), get_schema(conn, temporary = TRUE))
+    expect_identical(get_catalog(table), get_catalog(conn, temporary = TRUE))
+
+    table_id_inferred <- DBI::Id(
+      catalog = get_catalog(table),
+      schema = get_schema(table),
+      table = table_name
+    )
+
+    expect_identical(
+      dplyr::collect(dplyr::tbl(conn, table_id_inferred)),
+      dplyr::collect(table)
+    )
 
     connection_clean_up(conn)
   }
