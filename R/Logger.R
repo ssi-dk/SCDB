@@ -1,50 +1,120 @@
-#' LoggerConsole: Simple logging to console
+#' Logger: Complete logging to console, file and database
 #'
 #' @description
-#'   The `LoggerConsole` class is a simple logger that writes log messages to the console.
-#'   Logging is flexible and can take any message given.
+#'   The `Logger` class facilitates logging to a database and/or file and to console.
+#'
+#'   A `Logger` is associated with a specific table and timestamp which must be supplied at initialization.
+#'   This information is used to create the log file (if a `log_path` is given) and the log entry in the database
+#'   (if a `log_table_id` and `` is given).
+#'
+#'   Logging to the database must match the fields in the log table.
 #' @return
-#'   A new instance of the `LoggerConsole` [R6][R6::R6Class] class.
+#'   A new instance of the `Logger` [R6][R6::R6Class] class.
 #' @examples
-#'   logger <- LoggerConsole$new()
+#'   logger <- Logger$new(
+#'     db_table = "test.table",
+#'     timestamp = "2020-01-01 09:00:00"
+#'   )
 #'
 #'   logger$log_info("This is an info message")
+#'   logger$log_to_db(message = "This is a message")
+#'
 #'   try(logger$log_warn("This is a warning!"))
 #'   try(logger$log_error("This is an error!"))
 #' @export
 #' @importFrom R6 R6Class
-LoggerConsole <- R6::R6Class(                                                                                           # nolint: object_name_linter
-  classname  = "LoggerConsole",
+Logger <- R6::R6Class(                                                                                                  # nolint: object_name_linter
+  classname  = "Logger",
+
   public = list(
 
     #' @description
-    #'   Create a new `LoggerConsole` object
-    #' @param warn (`logical(1)`)\cr
-    #'   Should a warning be produced if no logging will be done?
+    #'   Create a new `Logger` object
+    #' @param db_table (`id-like object`)\cr
+    #'   A table specification (coercible by `id()`) specifying the table being updated.
+    #' @param timestamp (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
+    #'   A timestamp describing the data being processed (not the current time)
     #' @param output_to_console (`logical(1)`)\cr
     #'   Should the Logger output to console?
+    #' @param log_table_id (`id-like object`)\cr
+    #'   A table specification (coercible by `id()`) specifying the location of the log table.
+    #' @param log_conn (`DBIConnection`)\cr
+    #'   A database connection where log table should exist.
+    #' @param log_path (`character(1)`)\cr
+    #'   The path where logs are stored.
+    #'   If `NULL`, no file logs are created.
+    #' @param warn (`logical(1)`)\cr
+    #'   Should a warning be produced if no logging will be done?
     #' @param start_time (`POSIXct(1)`)\cr
     #'   The time at which data processing was started (defaults to [Sys.time()]).
     initialize = function(
-      start_time = Sys.time(),
+      # Data specification
+      db_table = NULL,
+      timestamp = NULL,
+      # Console
       output_to_console = TRUE,
+      # DB
+      log_table_id = getOption("SCDB.log_table_id"),
+      log_conn = NULL,
+      # File
+      log_path = getOption("SCDB.log_path"),
+      # Logger
+      start_time = Sys.time(),
       warn = TRUE
     ) {
+
       # Initialize logger
       coll <- checkmate::makeAssertCollection()
-      checkmate::assert_posixct(start_time, add = coll)
+      assert_id_like(db_table, null.ok = TRUE, add = coll)
+      assert_timestamp_like(timestamp, null.ok = TRUE, add = coll)
       checkmate::assert_logical(output_to_console, add = coll)
+      assert_id_like(log_table_id, null.ok = TRUE, add = coll)
+      checkmate::assert_class(log_conn, "DBIConnection", null.ok = is.null(log_table_id), add = coll)
+      checkmate::assert_character(log_path, null.ok = TRUE, add = coll)
+      checkmate::assert_posixct(start_time, add = coll)
       checkmate::assert_logical(warn, add = coll)
       checkmate::reportAssertions(coll)
 
-      private$.start_time <- start_time
+      # Store data specification
+      if (!is.null(db_table)) {
+        private$db_table <- id(db_table, log_conn)
+      }
+      private$timestamp <- timestamp
+
+      # Store console log information
       private$.output_to_console <- output_to_console
 
-      if (warn) private$check_logging()
+      # Store db log information
+      if (!is.null(log_table_id)) {
+        log_table_id <- id(log_table_id, log_conn)
+        private$.log_tbl <- create_logs_if_missing(log_conn, log_table_id)
+      }
+      private$log_conn <- log_conn
+
+      # Store file log information
+      private$.log_path <- log_path
+
+      # Store Logger information
+      private$.start_time <- start_time
+
+      # Create a line in log DB for Logger
+      private$generate_db_entry()
+
+      # Warn if no logging will be done
+      if (warn && is.null(self$log_path) && is.null(self$log_tbl)) {
+        warning("`log_path` and `log_tbl` are both `NULL` and therefore NO LOGGING WILL BE DONE.\n",
+                "Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile")
+      }
     },
 
     #' @description
-    #'   Write a line to log.
+    #'   Remove generated `log_name` from database if not writing to a file.
+    finalize = function() {
+      self$finalize_db_entry()
+    },
+
+    #' @description
+    #'   Write a line to log (console / file).
     #' @param ... `r log_dots <- "One or more character strings to be concatenated"; log_dots`
     #' @param tic (`POSIXct(1)`)\cr
     #'   The timestamp used by the log entry.
@@ -72,6 +142,11 @@ LoggerConsole <- R6::R6Class(                                                   
         message(msg)
       }
 
+      # Write message to file
+      if (!is.null(self$log_path)) {
+        write(msg, self$log_realpath, append = TRUE)
+      }
+
       return(invisible(msg))
     },
 
@@ -89,169 +164,7 @@ LoggerConsole <- R6::R6Class(                                                   
     #' @param log_type `r log_type`
     log_error = function(..., log_type = "ERROR") {
       stop(self$log_info(..., log_type = log_type))
-    }
-  ),
-
-  private = list(
-
-    # @field start_time (`POSIXct(1)`)\cr
-    #   The time at which data processing was started.
-    .start_time = NULL,
-
-    # @field output_to_console (`logical(1)`)\cr
-    #   Should the Logger output to console?
-    #   This can always be overridden by Logger$log_info(..., output_to_console = FALSE).
-    .output_to_console = NULL,
-
-    # Format the log message
-    # @inheritParams Logger$log_info()
-    log_format = function(..., tic = Sys.time(), log_type = NULL, timestamp_format = NULL) {
-      checkmate::assert_character(timestamp_format)
-      checkmate::assert_posixct(tic)
-
-      return(paste(format(tic, timestamp_format), Sys.info()[["user"]], log_type, paste(...), sep = " - "))
     },
-
-    # Warn if no logging will be done
-    check_logging = function() {
-      if (isFALSE(self$output_to_console)) {
-        warning("No logging will be done since `output_to_console` is set FALSE.")
-      }
-    }
-  ),
-
-  active = list(
-    #' @field start_time (`POSIXct(1)`)\cr
-    #'   The time at which data processing was started. Read only.
-    start_time = function(value) {
-      if (missing(value)) {
-        return(private$.start_time)
-      } else {
-        stop(glue::glue("`$start_time` is read only"), call. = FALSE)
-      }
-    },
-
-    #' @field output_to_console (`logical(1)`)\cr
-    #'   Should the Logger output to console? Read only.
-    #'   This can always be overridden by Logger$log_info(..., output_to_console = FALSE).
-    output_to_console = function(value) {
-      if (missing(value)) {
-        return(private$.output_to_console)
-      } else {
-        stop(glue::glue("`$output_to_console` is read only"), call. = FALSE)
-      }
-    }
-  )
-)
-
-
-#' Logger: Complete logging to console, file and database
-#'
-#' @description
-#'   The `Logger` class expands on the `LoggerConsole` class to include logging to a database and/or file.
-#'
-#'   A `Logger` is associated with a specific table and timestamp which must be supplied at initialization.
-#'   This information is used to create the log file (if a `log_path` is given) and the log entry in the database
-#'   (if a `log_table_id` and `` is given).
-#'
-#'   Logging to the database must match the fields in the log table.
-#' @return
-#'   A new instance of the `Logger` [R6][R6::R6Class] class.
-#' @examples
-#'   logger <- Logger$new(
-#'     db_table = "test.table",
-#'     timestamp = "2020-01-01 09:00:00"
-#'   )
-#'
-#'   logger$log_info("This is an info message")
-#'   logger$log_to_db(message = "This is a message")
-#'
-#'   try(logger$log_warn("This is a warning!"))
-#'   try(logger$log_error("This is an error!"))
-#' @export
-#' @importFrom R6 R6Class
-Logger <- R6::R6Class(                                                                                                  # nolint: object_name_linter
-  classname  = "Logger",
-  inherit = LoggerConsole,
-
-  public = list(
-
-    #' @description
-    #'   Create a new `Logger` object
-    #' @param db_table (`id-like object`)\cr
-    #'   A table specification (coercible by `id()`) specifying the table being updated.
-    #' @param timestamp (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
-    #'   A timestamp describing the data being processed (not the current time)
-    #' @param log_table_id (`id-like object`)\cr
-    #'   A table specification (coercible by `id()`) specifying the location of the log table.
-    #' @param log_conn (`DBIConnection`)\cr
-    #'   A database connection where log table should exist.
-    #' @param log_path (`character(1)`)\cr
-    #'   The path where logs are stored.
-    #'   If `NULL`, no file logs are created.
-    #' @param ... Additional arguments to be passed to `LoggerConsole$new()`.
-    initialize = function(
-      db_table = NULL,
-      timestamp = NULL,
-      # DB
-      log_table_id = getOption("SCDB.log_table_id"),
-      log_conn = NULL,
-      # File
-      log_path = getOption("SCDB.log_path"),
-      # LoggerConsole
-      ...
-    ) {
-
-      # Initialize logger
-      coll <- checkmate::makeAssertCollection()
-      assert_id_like(db_table, null.ok = TRUE, add = coll)
-      assert_timestamp_like(timestamp, null.ok = TRUE, add = coll)
-      assert_id_like(log_table_id, null.ok = TRUE, add = coll)
-      checkmate::assert_class(log_conn, "DBIConnection", null.ok = is.null(log_table_id), add = coll)
-      checkmate::assert_character(log_path, null.ok = TRUE, add = coll)
-      checkmate::reportAssertions(coll)
-
-      if (!is.null(db_table)) {
-        private$db_table <- id(db_table, log_conn)
-      }
-      private$timestamp <- timestamp
-
-      if (!is.null(log_table_id)) {
-        log_table_id <- id(log_table_id, log_conn)
-        private$.log_tbl <- create_logs_if_missing(log_conn, log_table_id)
-      }
-      private$log_conn <- log_conn
-
-      private$.log_path <- log_path
-
-      # Initialize LoggerConsole
-      super$initialize(...)
-
-      # Create a line in log DB for Logger
-      private$generate_db_entry()
-    },
-
-    #' @description
-    #'   Remove generated `log_name` from database if not writing to a file.
-    finalize = function() {
-      self$finalize_db_entry()
-    },
-
-    #' @description
-    #'   Write a line to log file.
-    #' @param ... Parameters to be passed to `LoggerConsole$log_info()`.
-    log_info = function(...) {
-
-      msg <- super$log_info(...)
-
-      # Write message to file
-      if (!is.null(self$log_path)) {
-        write(msg, self$log_realpath, append = TRUE)
-      }
-
-      return(invisible(msg))
-    },
-
 
     #' @description
     #'   Write or update log table.
@@ -335,7 +248,10 @@ Logger <- R6::R6Class(                                                          
   ),
 
   private = list(
-
+    # @field output_to_console (`logical(1)`)\cr
+    #   Should the Logger output to console?
+    #   This can always be overridden by Logger$log_info(..., output_to_console = FALSE).
+    .output_to_console = NULL,
 
     # @field log_path (`character(1)`)\cr
     #   A directory where log file is written (if this is not NULL).
@@ -345,11 +261,24 @@ Logger <- R6::R6Class(                                                          
     #   The DB table used for logging. Class is connection-specific, but inherits from `tbl_dbi`.
     .log_tbl = NULL,
 
+    # @field start_time (`POSIXct(1)`)\cr
+    #   The time at which data processing was started.
+    .start_time = NULL,
+
 
     .log_filename = NULL,
     db_table = NULL,
     log_conn = NULL,
     timestamp = NULL,
+
+    # Format the log message
+    # @inheritParams Logger$log_info()
+    log_format = function(..., tic = Sys.time(), log_type = NULL, timestamp_format = NULL) {
+      checkmate::assert_character(timestamp_format)
+      checkmate::assert_posixct(tic)
+
+      return(paste(format(tic, timestamp_format), Sys.info()[["user"]], log_type, paste(...), sep = " - "))
+    },
 
     generate_db_entry = function() {
       # Create a row for log in question
@@ -386,19 +315,21 @@ Logger <- R6::R6Class(                                                          
         copy = TRUE,
         in_place = TRUE
       )
-    },
-
-
-    # Warn if no logging will be done
-    check_logging = function() {
-      if (is.null(self$log_path) && is.null(self$log_tbl)) {
-        warning("`log_path` and `log_tbl` are both `NULL` and therefore NO LOGGING WILL BE DONE.\n",
-                "Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile")
-      }
     }
   ),
 
   active = list(
+    #' @field output_to_console (`logical(1)`)\cr
+    #'   Should the Logger output to console? Read only.
+    #'   This can always be overridden by Logger$log_info(..., output_to_console = FALSE).
+    output_to_console = function(value) {
+      if (missing(value)) {
+        return(private$.output_to_console)
+      } else {
+        stop(glue::glue("`$output_to_console` is read only"), call. = FALSE)
+      }
+    },
+
     #' @field log_path (`character(1)`)\cr
     #'   A directory where log file is written (if this is not NULL). Read only.
     log_path = function(value) {
@@ -416,6 +347,16 @@ Logger <- R6::R6Class(                                                          
         return(private$.log_tbl)
       } else {
         stop(glue::glue("`$log_tbl` is read only"), call. = FALSE)
+      }
+    },
+
+    #' @field start_time (`POSIXct(1)`)\cr
+    #'   The time at which data processing was started. Read only.
+    start_time = function(value) {
+      if (missing(value)) {
+        return(private$.start_time)
+      } else {
+        stop(glue::glue("`$start_time` is read only"), call. = FALSE)
       }
     },
 
