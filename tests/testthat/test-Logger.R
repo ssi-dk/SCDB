@@ -286,6 +286,7 @@ test_that("Logger: file logging stops if file exists", {
   logger1 <- Logger$new(
     db_table = db_table,
     timestamp = timestamp,
+    start_time = timestamp,
     log_path = log_path,
     output_to_console = FALSE
   )
@@ -306,7 +307,7 @@ test_that("Logger: file logging stops if file exists", {
   # whereas logger2 should fail since the log file now exists
   expect_error(
     logger2$log_info("test message"),
-    "already exists!"
+    glue::glue("Log file '{logger1$log_filename}' already exists!")
   )
 
   file.remove(logger1$log_realpath)
