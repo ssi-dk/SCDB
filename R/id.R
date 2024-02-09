@@ -122,7 +122,7 @@ id.tbl_dbi <- function(db_table_id, ...) {
   # Is the table temporary?
   if (is.null(catalog) &&
         (inherits(table_conn, "Microsoft SQL Server") && startsWith(table, "#")) ||
-        identical(schema, get_schema(table_conn, temporary = TRUE))) {
+        (!inherits(table_conn, "Microsoft SQL Server") && identical(schema, get_schema(table_conn, temporary = TRUE)))) {
     catalog <- get_catalog(table_conn, temporary = TRUE)
   } else {
     catalog <- get_catalog(table_conn, temporary = FALSE)
