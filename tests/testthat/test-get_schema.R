@@ -77,7 +77,7 @@ test_that("get_schema() works for PqConnection", {
   conn <- get_test_conns(1)[[1]]
   skip_if_not(inherits(conn, "PqConnection"))
 
-  expect_identical(get_schema(conn), "main")
+  expect_identical(get_schema(conn), "public")
   checkmate::expect_character(get_schema(conn, temporary = TRUE), pattern = "pq_temp_.*")
 
   connection_clean_up(conn)
