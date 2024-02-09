@@ -310,6 +310,12 @@ test_that("Logger: file logging stops if file exists", {
     glue::glue("Log file '{logger1$log_filename}' already exists!")
   )
 
+  # .. and it should do it persistently
+  expect_error(
+    logger2$log_info("test message"),
+    glue::glue("Log file '{logger1$log_filename}' already exists!")
+  )
+
   file.remove(logger1$log_realpath)
 
   rm(logger1, logger2)

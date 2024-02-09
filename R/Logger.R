@@ -393,12 +393,11 @@ Logger <- R6::R6Class(                                                          
         private$db_table
       )
 
-      private$.log_filename <- filename
-
-      if (file.exists(file.path(self$log_path, private$.log_filename))) {
-        stop(sprintf("Log file '%s' already exists!", private$.log_filename))
+      if (file.exists(file.path(self$log_path, filename))) {
+        stop(sprintf("Log file '%s' already exists!", filename))
       }
 
+      private$.log_filename <- filename
       return(filename)
     },
 
