@@ -6,6 +6,7 @@
 #'  logical. If `TRUE`, allows for returning an `DBI::Id` with `table` = `myschema.table` if schema `myschema`
 #'  is not found in `conn`.
 #'  If `FALSE`, the function will raise an error if the implied schema cannot be found in `conn`
+#' @param ... Further arguments passed to methods.
 #' @details The given `db_table_id` is parsed to a DBI::Id depending on the type of input:
 #'  * `character`: db_table_id is parsed to a DBI::Id object using an assumption of "schema.table" syntax
 #'     with corresponding schema (if found in `conn`) and table values.
