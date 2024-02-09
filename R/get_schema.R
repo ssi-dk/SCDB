@@ -53,7 +53,7 @@ get_schema.Id <- function(obj,  ...) {
 #' @rdname get_schema
 get_schema.PqConnection <- function(obj, temporary = FALSE,  ...) {
   if (isTRUE(temporary))  {
-    return("pg_temp")
+    return(DBI::dbGetQuery(obj, "SELECT nspname FROM pg_namespace WHERE oid = pg_my_temp_schema();")$nspname)
   } else {
     return(DBI::dbGetQuery(obj, "SELECT CURRENT_SCHEMA()")$current_schema)
   }
