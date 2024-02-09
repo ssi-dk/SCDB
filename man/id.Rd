@@ -2,9 +2,15 @@
 % Please edit documentation in R/id.R
 \name{id}
 \alias{id}
+\alias{id.Id}
+\alias{id.character}
 \title{Convenience function for DBI::Id}
 \usage{
-id(db_table_id, conn = NULL, allow_table_only = TRUE)
+id(db_table_id, ...)
+
+\method{id}{Id}(db_table_id, conn = NULL, ...)
+
+\method{id}{character}(db_table_id, conn = NULL, allow_table_only = TRUE, ...)
 }
 \arguments{
 \item{db_table_id}{A \code{\link[DBI:Id]{DBI::Id()}} object or a character string readable by \link{id}.}

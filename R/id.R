@@ -20,13 +20,14 @@
 #' id("schema.table")
 #' @seealso [DBI::Id] which this function wraps.
 #' @export
-id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+id <- function(db_table_id, ...) {
   UseMethod("id")
 }
 
 
 #' @export
-id.Id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+#' @rdname id
+id.Id <- function(db_table_id, conn = NULL, ...) {
 
   # Store the table_name for computations down the line
   table_name <- purrr::pluck(db_table_id, "name", "table")
@@ -49,7 +50,8 @@ id.Id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
 
 
 #' @export
-id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+#' @rdname id
+id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE, ...) {
 
   checkmate::assert(is.null(conn), DBI::dbIsValid(conn), combine = "or")
 
@@ -76,7 +78,7 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
 
 
 #' @export
-id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+id.tbl_dbi <- function(db_table_id, ...) {
 
   if (is.null(dbplyr::remote_table(db_table_id))) {
     stop(

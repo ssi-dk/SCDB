@@ -6,7 +6,7 @@
 #'   Should the reference be to the temporary schema/database?
 #' @param ... Further arguments passed to methods.
 #' @return
-#' For `get_schema.DBIConnection`, the current schema of the connection if `temporary = FALSE``.
+#' For `get_schema.DBIConnection`, the current schema of the connection if `temporary = FALSE`.
 #' See "Default schema" for more.
 #' If `temporary = TRUE`, the temporary schema of the connection is returned.
 #'
@@ -28,7 +28,7 @@
 #' @examples
 #' conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
+#' dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = TRUE)
 #'
 #' get_schema(conn)
 #' get_schema(get_table(conn, id("mtcars", conn = conn)))
