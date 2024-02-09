@@ -49,7 +49,8 @@ add_table_lock <- function(conn, db_table, schema = NULL) {
           "pid" = numeric(0)
         ),
         lock_table_id,
-        temporary = FALSE)
+        temporary = FALSE
+      )
     )
 
     if (inherits(conn, "PqConnection")) { # PostgreSQL needs an index for rows_insert
@@ -174,7 +175,9 @@ is_lock_owner <- function(conn, db_table, schema = NULL) {
     # If pid_exists is not available we cannot determine invalid locks and we throw an error to prevent infinite looping
     checkmate::assert_function(pid_exists)
 
-    stopifnot("Lock owner is no longer a valid PID (process likely crashed before completing)!"=pid_exists(lock_owner))
+    if (!pid_exists(lock_owner)) {
+      stop("Lock owner is no longer a valid PID (process likely crashed before completing)!")
+    }
 
   }
 
