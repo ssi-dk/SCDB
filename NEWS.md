@@ -78,6 +78,8 @@
 
 * Added missing tests for `get_schema()` (#99).
 
+* Added missing tests for `get_catalog()` (#??).
+
 * Improved tests for `get_tables()`, `table_exists()`, and `create_table()` (#93).
 
 
