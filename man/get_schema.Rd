@@ -8,9 +8,9 @@
 \alias{get_schema.SQLiteConnection}
 \title{Get the current schema / catalog of a database-related objects}
 \usage{
-get_catalog(.x, ...)
+get_catalog(obj, ...)
 
-\method{get_catalog}{`Microsoft SQL Server`}(.x, temporary = FALSE, ...)
+\method{get_catalog}{`Microsoft SQL Server`}(obj, temporary = FALSE, ...)
 
 get_schema(obj, ...)
 
@@ -19,12 +19,12 @@ get_schema(obj, ...)
 \method{get_schema}{SQLiteConnection}(obj, temporary = FALSE, ...)
 }
 \arguments{
+\item{obj}{The object from which to retrieve a schema}
+
 \item{...}{Further arguments passed to methods.}
 
 \item{temporary}{(\code{logical(1)}) \cr
 Should the reference be to the temporary schema/database?}
-
-\item{obj}{The object from which to retrieve a schema}
 }
 \value{
 For \verb{get_catalog.Microsoft SQL Server}, the current database context of the connection or "tempdb" if

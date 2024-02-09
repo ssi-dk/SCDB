@@ -1,46 +1,38 @@
 #' @rdname get_schema
-#' @param ... Further arguments passed to methods.
 #' @return
 #' For `get_catalog.Microsoft SQL Server`, the current database context of the connection or "tempdb" if
 #' `temporary = TRUE`.
 #'
 #' For `get_catalog.*`, `NULL` is returned.
 #' @export
-get_catalog <- function(.x, ...) {
+get_catalog <- function(obj, ...) {
   UseMethod("get_catalog")
 }
 
 #' @export
-get_catalog.tbl_dbi <- function(.x, ...) {
-  catalog <- dbplyr::remote_table(.x) |>
-    unclass() |>
-    purrr::discard(is.na) |>
-    purrr::pluck("catalog")
-
-  return(catalog)
+get_catalog.tbl_dbi <- function(obj,  ...) {
+  return(purrr::pluck(id(obj), "name", "catalog"))
 }
 
 #' @export
-get_catalog.Id <- function(.x, ...) {
-  return(purrr::pluck(.x@name, "catalog"))
+get_catalog.Id <- function(obj, ...) {
+  return(purrr::pluck(obj@name, "catalog"))
 }
 
 #' @rdname get_schema
-#' @param temporary (`logical(1)`) \cr
-#'   Is the table in the temporary database?
 #' @export
-`get_catalog.Microsoft SQL Server` <- function(.x, temporary = FALSE, ...) {
+`get_catalog.Microsoft SQL Server` <- function(obj, temporary = FALSE, ...) {
   checkmate::assert_logical(temporary)
 
   if (temporary) {
     return("tempdb")
   } else {
     query <- paste("SELECT DB_NAME() AS current_database;")
-    return(DBI::dbGetQuery(.x, query)$default_schema)
+    return(DBI::dbGetQuery(obj, query)$default_schema)
   }
 }
 
 #' @export
-get_catalog.default <- function(.x, ...) {
+get_catalog.default <- function(obj, ...) {
   return(NULL)
 }
