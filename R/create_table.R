@@ -35,35 +35,30 @@ create_table <- function(.data, conn = NULL, db_table_id, ...) {
                   .after = tidyselect::everything())
 
   # Early return if there is no connection to push to
-  if (is.null(conn)) return(invisible(.data))
+  if (is.null(conn)) return(invisible(utils::head(.data, 0)))
+
+  # Convert to id
+  db_table_id <- id(db_table_id, conn)
 
   # Check db_table_id conforms to requirements
-  # Temporary tables on some back ends must to begin with "#"
+  # Temporary tables on some back ends must to begin with "#".
+  # And DBI::dbCreateTable requires that table Ids are unqualified if they are temporary
   if (purrr::pluck(list(...), "temporary", .default = formals(DBI::dbCreateTable)$temporary)) {
 
-    db_table_schema <- purrr::pluck(db_table_id, "name", "schema")
-    db_table_name <- purrr::pluck(db_table_id, "name", "table", .default = db_table_id)
+    db_table_name <- purrr::pluck(db_table_id, "name", "table")
 
-    db_table_id <- DBI::Id(
-      schema = db_table_schema,
-      table = paste0(
-        ifelse(inherits(conn, "Microsoft SQL Server") && !startsWith(db_table_name, "#"), "#", ""),
-        db_table_name
-      )
-    )
+    if (inherits(conn, "Microsoft SQL Server") && !startsWith(db_table_name, "#")) {
+      db_table_name <- paste0("#", db_table_name)
+    }
 
-  } else {
-
-    # Non-temporary tables must be fully qualified
-    db_table_id <- id(db_table_id, conn)
+    db_table_id <- DBI::Id(table = db_table_name)
 
   }
 
   # Create the table on the remote and return the table
-  DBI::dbWriteTable(
+  DBI::dbCreateTable(
     conn = conn,
     name = db_table_id,
-    value = .data,
     fields = getTableSignature(.data = .data, conn = conn),
     ...
   )

@@ -16,7 +16,7 @@ test_that("create_table() can create temporary tables", {
     expect_identical(colnames(table), c(colnames(cars), "checksum", "from_ts", "until_ts"))
     expect_identical(
       dplyr::collect(dplyr::select(table, -tidyselect::all_of(c("checksum", "from_ts", "until_ts")))),
-      dplyr::collect(dplyr::copy_to(conn, cars, "cars_ref"))
+      dplyr::collect(dplyr::copy_to(conn, cars, "cars_ref") |> utils::head(0))
     )
 
     connection_clean_up(conn)
@@ -32,9 +32,8 @@ test_that("create_table() can create tables in default schema", {
     expect_identical(colnames(table), c(colnames(cars), "checksum", "from_ts", "until_ts"))
     expect_identical(
       dplyr::collect(dplyr::select(table, -tidyselect::all_of(c("checksum", "from_ts", "until_ts")))),
-      dplyr::collect(dplyr::copy_to(conn, cars, "cars_ref"))
+      dplyr::collect(dplyr::copy_to(conn, cars, "cars_ref") |> utils::head(0))
     )
-
 
     DBI::dbRemoveTable(conn, id(table))
     connection_clean_up(conn)
@@ -50,10 +49,10 @@ test_that("create_table() can create tables in non default schema", {
     expect_identical(colnames(table), c(colnames(cars), "checksum", "from_ts", "until_ts"))
     expect_identical(
       dplyr::collect(dplyr::select(table, -tidyselect::all_of(c("checksum", "from_ts", "until_ts")))),
-      dplyr::collect(dplyr::copy_to(conn, cars, "cars_ref"))
+      dplyr::collect(dplyr::copy_to(conn, cars, "cars_ref") |> utils::head(0))
     )
 
-    DBI::dbRemoveTable(conn, id("test.cars", conn))
+    DBI::dbRemoveTable(conn, id(table))
     connection_clean_up(conn)
   }
 })
@@ -65,7 +64,7 @@ test_that("create_table() works with no conn", {
   expect_identical(colnames(table), c(colnames(cars), "checksum", "from_ts", "until_ts"))
   expect_identical(
     dplyr::select(table, -tidyselect::all_of(c("checksum", "from_ts", "until_ts"))),
-    cars
+    cars |> utils::head(0)
   )
 })
 
@@ -73,14 +72,17 @@ test_that("create_table() works with no conn", {
 test_that("create_table() does not overwrite tables", {
   for (conn in get_test_conns()) {
 
-    table <- create_table(utils::head(cars, 10), db_table_id = "cars", conn = conn, temporary = TRUE)
+    table <- create_table(cars, db_table_id = "cars", conn = conn, temporary = TRUE)
 
     expect_error(
-      create_table(utils::head(cars, 20), db_table_id = "cars", conn = conn, temporary = TRUE),
-      'Table (<Id> )?["`]#?cars["`] exists in database'
+      create_table(iris, db_table_id = "cars", conn = conn, temporary = TRUE),
+      regexp = r"{(?:object named)|(?:table)|(?:relation) ["'`]#?cars["'`] (?:already exists)|(?:in the database)}"
     )
 
-    expect_equal(nrow(table), 10)
+    expect_identical(
+      dplyr::collect(dplyr::select(table, -tidyselect::all_of(c("checksum", "from_ts", "until_ts")))),
+      dplyr::collect(dplyr::copy_to(conn, cars, "cars_ref") |> utils::head(0))
+    )
 
     connection_clean_up(conn)
   }
