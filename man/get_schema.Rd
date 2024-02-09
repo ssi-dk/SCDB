@@ -48,7 +48,7 @@ the connection is established, \code{get_schema} will never return any of these,
 \examples{
 conn <- get_connection(drv = RSQLite::SQLite())
 
-dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = TRUE)
+dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
 
 get_schema(conn)
 get_schema(get_table(conn, id("mtcars", conn = conn)))
