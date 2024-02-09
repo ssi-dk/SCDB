@@ -27,7 +27,7 @@ test_that("get_schema() and get_catalog() works for tbl_dbi", {
     table_id_inferred <- DBI::Id(
       catalog = get_catalog(table),
       schema = get_schema(table),
-      table = table_name
+      table = paste0(ifelse(inherits(conn, "Microsoft SQL Server"), "#", ""), table_name)
     )
 
     expect_identical(
