@@ -6,7 +6,7 @@ test_that("Logger: logging to console works", {
   # Create logger and test configuration
   expect_warning(
     logger <- Logger$new(),
-    regexp = "NO LOGGING WILL BE DONE"
+    regexp = "NO file or DB logging will be done."
   )
   expect_null(logger$log_path)
   expect_null(logger$log_tbl)
@@ -36,7 +36,7 @@ test_that("Logger: all (non-warning, non-error) logging to console can be disabl
   # Create logger
   expect_warning(
     logger <- Logger$new(output_to_console = FALSE),
-    regexp = "NO LOGGING WILL BE DONE"
+    regexp = "NO file or DB logging will be done."
   )
 
   # Test INFO-logging to console is disabled
@@ -205,7 +205,7 @@ test_that("Logger: logging to db works", {
 })
 
 
-test_that("Logger: all logging simultanously works", {
+test_that("Logger: all logging simultaneously works", {
   for (conn in get_test_conns()) {
 
     # Set options for the test
@@ -323,7 +323,7 @@ test_that("Logger: console output may be disabled", {
   # Here, only print when explicitly stated
   expect_warning(
     logger <- Logger$new(output_to_console = FALSE),
-    regexp = "NO LOGGING WILL BE DONE"
+    regexp = "NO file or DB logging will be done."
   )
 
   expect_no_message(logger$log_info("Whoops! This should not have been printed!"))
@@ -340,7 +340,7 @@ test_that("Logger: console output may be disabled", {
   # ...and now, only suppress printing when explicitly stated
   expect_warning(
     logger <- Logger$new(output_to_console = TRUE),
-    regexp = "NO LOGGING WILL BE DONE"
+    regexp = "NO file or DB logging will be done."
   )
 
   expect_message(
@@ -411,7 +411,7 @@ test_that("Logger: custom timestamp_format works", {
   # Create logger and test configuration
   expect_warning(
     logger <- Logger$new(),
-    regexp = "NO LOGGING WILL BE DONE"
+    regexp = "NO file or DB logging will be done."
   )
 
   # Test logging to console has the right formatting and message type

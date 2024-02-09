@@ -253,7 +253,7 @@ test_that("update_snapshot checks table formats", {
 
     expect_warning(
       logger <- Logger$new(log_path = NULL, log_table_id = NULL, output_to_console = FALSE),
-      "NO LOGGING WILL BE DONE"
+      "NO file or DB logging will be done."
     )
 
     # Test columns not matching
