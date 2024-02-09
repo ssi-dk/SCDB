@@ -265,14 +265,24 @@ Logger <- R6::R6Class(                                                          
     #   The DB table used for logging. Class is connection-specific, but inherits from `tbl_dbi`.
     .log_tbl = NULL,
 
+    # @field log_conn (`DBIConnection`)\cr
+    #   A database connection where log table should exist.
+    log_conn = NULL,
+
     # @field start_time (`POSIXct(1)`)\cr
     #   The time at which data processing was started.
     .start_time = NULL,
 
-
+    # @field log_filename `character(1)`\cr
+    #   The filename (basename) of the file that the `Logger` instance will output to.
     .log_filename = NULL,
+
+    # @field db_table (`Id`)\cr
+    #   A table specification specifying the table being updated.
     db_table = NULL,
-    log_conn = NULL,
+
+    # @field timestamp (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
+    #   A timestamp describing the data being processed (not the current time)
     timestamp = NULL,
 
     # Format the log message
@@ -284,8 +294,9 @@ Logger <- R6::R6Class(                                                          
       return(paste(format(tic, timestamp_format), Sys.info()[["user"]], log_type, paste(...), sep = " - "))
     },
 
+    # Create a row for log in question
     generate_db_entry = function() {
-      # Create a row for log in question
+
       if (is.null(self$log_tbl)) {
         return(NULL)
       }
@@ -367,10 +378,13 @@ Logger <- R6::R6Class(                                                          
     #' @field log_filename `character(1)`\cr
     #'   The filename (basename) of the file that the `Logger` instance will output to.  Read only.
     log_filename = function() {
-      # If we are not producing a file log, we provide a random string to key by
+
+      # Early return, if log_filename has been generated
       if (!is.null(private$.log_filename)) {
         return(private$.log_filename)
       }
+
+      # If we are not producing a file log, we provide a random string to key by
       if (is.null(self$log_path)) {
         private$.log_filename <- basename(tempfile(tmpdir = "", pattern = ""))
         return(private$.log_filename)
