@@ -121,7 +121,7 @@ test_that("get_catalog() works for Microsoft SQL Server", {
   conn <- get_test_conns(1)[[1]]
   skip_if_not(inherits(conn, "Microsoft SQL Server"))
 
-  expect_identical(get_catalog(conn), "??")
+  expect_identical(get_catalog(conn), "master")
   expect_identical(get_catalog(conn, temporary = TRUE), "tempdb")
 
   connection_clean_up(conn)

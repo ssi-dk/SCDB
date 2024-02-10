@@ -40,7 +40,7 @@ get_catalog.Id <- function(obj, ...) {
     return("tempdb")
   } else {
     query <- paste("SELECT DB_NAME() AS current_database;")
-    return(DBI::dbGetQuery(obj, query)$default_schema)
+    return(DBI::dbGetQuery(obj, query)$current_database)
   }
 }
 
