@@ -60,13 +60,13 @@
 
 * `get_tables()` now supports temporary tables for Microsoft SQL Server (#93).
 
-* `get_schema()` has been updated (#??).
+* `get_schema()` has been updated (#107).
 
   * It will now always return a schema (either directly from the object or inferred by `id()`).
 
   * A `temporary` argument is added to get the temporary schemas from `DBIConnections`.
 
-* `id()` now includes information of catalog in more cases (#99).
+* `id()` now includes information of catalog in more cases (#99, #107).
 
 * Fixed dplyr joins failing if `testthat` is not installed (#90).
 
@@ -78,7 +78,7 @@
 
 * Added missing tests for `get_schema()` (#99).
 
-* Added missing tests for `get_catalog()` (#??).
+* Added missing tests for `get_catalog()` (#107).
 
 * Improved tests for `get_tables()`, `table_exists()`, and `create_table()` (#93).
 
