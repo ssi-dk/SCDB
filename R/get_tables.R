@@ -125,7 +125,7 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE)
 
   # Filter out trailing underscores added by engine
   tables <- tables |>
-    dplyr::mutate(table = stringr::str_remove(.data$table, "_+[0-9a-fA-F]+$"))
+    dplyr::mutate(table = stringr::str_remove(.data$table, "_{10,}[0-9a-fA-F]+$"))
 
   tables <- tables |>
     dplyr::select(!"is_temporary")
