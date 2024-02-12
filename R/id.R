@@ -116,6 +116,10 @@ id.tbl_dbi <- function(db_table_id, ...) {
         "This table does not contain information about its schema and ",
         "multiple tables with this name were found across schemas."
       )
+    } else if (length(schema) == 0) {
+      stop(
+        "Something went wrong, schema could not be inferred!"
+      )
     }
   }
 
