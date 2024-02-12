@@ -445,7 +445,7 @@ test_that("Logger: custom timestamp_format works", {
 })
 
 
-test_that("LoggerNull: no logging occurs", {
+test_that("LoggerNull: no console logging occurs", {
 
   # Create logger and test configuration
   expect_no_message(logger <- LoggerNull$new())
@@ -467,9 +467,46 @@ test_that("LoggerNull: no logging occurs", {
     glue::glue("{ts_str} - {Sys.info()[['user']]} - ERROR - test console")
   )
 
-  expect_no_message(logger$log_to_db(n_insertions = 42))
-  expect_no_message(logger$finalize_db_entry())
+  rm(logger)
+  invisible(gc())
+})
+
+
+test_that("LoggerNull: no file logging occurs", {
+  withr::local_options("SCDB.log_path" = tempdir())
+
+  # Create logger and test configuration
+  expect_no_message(logger <- LoggerNull$new())
+
+  expect_no_message(logger$log_info("test filewriting", tic = logger$start_time))
+  expect_false(logger$log_filename %in% dir(getOption("SCDB.log_path")))
 
   rm(logger)
   invisible(gc())
+})
+
+
+test_that("LoggerNull: no database logging occurs", {
+  for (conn in get_test_conns()) {
+
+    # Set options for the test
+    db_table <- "test.SCDB_logger"
+    timestamp <- "2022-06-01 09:00:00"
+
+    # Count entries in log
+    n_log_entries <- nrow(dplyr::tbl(conn, id("test.SCDB_logger", conn)))
+
+    # Create LoggerNull and test configuration
+    logger <- LoggerNull$new(
+      db_table = db_table, timestamp = timestamp,
+      log_conn = conn, log_table_id = "test.SCDB_logger"
+    )
+
+    expect_no_message(logger$log_to_db(n_insertions = 42))
+    expect_no_message(logger$finalize_db_entry())
+    expect_identical(nrow(dplyr::tbl(conn, id("test.SCDB_logger", conn))), n_log_entries)
+
+    rm(logger)
+    invisible(gc())
+  }
 })
