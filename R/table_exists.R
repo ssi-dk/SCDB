@@ -51,7 +51,16 @@ table_exists.DBIConnection <- function(conn, db_table_id) {
     db_table_id <- id(db_table_id, conn) # Ensure Id is fully qualified (has schema)
 
     exact_match <- tables |>
-      dplyr::filter(.data$table == db_table_id@name["table"], .data$schema == db_table_id@name["schema"])
+      dplyr::filter(
+        .data$table == db_table_id@name["table"],
+        .data$schema == db_table_id@name["schema"]
+      )
+
+    if ("catalog" %in% names(db_table_id@name)) {
+      exact_match <- exact_match |>
+        dplyr::filter(.data$catalog == db_table_id@name["catalog"])
+    }
+
 
     if (nrow(exact_match) == 1) {
       return(TRUE)
