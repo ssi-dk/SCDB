@@ -60,21 +60,21 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE, ...)
     db_name <- stringr::str_split(db_table_id, "\\.")[[1]]
     db_name <- db_name[rev(seq_along(db_name))] # Reverse order (table, schema?, catalog?)
 
-    db_table <- purrr::pluck(db_name, 1)
-    db_schema <- purrr::pluck(db_name, 2)
-    db_catalog <- purrr::pluck(db_name, 3, .default = get_catalog(conn))
+    table <- purrr::pluck(db_name, 1)
+    schema <- purrr::pluck(db_name, 2)
+    catalog <- purrr::pluck(db_name, 3, .default = get_catalog(conn))
 
     # If no matching implied schema is found, return the unmodified db_table_id in the default schema
-    if (allow_table_only && !is.null(conn) && !schema_exists(conn, db_schema)) {
-      return(DBI::Id(catalog = db_catalog, schema = get_schema(conn), table = db_table_id))
+    if (allow_table_only && !is.null(conn) && !schema_exists(conn, schema)) {
+      return(DBI::Id(catalog = catalog, schema = get_schema(conn), table = db_table_id))
     }
   } else {
-    db_table <- db_table_id
-    db_schema <- get_schema(conn)
-    db_catalog <- get_catalog(conn)
+    table <- db_table_id
+    schema <- get_schema(conn)
+    catalog <- get_catalog(conn)
   }
 
-  return(DBI::Id(catalog = db_catalog, schema = db_schema, table = db_table))
+  return(DBI::Id(catalog = catalog, schema = schema, table = table))
 }
 
 
