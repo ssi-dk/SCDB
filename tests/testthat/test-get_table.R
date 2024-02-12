@@ -96,7 +96,7 @@ test_that("get_table() works when tables exist", {
 })
 
 
-test_that("get_table() works when tables does not exist in default schema", {
+test_that("get_table() works when table does not exist in default schema", {
   for (conn in get_test_conns()) {
 
     # Generate table in default schema that does not exist
@@ -132,7 +132,7 @@ test_that("get_table() works when tables does not exist in default schema", {
 })
 
 
-test_that("get_table() works when tables does not exist in non existing schema", {
+test_that("get_table() works when table does not exist in non-existing schema", {
   for (conn in get_test_conns()) {
 
     # Generate schema that does not exist
