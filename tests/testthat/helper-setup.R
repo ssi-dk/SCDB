@@ -1,13 +1,11 @@
 #' Get a list of data base connections to test on
-#' @param n (`integer(1)`) \cr
-#'   The number of test connections to return.
 #' @return
 #'   If you run your tests locally, it returns a list of connections corresponding to conn_list and conn_args
 #'   If you run your tests on GitHub, it return a list of connection corresponding to the environment variables.
 #'   i.e. the GitHub workflows will configure the testing back ends
 #' @importFrom rlang `:=`
 #' @noRd
-get_test_conns <- function(n = Inf) {
+get_test_conns <- function() {
 
   # Locally use rlang's (without this, it may not be bound)
   `:=` <- rlang::`:=`
@@ -103,9 +101,6 @@ get_test_conns <- function(n = Inf) {
 
   # Check all conn_args have associated entry in conn_list
   checkmate::assert_subset(names(conn_args), names(conn_list))
-
-  # Truncate conn list
-  conn_list <- utils::head(conn_list, n)
 
   # Open connections
   test_conns <- names(conn_list) |>
