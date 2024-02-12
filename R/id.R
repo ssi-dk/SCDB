@@ -121,21 +121,12 @@ id.tbl_dbi <- function(db_table_id, ...) {
         "This table does not contain information about its schema and ",
         "multiple tables with this name were found across schemas."
       )
-    } else if (length(schema) == 0) {
-      stop(
-        "Something went wrong, schema could not be inferred!"
-      )
     }
   }
 
   # Is the table temporary?
-  if (is.null(catalog) &&
-      (inherits(table_conn, "Microsoft SQL Server") && startsWith(table, "#")) ||
-      (!inherits(table_conn, "Microsoft SQL Server") && identical(schema, get_schema(table_conn, temporary = TRUE)))
-  ) {
-    catalog <- get_catalog(table_conn, temporary = TRUE)
-  } else {
-    catalog <- get_catalog(table_conn, temporary = FALSE)
+  if (is.null(catalog) && inherits(table_conn, "Microsoft SQL Server")) {
+    catalog <- get_catalog(table_conn, temporary = startsWith(table, "#"))
   }
 
   # Return the inferred Id
