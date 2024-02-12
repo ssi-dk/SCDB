@@ -40,18 +40,18 @@ create_table <- function(.data, conn = NULL, db_table_id, ...) {
   # Convert to id
   db_table_id <- id(db_table_id, conn)
 
-  # Check db_table_id conforms to requirements
-  # Temporary tables on some back ends must to begin with "#".
-  # And DBI::dbCreateTable requires that table Ids are unqualified if they are temporary
+  # Check db_table_id conforms to requirements:
+  # 1) Temporary tables on some backends must to begin with "#".
+  # 2) DBI::dbCreateTable requires that table Ids are unqualified if the table should be temporary
   if (purrr::pluck(list(...), "temporary", .default = formals(DBI::dbCreateTable)$temporary)) {
 
-    db_table_name <- purrr::pluck(db_table_id, "name", "table")
+    table <- purrr::pluck(db_table_id, "name", "table")
 
-    if (inherits(conn, "Microsoft SQL Server") && !startsWith(db_table_name, "#")) {
-      db_table_name <- paste0("#", db_table_name)
+    if (inherits(conn, "Microsoft SQL Server") && !startsWith(table, "#")) {
+      table <- paste0("#", table)
     }
 
-    db_table_id <- DBI::Id(table = db_table_name)
+    db_table_id <- DBI::Id(table = table)
 
   }
 
