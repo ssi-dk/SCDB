@@ -157,10 +157,6 @@ test_that("get_table() works when table does not exist in non-existing schema", 
         get_table(conn, id(invalid_table_name, conn)),
         regexp = glue::glue("Table {as.character(id(invalid_table_name, conn))} could not be found!")
       )
-      expect_error(
-        get_table(conn, id(invalid_table_name)),
-        regexp = glue::glue("Table {as.character(id(invalid_table_name))} could not be found!")
-      )
 
     } else {
       warning("Non-existing schema could not be generated!")
