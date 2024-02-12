@@ -34,13 +34,14 @@ test_that("defer_db_cleanup() works in function call", {
 test_that("defer_db_cleanup() works with withr::deferred_run", {
   for (conn in get_test_conns()) {
     mt <- dplyr::copy_to(conn, mtcars, unique_table_name())
+    mt_id <- id(mt)
     defer_db_cleanup(mt)
 
-    expect_true(DBI::dbExistsTable(conn, id(mt)))
+    expect_true(DBI::dbExistsTable(conn, mt_id))
 
     expect_message(withr::deferred_run(), "Ran 1/1 deferred expressions")
 
-    expect_false(DBI::dbExistsTable(conn, id(mt)))
+    expect_false(DBI::dbExistsTable(conn, mt_id))
 
     connection_clean_up(conn)
   }

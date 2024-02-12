@@ -103,6 +103,11 @@ id.tbl_dbi <- function(db_table_id, ...) {
   # In some cases, tables may have been added to the DB that makes the id ambiguous.
   if (is.null(schema)) {
 
+    # Check table still exists
+    if (!table_exists(table_conn, db_table_id)) {
+      stop("Table does not exist (anymore) and id cannot be determined!")
+    }
+
     # If not, attempt to resolve the table from existing tables.
     # For SQLite, there should only be one table in main/temp matching the table
     # In some cases, tables may have been added to the DB that makes the id ambiguous.
