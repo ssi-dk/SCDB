@@ -55,6 +55,11 @@ create_table <- function(.data, conn = NULL, db_table_id, ...) {
 
   }
 
+  # Check if the table already exists
+  if (table_exists(conn, db_table_id)) {
+    stop("Table ", db_table_id, " already exists!")
+  }
+
   # Create the table on the remote and return the table
   DBI::dbCreateTable(
     conn = conn,
