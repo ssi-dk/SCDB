@@ -5,6 +5,7 @@
 #'
 #'   A `Logger` is associated with a specific table and timestamp which must be supplied at initialization.
 #'   This information is used to create the log file (if a `log_path` is given) and the log entry in the database
+#'   (if a `log_table_id` and `log_conn` is given).
 #'   (if a `log_table_id` and `` is given).
 #'
 #'   Logging to the database must match the fields in the log table.
@@ -453,7 +454,8 @@ LoggerNull <- R6::R6Class(                                                      
     #'   Create a new `LoggerNull` object
     #' @param ... Captures arguments given, but does nothing
     initialize = function(...) {
-      super$initialize(output_to_console = FALSE, warn = FALSE) # Disable all console logging
+      super$initialize(output_to_console = FALSE, warn = FALSE, log_path = NULL) # Disable all console logging
+
     },
 
     #' @description
