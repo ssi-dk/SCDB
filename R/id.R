@@ -62,7 +62,7 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE, ...)
 
     db_table <- purrr::pluck(db_name, 1)
     db_schema <- purrr::pluck(db_name, 2)
-    db_catalog <- purrr::pluck(db_name, 3)
+    db_catalog <- purrr::pluck(db_name, 3, .default = get_catalog(conn))
 
     # If no matching implied schema is found, return the unmodified db_table_id in the default schema
     if (allow_table_only && !is.null(conn) && !schema_exists(conn, db_schema)) {
