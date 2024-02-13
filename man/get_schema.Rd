@@ -54,10 +54,9 @@ For Postgres databases, this can be shown with \verb{SELECT CURRENT_SCHEMA()} (d
 \verb{SET search_path TO \{ schema \}}.
 
 For SQLite databases, a \code{temp} schema for temporary tables always exists as well as a \code{main} schema for permanent
-tables.
-Additional databases may be attached to the connection with a named schema, but as the attachment must be made after
-the connection is established, \code{get_schema} will never return any of these, as the default schema will always be
-\code{main}.
+tables. Additional databases may be attached to the connection with a named schema, but as the attachment must be
+made after the connection is established, \code{get_schema} will never return any of these, as the default schema will
+always be \code{main}.
 }
 
 \examples{

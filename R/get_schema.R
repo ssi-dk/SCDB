@@ -21,10 +21,9 @@
 #'   `SET search_path TO { schema }`.
 #'
 #'   For SQLite databases, a `temp` schema for temporary tables always exists as well as a `main` schema for permanent
-#'   tables.
-#'   Additional databases may be attached to the connection with a named schema, but as the attachment must be made after
-#'   the connection is established, `get_schema` will never return any of these, as the default schema will always be
-#'   `main`.
+#'   tables. Additional databases may be attached to the connection with a named schema, but as the attachment must be
+#'   made after the connection is established, `get_schema` will never return any of these, as the default schema will
+#'   always be `main`.
 #'
 #' @examples
 #'   conn <- get_connection(drv = RSQLite::SQLite())
