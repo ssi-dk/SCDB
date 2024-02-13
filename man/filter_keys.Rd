@@ -4,7 +4,7 @@
 \alias{filter_keys}
 \title{Filters .data according to all records in the filter}
 \usage{
-filter_keys(.data, filters, by = NULL, na_by = NULL)
+filter_keys(.data, filters, by = NULL, na_by = NULL, ...)
 }
 \arguments{
 \item{.data}{A data frame, a tibble, a data.table or a tbl.}
@@ -14,6 +14,8 @@ filter_keys(.data, filters, by = NULL, na_by = NULL)
 \item{by}{passed to inner_join if different from NULL}
 
 \item{na_by}{passed to inner_join if different from NULL}
+
+\item{...}{Further arguments passed to \code{dplyr::inner_join()}.}
 }
 \value{
 An object similar to .data
