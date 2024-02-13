@@ -215,7 +215,8 @@ Logger <- R6::R6Class(                                                          
       # Auto-fill log with end time and duration
       self$log_to_db(
         end_time = !!db_timestamp(end_time, private$log_conn),
-        duration = !!format(round(difftime(as.POSIXct(end_time), as.POSIXct(self$start_time)), digits = 2))
+        duration = !!format(round(difftime(as.POSIXct(end_time), as.POSIXct(self$start_time)), digits = 2)),
+        success = TRUE
       )
 
 
