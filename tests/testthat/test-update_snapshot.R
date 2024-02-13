@@ -55,7 +55,7 @@ test_that("update_snapshot() works", {
     expect_equal(nrow(slice_time(target, "2022-10-03 09:00:00")),
                  nrow(mtcars))
 
-    # Check log outputs exists
+    # Check file log outputs exists
     log_pattern <- glue::glue("{stringr::str_replace_all(as.Date(timestamp), '-', '_')}.{id(db_table, conn)}.log")
     log_file <- purrr::keep(dir(log_path), ~stringr::str_detect(., log_pattern))
     expect_true(length(log_file) == 1)
@@ -63,6 +63,31 @@ test_that("update_snapshot() works", {
     expect_true(nrow(get_table(conn, "test.SCDB_logs")) == 1)
     expect_true(nrow(dplyr::filter(get_table(conn, "test.SCDB_logs"),
                                    dplyr::if_any(.cols = !c(log_file), .fns = ~ !is.na(.)))) == 1)
+
+    # Check db log output exists
+    logs <- get_table(conn, "test.SCDB_logs") |> dplyr::collect()
+
+    checkmate::expect_data_frame(logs,
+      nrows = 1,
+      types = c(
+        "date" = "POSIXct",
+        "date" = "character", # SQLite does not support POSIXct
+        "catalog" = "character",
+        "schema" = "character",
+        "table" = "character",
+        "n_insertions" = "numeric",
+        "n_deactivations" = "numeric",
+        "start_time" = "POSIXct",
+        "start_time" = "character", # SQLite does not support POSIXct
+        "end_time" = "POSIXct",
+        "end_time" = "character", # SQLite does not support POSIXct
+        "duration" = "character",
+        "success" = "logical",
+        "success" = "numeric", # SQLite does not support logical
+        "message" = "character"
+      )
+    )
+
 
     # We now attempt to do another update on the same date
     .data <- mtcars |>
