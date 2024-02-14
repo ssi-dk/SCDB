@@ -211,6 +211,9 @@ Logger <- R6::R6Class(                                                          
     #' @param end_time (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
     #'   The end time for the log entry.
     finalize_db_entry = function(end_time = Sys.time()) {
+      if (private$finalized) {
+        return(NULL)
+      }
 
       assert_timestamp_like(self$start_time)
       assert_timestamp_like(end_time)
@@ -251,6 +254,8 @@ Logger <- R6::R6Class(                                                          
                       log_filename = self$log_filename,
                       affected_rows = affected_rows,
                       expected_rows = expected_rows)
+        } else {
+          private$finalized <- TRUE
         }
       }
     }
@@ -293,6 +298,10 @@ Logger <- R6::R6Class(                                                          
     # @field timestamp (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
     #   A timestamp describing the data being processed (not the current time)
     timestamp = NULL,
+
+    # @field finalized (`logical(1)`)\cr
+    #   Has the log entry been finalized?
+    finalized = FALSE,
 
     # Format the log message
     # @inheritParams Logger$log_info()
