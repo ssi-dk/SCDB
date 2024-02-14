@@ -169,13 +169,16 @@ as.character.Id <- function(x, explicit = FALSE, ...) {
   info <- x@name |>
     purrr::discard(is.na)
 
-  id_representation <- list(
+  id_elements <- list(
     catalog = purrr::pluck(info, "catalog"),
     schema = purrr::pluck(info, "schema"),
     table = purrr::pluck(info, "table")
   ) |>
-    purrr::discard(is.null) |>
-    do.call(purrr::partial(paste, sep = "."), args = _)
+    purrr::discard(is.null)
+
+  if (explicit) id_elements <- purrr::map(id_elements, ~ paste0('"', ., '"'))
+
+  id_representation <- do.call(purrr::partial(paste, sep = "."), args = id_elements)
 
   return(id_representation)
 }
