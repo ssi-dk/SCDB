@@ -61,7 +61,9 @@ lock_table <- function(conn, db_table, schema = NULL) {
     if (inherits(conn, "PqConnection")) { # PostgreSQL needs an index for rows_insert
       res <- DBI::dbSendQuery(
         conn,
-        glue::glue("ALTER TABLE {db_lock_table_id} ADD PRIMARY KEY (\"schema\", \"table\");")
+        glue::glue(
+          "ALTER TABLE {as.character(db_lock_table_id, explicit = TRUE)} ADD PRIMARY KEY (\"schema\", \"table\");"
+        )
       )
       DBI::dbClearResult(res)
     }
