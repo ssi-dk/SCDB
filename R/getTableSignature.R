@@ -5,7 +5,7 @@ methods::setGeneric("getTableSignature",
 
 methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
   # Define the column types to be updated based on backend class
-  col_types <- DBI::dbDataType(conn, .data)
+  col_types <- DBI::dbDataType(conn, dplyr::collect(utils::head(.data, 0)))
 
   backend_coltypes <- list(
     "PqConnection" = c(
