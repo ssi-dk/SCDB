@@ -410,6 +410,8 @@ test_that("Logger: $finalize() handles log table is at some point deleted", {
 
     DBI::dbRemoveTable(conn, id(log_table_id, conn))
 
+    expect_no_error(logger$log_to_db(n_insertions = 42))
+
     expect_no_error(logger$finalize())
 
     # Clean up

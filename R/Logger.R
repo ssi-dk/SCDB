@@ -87,8 +87,8 @@ Logger <- R6::R6Class(                                                          
 
       # Store db log information
       if (!is.null(log_table_id)) {
-        log_table_id <- id(log_table_id, log_conn)
-        private$.log_tbl <- create_logs_if_missing(log_conn, log_table_id)
+        private$log_table_id <- id(log_table_id, log_conn)
+        private$.log_tbl <- create_logs_if_missing(log_conn, private$log_table_id)
       }
       private$log_conn <- log_conn
 
@@ -179,7 +179,7 @@ Logger <- R6::R6Class(                                                          
 
       # Only write if we have a valid connection
       if (!is.null(private$log_conn) && DBI::dbIsValid(private$log_conn) && !is.null(self$log_tbl) &&
-            table_exists(private$log_conn, id(self$log_tbl, private$log_conn))) {
+            table_exists(private$log_conn, private$log_table_id)) {
 
         patch <- data.frame(log_file = self$log_filename) |>
           dplyr::copy_to(
@@ -222,7 +222,7 @@ Logger <- R6::R6Class(                                                          
 
       # Remove the log_file from the log table if no actual file is being written
       if (is.null(self$log_path) && !is.null(private$log_conn) && DBI::dbIsValid(private$log_conn) &&
-            !is.null(self$log_tbl) && table_exists(private$log_conn, id(self$log_tbl, private$log_conn))) {
+            !is.null(self$log_tbl) && table_exists(private$log_conn, private$log_table_id)) {
 
         expected_rows <- self$log_tbl |>
           dplyr::filter(log_file == !!self$log_filename) |>
@@ -266,6 +266,10 @@ Logger <- R6::R6Class(                                                          
     # @field log_tbl (`tbl_dbi`)\cr
     #   The DB table used for logging. Class is connection-specific, but inherits from `tbl_dbi`.
     .log_tbl = NULL,
+
+    # @field log_table_id (`Id`)\cr
+    #   The Id of the DB table used for logging.
+    log_table_id = NULL,
 
     # @field log_conn (`DBIConnection`)\cr
     #   A database connection where log table should exist.
