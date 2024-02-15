@@ -1,4 +1,13 @@
+#' Get (and override) the column types for a table for a given connection
+#'
+#' @description
+#'   The column types are determined via "DBI::dbDataType".
+#'   If the last three columns are named "checksum", "from_ts", and "until_ts",
+#'   we override the column types with backend-specific types.
+#' @template .data
+#' @template conn
 #' @importFrom methods setGeneric
+#' @noRd
 methods::setGeneric("getTableSignature",
                     function(.data, conn = NULL) standardGeneric("getTableSignature"),
                     signature = "conn")
