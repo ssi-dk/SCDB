@@ -4,22 +4,24 @@ methods::setGeneric("getTableSignature",
                     signature = "conn")
 
 methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
-  # Define the column types to be updated based on backend class
-  col_types <- DBI::dbDataType(conn, dplyr::collect(utils::head(.data, 0)))
 
+  # Retrive the translated data types
+  signature <- as.list(DBI::dbDataType(conn, dplyr::collect(utils::head(.data, 0))))
+
+  # Define the column types to be updated based on backend class
   backend_coltypes <- list(
-    "PqConnection" = c(
+    "SQLiteConnection" = c(
       checksum = "TEXT",
+      from_ts  = "TIMESTAMP", # Stored internally as TEXT
+      until_ts = "TIMESTAMP"  # Stored internally as TEXT
+    ),
+    "PqConnection" = c(
+      checksum = "VARCHAR(32)",
       from_ts  = "TIMESTAMP",
       until_ts = "TIMESTAMP"
     ),
-    "SQLiteConnection" = c(
-      checksum = "TEXT",
-      from_ts  = "TEXT",
-      until_ts = "TEXT"
-    ),
     "Microsoft SQL Server" = c(
-      checksum = "varchar(40)",
+      checksum = "VARCHAR(40)",
       from_ts  = "DATETIME2",
       until_ts = "DATETIME2"
     )
@@ -27,18 +29,31 @@ methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
 
   checkmate::assert_choice(class(conn), names(backend_coltypes))
 
-  # Update columns with indices instead of names to avoid conflicts
+  # Replace elements in signature with backend-specific types if names match
   special_cols <- backend_coltypes[[class(conn)]]
-  special_indices <- (1 + length(.data) - length(special_cols)):length(.data)
+  if (identical(colnames(.data)[(length(.data) - 2):length(.data)], names(special_cols))) {
+    signature[(length(.data) - 2):length(.data)] <- special_cols
+  }
 
-  return(replace(col_types, special_indices, special_cols))
+  return(signature)
 })
 
 methods::setMethod("getTableSignature", "NULL", function(.data, conn) {
   # Emulate product of DBI::dbDataType
-  signature <- dplyr::summarise(.data, dplyr::across(tidyselect::everything(), ~ class(.)[1]))
-
+  signature <- as.list(dplyr::summarise(.data, dplyr::across(tidyselect::everything(), ~ class(.)[1])))
   stats::setNames(as.character(signature), names(signature))
+
+  # Update columns with indices instead of names to avoid conflicts
+  special_cols <- c(
+    checksum = "character",
+    from_ts  = "POSIXct",
+    until_ts = "POSIXct"
+  )
+
+  # Replace elements in signature with backend-specific types if names match
+  if (identical(colnames(.data)[(length(.data) - 2):length(.data)], names(special_cols))) {
+    signature[(length(.data) - 2):length(.data)] <- special_cols
+  }
 
   return(signature)
 })
