@@ -26,6 +26,7 @@ test_that("Logger: logging to console works", {
     glue::glue("{ts_str} - {Sys.info()[['user']]} - ERROR - test console")
   )
 
+  # Clean up
   rm(logger)
   invisible(gc())
 })
@@ -43,6 +44,7 @@ test_that("Logger: all (non-warning, non-error) logging to console can be disabl
   ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_no_message(logger$log_info("test", tic = logger$start_time))
 
+  # Clean up
   rm(logger)
   invisible(gc())
 })
@@ -135,6 +137,7 @@ test_that("Logger: logging to file works", {
     )
   )
 
+  # Clean up
   file.remove(logger$log_realpath)
   rm(logger)
   invisible(gc())
@@ -153,6 +156,7 @@ test_that("Logger: log_tbl is not set when conn = NULL", {
   expect_null(logger$log_tbl) # log_table_id is NOT defined here, despite the option existing
   # the logger does not have the connection, so cannot pull the table from conn
 
+  # Clean up
   rm(logger)
   invisible(gc())
 })
@@ -198,9 +202,10 @@ test_that("Logger: logging to db works", {
 
 
     # Clean up
-    connection_clean_up(conn)
     rm(logger)
     invisible(gc())
+
+    connection_clean_up(conn)
   }
 })
 
@@ -266,10 +271,11 @@ test_that("Logger: all logging simultaneously works", {
 
 
     # Clean up
-    connection_clean_up(conn)
     file.remove(logger$log_realpath)
     rm(logger)
     invisible(gc())
+
+    connection_clean_up(conn)
   }
 })
 
@@ -316,8 +322,8 @@ test_that("Logger: file logging stops if file exists", {
     glue::glue("Log file '{logger1$log_filename}' already exists!")
   )
 
+  # Clean up
   file.remove(logger1$log_realpath)
-
   rm(logger1, logger2)
   invisible(gc())
 })
@@ -384,9 +390,10 @@ test_that("Logger: log_file is NULL in DB if not writing to file", {
     expect_length(db_log_file, 0)
 
     # Clean up
-    connection_clean_up(conn)
     rm(logger)
     invisible(gc())
+
+    connection_clean_up(conn)
   }
 })
 
@@ -406,9 +413,10 @@ test_that("Logger: $finalize() handles log table is at some point deleted", {
     expect_no_error(logger$finalize())
 
     # Clean up
-    connection_clean_up(conn)
     rm(logger)
     invisible(gc())
+
+    connection_clean_up(conn)
   }
 })
 
@@ -440,6 +448,7 @@ test_that("Logger: custom timestamp_format works", {
     glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test console")
   )
 
+  # Clean up
   rm(logger)
   invisible(gc())
 })
@@ -467,6 +476,7 @@ test_that("LoggerNull: no console logging occurs", {
     glue::glue("{ts_str} - {Sys.info()[['user']]} - ERROR - test console")
   )
 
+  # Clean up
   rm(logger)
   invisible(gc())
 })
@@ -481,6 +491,7 @@ test_that("LoggerNull: no file logging occurs", {
   expect_no_message(logger$log_info("test filewriting", tic = logger$start_time))
   expect_false(logger$log_filename %in% dir(getOption("SCDB.log_path")))
 
+  # Clean up
   rm(logger)
   invisible(gc())
 })
@@ -506,7 +517,10 @@ test_that("LoggerNull: no database logging occurs", {
     expect_no_message(logger$finalize_db_entry())
     expect_identical(nrow(dplyr::tbl(conn, id("test.SCDB_logger", conn))), n_log_entries)
 
+    # Clean up
     rm(logger)
     invisible(gc())
+
+    close_connection(conn)
   }
 })
