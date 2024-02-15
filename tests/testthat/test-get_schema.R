@@ -62,7 +62,14 @@ test_that("get_catalog() works for NULL", {
 })
 
 
-for (conn in get_test_conns()) {
+for (conn in c(list(NULL), get_test_conns())) {
+
+  test_that("get_schema() works for NULL connection", {
+    skip_if_not(is.null(conn))
+
+    expect_null(get_schema(conn))
+    expect_null(get_schema(conn, temporary = TRUE))
+  })
 
   test_that("get_schema() works for SQLiteConnection", {
     skip_if_not(inherits(conn, "SQLiteConnection"))
@@ -85,11 +92,18 @@ for (conn in get_test_conns()) {
     expect_identical(get_schema(conn, temporary = TRUE), "dbo")
   })
 
-  connection_clean_up(conn)
+  if (!is.null(conn)) connection_clean_up(conn)
 }
 
 
-for (conn in get_test_conns()) {
+for (conn in c(list(NULL), get_test_conns())) {
+
+  test_that("get_catalog() works for NULL connection", {
+    skip_if_not(is.null(conn))
+
+    expect_null(get_catalog(conn))
+    expect_null(get_catalog(conn, temporary = TRUE))
+  })
 
   test_that("get_catalog() works for SQLiteConnection", {
     skip_if_not(inherits(conn, "SQLiteConnection"))
@@ -112,5 +126,5 @@ for (conn in get_test_conns()) {
     expect_identical(get_catalog(conn, temporary = TRUE), "tempdb")
   })
 
-  connection_clean_up(conn)
+  if (!is.null(conn)) connection_clean_up(conn)
 }
