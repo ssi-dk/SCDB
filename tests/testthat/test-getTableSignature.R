@@ -2,7 +2,7 @@
 
 # One that follows the structure in update_snapshot()
 data_update_snapsnot <- data.frame(
-  "date"      = Sys.Date(),
+  "Date"      = Sys.Date(),
   "POSIXct"   = Sys.time(),
   "character" = "test",
   "integer"   = as.integer(1),
@@ -16,7 +16,7 @@ data_update_snapsnot <- data.frame(
 
 # One that has the special columns of update_snapshot(), but not at the end
 data_random <- data.frame(
-  "date"      = Sys.Date(),
+  "Date"      = Sys.Date(),
   "POSIXct"   = Sys.time(),
   "character" = "test",
   # .. Our special columns, but not at the end
@@ -29,26 +29,34 @@ data_random <- data.frame(
   "logical"   = TRUE
 )
 
-for (conn in c(c(NULL), get_test_conns())) {                                                                            # nolint: cyclocomp_linter
+for (conn in c(list(NULL), get_test_conns())) {                                                                            # nolint: cyclocomp_linter
 
   if (is.null(conn)) {
-    test_that("getTableSignature() matches local R types for NULL connections", {
-      for (data in c(data_update_snapsnot, data_random)) {
-        expect_identical(
-          getTableSignature(data, conn),
-          purrr::map(data, ~ purrr::pluck(., class, 1)) # eg. class POSIXct has two elemments, we choose first
+    test_that("getTableSignature() generates signature for update_snapshot() (conn == NULL)", {
+      expect_identical(
+        getTableSignature(data_update_snapsnot, conn),
+        c(
+          "Date"      = "Date",
+          "POSIXct"   = "POSIXct",
+          "character" = "character",
+          "integer"   = "integer",
+          "numeric"   = "numeric",
+          "logical"   = "logical",
+          # ..
+          "checksum"  = "character",
+          "from_ts"   = "POSIXct",
+          "until_ts"  = "POSIXct"
         )
-      }
+      )
     })
   }
-
 
   if (inherits(conn, "SQLiteConnection")) {
     test_that("getTableSignature() generates signature for update_snapshot() (SQLiteConnection)", {
       expect_identical(
         getTableSignature(data_update_snapsnot, conn),
         c(
-          "date"      = "DATE",
+          "Date"      = "DATE",
           "POSIXct"   = "TIMESTAMP",
           "character" = "TEXT",
           "integer"   = "INT",
@@ -68,7 +76,7 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
       expect_identical(
         getTableSignature(data_update_snapsnot, conn),
         c(
-          "date"      = "DATE",
+          "Date"      = "DATE",
           "POSIXct"   = "TIMESTAMPTZ",
           "character" = "TEXT",
           "integer"   = "INTEGER",
@@ -88,7 +96,7 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
       expect_identical(
         getTableSignature(data_update_snapsnot, conn),
         c(
-          "date"      = "DATE",
+          "Date"      = "DATE",
           "POSIXct"   = "DATETIME",
           "character" = "varchar(255)",
           "integer"   = "INT",
@@ -104,12 +112,33 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
   }
 
 
+  if (is.null(conn)) {
+    test_that("getTableSignature() generates signature for random data (conn == NULL)", {
+      expect_identical(
+        getTableSignature(data_random, conn),
+        c(
+          "Date"      = "Date",
+          "POSIXct"   = "POSIXct",
+          "character" = "character",
+          # ..
+          "checksum"  = "character",
+          "from_ts"   = "POSIXct",
+          "until_ts"  = "POSIXct",
+          # ..
+          "integer"   = "integer",
+          "numeric"   = "numeric",
+          "logical"   = "logical"
+        )
+      )
+    })
+  }
+
   if (inherits(conn, "SQLiteConnection")) {
     test_that("getTableSignature() generates signature for random data (SQLiteConnection)", {
       expect_identical(
         getTableSignature(data_random, conn),
         c(
-          "date"      = "DATE",
+          "Date"      = "DATE",
           "POSIXct"   = "TIMESTAMP",
           "character" = "TEXT",
           # ..
@@ -130,7 +159,7 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
       expect_identical(
         getTableSignature(data_random, conn),
         c(
-          "date"      = "DATE",
+          "Date"      = "DATE",
           "POSIXct"   = "TIMESTAMPTZ",
           "character" = "TEXT",
           # ..
@@ -151,7 +180,7 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
       expect_identical(
         getTableSignature(data_random, conn),
         c(
-          "date"      = "DATE",
+          "Date"      = "DATE",
           "POSIXct"   = "DATETIME",
           "character" = "varchar(255)",
           # ..
@@ -173,7 +202,7 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
       expect_identical(
         getTableSignature(dplyr::copy_to(conn, data_random), conn),
         c(
-          "date"      = "DOUBLE",  # By copying to SQLite and back, information is changed by
+          "Date"      = "DOUBLE",  # By copying to SQLite and back, information is changed by
           "POSIXct"   = "DOUBLE",  # dbplyr / DBI so data types are now similar, but different.
           "character" = "TEXT",    # Dates and timestamps which are normally stored in SQLite
           # ..                     # as internally TEXT are now converted to DOUBLE
@@ -194,7 +223,7 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
       expect_identical(
         getTableSignature(dplyr::copy_to(conn, data_random), conn),
         c(
-          "date"      = "DATE",
+          "Date"      = "DATE",
           "POSIXct"   = "TIMESTAMPTZ",
           "character" = "TEXT",
           # ..
@@ -215,7 +244,7 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
       expect_identical(
         getTableSignature(dplyr::copy_to(conn, data_random), conn),
         c(
-          "date"      = "DATE",
+          "Date"      = "DATE",
           "POSIXct"   = "DATETIME",
           "character" = "varchar(255)",
           # ..
