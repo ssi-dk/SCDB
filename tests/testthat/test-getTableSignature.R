@@ -152,16 +152,16 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
         getTableSignature(data_random, conn),
         c(
           "date"      = "DATE",
-          "POSIXct"   = "DATETIME2",
-          "character" = "TEXT",
+          "POSIXct"   = "DATETIME",
+          "character" = "varchar(255)",
           # ..
-          "checksum"  = "TEXT",
-          "from_ts"   = "DATETIME2",
-          "until_ts"  = "DATETIME2",
+          "checksum"  = "varchar(255)",
+          "from_ts"   = "DATETIME",
+          "until_ts"  = "DATETIME",
           # ..
           "integer"   = "INT",
           "numeric"   = "FLOAT",
-          "logical"   = "BOOLEAN"
+          "logical"   = "BIT"
         )
       )
     })
