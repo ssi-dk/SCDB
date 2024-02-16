@@ -44,7 +44,7 @@ methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
     signature[(length(.data) - 2):length(.data)] <- special_cols
   }
 
-  return(signature)
+  return(unlist(signature))
 })
 
 methods::setMethod("getTableSignature", "NULL", function(.data, conn) {
@@ -64,5 +64,5 @@ methods::setMethod("getTableSignature", "NULL", function(.data, conn) {
     signature[(length(.data) - 2):length(.data)] <- special_cols
   }
 
-  return(signature)
+  return(unlist(signature))
 })
