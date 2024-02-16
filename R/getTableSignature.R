@@ -49,8 +49,8 @@ methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
 
 methods::setMethod("getTableSignature", "NULL", function(.data, conn) {
   # Emulate product of DBI::dbDataType
-  signature <- as.list(dplyr::summarise(.data, dplyr::across(tidyselect::everything(), ~ class(.)[1])))
-  stats::setNames(as.character(signature), names(signature))
+  signature <- purrr::map(.data, ~ purrr::pluck(., class, 1))
+  stats::setNames(signature, colnames(.data))
 
   # Update columns with indices instead of names to avoid conflicts
   special_cols <- c(
