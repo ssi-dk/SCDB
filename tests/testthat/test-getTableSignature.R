@@ -29,7 +29,7 @@ data_random <- data.frame(
   "logical"   = TRUE
 )
 
-for (conn in c(c(NULL), get_test_conns())) {
+for (conn in c(c(NULL), get_test_conns())) {                                                                            # nolint: cyclocomp_linter
 
   if (is.null(conn)) {
     test_that("getTableSignature() matches local R types for NULL connections", {
