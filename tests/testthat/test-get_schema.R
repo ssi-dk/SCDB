@@ -64,33 +64,33 @@ test_that("get_catalog() works for NULL", {
 
 for (conn in c(list(NULL), get_test_conns())) {
 
-  test_that("get_schema() works for NULL connection", {
-    skip_if_not(is.null(conn))
+  if (is.null(conn)) {
+    test_that("get_schema() works for NULL connection", {
+      expect_null(get_schema(conn))
+      expect_null(get_schema(conn, temporary = TRUE))
+    })
+  }
 
-    expect_null(get_schema(conn))
-    expect_null(get_schema(conn, temporary = TRUE))
-  })
+  if (inherits(conn, "SQLiteConnection")) {
+    test_that("get_schema() works for SQLiteConnection", {
+      expect_identical(get_schema(conn), "main")
+      expect_identical(get_schema(conn, temporary = TRUE), "temp")
+    })
+  }
 
-  test_that("get_schema() works for SQLiteConnection", {
-    skip_if_not(inherits(conn, "SQLiteConnection"))
+  if (inherits(conn, "PqConnection")) {
+    test_that("get_schema() works for PqConnection", {
+      expect_identical(get_schema(conn), "public")
+      checkmate::expect_character(get_schema(conn, temporary = TRUE), pattern = "pq_temp_.*")
+    })
+  }
 
-    expect_identical(get_schema(conn), "main")
-    expect_identical(get_schema(conn, temporary = TRUE), "temp")
-  })
-
-  test_that("get_schema() works for PqConnection", {
-    skip_if_not(inherits(conn, "PqConnection"))
-
-    expect_identical(get_schema(conn), "public")
-    checkmate::expect_character(get_schema(conn, temporary = TRUE), pattern = "pq_temp_.*")
-  })
-
-  test_that("get_schema() works for Microsoft SQL Server", {
-    skip_if_not(inherits(conn, "Microsoft SQL Server"))
-
-    expect_identical(get_schema(conn), "dbo")
-    expect_identical(get_schema(conn, temporary = TRUE), "dbo")
-  })
+  if (inherits(conn, "Microsoft SQL Server")) {
+    test_that("get_schema() works for Microsoft SQL Server", {
+      expect_identical(get_schema(conn), "dbo")
+      expect_identical(get_schema(conn, temporary = TRUE), "dbo")
+    })
+  }
 
   if (!is.null(conn)) connection_clean_up(conn)
 }
@@ -98,33 +98,33 @@ for (conn in c(list(NULL), get_test_conns())) {
 
 for (conn in c(list(NULL), get_test_conns())) {
 
-  test_that("get_catalog() works for NULL connection", {
-    skip_if_not(is.null(conn))
+  if (is.null(conn)) {
+    test_that("get_catalog() works for NULL connection", {
+      expect_null(get_catalog(conn))
+      expect_null(get_catalog(conn, temporary = TRUE))
+    })
+  }
 
-    expect_null(get_catalog(conn))
-    expect_null(get_catalog(conn, temporary = TRUE))
-  })
+  if (inherits(conn, "SQLiteConnection")) {
+    test_that("get_catalog() works for SQLiteConnection", {
+      expect_null(get_catalog(conn))
+      expect_null(get_catalog(conn, temporary = TRUE))
+    })
+  }
 
-  test_that("get_catalog() works for SQLiteConnection", {
-    skip_if_not(inherits(conn, "SQLiteConnection"))
+  if (inherits(conn, "PqConnection")) {
+    test_that("get_catalog() works for PqConnection", {
+      expect_null(get_catalog(conn))
+      expect_null(get_catalog(conn, temporary = TRUE))
+    })
+  }
 
-    expect_null(get_catalog(conn))
-    expect_null(get_catalog(conn, temporary = TRUE))
-  })
-
-  test_that("get_catalog() works for PqConnection", {
-    skip_if_not(inherits(conn, "PqConnection"))
-
-    expect_null(get_catalog(conn))
-    expect_null(get_catalog(conn, temporary = TRUE))
-  })
-
-  test_that("get_catalog() works for Microsoft SQL Server", {
-    skip_if_not(inherits(conn, "Microsoft SQL Server"))
-
-    expect_identical(get_catalog(conn), "master")
-    expect_identical(get_catalog(conn, temporary = TRUE), "tempdb")
-  })
+  if (inherits(conn, "Microsoft SQL Server")) {
+    test_that("get_catalog() works for Microsoft SQL Server", {
+      expect_identical(get_catalog(conn), "master")
+      expect_identical(get_catalog(conn, temporary = TRUE), "tempdb")
+    })
+  }
 
   if (!is.null(conn)) connection_clean_up(conn)
 }
