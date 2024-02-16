@@ -69,10 +69,10 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
         getTableSignature(data_update_snapsnot, conn),
         c(
           "date"      = "DATE",
-          "POSIXct"   = "TIMESTAMP",
+          "POSIXct"   = "TIMESTAMPTZ",
           "character" = "TEXT",
           "integer"   = "INTEGER",
-          "numeric"   = "NUMERIC",
+          "numeric"   = "DOUBLE PRECISION",
           "logical"   = "BOOLEAN",
           # ..
           "checksum"  = "VARCHAR(32)",
@@ -89,15 +89,15 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
         getTableSignature(data_update_snapsnot, conn),
         c(
           "date"      = "DATE",
-          "POSIXct"   = "DATETIME2",
-          "character" = "TEXT",
+          "POSIXct"   = "DATETIME",
+          "character" = "varchar(255)",
           "integer"   = "INT",
           "numeric"   = "FLOAT",
-          "logical"   = "BOOLEAN",
+          "logical"   = "BIT",
           # ..
-          "checksum"  = "VARCHAR(40)",
-          "from_ts"   = "DATETIME2",
-          "until_ts"  = "DATETIME2"
+          "checksum"  = "varchar(40)",
+          "from_ts"   = "DATETIME",
+          "until_ts"  = "DATETIME"
         )
       )
     })
@@ -128,18 +128,18 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
   if (inherits(conn, "PqConnection")) {
     test_that("getTableSignature() generates signature for random data (PqConnection)", {
       expect_identical(
-        getTableSignature(data_update_snapsnot, conn),
+        getTableSignature(data_random, conn),
         c(
           "date"      = "DATE",
-          "POSIXct"   = "TIMESTAMP",
+          "POSIXct"   = "TIMESTAMPTZ",
           "character" = "TEXT",
           # ..
           "checksum"  = "TEXT",
-          "from_ts"   = "TIMESTAMP",
-          "until_ts"  = "TIMESTAMP",
+          "from_ts"   = "TIMESTAMPTZ",
+          "until_ts"  = "TIMESTAMPTZ",
           # ..
           "integer"   = "INTEGER",
-          "numeric"   = "NUMERIC",
+          "numeric"   = "DOUBLE PRECISION",
           "logical"   = "BOOLEAN"
         )
       )
@@ -149,7 +149,7 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
   if (inherits(conn, "Microsoft SQL Server")) {
     test_that("getTableSignature() generates signature for random data (Microsoft SQL Server)", {
       expect_identical(
-        getTableSignature(data_update_snapsnot, conn),
+        getTableSignature(data_random, conn),
         c(
           "date"      = "DATE",
           "POSIXct"   = "DATETIME2",
@@ -195,15 +195,15 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
         getTableSignature(dplyr::copy_to(conn, data_random), conn),
         c(
           "date"      = "DATE",
-          "POSIXct"   = "TIMESTAMP",
+          "POSIXct"   = "TIMESTAMPTZ",
           "character" = "TEXT",
           # ..
           "checksum"  = "TEXT",
-          "from_ts"   = "TIMESTAMP",
-          "until_ts"  = "TIMESTAMP",
+          "from_ts"   = "TIMESTAMPTZ",
+          "until_ts"  = "TIMESTAMPTZ",
           # ..
           "integer"   = "INTEGER",
-          "numeric"   = "NUMERIC",
+          "numeric"   = "DOUBLE PRECISION",
           "logical"   = "BOOLEAN"
         )
       )
@@ -216,16 +216,16 @@ for (conn in c(c(NULL), get_test_conns())) {                                    
         getTableSignature(dplyr::copy_to(conn, data_random), conn),
         c(
           "date"      = "DATE",
-          "POSIXct"   = "DATETIME2",
-          "character" = "TEXT",
+          "POSIXct"   = "DATETIME",
+          "character" = "varchar(255)",
           # ..
-          "checksum"  = "TEXT",
-          "from_ts"   = "DATETIME2",
-          "until_ts"  = "DATETIME2",
+          "checksum"  = "varchar(255)",
+          "from_ts"   = "DATETIME",
+          "until_ts"  = "DATETIME",
           # ..
           "integer"   = "INT",
           "numeric"   = "FLOAT",
-          "logical"   = "BOOLEAN"
+          "logical"   = "BIT"
         )
       )
     })
