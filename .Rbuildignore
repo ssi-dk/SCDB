@@ -1,5 +1,4 @@
-^renv$
-^renv\.lock$
+^pkg\.lock$
 ^SCDB\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
