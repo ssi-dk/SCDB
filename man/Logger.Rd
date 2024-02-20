@@ -12,7 +12,6 @@ The \code{Logger} class facilitates logging to a database and/or file and to con
 A \code{Logger} is associated with a specific table and timestamp which must be supplied at initialization.
 This information is used to create the log file (if a \code{log_path} is given) and the log entry in the database
 (if a \code{log_table_id} and \code{log_conn} is given).
-(if a \code{log_table_id} and `` is given).
 
 Logging to the database must match the fields in the log table.
 }
