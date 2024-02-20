@@ -6,7 +6,6 @@
 #'   A `Logger` is associated with a specific table and timestamp which must be supplied at initialization.
 #'   This information is used to create the log file (if a `log_path` is given) and the log entry in the database
 #'   (if a `log_table_id` and `log_conn` is given).
-#'   (if a `log_table_id` and `` is given).
 #'
 #'   Logging to the database must match the fields in the log table.
 #' @return
