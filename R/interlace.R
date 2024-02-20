@@ -41,14 +41,14 @@ interlace <- function(tables, by = NULL, colnames = NULL) {
   checkmate::assert_character(by)
   # TODO: how to checkmate tables and colnames?
 
+  # Check edgecase
+  if (length(tables) == 1) return(purrr::pluck(tables, 1))
+
   UseMethod("interlace")
 }
 
 #' @export
 interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
-
-  # Check edgecase
-  if (length(tables) == 1) return(purrr::pluck(tables, 1))
 
   # Parse inputs for colnames .from / .to columns
   from_cols <- seq_along(tables) |>
