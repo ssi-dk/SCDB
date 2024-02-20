@@ -42,6 +42,8 @@
 
 * The `%notin%` operator has been removed from the package (#??).
 
+* The `interlace_sql()` function is converted to the S3 generic `interlace()` (#??).
+
 ## New features
 
 * The S3 method `as.character.Id()` is added which converts `DBI::Id()` to `character` (#93).
