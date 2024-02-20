@@ -41,15 +41,11 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   checkmate::assert_class(filters, "tbl_dbi", null.ok = TRUE)
   checkmate::assert_character(message, null.ok = TRUE)
   assert_timestamp_like(tic)
-  checkmate::assert_class(logger, "Logger", null.ok = TRUE)
+  checkmate::assert_multi_class(logger, "Logger", null.ok = TRUE)
   checkmate::assert_logical(enforce_chronological_order)
 
   # Retrieve Id from any valid db_table inputs to correctly create a missing table
   db_table_id <- id(db_table, conn)
-  db_table_name <- db_table_id |>
-    methods::slot("name") |>
-    stats::na.omit() |>
-    paste(collapse = ".")
 
   if (table_exists(conn, db_table_id)) {
     db_table <- dplyr::tbl(conn, db_table_id, check_from = FALSE)
@@ -60,14 +56,13 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   # Initialize logger
   if (is.null(logger)) {
     logger <- Logger$new(
-      db_tablestring = db_table_name,
+      db_table = db_table_id,
       log_conn = conn,
-      ts = timestamp,
+      timestamp = timestamp,
       start_time = tic
     )
   }
 
-  logger$log_to_db(start_time = !!db_timestamp(tic, conn))
   logger$log_info("Started", tic = tic) # Use input time in log
 
   # Add message to log (if given)
@@ -94,9 +89,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
                      paste(colnames(.data), collapse = ", "), tic = tic) # Use input time in log
   }
 
-  logger$log_to_db(schema = purrr::pluck(db_table_id@name, "schema"), table = purrr::pluck(db_table_id@name, "table"))
-  logger$log_info("Parsing data for table", db_table_name, "started", tic = tic) # Use input time in log
-  logger$log_to_db(date = !!db_timestamp(timestamp, conn))
+  logger$log_info("Parsing data for table", as.character(db_table_id), "started", tic = tic) # Use input time in log
   logger$log_info("Given timestamp for table is", timestamp, tic = tic) # Use input time in log
 
   # Check for current update status
@@ -272,9 +265,8 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   }
 
   toc <- Sys.time()
-  logger$log_to_db(end_time = !!db_timestamp(toc, conn),
-                   duration = !!format(round(difftime(toc, tic), digits = 2)), success = TRUE)
-  logger$log_info("Finished processing for table", db_table_name, tic = toc)
+  logger$finalize_db_entry()
+  logger$log_info("Finished processing for table", as.character(db_table_id), tic = toc)
 
   return()
 }

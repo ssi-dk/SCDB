@@ -6,6 +6,7 @@ checksums
 cloneable
 CMD
 Codecov
+coercible
 colname
 conn
 cr
@@ -32,6 +33,7 @@ ip
 Kimball
 
 Lasse
+LoggerNull
 
 Margy
 md
@@ -43,6 +45,7 @@ nrow
 ODBC
 ORCID
 
+parsable
 pgpass
 POSIXct
 Postgres

@@ -21,14 +21,9 @@ suppressPackageStartupMessages(library(SCDB))
 # Setup conn to be used for examples
 conn <- get_connection(drv = RSQLite::SQLite())
 
-# Setup log table in temporary db
-SCDB::create_logs_if_missing(conn, "logs")
-withr::local_options("SCDB.log_table_id" = "logs")
-
-# Use a wrapper for update_snapshot which uses a quiet Logger
+# Use a wrapper for update_snapshot which uses LoggerNull to suppress all logging
 if (!"update_snapshot" %in% ls(envir = globalenv())) {
-  logger <- Logger$new(output_to_console = FALSE, log_table_id = "logs", log_conn = conn)
-  update_snapshot <- function(...) return(invisible(SCDB::update_snapshot(logger = logger, ...)))
+  update_snapshot <- function(...) return(SCDB::update_snapshot(logger = LoggerNull$new(), ...))
 }
 
 # Setup example_data table in conn

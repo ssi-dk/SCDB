@@ -22,8 +22,11 @@
 #' close_connection(conn)
 #' @export
 table_exists <- function(conn, db_table_id) {
-  checkmate::assert(DBI::dbIsValid(conn))
-  assert_id_like(db_table_id)
+  coll <- checkmate::makeAssertCollection()
+  checkmate::assert_class(conn, "DBIConnection", add = coll)
+  checkmate::assert(DBI::dbIsValid(conn), add = coll)
+  assert_id_like(db_table_id, add = coll)
+  checkmate::reportAssertions(coll)
 
   # Check arguments
   if (inherits(db_table_id, "tbl_dbi")) {

@@ -30,6 +30,22 @@
 
 * The `%notin%` operator has been removed from the package
 
+* `get_schema()` now returns `NULL` instead of `NA` if schema is undefined (#99).
+
+* The order of arguments in `create_logs_if_missing()` has been swapped to match the rest of the package (#??).
+  The `conn` argument is now before the `log_table` argument.
+
+* The arguments of `Logger` has been updated (#98).
+  * `db_tablestring` is replaced with the `db_table` argument.
+
+    This argument takes any Id-like input instead of only allowing a character string.
+
+  * `ts` is replaced with the `timestamp` argument to align with `update_snapshot()`.
+
+* The order of input arguments to `Logger` is changed (#98).
+
+* The `%notin%` operator has been removed from the package (#??).
+
 ## New features
 
 * The S3 method `as.character.Id()` is added which converts `DBI::Id()` to `character` (#93).
@@ -43,6 +59,12 @@
 
 * A new function, `unique_table_name()`, to generate unique table names is added (#89).
   This function is heavily inspired by the unexported `dbplyr:::unique_table_name()`.
+
+* A logger is introduced `LoggerNull` (#98).
+
+  * `Logger` facilitates logging to file/console and logging to db.
+
+  * `LoggerNull` is "no-logging" logger that can be used to suppress all logging.
 
 ## Improvements and Fixes
 
@@ -70,6 +92,9 @@
 
 * The footprint of `update_snapshot()` is reduced by cleaning up intermediate tables with `defer_db_cleanup()` (#89)
 
+* `Logger$log_info()` now uses `message()` instead of `cat()` to write to console (#98).
+  The message written is now also returned invisibly.
+
 ## Testing
 
 * Added missing tests for `create_logs_if_missing()` (#93).
@@ -77,6 +102,8 @@
 * Added missing tests for `get_schema()` (#99).
 
 * Improved tests for `get_tables()`, `table_exists()`, and `create_table()` (#93).
+
+* Improved tests for `Logger` (#98).
 
 
 # SCDB 0.3

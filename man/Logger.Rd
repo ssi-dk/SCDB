@@ -2,42 +2,52 @@
 % Please edit documentation in R/Logger.R
 \name{Logger}
 \alias{Logger}
-\title{Logger}
+\title{Logger: Complete logging to console, file and database}
 \value{
 A new instance of the \code{Logger} \link[R6:R6Class]{R6} class.
 }
 \description{
-Create an object for logging database operations
+The \code{Logger} class facilitates logging to a database and/or file and to console.
+
+A \code{Logger} is associated with a specific table and timestamp which must be supplied at initialization.
+This information is used to create the log file (if a \code{log_path} is given) and the log entry in the database
+(if a \code{log_table_id} and \code{log_conn} is given).
+
+Logging to the database must match the fields in the log table.
 }
 \examples{
-logger <- Logger$new(db_tablestring = "test.table",
-                     ts = "2020-01-01 09:00:00")
-}
-\section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{log_path}}{(\code{character(1)})\cr
-A directory where log file is written (if this is not NULL). Defaults to \code{getOption("SCDB.log_path")}.}
+  logger <- Logger$new(
+    db_table = "test.table",
+    timestamp = "2020-01-01 09:00:00"
+  )
 
-\item{\code{log_tbl}}{The DB table used for logging. Class is connection-specific, but inherits from \code{tbl_dbi}.}
+  logger$log_info("This is an info message")
+  logger$log_to_db(message = "This is a message")
 
-\item{\code{start_time}}{(\code{POSIXct(1)})\cr
-The time at which data processing was started.}
-
-\item{\code{output_to_console}}{(\code{logical(1)})\cr
-Should the Logger output to console?
-This can always be overridden by Logger$log_info(..., output_to_console = FALSE).}
-}
-\if{html}{\out{</div>}}
+  try(logger$log_warn("This is a warning!"))
+  try(logger$log_error("This is an error!"))
 }
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
+\item{\code{output_to_console}}{(\code{logical(1)})\cr
+Should the Logger output to console? Read only.
+This can always be overridden by Logger$log_info(..., output_to_console = FALSE).}
+
+\item{\code{log_path}}{(\code{character(1)})\cr
+A directory where log file is written (if this is not NULL). Read only.}
+
+\item{\code{log_tbl}}{(\code{tbl_dbi})\cr
+The DB table used for logging. Class is connection-specific, but inherits from \code{tbl_dbi}. Read Only.}
+
+\item{\code{start_time}}{(\code{POSIXct(1)})\cr
+The time at which data processing was started. Read only.}
+
 \item{\code{log_filename}}{\code{character(1)}\cr
-The filename (basename) of the file that the \code{Logger} instance will output to}
+The filename (basename) of the file that the \code{Logger} instance will output to.  Read only.}
 
 \item{\code{log_realpath}}{\code{character(1)}\cr
-The full path to the logger's log file.}
+The full path to the logger's log file. Read only.}
 }
 \if{html}{\out{</div>}}
 }
@@ -50,6 +60,7 @@ The full path to the logger's log file.}
 \item \href{#method-Logger-log_warn}{\code{Logger$log_warn()}}
 \item \href{#method-Logger-log_error}{\code{Logger$log_error()}}
 \item \href{#method-Logger-log_to_db}{\code{Logger$log_to_db()}}
+\item \href{#method-Logger-finalize_db_entry}{\code{Logger$finalize_db_entry()}}
 \item \href{#method-Logger-clone}{\code{Logger$clone()}}
 }
 }
@@ -57,39 +68,47 @@ The full path to the logger's log file.}
 \if{html}{\out{<a id="method-Logger-new"></a>}}
 \if{latex}{\out{\hypertarget{method-Logger-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new Logger object
+Create a new \code{Logger} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logger$new(
-  db_tablestring = NULL,
+  db_table = NULL,
+  timestamp = NULL,
+  output_to_console = TRUE,
   log_table_id = getOption("SCDB.log_table_id"),
   log_conn = NULL,
   log_path = getOption("SCDB.log_path"),
-  output_to_console = TRUE,
-  warn = TRUE,
-  ts = NULL,
-  start_time = Sys.time()
+  start_time = Sys.time(),
+  warn = TRUE
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_tablestring}}{A string specifying the table being updated}
+\item{\code{db_table}}{(\verb{id-like object})\cr
+A table specification (coercible by \code{id()}) specifying the table being updated.}
 
-\item{\code{log_table_id}}{A \code{\link[DBI:Id]{DBI::Id()}} object or a character string readable by \link{id}, specifying the location of the log table.}
+\item{\code{timestamp}}{(\code{POSIXct(1)}, \code{Date(1)}, or \code{character(1)})\cr
+A timestamp describing the data being processed (not the current time)}
 
-\item{\code{log_conn}}{A database connection inheriting from \code{DBIConnection}}
+\item{\code{output_to_console}}{(\code{logical(1)})\cr
+Should the Logger output to console?}
 
-\item{\code{log_path}}{The path where logs are stored.
-If NULL, no file logs are created.}
+\item{\code{log_table_id}}{(\verb{id-like object})\cr
+A table specification (coercible by \code{id()}) specifying the location of the log table.}
 
-\item{\code{output_to_console}}{Should the Logger output to console (TRUE/FALSE)?}
+\item{\code{log_conn}}{(\code{DBIConnection})\cr
+A database connection where log table should exist.}
 
-\item{\code{warn}}{Show a warning if neither log_table_id or log_path could be determined}
+\item{\code{log_path}}{(\code{character(1)})\cr
+The path where logs are stored.
+If \code{NULL}, no file logs are created.}
 
-\item{\code{ts}}{A timestamp describing the data being processed (not the current time)}
+\item{\code{start_time}}{(\code{POSIXct(1)})\cr
+The time at which data processing was started (defaults to \code{\link[=Sys.time]{Sys.time()}}).}
 
-\item{\code{start_time}}{The time at which data processing was started (defaults to \code{\link[=Sys.time]{Sys.time()}})}
+\item{\code{warn}}{(\code{logical(1)})\cr
+Should a warning be produced if no logging will be done?}
 }
 \if{html}{\out{</div>}}
 }
@@ -98,7 +117,7 @@ If NULL, no file logs are created.}
 \if{html}{\out{<a id="method-Logger-finalize"></a>}}
 \if{latex}{\out{\hypertarget{method-Logger-finalize}{}}}
 \subsection{Method \code{finalize()}}{
-Remove generated log_name from database if not writing to a file
+Remove generated \code{log_name} from database if not writing to a file.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logger$finalize()}\if{html}{\out{</div>}}
 }
@@ -108,13 +127,14 @@ Remove generated log_name from database if not writing to a file
 \if{html}{\out{<a id="method-Logger-log_info"></a>}}
 \if{latex}{\out{\hypertarget{method-Logger-log_info}{}}}
 \subsection{Method \code{log_info()}}{
-Write a line to log file
+Write a line to log (console / file).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logger$log_info(
   ...,
   tic = Sys.time(),
   output_to_console = self$output_to_console,
-  log_type = "INFO"
+  log_type = "INFO",
+  timestamp_format = getOption("SCDB.log_timestamp_format", "\%F \%R:\%OS3")
 )}\if{html}{\out{</div>}}
 }
 
@@ -123,13 +143,21 @@ Write a line to log file
 \describe{
 \item{\code{...}}{One or more character strings to be concatenated}
 
-\item{\code{tic}}{The timestamp used by the log entry (default Sys.time())}
+\item{\code{tic}}{(\code{POSIXct(1)})\cr
+The timestamp used by the log entry.}
 
-\item{\code{output_to_console}}{Should the line be written to console?}
+\item{\code{output_to_console}}{(\code{logical(1)})\cr
+Should the line be written to console?}
 
 \item{\code{log_type}}{A character string which describes the severity of the log message}
+
+\item{\code{timestamp_format}}{(\code{character(1)})\cr
+The format of the timestamp used in the log message (parsable by \code{\link[=strftime]{strftime()}}).}
 }
 \if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Returns the log message invisibly
 }
 }
 \if{html}{\out{<hr>}}
@@ -155,7 +183,7 @@ Write a warning to log file and generate warning.
 \if{html}{\out{<a id="method-Logger-log_error"></a>}}
 \if{latex}{\out{\hypertarget{method-Logger-log_error}{}}}
 \subsection{Method \code{log_error()}}{
-Write an error to log file and stop execution
+Write an error to log file and stop execution.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logger$log_error(..., log_type = "ERROR")}\if{html}{\out{</div>}}
 }
@@ -174,7 +202,7 @@ Write an error to log file and stop execution
 \if{html}{\out{<a id="method-Logger-log_to_db"></a>}}
 \if{latex}{\out{\hypertarget{method-Logger-log_to_db}{}}}
 \subsection{Method \code{log_to_db()}}{
-Write or update log table
+Write or update log table.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Logger$log_to_db(...)}\if{html}{\out{</div>}}
 }
@@ -182,7 +210,26 @@ Write or update log table
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{Name-value pairs with which to update the log table}
+\item{\code{...}}{Name-value pairs with which to update the log table.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Logger-finalize_db_entry"></a>}}
+\if{latex}{\out{\hypertarget{method-Logger-finalize_db_entry}{}}}
+\subsection{Method \code{finalize_db_entry()}}{
+Auto-fills "end_time" and "duration" for the log entry and clears the "log_file" field if no
+file is being written.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Logger$finalize_db_entry(end_time = Sys.time())}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{end_time}}{(\code{POSIXct(1)}, \code{Date(1)}, or \code{character(1)})\cr
+The end time for the log entry.}
 }
 \if{html}{\out{</div>}}
 }
