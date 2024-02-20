@@ -44,7 +44,7 @@ interlace <- function(tables, by = NULL, colnames = NULL) {
   # Check edgecase
   if (length(tables) == 1) return(purrr::pluck(tables, 1))
 
-  UseMethod("interlace")
+  UseMethod("interlace", tables[[1]])
 }
 
 #' @export
