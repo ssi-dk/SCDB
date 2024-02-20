@@ -42,7 +42,7 @@
 
 * The `%notin%` operator has been removed from the package (#??).
 
-* The `interlace_sql()` function is converted to the S3 generic `interlace()` (#??).
+* The `interlace_sql()` function is converted to the S3 generic `interlace()` (#113).
 
 ## New features
 
