@@ -144,7 +144,7 @@ is_lock_owner <- function(conn, db_table, schema = NULL) {
   # Determine lock table id
   lock_table_id <- id(paste(c(schema, "locks"), collapse = "."), conn)
 
-  # Create lock table if missing
+  # Return early if lock table does not exist
   if (!table_exists(conn, lock_table_id)) {
     return(NULL)
   }
