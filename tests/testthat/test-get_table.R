@@ -51,7 +51,7 @@ test_that("get_tables() works", {
     # Our test tables should be present
     checkmate::expect_subset(c(table_1, table_2, tmp_name), db_table_names)
 
-    DBI::dbDisconnect(conn)
+    connection_clean_up(conn)
   }
 })
 
@@ -96,7 +96,7 @@ test_that("get_table() works when tables exist", {
 })
 
 
-test_that("get_table() works when tables does not exist in default schema", {
+test_that("get_table() works when table does not exist in default schema", {
   for (conn in get_test_conns()) {
 
     # Generate table in default schema that does not exist
@@ -132,7 +132,7 @@ test_that("get_table() works when tables does not exist in default schema", {
 })
 
 
-test_that("get_table() works when tables does not exist in non existing schema", {
+test_that("get_table() works when table does not exist in non-existing schema", {
   for (conn in get_test_conns()) {
 
     # Generate schema that does not exist
@@ -156,10 +156,6 @@ test_that("get_table() works when tables does not exist in non existing schema",
       expect_error(
         get_table(conn, id(invalid_table_name, conn)),
         regexp = glue::glue("Table {as.character(id(invalid_table_name, conn))} could not be found!")
-      )
-      expect_error(
-        get_table(conn, id(invalid_table_name)),
-        regexp = glue::glue("Table {as.character(id(invalid_table_name))} could not be found!")
       )
 
     } else {

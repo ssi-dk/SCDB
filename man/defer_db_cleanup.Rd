@@ -19,14 +19,15 @@ This function marks a table for deletion once the current function exits.
 conn <- get_connection(drv = RSQLite::SQLite())
 
 mt <- dplyr::copy_to(conn, mtcars)
+id_mt <- id(mt)
 
 defer_db_cleanup(mt)
 
-DBI::dbExistsTable(conn, id(mt)) # TRUE
+DBI::dbExistsTable(conn, id_mt) # TRUE
 
 withr::deferred_run()
 
-DBI::dbExistsTable(conn, id(mt)) # FALSE
+DBI::dbExistsTable(conn, id_mt) # FALSE
 
 close_connection(conn)
 }

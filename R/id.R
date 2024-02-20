@@ -6,6 +6,7 @@
 #'  logical. If `TRUE`, allows for returning an `DBI::Id` with `table` = `myschema.table` if schema `myschema`
 #'  is not found in `conn`.
 #'  If `FALSE`, the function will raise an error if the implied schema cannot be found in `conn`
+#' @param ... Further arguments passed to methods.
 #' @details The given `db_table_id` is parsed to a DBI::Id depending on the type of input:
 #'  * `character`: db_table_id is parsed to a DBI::Id object using an assumption of "schema.table" syntax
 #'     with corresponding schema (if found in `conn`) and table values.
@@ -20,13 +21,14 @@
 #' id("schema.table")
 #' @seealso [DBI::Id] which this function wraps.
 #' @export
-id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+id <- function(db_table_id, ...) {
   UseMethod("id")
 }
 
 
 #' @export
-id.Id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+#' @rdname id
+id.Id <- function(db_table_id, conn = NULL, ...) {
 
   # Store the table_name for computations down the line
   table_name <- purrr::pluck(db_table_id, "name", "table")
@@ -49,7 +51,8 @@ id.Id <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
 
 
 #' @export
-id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+#' @rdname id
+id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE, ...) {
 
   checkmate::assert(is.null(conn), DBI::dbIsValid(conn), combine = "or")
 
@@ -57,26 +60,26 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
     db_name <- stringr::str_split(db_table_id, "\\.")[[1]]
     db_name <- db_name[rev(seq_along(db_name))] # Reverse order (table, schema?, catalog?)
 
-    db_table <- purrr::pluck(db_name, 1)
-    db_schema <- purrr::pluck(db_name, 2)
-    db_catalog <- purrr::pluck(db_name, 3)
+    table <- purrr::pluck(db_name, 1)
+    schema <- purrr::pluck(db_name, 2)
+    catalog <- purrr::pluck(db_name, 3, .default = get_catalog(conn))
 
     # If no matching implied schema is found, return the unmodified db_table_id in the default schema
-    if (allow_table_only && !is.null(conn) && !schema_exists(conn, db_schema)) {
-      return(DBI::Id(catalog = db_catalog, schema = get_schema(conn), table = db_table_id))
+    if (allow_table_only && !is.null(conn) && !schema_exists(conn, schema)) {
+      return(DBI::Id(catalog = catalog, schema = get_schema(conn), table = db_table_id))
     }
   } else {
-    db_table <- db_table_id
-    db_schema <- get_schema(conn)
-    db_catalog <- get_catalog(conn)
+    table <- db_table_id
+    schema <- get_schema(conn)
+    catalog <- get_catalog(conn)
   }
 
-  return(DBI::Id(catalog = db_catalog, schema = db_schema, table = db_table))
+  return(DBI::Id(catalog = catalog, schema = schema, table = table))
 }
 
 
 #' @export
-id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
+id.tbl_dbi <- function(db_table_id, ...) {
 
   if (is.null(dbplyr::remote_table(db_table_id))) {
     stop(
@@ -85,30 +88,31 @@ id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
     )
   }
 
-  # If table identification is fully qualified extract Id from remote_Table
-  if (!is.na(purrr::pluck(dbplyr::remote_table(db_table_id), unclass, "schema"))) {
+  # Store currently known information about table
+  table_conn <- dbplyr::remote_con(db_table_id)
+  table_ident <- dbplyr::remote_table(db_table_id) |>
+    unclass() |>
+    purrr::discard(is.na)
 
-    table_ident <- dbplyr::remote_table(db_table_id) |>
-      unclass() |>
-      purrr::discard(is.na)
+  table <- purrr::pluck(table_ident, "table")
+  schema <- purrr::pluck(table_ident, "schema")
+  catalog <- purrr::pluck(table_ident, "catalog")
 
-    table_conn <- dbplyr::remote_con(db_table_id)
+  # If only table is known, attempt to attempt to resolve the table from existing tables.
+  # For SQLite, there should only be one table in main/temp matching the table.
+  # In some cases, tables may have been added to the DB that makes the id ambiguous.
+  if (is.null(schema)) {
 
-    return(
-      DBI::Id(
-        catalog = purrr::pluck(table_ident, "catalog"),
-        schema = purrr::pluck(table_ident, "schema", .default = get_schema(table_conn)),
-        table = purrr::pluck(table_ident, "table")
-      )
-    )
+    # Check table still exists
+    if (!table_exists(table_conn, db_table_id)) {
+      stop("Table does not exist (anymore) and id cannot be determined!")
+    }
 
-  } else {
-
-    # If not attempt to resolve the table from existing tables.
+    # If not, attempt to resolve the table from existing tables.
     # For SQLite, there should only be one table in main/temp matching the table
     # In some cases, tables may have been added to the DB that makes the id ambiguous.
-    schema <- get_tables(dbplyr::remote_con(db_table_id), show_temporary = TRUE) |>
-      dplyr::filter(.data$table == dbplyr::remote_name(db_table_id)) |>
+    schema <- get_tables(table_conn, show_temporary = TRUE) |>
+      dplyr::filter(.data$table == !!table) |>
       dplyr::pull("schema")
 
     if (length(schema) > 1)  {
@@ -118,9 +122,15 @@ id.tbl_dbi <- function(db_table_id, conn = NULL, allow_table_only = TRUE) {
         "multiple tables with this name were found across schemas."
       )
     }
-
-    return(DBI::Id(schema = schema, table = dbplyr::remote_name(db_table_id)))
   }
+
+  # Is the table temporary?
+  if (is.null(catalog) && inherits(table_conn, "Microsoft SQL Server")) {
+    catalog <- get_catalog(table_conn, temporary = startsWith(table, "#"))
+  }
+
+  # Return the inferred Id
+  return(DBI::Id(catalog = catalog, schema = schema, table = table))
 }
 
 

@@ -14,16 +14,12 @@
 
 * The `show_temporary` argument of `get_tables()` is now a simple logical (#93).
 
-  In addition, schema is always returned in the list of table (no longer NA for default schema).
+  In addition, schema is always returned in the list of tables (no longer NA for default schema).
 
 * Tables created with `create_table()` will now be temporary or permanent dependent on the default value of
   `DBI::dbCreateTable()` (#93).
 
   If you wish to overwrite this, use `...` arguments which are passed to `DBI::dbCreateTable()`.
-
-* If a `SQLiteConnection` is passed to `get_schema()`, the returned schema will always be "main" (#93).
-
-* `get_schema()` now returns `NULL` instead of `NA` if schema is undefined (#99).
 
 * The order of arguments in `create_logs_if_missing()` has been swapped to match the rest of the package (#??).
   The `conn` argument is now before the `log_table` argument.
@@ -86,7 +82,13 @@
 
 * `get_tables()` now supports temporary tables for Microsoft SQL Server (#93).
 
-* `id()` now includes information of catalog in more cases (#99).
+* `get_schema()` has been updated (#107).
+
+  * It will now always return a schema (either directly from the object or inferred by `id()`).
+
+  * A `temporary` argument is added to get the temporary schemas from `DBIConnections`.
+
+* `id()` now includes information of catalog in more cases (#99, #107).
 
 * Fixed dplyr joins failing if `testthat` is not installed (#90).
 
@@ -100,6 +102,8 @@
 * Added missing tests for `create_logs_if_missing()` (#93).
 
 * Added missing tests for `get_schema()` (#99).
+
+* Added missing tests for `get_catalog()` (#107).
 
 * Improved tests for `get_tables()`, `table_exists()`, and `create_table()` (#93).
 

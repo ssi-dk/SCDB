@@ -101,17 +101,20 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE)
 #' @importFrom rlang .data
 #' @export
 `get_tables.Microsoft SQL Server` <- function(conn, pattern = NULL, show_temporary = TRUE) {
-  query <- paste("SELECT",
-                 "s.name AS [schema],",
-                 "t.name AS [table],",
-                 "t.is_temporary",
-                 "FROM (",
-                 "SELECT *, 0 AS is_temporary FROM sys.tables WHERE NOT name  LIKE '#%'",
-                 "UNION ALL",
-                 "SELECT *, 1 AS is_temporary FROM tempdb.sys.tables WHERE name LIKE '#%'",
-                 ") AS t",
-                 "INNER JOIN sys.schemas AS s",
-                 "ON t.schema_id = s.schema_id")
+  query <- paste(
+    "SELECT",
+    "t.catalog AS [catalog],",
+    "s.name AS [schema],",
+    "t.name AS [table],",
+    "t.is_temporary",
+    "FROM (",
+    "SELECT *, 0 AS is_temporary, DB_NAME() AS [catalog] FROM sys.tables WHERE NOT name LIKE '#%'",
+    "UNION ALL",
+    "SELECT *, 1 AS is_temporary, 'tempdb' AS [catalog] FROM tempdb.sys.tables WHERE name LIKE '#%'",
+    ") AS t",
+    "INNER JOIN sys.schemas AS s",
+    "ON t.schema_id = s.schema_id"
+  )
 
   tables <- DBI::dbGetQuery(conn, query)
 
@@ -122,14 +125,14 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE)
 
   # Filter out trailing underscores added by engine
   tables <- tables |>
-    dplyr::mutate(table = stringr::str_remove(.data$table, "_+[0-9a-fA-F]+$"))
+    dplyr::mutate(table = stringr::str_remove(.data$table, "_{10,}[0-9a-fA-F]+$"))
 
   tables <- tables |>
     dplyr::select(!"is_temporary")
 
   if (!is.null(pattern)) {
     tables <- tables |>
-      tidyr::unite("db_table_str", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
+      tidyr::unite("db_table_str", "catalog", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
       dplyr::filter(grepl(pattern, .data$db_table_str)) |>
       dplyr::select(!"db_table_str")
   }
