@@ -15,6 +15,7 @@
 #'   colnames must be named in same order as as given in tables (i.e. t1, t2, t3, ...).
 #' @return
 #'   The combination of input queries with a single, interlaced valid_from / valid_until time axis.
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   t1 <- data.frame(key = c("A", "A", "B"),

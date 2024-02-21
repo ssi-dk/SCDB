@@ -60,6 +60,7 @@ This way, the data can be reconstructed as it looked at any point in time while 
 See \code{vignette("basic-principles")} for further introduction to the function.
 }
 \examples{
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
   conn <- get_connection(drv = RSQLite::SQLite())
 
   data <- dplyr::copy_to(conn, mtcars)
@@ -83,6 +84,7 @@ See \code{vignette("basic-principles")} for further introduction to the function
   dplyr::tbl(conn, "test.mtcars")
 
   close_connection(conn)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 filter_keys

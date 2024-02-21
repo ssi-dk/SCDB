@@ -15,13 +15,17 @@ A table specification where the logs should exist (coercible by \code{id()}).}
 }
 \value{
 Invisibly returns the generated (or existing) log table.
-conn <- get_connection(drv = RSQLite::SQLite())
-log_table <- id("test.logs", conn = conn, allow_table_only = TRUE)
-
-create_logs_if_missing(conn, log_table)
-
-close_connection(conn)
 }
 \description{
 Create a table with the SCDB log structure if it does not exists
+}
+\examples{
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+  conn <- get_connection(drv = RSQLite::SQLite())
+  log_table <- id("test.logs", conn = conn, allow_table_only = TRUE)
+
+  create_logs_if_missing(conn, log_table)
+
+  close_connection(conn)
+\dontshow{\}) # examplesIf}
 }

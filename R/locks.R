@@ -23,7 +23,7 @@ NULL
 #'   * `lock_table()` returns the `TRUE`` if the lock was success fully added.
 #'
 #'   * `unlock_table()` returns `NULL` (called for side effects).
-#' @examples
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- DBI::dbConnect(RSQLite::SQLite())
 #'
 #'   lock_table(conn, "test_table") # TRUE

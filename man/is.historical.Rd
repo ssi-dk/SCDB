@@ -17,6 +17,7 @@ Data object.}
 Checks if table contains historical data
 }
 \examples{
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
   conn <- get_connection(drv = RSQLite::SQLite())
 
   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
@@ -26,4 +27,5 @@ Checks if table contains historical data
   is.historical(get_table(conn, "mtcars_historical")) # TRUE
 
   close_connection(conn)
+\dontshow{\}) # examplesIf}
 }

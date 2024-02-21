@@ -37,6 +37,7 @@ This set of function adds a simple locking system to db tables.
 }
 }
 \examples{
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
   conn <- DBI::dbConnect(RSQLite::SQLite())
 
   lock_table(conn, "test_table") # TRUE
@@ -44,4 +45,5 @@ This set of function adds a simple locking system to db tables.
   unlock_table(conn, "test_table")
 
   DBI::dbDisconnect(conn)
+\dontshow{\}) # examplesIf}
 }

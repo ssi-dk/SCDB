@@ -23,6 +23,7 @@ An object of same class as .data
 Slices a data object based on time / date
 }
 \examples{
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
   conn <- get_connection(drv = RSQLite::SQLite())
 
   m <- mtcars |>
@@ -40,4 +41,5 @@ Slices a data object based on time / date
   nrow(slice_time(q, "2021-01-01")) # nrow(mtcars)
 
   close_connection(conn)
+\dontshow{\}) # examplesIf}
 }

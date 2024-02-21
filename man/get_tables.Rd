@@ -18,16 +18,20 @@ Should temporary tables be listed?}
 }
 \value{
 A data.frame containing table names in the DB.
-conn <- get_connection(drv = RSQLite::SQLite())
-
-dplyr::copy_to(conn, mtcars, name = "my_test_table_1", temporary = FALSE)
-dplyr::copy_to(conn, mtcars, name = "my_test_table_2")
-
-get_tables(conn, pattern = "my_\link{th}est")
-get_tables(conn, pattern = "my_\link{th}est", show_temporary = FALSE)
-
-close_connection(conn)
 }
 \description{
 List the available tables on the connection
+}
+\examples{
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+  conn <- get_connection(drv = RSQLite::SQLite())
+
+  dplyr::copy_to(conn, mtcars, name = "my_test_table_1", temporary = FALSE)
+  dplyr::copy_to(conn, mtcars, name = "my_test_table_2")
+
+  get_tables(conn, pattern = "my_[th]est")
+  get_tables(conn, pattern = "my_[th]est", show_temporary = FALSE)
+
+  close_connection(conn)
+\dontshow{\}) # examplesIf}
 }

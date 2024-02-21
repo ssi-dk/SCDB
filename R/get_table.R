@@ -13,7 +13,7 @@
 #'
 #'   Note that a temporary table will be preferred over ordinary tables in the default schema (see [get_schema()]) with
 #'   an identical name.
-#' @examples
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)

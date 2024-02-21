@@ -100,7 +100,7 @@ get_connection <- function(drv = RPostgres::Postgres(),
 #'
 #' @template conn
 #' @inherit DBI::dbDisconnect return
-#' @examples
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   close_connection(conn)

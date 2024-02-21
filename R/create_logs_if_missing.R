@@ -5,6 +5,7 @@
 #'   A table specification where the logs should exist (coercible by `id()`).
 #' @return
 #'   Invisibly returns the generated (or existing) log table.
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'   log_table <- id("test.logs", conn = conn, allow_table_only = TRUE)
 #'

@@ -63,6 +63,7 @@ always be \code{main}.
 }
 
 \examples{
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
   conn <- get_connection(drv = RSQLite::SQLite())
 
   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
@@ -74,4 +75,5 @@ always be \code{main}.
   get_catalog(get_table(conn, id("mtcars", conn = conn)))
 
   close_connection(conn)
+\dontshow{\}) # examplesIf}
 }

@@ -19,12 +19,16 @@ Connection object.}
 }
 \value{
 Invisibly returns the table as it looks on the destination (or locally if \code{conn} is \code{NULL}).
-conn <- get_connection(drv = RSQLite::SQLite())
-
-create_table(mtcars, conn = conn, db_table_id = "mtcars")
-
-close_connection(conn)
 }
 \description{
 Create a historical table from input data
+}
+\examples{
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+  conn <- get_connection(drv = RSQLite::SQLite())
+
+  create_table(mtcars, conn = conn, db_table_id = "mtcars")
+
+  close_connection(conn)
+\dontshow{\}) # examplesIf}
 }

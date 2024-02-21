@@ -7,6 +7,7 @@
 #'   Should temporary tables be listed?
 #' @return
 #'   A data.frame containing table names in the DB.
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   dplyr::copy_to(conn, mtcars, name = "my_test_table_1", temporary = FALSE)

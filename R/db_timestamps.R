@@ -6,6 +6,7 @@
 #' @template conn
 #' @return
 #'   The given timestamp converted to a SQL-backend dependent timestamp.
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   db_timestamp(Sys.time(), conn)

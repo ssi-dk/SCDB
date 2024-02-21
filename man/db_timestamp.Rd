@@ -21,12 +21,16 @@ Connection object.}
 }
 \value{
 The given timestamp converted to a SQL-backend dependent timestamp.
-conn <- get_connection(drv = RSQLite::SQLite())
-
-db_timestamp(Sys.time(), conn)
-
-close_connection(conn)
 }
 \description{
 Determine the type of timestamps the DB supports
+}
+\examples{
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+  conn <- get_connection(drv = RSQLite::SQLite())
+
+  db_timestamp(Sys.time(), conn)
+
+  close_connection(conn)
+\dontshow{\}) # examplesIf}
 }

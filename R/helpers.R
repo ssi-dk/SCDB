@@ -3,6 +3,7 @@
 #' @template .data
 #' @return
 #'   The number of records in the object.
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   m <- dplyr::copy_to(conn, mtcars)
@@ -24,7 +25,7 @@ nrow <- function(.data) {
 #' @template .data
 #' @return
 #'   `TRUE` if `.data` contains the columns: "checksum", "from_ts", and "until_ts". `FALSE` otherwise.
-#' @examples
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
@@ -49,7 +50,7 @@ is.historical <- function(.data) {                                              
 #'   This function marks a table for deletion once the current function exits.
 #' @param db_table (`tbl_sql`)\cr
 #'   A unmanipulated reference to a sql table.
-#' @examples
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   mt <- dplyr::copy_to(conn, mtcars)

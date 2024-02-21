@@ -31,6 +31,7 @@ an identical name.
 Retrieves a named table from a given schema on the connection
 }
 \examples{
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
   conn <- get_connection(drv = RSQLite::SQLite())
 
   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
@@ -41,4 +42,5 @@ Retrieves a named table from a given schema on the connection
   }
 
   close_connection(conn)
+\dontshow{\}) # examplesIf}
 }

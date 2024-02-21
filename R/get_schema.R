@@ -29,7 +29,7 @@
 #'   made after the connection is established, `get_schema` will never return any of these, as the default schema will
 #'   always be `main`.
 #'
-#' @examples
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)

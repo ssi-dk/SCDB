@@ -12,13 +12,17 @@ Data object.}
 }
 \value{
 The number of records in the object.
-conn <- get_connection(drv = RSQLite::SQLite())
-
-m <- dplyr::copy_to(conn, mtcars)
-nrow(m) == nrow(mtcars) # TRUE
-
-close_connection(conn)
 }
 \description{
 nrow() but also works on remote tables
+}
+\examples{
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+  conn <- get_connection(drv = RSQLite::SQLite())
+
+  m <- dplyr::copy_to(conn, mtcars)
+  nrow(m) == nrow(mtcars) # TRUE
+
+  close_connection(conn)
+\dontshow{\}) # examplesIf}
 }

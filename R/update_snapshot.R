@@ -26,7 +26,7 @@
 #'   Are updates allowed if they are chronologically earlier than latest update?
 #' @return
 #'   No return value, called for side effects.
-#' @examples
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   data <- dplyr::copy_to(conn, mtcars)

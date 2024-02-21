@@ -5,7 +5,7 @@
 #' @template conn
 #' @return
 #'   TRUE if the given schema is found on `conn`.
-#'
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   schema_exists(conn, "test")

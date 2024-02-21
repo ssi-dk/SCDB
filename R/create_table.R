@@ -7,6 +7,7 @@
 #'   Other arguments passed to [DBI::dbCreateTable()].
 #' @return
 #'   Invisibly returns the table as it looks on the destination (or locally if `conn` is `NULL`).
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   create_table(mtcars, conn = conn, db_table_id = "mtcars")

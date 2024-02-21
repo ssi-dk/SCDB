@@ -6,7 +6,7 @@
 #' @param from_ts,until_ts (`character(1)`)\cr
 #'   The name of the columns in .data specifying valid from and valid until time.
 #' @template .data_return
-#' @examples
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   m <- mtcars |>
