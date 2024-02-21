@@ -11,6 +11,7 @@
 #' @template filters
 #' @param by      passed to inner_join if different from NULL
 #' @param na_by   passed to inner_join if different from NULL
+#' @param ... Further arguments passed to `dplyr::inner_join()`.
 #' @template .data_return
 #' @examples
 #' # Filtering with null means no filtering is done
@@ -27,7 +28,7 @@
 #'
 #' @importFrom rlang .data
 #' @export
-filter_keys <- function(.data, filters, by = NULL, na_by = NULL) {
+filter_keys <- function(.data, filters, by = NULL, na_by = NULL, ...) {
   if (is.null(filters)) {
     return(.data)
   }
@@ -40,7 +41,7 @@ filter_keys <- function(.data, filters, by = NULL, na_by = NULL) {
 }
 
 #' @export
-filter_keys.tbl_sql <- function(.data, filters, by = NULL, na_by = NULL) {
+filter_keys.tbl_sql <- function(.data, filters, by = NULL, na_by = NULL, ...) {
 
   if (is.null(by) && is.null(na_by)) {
     # Determine key types
@@ -58,11 +59,11 @@ filter_keys.tbl_sql <- function(.data, filters, by = NULL, na_by = NULL) {
     if (length(by) == 0)    by    <- NULL
     if (length(na_by) == 0) na_by <- NULL
   }
-  return(dplyr::inner_join(.data, filters, by = by, na_by = na_by))
+  return(dplyr::inner_join(.data, filters, by = by, na_by = na_by, ...))
 }
 
 #' @export
-filter_keys.data.frame <- function(.data, filters, by = NULL, na_by = NULL) {
+filter_keys.data.frame <- function(.data, filters, by = NULL, na_by = NULL, ...) {
   if (is.null(by) && is.null(na_by)) by <- colnames(filters)
-  return(dplyr::inner_join(.data, filters, by = c(by, na_by)))
+  return(dplyr::inner_join(.data, filters, by = c(by, na_by), ...))
 }
