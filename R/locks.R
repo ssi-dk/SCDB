@@ -1,3 +1,8 @@
+# We have to manually import parallelly to get access to the un-exported pid_exists() function
+#' @import parallelly
+NULL
+
+
 #' Sets, queries and removes locks for db tables
 #'
 #' @name db_locks
