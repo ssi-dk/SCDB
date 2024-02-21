@@ -5,7 +5,7 @@ test_that("Logger: logging to console works", {
 
   # Create logger and test configuration
   expect_warning(
-    logger <- Logger$new(),
+    logger <- Logger$new(),                                                                                             # nolint: implicit_assignment_linter
     regexp = "NO file or DB logging will be done."
   )
   expect_null(logger$log_path)
@@ -36,7 +36,7 @@ test_that("Logger: all (non-warning, non-error) logging to console can be disabl
 
   # Create logger
   expect_warning(
-    logger <- Logger$new(output_to_console = FALSE),
+    logger <- Logger$new(output_to_console = FALSE),                                                                    # nolint: implicit_assignment_linter
     regexp = "NO file or DB logging will be done."
   )
 
@@ -334,7 +334,7 @@ test_that("Logger: console output may be disabled", {
   # First test cases with output_to_console == FALSE
   # Here, only print when explicitly stated
   expect_warning(
-    logger <- Logger$new(output_to_console = FALSE),
+    logger <- Logger$new(output_to_console = FALSE),                                                                    # nolint: implicit_assignment_linter
     regexp = "NO file or DB logging will be done."
   )
 
@@ -351,7 +351,7 @@ test_that("Logger: console output may be disabled", {
 
   # ...and now, only suppress printing when explicitly stated
   expect_warning(
-    logger <- Logger$new(output_to_console = TRUE),
+    logger <- Logger$new(output_to_console = TRUE),                                                                     # nolint: implicit_assignment_linter
     regexp = "NO file or DB logging will be done."
   )
 
@@ -426,7 +426,7 @@ test_that("Logger: custom timestamp_format works", {
 
   # Create logger and test configuration
   expect_warning(
-    logger <- Logger$new(),
+    logger <- Logger$new(),                                                                                             # nolint: implicit_assignment_linter
     regexp = "NO file or DB logging will be done."
   )
 
@@ -459,7 +459,7 @@ test_that("Logger: custom timestamp_format works", {
 test_that("LoggerNull: no console logging occurs", {
 
   # Create logger and test configuration
-  expect_no_message(logger <- LoggerNull$new())
+  logger <- expect_no_message(LoggerNull$new())
 
   ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_no_message(logger$log_info("test console", tic = logger$start_time))
@@ -467,7 +467,7 @@ test_that("LoggerNull: no console logging occurs", {
   # Test logging to console has the right formatting and message type
   ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_no_message(
-    logger$log_info("test console", tic = logger$start_time),
+    logger$log_info("test console", tic = logger$start_time)
   )
   expect_warning(
     logger$log_warn("test console", tic = logger$start_time),
@@ -488,7 +488,7 @@ test_that("LoggerNull: no file logging occurs", {
   withr::local_options("SCDB.log_path" = tempdir())
 
   # Create logger and test configuration
-  expect_no_message(logger <- LoggerNull$new())
+  logger <- expect_no_message(LoggerNull$new())
 
   expect_no_message(logger$log_info("test filewriting", tic = logger$start_time))
   expect_false(logger$log_filename %in% dir(getOption("SCDB.log_path")))

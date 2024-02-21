@@ -47,7 +47,7 @@ for (conn in get_test_conns()) {
   tryCatch(
     dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
                    name = id("test.mtcars", conn), temporary = FALSE, overwrite = TRUE),
-    message = \(m) if (!stringr::str_detect(m$message, "check_from = FALSE")) message(m)
+    message = \(m) if (!stringr::str_detect(m$message, stringr::fixed("check_from = FALSE"))) message(m)
   )
 
   dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),

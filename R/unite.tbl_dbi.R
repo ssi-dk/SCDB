@@ -21,7 +21,7 @@ utils::globalVariables(c("NULLIF", "CONCAT_WS"))
 #' @importFrom rlang :=
 #' @return A tbl_dbi with the specified columns united into a new column named according to "col"
 #' @exportS3Method tidyr::unite tbl_dbi
-unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALSE) { # nolint: object_name_linter
+unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALSE) {                                    # nolint: object_name_linter
 
   # Modified from
   # https://stackoverflow.com/questions/48536983/how-to-concatenate-strings-of-multiple-  -- continued below

@@ -29,7 +29,7 @@
 #' @seealso filter_keys
 #' @importFrom rlang .data
 #' @export
-update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, message = NULL, tic = Sys.time(), # nolint: cyclocomp_linter, line_length_linter
+update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, message = NULL, tic = Sys.time(),
                             logger = NULL,
                             enforce_chronological_order = TRUE) {
 
@@ -86,12 +86,14 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   if (!setequal(colnames(.data),
                 colnames(dplyr::select(db_table, !c("checksum", "from_ts", "until_ts"))))) {
     logger$log_to_db(success = FALSE, end_time = !!db_timestamp(tic, conn))
-    logger$log_error("Columns do not match!\n",
-                     "Table columns:\n",
-                     paste(colnames(dplyr::select(db_table, !tidyselect::any_of(c("checksum", "from_ts", "until_ts")))),
-                           collapse = ", "),
-                     "\nInput columns:\n",
-                     paste(colnames(.data), collapse = ", "), tic = tic) # Use input time in log
+    logger$log_error(
+      "Columns do not match!\n",
+      "Table columns:\n",
+      toString(colnames(dplyr::select(db_table, !tidyselect::any_of(c("checksum", "from_ts", "until_ts"))))),
+      "\nInput columns:\n",
+      toString(colnames(.data)),
+      tic = tic # Use input time in log
+    )
   }
 
   logger$log_info("Parsing data for table", as.character(db_table_id), "started", tic = tic) # Use input time in log

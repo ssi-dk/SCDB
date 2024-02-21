@@ -58,35 +58,40 @@ test_that("update_snapshot() works", {
     # Check file log outputs exists
     log_pattern <- glue::glue("{stringr::str_replace_all(as.Date(timestamp), '-', '_')}.{id(db_table, conn)}.log")
     log_file <- purrr::keep(dir(log_path), ~stringr::str_detect(., log_pattern))
-    expect_true(length(log_file) == 1)
-    expect_true(file.info(file.path(log_path, log_file))$size > 0)
-    expect_true(nrow(get_table(conn, "test.SCDB_logs")) == 1)
-    expect_true(nrow(dplyr::filter(get_table(conn, "test.SCDB_logs"),
-                                   dplyr::if_any(.cols = !c(log_file), .fns = ~ !is.na(.)))) == 1)
+    expect_length(log_file, 1)
+    expect_gt(file.info(file.path(log_path, log_file))$size, 0)
+    expect_identical(nrow(get_table(conn, "test.SCDB_logs")), 1)
 
-    # Check db log output exists
+    db_logs_with_log_file <- get_table(conn, "test.SCDB_logs") |>
+      dplyr::filter(!is.na(.data$log_file))
+    expect_identical(nrow(db_logs_with_log_file), 1)
+
+    # Check db log output
     logs <- get_table(conn, "test.SCDB_logs") |> dplyr::collect()
 
-    checkmate::expect_data_frame(logs,
-      nrows = 1,
-      types = c(
-        "date" = "POSIXct",
-        "date" = "character", # SQLite does not support POSIXct
-        "catalog" = "character",
-        "schema" = "character",
-        "table" = "character",
-        "n_insertions" = "numeric",
-        "n_deactivations" = "numeric",
-        "start_time" = "POSIXct",
-        "start_time" = "character", # SQLite does not support POSIXct
-        "end_time" = "POSIXct",
-        "end_time" = "character", # SQLite does not support POSIXct
-        "duration" = "character",
-        "success" = "logical",
-        "success" = "numeric", # SQLite does not support logical
-        "message" = "character"
-      )
+    # The logs should have specified data types
+    types <- c(
+      "date" = "POSIXct",
+      "catalog" = "character",
+      "schema" = "character",
+      "table" = "character",
+      "n_insertions" = "numeric",
+      "n_deactivations" = "numeric",
+      "start_time" = "POSIXct",
+      "end_time" = "POSIXct",
+      "duration" = "character",
+      "success" = "logical",
+      "message" = "character"
     )
+
+    if (inherits(conn, "SQLiteConnection")) {
+      types <- types |>
+        purrr::map_if(~ identical(., "POSIXct"), "character") |> # SQLite does not support POSIXct
+        purrr::map_if(~ identical(., "logical"), "numneric") |>  # SQLite does not support logical
+        as.character()
+    }
+
+    checkmate::expect_data_frame(logs, nrows = 1, types)
 
 
     # We now attempt to do another update on the same date
@@ -277,12 +282,12 @@ test_that("update_snapshot checks table formats", {
     timestamp <- Sys.time()
 
     expect_warning(
-      logger <- Logger$new(log_path = NULL, log_table_id = NULL, output_to_console = FALSE),
+      logger <- Logger$new(log_path = NULL, log_table_id = NULL, output_to_console = FALSE),                            # nolint: implicit_assignment_linter
       "NO file or DB logging will be done."
     )
 
     # Test columns not matching
-    broken_table <- dplyr::copy_to(conn, dplyr::select(mtcars, -"mpg"), name = "mtcars_broken", overwrite = TRUE)
+    broken_table <- dplyr::copy_to(conn, dplyr::select(mtcars, !"mpg"), name = "mtcars_broken", overwrite = TRUE)
 
     expect_error(
       update_snapshot(

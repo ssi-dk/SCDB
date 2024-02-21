@@ -14,7 +14,7 @@
 #'
 #' close_connection(conn)
 #' @export
-create_table <- function(.data, conn = NULL, db_table_id, ...) {
+create_table <- function(.data, conn = NULL, db_table_id, ...) {                                                        #nolint: function_argument_linter
 
   checkmate::assert_class(.data, "data.frame")
   checkmate::assert_class(conn, "DBIConnection", null.ok = TRUE)

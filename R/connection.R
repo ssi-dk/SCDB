@@ -86,7 +86,7 @@ get_connection <- function(drv = RPostgres::Postgres(),
     "Microsoft SQL Server"
   )
 
-  if (!class(conn) %in% .supported) {
+  if (!checkmate::test_choice(class(conn), .supported)) {
     warning("Connections of class '",
             class(conn),
             "' is currently not fully supported and SCDB may not perform as expected.")

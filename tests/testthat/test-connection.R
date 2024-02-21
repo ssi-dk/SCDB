@@ -13,7 +13,7 @@ test_that("get_connection() notifies if connection fails", {
 
     if (dir.exists(random_string)) next
 
-    expect_error(get_connection(drv = RSQLite::SQLite(), dbname = paste0(random_string, "/invalid_path")),
+    expect_error(get_connection(drv = RSQLite::SQLite(), dbname = file.path(random_string, "/invalid_path")),
                  regexp = "Could not connect to database:\nunable to open database file")
   }
 })

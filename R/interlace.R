@@ -38,11 +38,18 @@
 #' @export
 interlace <- function(tables, by = NULL, colnames = NULL) {
   # Check arguments
-  checkmate::assert_character(by)
-  # TODO: how to checkmate tables and colnames?
+  coll <- checkmate::makeAssertCollection()
+  checkmate::assert_list(tables, types = c("tbl_dbi", "data.frame"), add = coll)
+  checkmate::assert_character(by, null.ok = TRUE, add = coll)
+  checkmate::assert_character(colnames, null.ok = TRUE, add = coll)
+  checkmate::assert_character(names(colnames), pattern = r"{t\d+\.(from|until)}", null.ok = TRUE, add = coll)
+  checkmate::reportAssertions(coll)
 
-  # Check edgecase
-  if (length(tables) == 1) return(purrr::pluck(tables, 1))
+
+  # Check edge case
+  if (length(tables) == 1) {
+    return(purrr::pluck(tables, 1))
+  }
 
   UseMethod("interlace", tables[[1]])
 }
@@ -86,7 +93,7 @@ interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
     dbplyr::window_order(.data$valid_from) |>
     dplyr::mutate(.row = dplyr::if_else(is.na(.data$valid_from),  # Some DB backends considers NULL to be the
                                         dplyr::n(),               # smallest, so we need to adjust for that
-                                        dplyr::row_number() - ifelse(is.na(dplyr::first(.data$valid_from)), 1, 0)))
+                                        dplyr::row_number() - ifelse(is.na(dplyr::first(.data$valid_from)), 1, 0)))     # nolint: redundant_ifelse_linter
 
   t <- dplyr::left_join(t |>
                           dplyr::filter(.data$.row < dplyr::n()),
