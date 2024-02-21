@@ -1,4 +1,4 @@
-test_that("interlace_sql() works", {
+test_that("interlace.tbl_sql() works", {
   for (conn in get_test_conns()) {
 
     t1 <- data.frame(key = c("A", "A", "B"),
@@ -34,17 +34,17 @@ test_that("interlace_sql() works", {
     )
 
 
-    expect_identical(interlace_sql(list(t1, t2), by = "key") |> dplyr::collect(),
+    expect_identical(interlace(list(t1, t2), by = "key") |> dplyr::collect(),
                      t_ref |> dplyr::collect())
 
-    expect_mapequal(interlace_sql(list(t1, t2), by = "key") |> dplyr::collect(),
-                    interlace_sql(list(t2, t1), by = "key") |> dplyr::collect())
+    expect_mapequal(interlace(list(t1, t2), by = "key") |> dplyr::collect(),
+                    interlace(list(t2, t1), by = "key") |> dplyr::collect())
 
     connection_clean_up(conn)
   }
 })
 
 
-test_that("interlace_sql returns early if length(table) == 1", {
-  expect_identical(mtcars$mpg, interlace_sql(mtcars["mpg"], by = "mpg"))
+test_that("interlace returns early if length(table) == 1", {
+  expect_identical(mtcars$mpg, interlace(mtcars["mpg"], by = "mpg"))
 })
