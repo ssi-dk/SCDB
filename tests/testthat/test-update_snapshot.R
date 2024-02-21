@@ -338,7 +338,7 @@ test_that("update_snapshot works with across connection", {
     target_table <- id("test.mtcars_modified", target_conn)
     if (DBI::dbExistsTable(target_conn, target_table)) DBI::dbRemoveTable(target_conn, target_table)
 
-    logger <- Logger$new(as.character(target_table), NULL, NULL, NULL, FALSE, FALSE, Sys.time())
+    logger <- LoggerNull$new()
 
     # Check we can transfer without error
     expect_no_error(
@@ -384,7 +384,7 @@ test_that("update_snapshot works with across connection", {
     target_table <- id("mtcars_modified", target_conn)
     if (DBI::dbExistsTable(target_conn, target_table)) DBI::dbRemoveTable(target_conn, target_table)
 
-    logger <- Logger$new(as.character(target_table), NULL, NULL, NULL, FALSE, FALSE, Sys.time())
+    logger <- LoggerNull$new()
 
     # Check we can transfer without error
     expect_no_error(
