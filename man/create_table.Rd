@@ -4,7 +4,7 @@
 \alias{create_table}
 \title{Create a historical table from input data}
 \usage{
-create_table(.data, conn = NULL, db_table_id, ...)
+create_table(.data, conn = NULL, db_table, ...)
 }
 \arguments{
 \item{.data}{(\code{data.frame(1)}, \code{tibble(1)}, \code{data.table(1)}, or \code{tbl_dbi(1)})\cr
@@ -13,7 +13,8 @@ Data object.}
 \item{conn}{(\code{DBIConnection(1)})\cr
 Connection object.}
 
-\item{db_table_id}{A \code{\link[DBI:Id]{DBI::Id()}} object or a character string readable by \link{id}.}
+\item{db_table}{(\verb{id-like object(1)})\cr
+A table specification (coercible by \code{id()}).}
 
 \item{...}{Other arguments passed to \code{\link[DBI:dbCreateTable]{DBI::dbCreateTable()}}.}
 }
@@ -27,7 +28,7 @@ Create a historical table from input data
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
   conn <- get_connection(drv = RSQLite::SQLite())
 
-  create_table(mtcars, conn = conn, db_table_id = "mtcars")
+  create_table(mtcars, conn = conn, db_table = "mtcars")
 
   close_connection(conn)
 \dontshow{\}) # examplesIf}

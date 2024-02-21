@@ -67,11 +67,11 @@ is.historical <- function(.data) {                                              
 #'   close_connection(conn)
 #' @return NULL (called for side effects)
 #' @export
-defer_db_cleanup <- function(tbl_sql) {
+defer_db_cleanup <- function(db_table) {
 
   # Determine table info
-  conn <- dbplyr::remote_con(tbl_sql)
-  db_table_id <- id(tbl_sql)
+  conn <- dbplyr::remote_con(db_table)
+  db_table_id <- id(db_table)
 
   # Remove table on exit
   withr::defer_parent(

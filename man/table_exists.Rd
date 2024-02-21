@@ -5,18 +5,19 @@
 \alias{table_exists.DBIConnection}
 \title{Test if a table exists in database}
 \usage{
-table_exists(conn, db_table_id)
+table_exists(conn, db_table)
 
-\method{table_exists}{DBIConnection}(conn, db_table_id)
+\method{table_exists}{DBIConnection}(conn, db_table)
 }
 \arguments{
 \item{conn}{(\code{DBIConnection(1)})\cr
 Connection object.}
 
-\item{db_table_id}{A \code{\link[DBI:Id]{DBI::Id()}} object or a character string readable by \link{id}.}
+\item{db_table}{(\verb{id-like object(1)})\cr
+A table specification (coercible by \code{id()}).}
 }
 \value{
-\code{TRUE} if db_table_id can be parsed to a table found in \code{conn}.
+\code{TRUE} if db_table can be parsed to a table found in \code{conn}.
 }
 \description{
 This functions attempts to determine the existence of a given table.

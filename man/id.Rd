@@ -7,16 +7,17 @@
 \alias{id.data.frame}
 \title{Convenience function for DBI::Id}
 \usage{
-id(db_table_id, ...)
+id(db_table, ...)
 
-\method{id}{Id}(db_table_id, conn = NULL, ...)
+\method{id}{Id}(db_table, conn = NULL, ...)
 
-\method{id}{character}(db_table_id, conn = NULL, allow_table_only = TRUE, ...)
+\method{id}{character}(db_table, conn = NULL, allow_table_only = TRUE, ...)
 
-\method{id}{data.frame}(db_table_id, ...)
+\method{id}{data.frame}(db_table, ...)
 }
 \arguments{
-\item{db_table_id}{A \code{\link[DBI:Id]{DBI::Id()}} object or a character string readable by \link{id}.}
+\item{db_table}{(\verb{id-like object(1)})\cr
+A table specification (coercible by \code{id()}).}
 
 \item{...}{Further arguments passed to methods.}
 
@@ -29,15 +30,15 @@ is not found in \code{conn}.
 If \code{FALSE}, the function will raise an error if the implied schema cannot be found in \code{conn}.}
 }
 \value{
-A \code{DBI::Id} object parsed from db_table_id (see details).
+A \code{DBI::Id} object parsed from db_table (see details).
 }
 \description{
 Convenience function for DBI::Id
 }
 \details{
-The given \code{db_table_id} is parsed to a DBI::Id depending on the type of input:
+The given \code{db_table} is parsed to a DBI::Id depending on the type of input:
 \itemize{
-\item \code{character}: db_table_id is parsed to a DBI::Id object using an assumption of "schema.table" syntax
+\item \code{character}: db_table is parsed to a DBI::Id object using an assumption of "schema.table" syntax
 with corresponding schema (if found in \code{conn}) and table values.
 If no schema is implied, the default schema of \code{conn} will be used.
 \item \code{DBI::Id}: if schema is not specified in \code{Id}, the schema is set to the default schema for \code{conn} (if given).

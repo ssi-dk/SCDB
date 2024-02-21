@@ -26,22 +26,22 @@
 #'   close_connection(conn)
 #' @importFrom rlang .data
 #' @export
-get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_info = FALSE) {
+get_table <- function(conn, db_table = NULL, slice_ts = NA, include_slice_info = FALSE) {
 
   # Check arguments
   checkmate::assert_class(conn, "DBIConnection")
-  assert_id_like(db_table_id, null.ok = TRUE)
+  assert_id_like(db_table, null.ok = TRUE)
   assert_timestamp_like(slice_ts, null.ok = TRUE)
   checkmate::assert_logical(include_slice_info)
 
   # Get tables in db schema
-  if (is.null(db_table_id)) {
+  if (is.null(db_table)) {
     message("Select one of the following tables:")
     return(get_tables(conn))
   }
 
   # Ensure id is fully qualified
-  db_table_id <- id(db_table_id, conn = conn)
+  db_table_id <- id(db_table, conn = conn)
 
   # Ensure existence of table
   if (!table_exists(conn, db_table_id)) {

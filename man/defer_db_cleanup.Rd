@@ -4,7 +4,7 @@
 \alias{defer_db_cleanup}
 \title{Delete table at function exit}
 \usage{
-defer_db_cleanup(tbl_sql)
+defer_db_cleanup(db_table)
 }
 \arguments{
 \item{db_table}{(\code{tbl_sql})\cr

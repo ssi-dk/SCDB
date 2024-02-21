@@ -4,11 +4,15 @@
 \alias{get_table}
 \title{Retrieves a named table from a given schema on the connection}
 \usage{
-get_table(conn, db_table_id = NULL, slice_ts = NA, include_slice_info = FALSE)
+get_table(conn, db_table = NULL, slice_ts = NA, include_slice_info = FALSE)
 }
 \arguments{
 \item{conn}{(\code{DBIConnection(1)})\cr
 Connection object.}
+
+\item{db_table}{(\verb{id-like object(1)})\cr
+A table specification (coercible by \code{id()}).
+If missing, a list of available tables is printed.}
 
 \item{slice_ts}{(\code{POSIXct(1)}, \code{Date(1)}, or \code{character(1)})\cr
 If set different from \code{NA} (default), the returned data looks as on the given date.
@@ -16,10 +20,6 @@ If set as \code{NULL}, all data is returned.}
 
 \item{include_slice_info}{(\code{logical(1)})\cr
 Should the history columns "checksum", "from_ts", "until_ts" are also be returned?}
-
-\item{db_table}{(\verb{id-like object(1)})\cr
-A table specification (coercible by \code{id()}).
-If missing, a list of available tables is printed.}
 }
 \value{
 A "lazy" data.frame (tbl_lazy) generated using dbplyr.
