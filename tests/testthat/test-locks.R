@@ -8,13 +8,13 @@ test_that("lock helpers works in default and test schema", {
 
 
       ## Check we can add locks
-      add_table_lock(conn, db_table = test_table_id, schema = schema)
-      lock_table <- dplyr::tbl(conn, lock_table_id)
+      expect_true(lock_table(conn, db_table = test_table_id, schema = schema))
 
-      expect_identical(colnames(lock_table), c("schema", "table", "lock_start", "pid"))
+      db_lock_table <- dplyr::tbl(conn, lock_table_id)
+      expect_identical(colnames(db_lock_table), c("schema", "table", "lock_start", "pid"))
 
       expect_identical(
-        dplyr::collect(dplyr::select(lock_table, !"lock_start")),
+        dplyr::collect(dplyr::select(db_lock_table, !"lock_start")),
         tibble::tibble(
           "schema" = purrr::pluck(test_table_id, "name", "schema"),
           "table"  = purrr::pluck(test_table_id, "name", "table"),
@@ -24,21 +24,15 @@ test_that("lock helpers works in default and test schema", {
 
 
 
-      ## Check we are the lock owner
-      expect_true(is_lock_owner(conn, db_table = test_table_id, schema = schema))
-      expect_false(is_lock_owner(conn, db_table = lock_table_id, schema = schema))
-
-
-
       ## Check we can remove locks
-      remove_table_lock(conn, db_table = test_table_id, schema = schema)
-      expect_identical(nrow(lock_table), 0)
+      expect_null(unlock_table(conn, db_table = test_table_id, schema = schema))
+      expect_identical(nrow(db_lock_table), 0)
 
 
 
-      # Add an (invalid) lock that we do not own
+      # Add an invalid lock that we do not own
       dplyr::rows_append(
-        lock_table,
+        db_lock_table,
         tibble::tibble(
           "schema" = purrr::pluck(test_table_id, "name", "schema"),
           "table"  = purrr::pluck(test_table_id, "name", "table"),
@@ -51,16 +45,40 @@ test_that("lock helpers works in default and test schema", {
 
       ## Check invalid lock owners are flagged
       expect_error(
-        is_lock_owner(conn, test_table_id, schema = schema),
+        lock_table(conn, test_table_id, schema = schema),
         "Lock owner is no longer a valid PID"
       )
 
+      # Remove the lock
+      unlock_table(conn, db_table = test_table_id, schema = schema, pid = 0.5)
+      expect_identical(nrow(db_lock_table), 0)
+
+
+
       ## Check that we cannot steal locks
-      add_table_lock(conn, db_table = test_table_id, schema = schema)
-      expect_error(
-        is_lock_owner(conn, test_table_id, schema = schema),
-        "Lock owner is no longer a valid PID"
+      # Get the PID of a background process that will linger for a while
+      bg_process <- callr::r_bg(\() Sys.sleep(10))
+      expect_false(bg_process$get_pid() == Sys.getpid())
+
+      # Add an valid lock that we do not own
+      dplyr::rows_append(
+        db_lock_table,
+        tibble::tibble(
+          "schema" = purrr::pluck(test_table_id, "name", "schema"),
+          "table"  = purrr::pluck(test_table_id, "name", "table"),
+          "lock_start" = as.numeric(Sys.time()),
+          "pid" = bg_process$get_pid()
+        ),
+        in_place = TRUE,
+        copy = TRUE
       )
+
+      ## Check we cannot achieve table lock
+      expect_false(lock_table(conn, test_table_id, schema = schema))
+
+      # Remove the lock
+      unlock_table(conn, db_table = test_table_id, schema = schema, pid = bg_process$get_pid())
+      expect_identical(nrow(db_lock_table), 0)
 
       # Clean up
       DBI::dbRemoveTable(conn, lock_table_id)

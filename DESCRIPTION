@@ -41,6 +41,7 @@ Imports:
     tidyverse,
     utils
 Suggests:
+    callr,
     conflicted,
     jsonlite,
     knitr,

@@ -64,7 +64,7 @@
 
 * Added a set of helper functions to prevent race conditions when writing to data bases (#104).
 
-  See `add_table_lock()`, `remove_table_lock()` and `is_lock_owner()`.
+  See `lock_table()` and `unlock_table()`.
 
 ## Improvements and Fixes
 
