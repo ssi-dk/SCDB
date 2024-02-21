@@ -122,6 +122,25 @@ test_that("id() is gives informative error for manipulated tbl_dbi inputs", {
 })
 
 
+test_that("id() works for data.frame inputs", {
+  for (conn in get_test_conns()) {
+
+    # Output of get_tables should be parsable by id
+    db_table <- utils::head(get_tables(conn), 1)
+
+    expect_no_error(db_table_id <- id(db_table))
+
+    # And it should have the corresponding fields, which we here check by comparing the string representations
+    expect_identical(
+      as.character(db_table_id),
+      paste(unlist(db_table), collapse = ".")
+    )
+
+    connection_clean_up(conn)
+  }
+})
+
+
 test_that("as.character.id() works", {
   expect_identical(as.character(DBI::Id(table = "table")), "table")
   expect_identical(as.character(DBI::Id(schema = "schema", table = "table")), "schema.table")
