@@ -72,19 +72,15 @@ test_that("update_snapshot() works", {
     checkmate::expect_data_frame(logs,
       nrows = 1,
       types = c(
-        "date" = "POSIXct",
         "date" = "character", # SQLite does not support POSIXct
         "catalog" = "character",
         "schema" = "character",
         "table" = "character",
         "n_insertions" = "numeric",
         "n_deactivations" = "numeric",
-        "start_time" = "POSIXct",
         "start_time" = "character", # SQLite does not support POSIXct
-        "end_time" = "POSIXct",
         "end_time" = "character", # SQLite does not support POSIXct
         "duration" = "character",
-        "success" = "logical",
         "success" = "numeric", # SQLite does not support logical
         "message" = "character"
       )
@@ -279,12 +275,12 @@ test_that("update_snapshot checks table formats", {
     timestamp <- Sys.time()
 
     expect_warning(
-      logger <- Logger$new(log_path = NULL, log_table_id = NULL, output_to_console = FALSE),
+      logger <- Logger$new(log_path = NULL, log_table_id = NULL, output_to_console = FALSE),                            # nolint: implicit_assignment_linter
       "NO file or DB logging will be done."
     )
 
     # Test columns not matching
-    broken_table <- dplyr::copy_to(conn, dplyr::select(mtcars, -"mpg"), name = "mtcars_broken", overwrite = TRUE)
+    broken_table <- dplyr::copy_to(conn, dplyr::select(mtcars, !"mpg"), name = "mtcars_broken", overwrite = TRUE)
 
     expect_error(
       update_snapshot(

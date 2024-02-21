@@ -5,8 +5,8 @@ data_update_snapsnot <- data.frame(
   "Date"      = Sys.Date(),
   "POSIXct"   = Sys.time(),
   "character" = "test",
-  "integer"   = as.integer(1),
-  "numeric"   = as.numeric(1),
+  "integer"   = 1L,
+  "numeric"   = 1,
   "logical"   = TRUE,
   # .. and our special columns
   "checksum"  = "test",
@@ -24,12 +24,12 @@ data_random <- data.frame(
   "from_ts"   = Sys.time(),
   "until_ts"  = Sys.time(),
   # ..
-  "integer"   = as.integer(1),
-  "numeric"   = as.numeric(1),
+  "integer"   = 1L,
+  "numeric"   = 1,
   "logical"   = TRUE
 )
 
-for (conn in c(list(NULL), get_test_conns())) {                                                                            # nolint: cyclocomp_linter
+for (conn in c(list(NULL), get_test_conns())) {                                                                         # nolint: cyclocomp_linter
 
   if (is.null(conn)) {
     test_that("getTableSignature() generates signature for update_snapshot() (conn == NULL)", {
@@ -281,11 +281,11 @@ for (conn in c(list(NULL), get_test_conns())) {                                 
 
       # The table signatures are not always the same (eg. SQLiteConnection).
       if (inherits(conn, "SQLiteConnection")) {
-        expect_false(identical( # In leui of expect_not_identical
+        expect_false(identical( # In lieu of expect_not_identical
           getTableSignature(data_random, conn),
           getTableSignature(remote_data_1, conn)
         ))
-        expect_identical(
+        expect_identical(                                                                                               # nolint: expect_named_linter
           names(getTableSignature(data_random, conn)),
           names(getTableSignature(remote_data_1, conn))
         )

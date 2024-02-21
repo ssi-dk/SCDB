@@ -46,5 +46,5 @@ test_that("interlace.tbl_sql() works", {
 
 
 test_that("interlace returns early if length(table) == 1", {
-  expect_identical(mtcars$mpg, interlace(mtcars["mpg"], by = "mpg"))
+  expect_identical(mtcars["mpg"], interlace(list(mtcars["mpg"]), by = "mpg"))
 })

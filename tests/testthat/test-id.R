@@ -128,7 +128,7 @@ test_that("id() works for data.frame inputs", {
     # Output of get_tables should be parsable by id
     db_table <- utils::head(get_tables(conn), 1)
 
-    expect_no_error(db_table_id <- id(db_table))
+    db_table_id <- expect_no_error(id(db_table))
 
     # And it should have the corresponding fields, which we here check by comparing the string representations
     expect_identical(

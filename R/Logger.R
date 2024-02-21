@@ -101,13 +101,11 @@ Logger <- R6::R6Class(                                                          
       private$generate_db_entry()
 
       # Warn if no logging will be done
-      if (warn) {
-        if (is.null(self$log_path) && is.null(self$log_tbl)) {
-          warning(
-            "`log_path` and `log_tbl` are both `NULL` and therefore NO file or DB logging will be done.\n",
-            "Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile"
-          )
-        }
+      if (warn && is.null(self$log_path) && is.null(self$log_tbl)) {
+        warning(
+          "`log_path` and `log_tbl` are both `NULL` and therefore NO file or DB logging will be done.\n",
+          "Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile"
+        )
       }
     },
 
