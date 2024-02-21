@@ -93,18 +93,20 @@ lock_table <- function(conn, db_table, schema = NULL) {
 
 
   # Determine the owner of the lock
-  lock_owner <- db_lock_table |>
+  lock_entry <- db_lock_table |>
     dplyr::filter(.data$schema == purrr::pluck(db_table_id, "name", "schema"),
-                  .data$table  == purrr::pluck(db_table_id, "name", "table")) |>
-    dplyr::pull("pid")
+                  .data$table  == purrr::pluck(db_table_id, "name", "table"))
+
+  lock_owner_user <- dplyr::pull(lock_entry, "user")
+  lock_owner_pid <- dplyr::pull(lock_entry, "pid")
 
   # Return early if we own the lock
-  if (identical(as.integer(lock_owner), Sys.getpid())) {
+  if (identical(as.integer(lock_owner_pid), Sys.getpid())) {
     return(TRUE)
   }
 
   # If we don't, check if the owner is still active
-  if (!identical(lock_owner, numeric(0))) {
+  if (!identical(lock_owner_pid, numeric(0))) {
 
     ## Detect stale lock
     # Attempt to get the un-exported pid_exists() from parallelly
@@ -116,8 +118,14 @@ lock_table <- function(conn, db_table, schema = NULL) {
     # If pid_exists is not available we cannot determine invalid locks and we throw an error to prevent infinite looping
     checkmate::assert_function(pid_exists)
 
-    if (!pid_exists(lock_owner)) {
-      stop("Lock owner is no longer a valid PID (process likely crashed before completing)!")
+    if (!pid_exists(lock_owner_pid)) {
+      stop(
+        glue::glue(
+          "Active lock (user = {lock_owner_user}, PID = {lock_owner_pid}) ",
+          "on table {db_table_id} is no longer a valid PID! ",
+          "Process likely crashed before completing."
+        )
+      )
     }
 
   }

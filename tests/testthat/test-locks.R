@@ -48,7 +48,10 @@ test_that("lock helpers works in default and test schema", {
       ## Check invalid lock owners are flagged
       expect_error(
         lock_table(conn, test_table_id, schema = schema),
-        "Lock owner is no longer a valid PID"
+        glue::glue(
+          "Active lock \\(user = some_other_user, PID = 0.5\\) on table {test_table_id} is no longer a valid PID! ",
+          "Process likely crashed before completing."
+        )
       )
 
       # Remove the lock
@@ -62,7 +65,7 @@ test_that("lock helpers works in default and test schema", {
       bg_process <- callr::r_bg(\() Sys.sleep(10))
       expect_false(bg_process$get_pid() == Sys.getpid())
 
-      # Add an valid lock that we do not own
+      # Add a valid lock that we do not own
       dplyr::rows_append(
         db_lock_table,
         tibble::tibble(
