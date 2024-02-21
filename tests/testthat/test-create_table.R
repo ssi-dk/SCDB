@@ -11,12 +11,12 @@ test_that("create_table() refuses a historical table", {
 test_that("create_table() can create temporary tables", {
   for (conn in get_test_conns()) {
 
-    table <- create_table(cars, db_table_id = "cars", conn = conn, temporary = TRUE)
+    table <- create_table(cars, db_table_id = unique_table_name(), conn = conn, temporary = TRUE)
 
     expect_identical(colnames(table), c(colnames(cars), "checksum", "from_ts", "until_ts"))
     expect_identical(
       dplyr::collect(dplyr::select(table, -tidyselect::all_of(c("checksum", "from_ts", "until_ts")))),
-      dplyr::collect(dplyr::copy_to(conn, cars, "cars_ref"))
+      dplyr::collect(dplyr::copy_to(conn, cars, unique_table_name()) |> utils::head(0))
     )
 
     connection_clean_up(conn)
@@ -27,16 +27,15 @@ test_that("create_table() can create temporary tables", {
 test_that("create_table() can create tables in default schema", {
   for (conn in get_test_conns()) {
 
-    table <- create_table(cars, db_table_id = "cars", conn = conn, temporary = FALSE)
+    table <- create_table(cars, db_table_id = unique_table_name(), conn = conn, temporary = FALSE)
+    defer_db_cleanup(table)
 
     expect_identical(colnames(table), c(colnames(cars), "checksum", "from_ts", "until_ts"))
     expect_identical(
       dplyr::collect(dplyr::select(table, -tidyselect::all_of(c("checksum", "from_ts", "until_ts")))),
-      dplyr::collect(dplyr::copy_to(conn, cars, "cars_ref"))
+      dplyr::collect(dplyr::copy_to(conn, cars, unique_table_name()) |> utils::head(0))
     )
 
-
-    DBI::dbRemoveTable(conn, id(table))
     connection_clean_up(conn)
   }
 })
@@ -45,27 +44,29 @@ test_that("create_table() can create tables in default schema", {
 test_that("create_table() can create tables in non default schema", {
   for (conn in get_test_conns()) {
 
-    table <- create_table(cars, db_table_id = id("test.cars", conn), conn = conn, temporary = FALSE)
+    table <- create_table(
+      cars, db_table_id = id(paste0("test.", unique_table_name()), conn), conn = conn, temporary = FALSE
+    )
+    defer_db_cleanup(table)
 
     expect_identical(colnames(table), c(colnames(cars), "checksum", "from_ts", "until_ts"))
     expect_identical(
       dplyr::collect(dplyr::select(table, -tidyselect::all_of(c("checksum", "from_ts", "until_ts")))),
-      dplyr::collect(dplyr::copy_to(conn, cars, "cars_ref"))
+      dplyr::collect(dplyr::copy_to(conn, cars, unique_table_name()) |> utils::head(0))
     )
 
-    DBI::dbRemoveTable(conn, id("test.cars", conn))
     connection_clean_up(conn)
   }
 })
 
 
 test_that("create_table() works with no conn", {
-  table <- create_table(cars, db_table_id = "cars", conn = NULL)
+  table <- create_table(cars, db_table_id = unique_table_name(), conn = NULL)
 
   expect_identical(colnames(table), c(colnames(cars), "checksum", "from_ts", "until_ts"))
   expect_identical(
     dplyr::select(table, -tidyselect::all_of(c("checksum", "from_ts", "until_ts"))),
-    cars
+    cars |> utils::head(0)
   )
 })
 
@@ -73,14 +74,24 @@ test_that("create_table() works with no conn", {
 test_that("create_table() does not overwrite tables", {
   for (conn in get_test_conns()) {
 
-    table <- create_table(utils::head(cars, 10), db_table_id = "cars", conn = conn, temporary = TRUE)
+    table_name <- unique_table_name()
+    table <- create_table(cars, db_table_id = table_name, conn = conn, temporary = TRUE)
 
-    expect_error(
-      create_table(utils::head(cars, 20), db_table_id = "cars", conn = conn, temporary = TRUE),
-      'Table (<Id> )?["`]#?cars["`] exists in database'
+    table_regex <- paste(
+      paste(c(get_catalog(conn, temporary = TRUE), get_schema(conn, temporary = TRUE)), collapse = "."),
+      paste0("#?", table_name),
+      sep = "."
     )
 
-    expect_equal(nrow(table), 10)
+    expect_error(
+      create_table(iris, db_table_id = table_name, conn = conn, temporary = TRUE),
+      regexp = paste("Table", table_regex, "already exists!")
+    )
+
+    expect_identical(
+      dplyr::collect(dplyr::select(table, -tidyselect::all_of(c("checksum", "from_ts", "until_ts")))),
+      dplyr::collect(dplyr::copy_to(conn, cars, unique_table_name()) |> utils::head(0))
+    )
 
     connection_clean_up(conn)
   }

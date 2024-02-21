@@ -35,35 +35,53 @@ create_table <- function(.data, conn = NULL, db_table_id, ...) {
                   .after = tidyselect::everything())
 
   # Early return if there is no connection to push to
-  if (is.null(conn)) return(invisible(.data))
+  if (is.null(conn)) return(invisible(utils::head(.data, 0)))
 
-  # Check db_table_id conforms to requirements
-  # Temporary tables on some back ends must to begin with "#"
+  # Convert to id
+  # But supply no "conn" argument to prevent inference of (default) schema
+  db_table_id <- id(db_table_id)
+
+  # Check db_table_id conforms to requirements:
+  # 1) Temporary tables on some backends must to begin with "#".
+  # 2) DBI::dbCreateTable requires that table Ids are unqualified if the table should be temporary
   if (purrr::pluck(list(...), "temporary", .default = formals(DBI::dbCreateTable)$temporary)) {
 
-    db_table_schema <- purrr::pluck(db_table_id, "name", "schema")
-    db_table_name <- purrr::pluck(db_table_id, "name", "table", .default = db_table_id)
-
-    db_table_id <- DBI::Id(
-      schema = db_table_schema,
-      table = paste0(
-        ifelse(inherits(conn, "Microsoft SQL Server") && !startsWith(db_table_name, "#"), "#", ""),
-        db_table_name
-      )
+    # If catalog/schema is given, it must match the temporary locations
+    checkmate::assert_choice(
+      purrr::pluck(db_table_id, "name", "schema"), get_schema(conn, temporary = TRUE),
+      null.ok = TRUE
     )
+    checkmate::assert_choice(
+      purrr::pluck(db_table_id, "name", "catalog"), get_catalog(conn, temporary = TRUE),
+      null.ok = TRUE
+    )
+
+    table <- purrr::pluck(db_table_id, "name", "table")
+    schema <- purrr::pluck(db_table_id, "name", "schema", .default = get_schema(conn, temporary = TRUE))
+    catalog <- purrr::pluck(db_table_id, "name", "catalog", .default = get_catalog(conn, temporary = TRUE))
+
+    if (inherits(conn, "Microsoft SQL Server") && !startsWith(table, "#")) {
+      table <- paste0("#", table)
+    }
+
+    # Create full and partial Ids of the table to create
+    dbi_create_table_id <- DBI::Id(table = table)
+    db_table_id <- DBI::Id("catalog" = catalog, "schema" = schema, "table" = table)
 
   } else {
 
-    # Non-temporary tables must be fully qualified
-    db_table_id <- id(db_table_id, conn)
+    dbi_create_table_id <- db_table_id <- id(db_table_id, conn) # If permanent, use all available info
+  }
 
+  # Check if the table already exists
+  if (table_exists(conn, id(db_table_id, conn))) {
+    stop("Table ", db_table_id, " already exists!")
   }
 
   # Create the table on the remote and return the table
-  DBI::dbWriteTable(
+  DBI::dbCreateTable(
     conn = conn,
-    name = db_table_id,
-    value = .data,
+    name = dbi_create_table_id,
     fields = getTableSignature(.data = .data, conn = conn),
     ...
   )
