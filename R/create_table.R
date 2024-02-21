@@ -70,7 +70,7 @@ create_table <- function(.data, conn = NULL, db_table_id, ...) {
 
   } else {
 
-    dbi_create_table_id <- db_table_id <- id(db_table_id, conn) # If permanent, use all availalbe info
+    dbi_create_table_id <- db_table_id <- id(db_table_id, conn) # If permanent, use all available info
   }
 
   # Check if the table already exists
