@@ -13,20 +13,20 @@ db_timestamp(timestamp, conn = NULL)
 \method{db_timestamp}{SQLiteConnection}(timestamp, conn)
 }
 \arguments{
-\item{timestamp}{The timestamp to be transformed to the DB type. Can be character.}
+\item{timestamp}{(\code{POSIXct(1)} or \code{character(1)})\cr
+The timestamp to be transformed to the DB type.}
 
-\item{conn}{A \code{DBIConnection} to the DB where the timestamp should be stored}
+\item{conn}{(\code{DBIConnection(1)})\cr
+Connection object.}
 }
 \value{
-The given timestamp converted to a SQL-backend dependent timestamp
-}
-\description{
-Determine the type of timestamps the DB supports
-}
-\examples{
+The given timestamp converted to a SQL-backend dependent timestamp.
 conn <- get_connection(drv = RSQLite::SQLite())
 
 db_timestamp(Sys.time(), conn)
 
 close_connection(conn)
+}
+\description{
+Determine the type of timestamps the DB supports
 }

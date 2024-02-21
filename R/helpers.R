@@ -1,17 +1,14 @@
-#' @import tidyverse dbplyr lubridate
-NULL
-
 #' nrow() but also works on remote tables
 #'
-#' @param .data lazy_query to parse
-#' @return The number of records in the object
-#' @examples
-#' conn <- get_connection(drv = RSQLite::SQLite())
+#' @template .data
+#' @return
+#'   The number of records in the object.
+#'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' m <- dplyr::copy_to(conn, mtcars)
-#' nrow(m) == nrow(mtcars) # TRUE
+#'   m <- dplyr::copy_to(conn, mtcars)
+#'   nrow(m) == nrow(mtcars) # TRUE
 #'
-#' close_connection(conn)
+#'   close_connection(conn)
 #' @export
 nrow <- function(.data) {
   if (inherits(.data, "tbl_dbi")) {
@@ -25,17 +22,18 @@ nrow <- function(.data) {
 #' Checks if table contains historical data
 #'
 #' @template .data
-#' @return TRUE if .data contains the columns: "checksum", "from_ts", and "until_ts". FALSE otherwise
+#' @return
+#'   `TRUE` if `.data` contains the columns: "checksum", "from_ts", and "until_ts". `FALSE` otherwise.
 #' @examples
-#' conn <- get_connection(drv = RSQLite::SQLite())
+#'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
-#' create_table(mtcars, conn, db_table_id = id("mtcars_historical", conn))
+#'   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
+#'   create_table(mtcars, conn, db_table = id("mtcars_historical", conn))
 #'
-#' is.historical(get_table(conn, "mtcars")) # FALSE
-#' is.historical(get_table(conn, "mtcars_historical")) # TRUE
+#'   is.historical(get_table(conn, "mtcars")) # FALSE
+#'   is.historical(get_table(conn, "mtcars_historical")) # TRUE
 #'
-#' close_connection(conn)
+#'   close_connection(conn)
 #' @export
 is.historical <- function(.data) {                                                                                      # nolint: object_name_linter
 
@@ -49,22 +47,23 @@ is.historical <- function(.data) {                                              
 #' Delete table at function exit
 #' @description
 #'   This function marks a table for deletion once the current function exits.
-#' @param tbl_sql A "bare" reference to a sql table
+#' @param db_table (`tbl_sql`)\cr
+#'   A unmanipulated reference to a sql table.
 #' @examples
-#' conn <- get_connection(drv = RSQLite::SQLite())
+#'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' mt <- dplyr::copy_to(conn, mtcars)
-#' id_mt <- id(mt)
+#'   mt <- dplyr::copy_to(conn, mtcars)
+#'   id_mt <- id(mt)
 #'
-#' defer_db_cleanup(mt)
+#'   defer_db_cleanup(mt)
 #'
-#' DBI::dbExistsTable(conn, id_mt) # TRUE
+#'   DBI::dbExistsTable(conn, id_mt) # TRUE
 #'
-#' withr::deferred_run()
+#'   withr::deferred_run()
 #'
-#' DBI::dbExistsTable(conn, id_mt) # FALSE
+#'   DBI::dbExistsTable(conn, id_mt) # FALSE
 #'
-#' close_connection(conn)
+#'   close_connection(conn)
 #' @return NULL (called for side effects)
 #' @export
 defer_db_cleanup <- function(tbl_sql) {
@@ -85,7 +84,8 @@ defer_db_cleanup <- function(tbl_sql) {
 #' Create a name for a temporary table
 #' @description
 #'   This function is heavily inspired by the unexported dbplyr function unique_table_name
-#' @param scope A naming scope to generate the table name within.
+#' @param scope (`character(1)`)\cr
+#'   A naming scope to generate the table name within.
 #' @examples
 #'   print(unique_table_name()) # SCDB_001
 #'   print(unique_table_name()) # SCDB_002
@@ -104,9 +104,11 @@ unique_table_name <- function(scope = "SCDB") {
 
 
 #' checkmate helper: Assert "generic" data.table/data.frame/tbl/tibble type
-#' @param .data Object to test if is data.table, data.frame, tbl or tibble
-#' @param ...   Parameters passed to checkmate::check_*
-#' @param add   `AssertCollection` to add assertions to
+#'
+#' @template .data
+#' @param ...
+#'   Parameters passed to checkmate::check_*.
+#' @template add
 #' @inherit checkmate::assert return
 #' @noRd
 assert_data_like <- function(.data, ..., add = NULL) {
@@ -121,9 +123,11 @@ assert_data_like <- function(.data, ..., add = NULL) {
 
 
 #' checkmate helper: Assert "generic" timestamp type
-#' @param timestamp Object to test if is POSIX or character
-#' @param ...       parameters passed to checkmate::check_*
-#' @param add       `AssertCollection` to add assertions to
+#' @param timestamp (`any(1)`)\cr
+#'   Object to test if is `POSIXct`, `Date` or `character`.
+#' @param ...
+#'   Parameters passed to checkmate::check_*.
+#' @template add
 #' @inherit checkmate::assert return
 #' @noRd
 assert_timestamp_like <- function(timestamp, ..., add = NULL) {
@@ -137,9 +141,11 @@ assert_timestamp_like <- function(timestamp, ..., add = NULL) {
 
 
 #' checkmate helper: Assert for "generic" db_table type
-#' @param db_table Object to test if is of class "tbl_dbi" or character on form "schema.table"
-#' @param ...      Parameters passed to checkmate::check_*
-#' @param add      `AssertCollection` to add assertions to
+#' @param db_table (`any(1)`)\cr
+#'   Object to test if is of class `tbl_dbi` or `character` on form "schema.table".
+#' @param ...
+#'   Parameters passed to checkmate::check_*.
+#' @template add
 #' @inherit checkmate::assert return
 #' @noRd
 assert_dbtable_like <- function(db_table, ..., add = NULL) {
@@ -153,9 +159,11 @@ assert_dbtable_like <- function(db_table, ..., add = NULL) {
 
 
 #' checkmate helper: Assert for "generic" id structure
-#' @param id   Object to test if is of class "Id" or character on form "schema.table"
-#' @param ...  Parameters passed to checkmate::check_*
-#' @param add `AssertCollection` to add assertions to
+#' @param id (`any(1)`)\cr
+#'   Object to test if is coercible by `id()`.
+#' @param ...
+#'   Parameters passed to checkmate::check_*.
+#' @template add
 #' @inherit checkmate::assert return
 #' @noRd
 assert_id_like <- function(id, ..., add = NULL) {

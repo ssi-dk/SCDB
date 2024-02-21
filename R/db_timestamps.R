@@ -1,14 +1,16 @@
 #' Determine the type of timestamps the DB supports
+#'
 #' @name db_timestamp
-#' @param timestamp The timestamp to be transformed to the DB type. Can be character.
-#' @param conn A `DBIConnection` to the DB where the timestamp should be stored
-#' @examples
-#' conn <- get_connection(drv = RSQLite::SQLite())
+#' @param timestamp (`POSIXct(1)` or `character(1)`)\cr
+#'   The timestamp to be transformed to the DB type.
+#' @template conn
+#' @return
+#'   The given timestamp converted to a SQL-backend dependent timestamp.
+#'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' db_timestamp(Sys.time(), conn)
+#'   db_timestamp(Sys.time(), conn)
 #'
-#' close_connection(conn)
-#' @return The given timestamp converted to a SQL-backend dependent timestamp
+#'   close_connection(conn)
 #' @export
 db_timestamp <- function(timestamp, conn = NULL) {
   if (is.null(conn)) db_timestamp.NULL(timestamp, conn)

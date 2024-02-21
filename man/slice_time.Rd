@@ -7,16 +7,17 @@
 slice_time(.data, slice_ts, from_ts = "from_ts", until_ts = "until_ts")
 }
 \arguments{
-\item{.data}{A data frame, a tibble, a data.table or a tbl.}
+\item{.data}{(\code{data.frame(1)}, \code{tibble(1)}, \code{data.table(1)}, or \code{tbl_dbi(1)})\cr
+Data object.}
 
 \item{slice_ts}{(\code{POSIXct(1)}, \code{Date(1)}, or \code{character(1)})\cr
-The time / date to slice by}
+The time / date to slice by.}
 
 \item{from_ts, until_ts}{(\code{character(1)})\cr
-The name of the columns in .data specifying valid from and valid until time}
+The name of the columns in .data specifying valid from and valid until time.}
 }
 \value{
-An object similar to .data
+An object of same class as .data
 }
 \description{
 Slices a data object based on time / date

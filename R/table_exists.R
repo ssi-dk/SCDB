@@ -1,25 +1,26 @@
 #' Test if a table exists in database
 #'
+#' @name table_exists
 #' @description
 #'   This functions attempts to determine the existence of a given table.
 #'   If a character input is given, matching is done heuristically assuming a "schema.table" notation.
 #'   If no schema is implied in this case, the default schema is assumed.
 #' @template conn
 #' @template db_table_id
-#' @return TRUE if db_table_id can be parsed to a table found in conn
+#' @return
+#'   `TRUE` if db_table_id can be parsed to a table found in `conn`.
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
+#'   conn <- get_connection(drv = RSQLite::SQLite())
+#'
+#'   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
+#'   dplyr::copy_to(conn, iris, name = "iris")
+#'
+#'   table_exists(conn, "mtcars")    # TRUE
+#'   table_exists(conn, "iris")      # FALSE
+#'   table_exists(conn, "temp.iris") # TRUE
+#'
+#'   close_connection(conn)
 #' @importFrom rlang .data
-#' @name table_exists
-#' @examples
-#' conn <- get_connection(drv = RSQLite::SQLite())
-#'
-#' dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
-#' dplyr::copy_to(conn, iris, name = "iris")
-#'
-#' table_exists(conn, "mtcars")    # TRUE
-#' table_exists(conn, "iris")      # FALSE
-#' table_exists(conn, "temp.iris") # TRUE
-#'
-#' close_connection(conn)
 #' @export
 table_exists <- function(conn, db_table_id) {
   coll <- checkmate::makeAssertCollection()

@@ -1,30 +1,29 @@
-#' Gets a named table from a given schema
+#' Retrieves a named table from a given schema on the connection
 #'
 #' @template conn
 #' @templateVar miss TRUE
-#' @template db_table_id
-#' @param slice_ts
-#'   If set different from NA (default), the returned data looks as on the given date.
-#'   If set as NULL, all data is returned
-#' @param include_slice_info
-#'   Default FALSE.
-#'   If set TRUE, the history columns "checksum", "from_ts", "until_ts" are returned also
+#' @template db_table
+#' @param slice_ts (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
+#'   If set different from `NA` (default), the returned data looks as on the given date.
+#'   If set as `NULL`, all data is returned.
+#' @param include_slice_info (`logical(1)`)\cr
+#'   Should the history columns "checksum", "from_ts", "until_ts" are also be returned?
 #' @return
-#'   A "lazy" dataframe (tbl_lazy) generated using dbplyr.
+#'   A "lazy" data.frame (tbl_lazy) generated using dbplyr.
 #'
 #'   Note that a temporary table will be preferred over ordinary tables in the default schema (see [get_schema()]) with
 #'   an identical name.
 #' @examples
-#' conn <- get_connection(drv = RSQLite::SQLite())
+#'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
+#'   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
 #'
-#' get_table(conn)
-#' if (table_exists(conn, "mtcars")) {
-#'   get_table(conn, "mtcars")
-#' }
+#'   get_table(conn)
+#'   if (table_exists(conn, "mtcars")) {
+#'     get_table(conn, "mtcars")
+#'   }
 #'
-#' close_connection(conn)
+#'   close_connection(conn)
 #' @importFrom rlang .data
 #' @export
 get_table <- function(conn, db_table_id = NULL, slice_ts = NA, include_slice_info = FALSE) {

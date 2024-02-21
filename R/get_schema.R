@@ -1,17 +1,21 @@
 #' Get the current schema/catalog of a database-related objects
 #'
 #' @name get_schema
-#' @param obj (`any(1)`\cr
-#'   The object from which to retrieve a schema/catalog
+#' @param obj (`DBIConnection(1)`, `tbl_dbi(1)`, `Id(1)`)\cr
+#'   The object from which to retrieve a schema/catalog.
 #' @param temporary (`logical(1)`) \cr
 #'   Should the reference be to the temporary schema/catalog?
 #' @param ... Further arguments passed to methods.
 #' @return
-#'   * For `get_schema.DBIConnection`, the current schema of the connection if `temporary = FALSE`.
+#'   The schema is extracted from `obj` depending on the type of input:
+#'
+#'   * For `get_schema.DBIConnection()`, the current schema of the connection if `temporary = FALSE`.
 #'     See "Default schema" for more.
 #'     If `temporary = TRUE`, the temporary schema of the connection is returned.
 #'
-#'   * For `get_schema.tbl_dbi` the schema is determined via `id()`.
+#'   * For `get_schema.tbl_dbi()` the schema is determined via `id()`.
+#'
+#'   * For `get_schema.Id()`, the schema is extracted from the `Id` specification.
 #'
 #' @section Default schema:
 #'

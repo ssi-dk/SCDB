@@ -1,8 +1,9 @@
 #' Get a list of data base connections to test on
+#'
 #' @return
-#'   If you run your tests locally, it returns a list of connections corresponding to conn_list and conn_args
+#'   If you run your tests locally, it returns a list of connections corresponding to conn_list and conn_args.
 #'   If you run your tests on GitHub, it return a list of connection corresponding to the environment variables.
-#'   i.e. the GitHub workflows will configure the testing back ends
+#'   i.e. the GitHub workflows will configure the testing back ends.
 #' @importFrom rlang `:=`
 #' @noRd
 get_test_conns <- function() {

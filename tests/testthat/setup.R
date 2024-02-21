@@ -68,7 +68,7 @@ for (conn in get_test_conns()) {
 #' Clean up and test function
 #' @description
 #'   This function checks for the existence of "dbplyr_###" tables on the connection before closing the connection
-#' @param conn The connection to test
+#' @template conn
 #' @return NULL (called for side effects)
 #' @import rlang .data
 #' @noRd

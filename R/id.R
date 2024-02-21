@@ -2,24 +2,23 @@
 #'
 #' @template db_table_id
 #' @template conn
-#' @param allow_table_only
-#'  logical. If `TRUE`, allows for returning an `DBI::Id` with `table` = `myschema.table` if schema `myschema`
-#'  is not found in `conn`.
-#'  If `FALSE`, the function will raise an error if the implied schema cannot be found in `conn`
 #' @param ... Further arguments passed to methods.
-#' @details The given `db_table_id` is parsed to a DBI::Id depending on the type of input:
-#'  * `character`: db_table_id is parsed to a DBI::Id object using an assumption of "schema.table" syntax
-#'    with corresponding schema (if found in `conn`) and table values.
-#'    If no schema is implied, the default schema of `conn` will be used.
+#' @details
+#'   The given `db_table_id` is parsed to a DBI::Id depending on the type of input:
 #'
-#'  * `DBI::Id`: if schema is not specified in `Id`, the schema is set to the default schema for `conn` (if given).
+#'   * `character`: db_table_id is parsed to a DBI::Id object using an assumption of "schema.table" syntax
+#'     with corresponding schema (if found in `conn`) and table values.
+#'     If no schema is implied, the default schema of `conn` will be used.
 #'
-#'  * `tbl_sql`: the remote name is used to resolve the table identification.
+#'   * `DBI::Id`: if schema is not specified in `Id`, the schema is set to the default schema for `conn` (if given).
 #'
-#'  * `data.frame`: A Id is built from the data.frame (columns `catalog`, `schema`, and `table`).
-#'    Can be used in conjunction with `get_tables(conn, pattern)`.
+#'   * `tbl_sql`: the remote name is used to resolve the table identification.
 #'
-#' @return A DBI::Id object parsed from db_table_id (see details)
+#'   * `data.frame`: A Id is built from the data.frame (columns `catalog`, `schema`, and `table`).
+#'     Can be used in conjunction with `get_tables(conn, pattern)`.
+#'
+#' @return
+#'   A `DBI::Id` object parsed from db_table_id (see details).
 #' @examples
 #'   id("schema.table")
 #' @seealso [DBI::Id] which this function wraps.
@@ -53,6 +52,10 @@ id.Id <- function(db_table_id, conn = NULL, ...) {
 }
 
 
+#' @param allow_table_only (`logical(1)`)\cr
+#'   If `TRUE`, allows for returning an `DBI::Id` with `table` = "myschema.table" if schema "myschema"
+#'   is not found in `conn`.
+#'   If `FALSE`, the function will raise an error if the implied schema cannot be found in `conn`.
 #' @export
 #' @rdname id
 id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE, ...) {
@@ -148,8 +151,20 @@ id.data.frame <- function(db_table_id, ...) {
 }
 
 
+#' Convert Id object to character
+#'
+#' @description
+#'   This method extends the `as.character` function for objects of class `Id`.
+#'   It converts an `Id` object to a character string on the form "catalog.schema.table".
+#' @param x (`Id(1)`)\cr
+#'   Id object to convert to character.
+#' @param explicit (`logical(1)`)\cr
+#'   Should Id elements be quoted explicitly?
+#' @seealso
+#'   \code{\link[base]{as.character}} for the base method.
 #' @export
-as.character.Id <- function(x, ...) {
+#' @noRd
+as.character.Id <- function(x, explicit = FALSE, ...) {
 
   info <- x@name |>
     purrr::discard(is.na)

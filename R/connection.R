@@ -1,37 +1,37 @@
 #' Opens connection to the database
 #'
-#' Connects to the specified dbname of host:port using user and password from given arguments.
-#' Certain drivers may use credentials stored in a file, such as ~/.pgpass (PostgreSQL)
-#'
-#' @param drv
-#'   An object that inherits from DBIDriver or an existing DBIConnection (default: RPostgres::Postgres())
-#' @param host
-#'   Character string giving the ip of the host to connect to
-#' @param port
-#'   Host port to connect to. Must be a number or a numeric string.
-#' @param dbname
-#'   Name of the database located at the host
-#' @param user
-#'   Username to login with
-#' @param password
-#'   Password to login with
-#' @param timezone
+#' @description
+#'   Connects to the specified dbname of host:port using user and password from given arguments.
+#'   Certain drivers may use credentials stored in a file, such as ~/.pgpass (PostgreSQL).
+#' @param drv (`DBIDriver(1)` or `DBIConnection(1)`)\cr
+#'   The driver for the connection.
+#' @param host (`character(1)`)\cr
+#'   The ip of the host to connect to.
+#' @param port (`numeric(1)` or `character(1)`)\cr
+#'   Host port to connect to.
+#' @param dbname (`character(1)`)\cr
+#'   Name of the database located at the host.
+#' @param user (`character(1)`)\cr
+#'   Username to login with.
+#' @param password (`character(1)`)\cr
+#'   Password to login with.
+#' @param timezone (`character(1)`)\cr
 #'   Sets the timezone of DBI::dbConnect(). Must be in [OlsonNames()].
-#' @param timezone_out
+#' @param timezone_out (`character(1)`)\cr
 #'   Sets the timezone_out of DBI::dbConnect(). Must be in [OlsonNames()].
 #' @param ...
-#'  Additional parameters sent to DBI::dbConnect()
+#'  Additional parameters sent to DBI::dbConnect().
 #' @inheritParams RPostgres::dbConnect_PqDriver
 #' @return
-#'   An object that inherits from DBIConnection driver specified in drv
+#'   An object that inherits from `DBIConnection` driver specified in `drv`.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#' conn <- get_connection(drv = RSQLite::SQLite(), dbname = ":memory:")
+#'   conn <- get_connection(drv = RSQLite::SQLite(), dbname = ":memory:")
 #'
-#' DBI::dbIsValid(conn) # TRUE
+#'   DBI::dbIsValid(conn) # TRUE
 #'
-#' close_connection(conn)
+#'   close_connection(conn)
 #'
-#' DBI::dbIsValid(conn) # FALSE
+#'   DBI::dbIsValid(conn) # FALSE
 #' @seealso [RPostgres::Postgres]
 #' @export
 get_connection <- function(drv = RPostgres::Postgres(),
@@ -101,9 +101,9 @@ get_connection <- function(drv = RPostgres::Postgres(),
 #' @template conn
 #' @inherit DBI::dbDisconnect return
 #' @examples
-#' conn <- get_connection(drv = RSQLite::SQLite())
+#'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' close_connection(conn)
+#'   close_connection(conn)
 #' @export
 close_connection <- function(conn) {
 

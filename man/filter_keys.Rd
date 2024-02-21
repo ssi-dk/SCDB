@@ -7,37 +7,69 @@
 filter_keys(.data, filters, by = NULL, na_by = NULL, ...)
 }
 \arguments{
-\item{.data}{A data frame, a tibble, a data.table or a tbl.}
+\item{.data}{(\code{data.frame(1)}, \code{tibble(1)}, \code{data.table(1)}, or \code{tbl_dbi(1)})\cr
+Data object.}
 
-\item{filters}{A filter to subset data by.  if filters == NULL, no filtering occurs. Else, an inner_join is performed using all columns of the filter}
+\item{filters}{(\code{data.frame(1)}, \code{tibble(1)}, \code{data.table(1)}, or \code{tbl_dbi(1)})\cr
+A object subset data by.
+If filters is \code{NULL}, no filtering occurs.
+Otherwise, an \code{inner_join()} is performed using all columns of the filter object.}
 
-\item{by}{passed to inner_join if different from NULL}
+\item{by}{A join specification created with \code{\link[dplyr:join_by]{join_by()}}, or a character
+vector of variables to join by.
 
-\item{na_by}{passed to inner_join if different from NULL}
+If \code{NULL}, the default, \verb{*_join()} will perform a natural join, using all
+variables in common across \code{x} and \code{y}. A message lists the variables so
+that you can check they're correct; suppress the message by supplying \code{by}
+explicitly.
+
+To join on different variables between \code{x} and \code{y}, use a \code{\link[dplyr:join_by]{join_by()}}
+specification. For example, \code{join_by(a == b)} will match \code{x$a} to \code{y$b}.
+
+To join by multiple variables, use a \code{\link[dplyr:join_by]{join_by()}} specification with
+multiple expressions. For example, \code{join_by(a == b, c == d)} will match
+\code{x$a} to \code{y$b} and \code{x$c} to \code{y$d}. If the column names are the same between
+\code{x} and \code{y}, you can shorten this by listing only the variable names, like
+\code{join_by(a, c)}.
+
+\code{\link[dplyr:join_by]{join_by()}} can also be used to perform inequality, rolling, and overlap
+joins. See the documentation at \link[dplyr:join_by]{?join_by} for details on
+these types of joins.
+
+For simple equality joins, you can alternatively specify a character vector
+of variable names to join by. For example, \code{by = c("a", "b")} joins \code{x$a}
+to \code{y$a} and \code{x$b} to \code{y$b}. If variable names differ between \code{x} and \code{y},
+use a named character vector like \code{by = c("x_a" = "y_a", "x_b" = "y_b")}.
+
+To perform a cross-join, generating all combinations of \code{x} and \code{y}, see
+\code{\link[dplyr:cross_join]{cross_join()}}.}
+
+\item{na_by}{(\code{character()})\cr
+Columns where NA should match with NA.}
 
 \item{...}{Further arguments passed to \code{dplyr::inner_join()}.}
 }
 \value{
-An object similar to .data
+An object of same class as .data
 }
 \description{
-If filter = NULL, not filtering is done
-If filter is different from NULL, the .data is filtered by a inner_join using all columns of the filter:
+If \code{filters} is \code{NULL}, no filtering is done.
+Otherwise, the \code{.data} object is filtered via an \code{inner_join()} using all columns of the filter:
 \code{inner_join(.data, filter, by = colnames(filter))}
 
-by and na_by can overwrite the inner_join columns used in the filtering
+\code{by} and \code{na_by} can overwrite the \code{inner_join()} columns used in the filtering.
 }
 \examples{
-# Filtering with null means no filtering is done
-filter <- NULL
-identical(filter_keys(mtcars, filter), mtcars) # TRUE
+  # Filtering with null means no filtering is done
+  filter <- NULL
+  identical(filter_keys(mtcars, filter), mtcars) # TRUE
 
-# Filtering by vs = 0
-filter <- data.frame(vs = 0)
-identical(filter_keys(mtcars, filter), dplyr::filter(mtcars, vs == 0)) # TRUE
+  # Filtering by vs = 0
+  filter <- data.frame(vs = 0)
+  identical(filter_keys(mtcars, filter), dplyr::filter(mtcars, vs == 0)) # TRUE
 
-# Filtering by the specific combinations of vs = 0 and am = 1
-filter <- dplyr::distinct(mtcars, vs, am)
-filter_keys(mtcars, filter)
+  # Filtering by the specific combinations of vs = 0 and am = 1
+  filter <- dplyr::distinct(mtcars, vs, am)
+  filter_keys(mtcars, filter)
 
 }

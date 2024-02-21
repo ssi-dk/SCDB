@@ -8,9 +8,10 @@ NULL
 #' @name db_locks
 #' @description
 #'   This set of function adds a simple locking system to db tables.
+#'
 #'   * `lock_table()` adds a record in the schema.locks table with the current time and R-session process id.
-#'   * `unlock_table()` removes records in the schema.locks table with the target table and the
-#'      R-session process id.
+#'
+#'   * `unlock_table()` removes records in the schema.locks table with the target table and the R-session process id.
 #' @template conn
 #' @param db_table (`character(1)`)\cr
 #'   A specification of "schema.table" to modify lock for.
@@ -20,6 +21,7 @@ NULL
 #'   The process id to remove the lock for.
 #' @return
 #'   * `lock_table()` returns the `TRUE`` if the lock was success fully added.
+#'
 #'   * `unlock_table()` returns `NULL` (called for side effects).
 #' @examples
 #'   conn <- DBI::dbConnect(RSQLite::SQLite())

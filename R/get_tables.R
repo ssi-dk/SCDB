@@ -1,21 +1,21 @@
-#' Gets the available tables
+#' List the available tables on the connection
 #'
 #' @template conn
-#' @param pattern A regex pattern with which to subset the returned tables
-#' @param show_temporary (`logical`)\cr
+#' @param pattern (`character(1)`)\cr
+#'   Regex pattern with which to subset the returned tables.
+#' @param show_temporary (`logical(1)`)\cr
 #'   Should temporary tables be listed?
+#' @return
+#'   A data.frame containing table names in the DB.
+#'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' @return A data.frame containing table names in the DB
-#' @examples
-#' conn <- get_connection(drv = RSQLite::SQLite())
+#'   dplyr::copy_to(conn, mtcars, name = "my_test_table_1", temporary = FALSE)
+#'   dplyr::copy_to(conn, mtcars, name = "my_test_table_2")
 #'
-#' dplyr::copy_to(conn, mtcars, name = "my_test_table_1", temporary = FALSE)
-#' dplyr::copy_to(conn, mtcars, name = "my_test_table_2")
+#'   get_tables(conn, pattern = "my_[th]est")
+#'   get_tables(conn, pattern = "my_[th]est", show_temporary = FALSE)
 #'
-#' get_tables(conn, pattern = "my_[th]est")
-#' get_tables(conn, pattern = "my_[th]est", show_temporary = FALSE)
-#'
-#' close_connection(conn)
+#'   close_connection(conn)
 #' @importFrom rlang .data
 #' @export
 get_tables <- function(conn, pattern = NULL, show_temporary = TRUE) {

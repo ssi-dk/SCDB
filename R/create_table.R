@@ -1,18 +1,17 @@
 #' Create a historical table from input data
 #'
-#' @name create_table
-#'
 #' @template .data
 #' @template conn
 #' @template db_table_id
-#' @param ... Other arguments passed to [DBI::dbCreateTable()]
-#' @return Invisibly returns the table as it looks on the destination (or locally if conn is NULL)
-#' @examples
-#' conn <- get_connection(drv = RSQLite::SQLite())
+#' @param ...
+#'   Other arguments passed to [DBI::dbCreateTable()].
+#' @return
+#'   Invisibly returns the table as it looks on the destination (or locally if `conn` is `NULL`).
+#'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' create_table(mtcars, conn = conn, db_table_id = "mtcars")
+#'   create_table(mtcars, conn = conn, db_table_id = "mtcars")
 #'
-#' close_connection(conn)
+#'   close_connection(conn)
 #' @export
 create_table <- function(.data, conn = NULL, db_table_id, ...) {                                                        #nolint: function_argument_linter
 

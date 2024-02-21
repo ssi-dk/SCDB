@@ -1,30 +1,31 @@
 #' Filters .data according to all records in the filter
 #'
 #' @description
-#' If filter = NULL, not filtering is done
-#' If filter is different from NULL, the .data is filtered by a inner_join using all columns of the filter:
-#' \code{inner_join(.data, filter, by = colnames(filter))}
+#'   If `filters` is `NULL`, no filtering is done.
+#'   Otherwise, the `.data` object is filtered via an `inner_join()` using all columns of the filter:
+#'   \code{inner_join(.data, filter, by = colnames(filter))}
 #'
-#' by and na_by can overwrite the inner_join columns used in the filtering
+#'   `by` and `na_by` can overwrite the `inner_join()` columns used in the filtering.
 #'
 #' @template .data
 #' @template filters
-#' @param by      passed to inner_join if different from NULL
-#' @param na_by   passed to inner_join if different from NULL
+#' @inheritParams dbplyr::join.tbl_sql
+#' @param na_by (`character()`)\cr
+#'   Columns where NA should match with NA.
 #' @param ... Further arguments passed to `dplyr::inner_join()`.
 #' @template .data_return
 #' @examples
-#' # Filtering with null means no filtering is done
-#' filter <- NULL
-#' identical(filter_keys(mtcars, filter), mtcars) # TRUE
+#'   # Filtering with null means no filtering is done
+#'   filter <- NULL
+#'   identical(filter_keys(mtcars, filter), mtcars) # TRUE
 #'
-#' # Filtering by vs = 0
-#' filter <- data.frame(vs = 0)
-#' identical(filter_keys(mtcars, filter), dplyr::filter(mtcars, vs == 0)) # TRUE
+#'   # Filtering by vs = 0
+#'   filter <- data.frame(vs = 0)
+#'   identical(filter_keys(mtcars, filter), dplyr::filter(mtcars, vs == 0)) # TRUE
 #'
-#' # Filtering by the specific combinations of vs = 0 and am = 1
-#' filter <- dplyr::distinct(mtcars, vs, am)
-#' filter_keys(mtcars, filter)
+#'   # Filtering by the specific combinations of vs = 0 and am = 1
+#'   filter <- dplyr::distinct(mtcars, vs, am)
+#'   filter_keys(mtcars, filter)
 #'
 #' @importFrom rlang .data
 #' @export

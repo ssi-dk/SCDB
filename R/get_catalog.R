@@ -1,11 +1,13 @@
 #' @rdname get_schema
 #' @return
+#'   The catalog is extracted from `obj` depending on the type of input:
+#'
 #'   * For `get_catalog.Microsoft SQL Server`, the current database context of the connection or "tempdb" if
-#'   `temporary = TRUE`.
+#'     `temporary = TRUE`.
 #'
 #'   * For `get_schema.tbl_dbi` the catalog is determined via `id()`.
 #'
-#'   * For `get_catalog.\*`, `NULL` is returned.
+#'   * For `get_catalog.\\*`, `NULL` is returned.
 #' @export
 get_catalog <- function(obj, ...) {
   UseMethod("get_catalog")

@@ -7,7 +7,8 @@
 defer_db_cleanup(tbl_sql)
 }
 \arguments{
-\item{tbl_sql}{A "bare" reference to a sql table}
+\item{db_table}{(\code{tbl_sql})\cr
+A unmanipulated reference to a sql table.}
 }
 \value{
 NULL (called for side effects)
@@ -16,18 +17,18 @@ NULL (called for side effects)
 This function marks a table for deletion once the current function exits.
 }
 \examples{
-conn <- get_connection(drv = RSQLite::SQLite())
+  conn <- get_connection(drv = RSQLite::SQLite())
 
-mt <- dplyr::copy_to(conn, mtcars)
-id_mt <- id(mt)
+  mt <- dplyr::copy_to(conn, mtcars)
+  id_mt <- id(mt)
 
-defer_db_cleanup(mt)
+  defer_db_cleanup(mt)
 
-DBI::dbExistsTable(conn, id_mt) # TRUE
+  DBI::dbExistsTable(conn, id_mt) # TRUE
 
-withr::deferred_run()
+  withr::deferred_run()
 
-DBI::dbExistsTable(conn, id_mt) # FALSE
+  DBI::dbExistsTable(conn, id_mt) # FALSE
 
-close_connection(conn)
+  close_connection(conn)
 }

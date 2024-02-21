@@ -7,14 +7,17 @@
 digest_to_checksum(.data, col = "checksum", exclude = NULL)
 }
 \arguments{
-\item{.data}{A data frame, a tibble, a data.table or a tbl.}
+\item{.data}{(\code{data.frame(1)}, \code{tibble(1)}, \code{data.table(1)}, or \code{tbl_dbi(1)})\cr
+Data object.}
 
-\item{col}{Name of the column to put the checksums in}
+\item{col}{(\code{character(1)})\cr
+Name of the column to put the checksums in. Will be generated if missing.}
 
-\item{exclude}{Columns to exclude from the checksum generation}
+\item{exclude}{(\code{character()})\cr
+Columns to exclude from the checksum generation.}
 }
 \value{
-.data with an checksum column added
+.data with an checksum column added.
 }
 \description{
 Computes an checksum from columns
@@ -24,6 +27,5 @@ In most cases, the md5 algorithm is used to compute the checksums.
 For Microsoft SQL Server, the SHA-256 algorithm is used.
 }
 \examples{
-digest_to_checksum(mtcars)
-
+  digest_to_checksum(mtcars)
 }

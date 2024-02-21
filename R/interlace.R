@@ -1,20 +1,20 @@
-#' Combine any number of tables, where each has their own time axis of
-#' validity (valid_from and valid_until)
+#' Combine any number of tables, where each has their own time axis of validity
 #'
 #' @description
-#' The function "interlaces" the queries and combines their validity time axes
-#' onto a single time axis
+#'   The function "interlaces" the queries and combines their validity time axes (valid_from and valid_until)
+#'   onto a single time axis.
 #'
-#' @param tables    A list(!) of tables you want to combine is supplied here as
-#'                  lazy_queries.
-#' @param by        The (group) variable to merge by
-#' @param colnames  If the time axes of validity is not called "valid_to" and
-#'                  "valid_until" inside each lazy_query, you can specify their
-#'                  names by supplying the arguments as a list
-#'                  (e.g. c(t1.from = "\<colname\>", t2.until = "\<colname\>").
-#'                  colnames must be named in same order as as given in tables
-#'                  (i.e. t1, t2, t3, ...).
-#' @examples
+#' @param tables (`list`(`tbl_dbi(1)`))\cr
+#'   The historical tables to combine.
+#' @param by (`character()`)\cr
+#'   The variable to merge by.
+#' @param colnames (`named list()`)\cr
+#'   If the time axes of validity is not called "valid_to" and "valid_until" inside each `tbl_dbi`,
+#'   you can specify their names by supplying the arguments as a list:
+#'   e.g. c(t1.from = "\<colname\>", t2.until = "\<colname\>").
+#'   colnames must be named in same order as as given in tables (i.e. t1, t2, t3, ...).
+#' @return
+#'   The combination of input queries with a single, interlaced valid_from / valid_until time axis.
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   t1 <- data.frame(key = c("A", "A", "B"),
