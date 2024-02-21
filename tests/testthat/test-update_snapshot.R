@@ -66,25 +66,32 @@ test_that("update_snapshot() works", {
       dplyr::filter(!is.na(.data$log_file))
     expect_identical(nrow(db_logs_with_log_file), 1)
 
-    # Check db log output exists
+    # Check db log output
     logs <- get_table(conn, "test.SCDB_logs") |> dplyr::collect()
 
-    checkmate::expect_data_frame(logs,
-      nrows = 1,
-      types = c(
-        "date" = "character", # SQLite does not support POSIXct
-        "catalog" = "character",
-        "schema" = "character",
-        "table" = "character",
-        "n_insertions" = "numeric",
-        "n_deactivations" = "numeric",
-        "start_time" = "character", # SQLite does not support POSIXct
-        "end_time" = "character", # SQLite does not support POSIXct
-        "duration" = "character",
-        "success" = "numeric", # SQLite does not support logical
-        "message" = "character"
-      )
+    # The logs should have specified data types
+    types <- c(
+      "date" = "POSIXct",
+      "catalog" = "character",
+      "schema" = "character",
+      "table" = "character",
+      "n_insertions" = "numeric",
+      "n_deactivations" = "numeric",
+      "start_time" = "POSIXct",
+      "end_time" = "POSIXct",
+      "duration" = "character",
+      "success" = "logical",
+      "message" = "character"
     )
+
+    if (inherits(conn, "SQLiteConnection")) {
+      types <- types |>
+        purrr::map_if(~ identical(., "POSIXct"), "character") |> # SQLite does not support POSIXct
+        purrr::map_if(~ identical(., "logical"), "numneric") |>  # SQLite does not support logical
+        as.character()
+    }
+
+    checkmate::expect_data_frame(logs, nrows = 1, types)
 
 
     # We now attempt to do another update on the same date
