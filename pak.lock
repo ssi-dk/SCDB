@@ -11,7 +11,7 @@
       "type": "local",
       "direct": true,
       "binary": false,
-      "dependencies": ["checkmate", "DBI", "dbplyr", "dplyr", "glue", "lubridate", "openssl", "purrr", "rlang", "R6", "RSQLite", "stringr", "tidyr", "tidyselect", "tidyverse"],
+      "dependencies": ["checkmate", "DBI", "dbplyr", "dplyr", "glue", "lubridate", "openssl", "parallelly", "purrr", "rlang", "R6", "RSQLite", "stringr", "tidyr", "tidyselect", "tidyverse"],
       "vignettes": false,
       "metadata": {
         "RemotePkgRef": "local::.",
@@ -2296,6 +2296,37 @@
           "post_install": {}
         }
       ]
+    },
+    {
+      "ref": "parallelly",
+      "package": "parallelly",
+      "version": "1.37.0",
+      "type": "standard",
+      "direct": false,
+      "binary": true,
+      "dependencies": [],
+      "vignettes": false,
+      "needscompilation": false,
+      "metadata": {
+        "RemoteType": "standard",
+        "RemotePkgRef": "parallelly",
+        "RemoteRef": "parallelly",
+        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
+        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
+        "RemoteSha": "1.37.0"
+      },
+      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/parallelly_1.37.0.tar.gz"],
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.3/parallelly_1.37.0.tar.gz",
+      "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
+      "rversion": "4.3",
+      "directpkg": false,
+      "license": "LGPL (>= 2.1)",
+      "dep_types": ["Depends", "Imports", "LinkingTo"],
+      "params": [],
+      "install_args": "",
+      "repotype": "cranlike",
+      "sysreqs": "",
+      "sysreqs_packages": {}
     },
     {
       "ref": "pillar",

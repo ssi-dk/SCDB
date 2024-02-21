@@ -30,6 +30,7 @@ Imports:
     lubridate,
     methods,
     openssl,
+    parallelly,
     purrr,
     rlang,
     R6,
@@ -40,6 +41,7 @@ Imports:
     tidyverse,
     utils
 Suggests:
+    callr,
     conflicted,
     jsonlite,
     knitr,
