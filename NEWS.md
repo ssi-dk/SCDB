@@ -48,6 +48,9 @@
 
 * The S3 method `as.character.Id()` is added which converts `DBI::Id()` to `character` (#93).
 
+* A new `id.data.frame()` which converts `data.frame` to `DBI::Id()` (#108).
+  Useful in combination with `get_tables(conn, pattern)`.
+
 * A new `get_catalog()` function is added to give more specific table identification (#99).
 
 * A new clean up function, `defer_db_cleanup()`, is added (#89).

@@ -9,16 +9,19 @@
 #' @param ... Further arguments passed to methods.
 #' @details The given `db_table_id` is parsed to a DBI::Id depending on the type of input:
 #'  * `character`: db_table_id is parsed to a DBI::Id object using an assumption of "schema.table" syntax
-#'     with corresponding schema (if found in `conn`) and table values.
-#'     If no schema is implied, the default schema of `conn` will be used.
+#'    with corresponding schema (if found in `conn`) and table values.
+#'    If no schema is implied, the default schema of `conn` will be used.
 #'
 #'  * `DBI::Id`: if schema is not specified in `Id`, the schema is set to the default schema for `conn` (if given).
 #'
 #'  * `tbl_sql`: the remote name is used to resolve the table identification.
 #'
+#'  * `data.frame`: A Id is built from the data.frame (columns `catalog`, `schema`, and `table`).
+#'    Can be used in conjunction with `get_tables(conn, pattern)`.
+#'
 #' @return A DBI::Id object parsed from db_table_id (see details)
 #' @examples
-#' id("schema.table")
+#'   id("schema.table")
 #' @seealso [DBI::Id] which this function wraps.
 #' @export
 id <- function(db_table_id, ...) {
@@ -42,7 +45,7 @@ id.Id <- function(db_table_id, conn = NULL, ...) {
 
   fully_qualified_id <- DBI::Id(
     catalog = purrr::pluck(db_table_id, "name", "catalog", .default = catalog),
-    schema = purrr::pluck(db_table_id, "name", "schema", .default = SCDB::get_schema(conn)),
+    schema = purrr::pluck(db_table_id, "name", "schema", .default = get_schema(conn)),
     table = table_name
   )
 
@@ -94,43 +97,54 @@ id.tbl_dbi <- function(db_table_id, ...) {
     unclass() |>
     purrr::discard(is.na)
 
-  table <- purrr::pluck(table_ident, "table")
-  schema <- purrr::pluck(table_ident, "schema")
+  # Check table still exists
+  if (!table_exists(table_conn, db_table_id)) {
+    stop("Table does not exist (anymore) and id cannot be determined!")
+  }
+
   catalog <- purrr::pluck(table_ident, "catalog")
+  schema <- purrr::pluck(table_ident, "schema")
+  table <- purrr::pluck(table_ident, "table")
 
-  # If only table is known, attempt to attempt to resolve the table from existing tables.
-  # For SQLite, there should only be one table in main/temp matching the table.
+  # Match against known tables
   # In some cases, tables may have been added to the DB that makes the id ambiguous.
-  if (is.null(schema)) {
+  matches <- get_tables(dbplyr::remote_con(db_table_id), show_temporary = TRUE) |>
+    dplyr::filter(.data$table == !!table)
 
-    # Check table still exists
-    if (!table_exists(table_conn, db_table_id)) {
-      stop("Table does not exist (anymore) and id cannot be determined!")
-    }
+  if (!is.null(schema)) matches <- dplyr::filter(matches, .data$schema == !!schema)
+  if (!is.null(catalog)) matches <- dplyr::filter(matches, .data$catalog == !!catalog)
 
-    # If not, attempt to resolve the table from existing tables.
-    # For SQLite, there should only be one table in main/temp matching the table
-    # In some cases, tables may have been added to the DB that makes the id ambiguous.
-    schema <- get_tables(table_conn, show_temporary = TRUE) |>
-      dplyr::filter(.data$table == !!table) |>
-      dplyr::pull("schema")
-
-    if (length(schema) > 1)  {
-      stop(
-        "Table identification has been corrupted! ",
-        "This table does not contain information about its schema and ",
-        "multiple tables with this name were found across schemas."
-      )
-    }
+  if (nrow(matches) > 1)  {
+    stop(
+      "Table identification has been corrupted! ",
+      "This table does not contain information about its schema and ",
+      "multiple tables with this name were found across schemas."
+    )
   }
 
-  # Is the table temporary?
-  if (is.null(catalog) && inherits(table_conn, "Microsoft SQL Server")) {
-    catalog <- get_catalog(table_conn, temporary = startsWith(table, "#"))
-  }
+  return(id(matches))
+}
 
-  # Return the inferred Id
-  return(DBI::Id(catalog = catalog, schema = schema, table = table))
+
+#' @export
+#' @rdname id
+id.data.frame <- function(db_table_id, ...) {
+
+  checkmate::assert_data_frame(db_table_id, nrows = 1)
+  checkmate::assert_names(
+    names(db_table_id),
+    must.include = c("schema", "table"),
+    subset.of = c("catalog", "schema", "table")
+  )
+
+  # Convert the given data.frame to DBI::Id
+  return(
+    DBI::Id(
+      "catalog" = purrr::pluck(db_table_id, "catalog"),
+      "schema" = purrr::pluck(db_table_id, "schema"),
+      "table" = purrr::pluck(db_table_id, "table")
+    )
+  )
 }
 
 

@@ -4,6 +4,7 @@
 \alias{id}
 \alias{id.Id}
 \alias{id.character}
+\alias{id.data.frame}
 \title{Convenience function for DBI::Id}
 \usage{
 id(db_table_id, ...)
@@ -11,6 +12,8 @@ id(db_table_id, ...)
 \method{id}{Id}(db_table_id, conn = NULL, ...)
 
 \method{id}{character}(db_table_id, conn = NULL, allow_table_only = TRUE, ...)
+
+\method{id}{data.frame}(db_table_id, ...)
 }
 \arguments{
 \item{db_table_id}{A \code{\link[DBI:Id]{DBI::Id()}} object or a character string readable by \link{id}.}
@@ -37,10 +40,12 @@ with corresponding schema (if found in \code{conn}) and table values.
 If no schema is implied, the default schema of \code{conn} will be used.
 \item \code{DBI::Id}: if schema is not specified in \code{Id}, the schema is set to the default schema for \code{conn} (if given).
 \item \code{tbl_sql}: the remote name is used to resolve the table identification.
+\item \code{data.frame}: A Id is built from the data.frame (columns \code{catalog}, \code{schema}, and \code{table}).
+Can be used in conjunction with \code{get_tables(conn, pattern)}.
 }
 }
 \examples{
-id("schema.table")
+  id("schema.table")
 }
 \seealso{
 \link[DBI:Id]{DBI::Id} which this function wraps.
