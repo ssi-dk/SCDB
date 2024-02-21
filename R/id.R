@@ -93,18 +93,43 @@ id.tbl_dbi <- function(db_table_id, ...) {
 
   # Store currently known information about table
   table_conn <- dbplyr::remote_con(db_table_id)
-  table_ident <- dbplyr::remote_table(db_table_id) |>
-    unclass() |>
-    purrr::discard(is.na)
 
   # Check table still exists
   if (!table_exists(table_conn, db_table_id)) {
     stop("Table does not exist (anymore) and id cannot be determined!")
   }
 
-  catalog <- purrr::pluck(table_ident, "catalog")
-  schema <- purrr::pluck(table_ident, "schema")
-  table <- purrr::pluck(table_ident, "table")
+  table_ident <- dbplyr::remote_table(db_table_id)
+
+  if (inherits(table_ident, "dbplyr_table_path")) { # dbplyr >= 2.5.0
+    components <- dbplyr::table_path_components(table_ident, table_conn)[[1]]
+    if (length(components) == 1) {
+      catalog <- NULL
+      schema <- NULL
+      table <- components[[1]]
+    } else if (length(components) == 2) {
+      catalog <- NULL
+      schema <- components[[1]]
+      table <- components[[2]]
+    } else if (length(components) == 3) {
+      catalog <- components[[1]]
+      schema <- components[[2]]
+      table <- components[[3]]
+    } else {
+      stop("Unknown table specification")
+    }
+
+  } else {
+
+    table_ident <- table_ident |>
+      unclass() |>
+      purrr::discard(is.na)
+
+    catalog <- purrr::pluck(table_ident, "catalog")
+    schema <- purrr::pluck(table_ident, "schema")
+    table <- purrr::pluck(table_ident, "table")
+
+  }
 
   # Match against known tables
   # In some cases, tables may have been added to the DB that makes the id ambiguous.

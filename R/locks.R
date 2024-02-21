@@ -94,8 +94,8 @@ lock_table <- function(conn, db_table, schema = NULL) {
 
   # Determine the owner of the lock
   lock_entry <- db_lock_table |>
-    dplyr::filter(.data$schema == purrr::pluck(db_table_id, "name", "schema"),
-                  .data$table  == purrr::pluck(db_table_id, "name", "table"))
+    dplyr::filter(.data$schema == !!purrr::pluck(db_table_id, "name", "schema"),
+                  .data$table  == !!purrr::pluck(db_table_id, "name", "table"))
 
   lock_owner_user <- dplyr::pull(lock_entry, "user")
   lock_owner_pid <- dplyr::pull(lock_entry, "pid")
