@@ -1,6 +1,6 @@
 {
   "lockfile_version": 1,
-  "os": "Ubuntu 22.04.3 LTS",
+  "os": "Ubuntu 22.04.4 LTS",
   "r_version": "R version 4.3.2 (2023-10-31)",
   "platform": "x86_64-pc-linux-gnu",
   "packages": [
