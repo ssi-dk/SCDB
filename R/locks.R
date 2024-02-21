@@ -46,6 +46,7 @@ lock_table <- function(conn, db_table, schema = NULL) {
         data.frame(
           "schema" = character(0),
           "table" = character(0),
+          "user" = character(0),
           "lock_start" = numeric(0),
           "pid" = numeric(0)
         ),
@@ -76,6 +77,7 @@ lock_table <- function(conn, db_table, schema = NULL) {
         data.frame(
           "schema" = purrr::pluck(db_table_id, "name", "schema"),
           "table" = purrr::pluck(db_table_id, "name", "table"),
+          "user" = Sys.info()[["user"]],
           "pid" = Sys.getpid(),
           "lock_start" = as.numeric(Sys.time())
         ),

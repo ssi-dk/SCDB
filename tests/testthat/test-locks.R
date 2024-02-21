@@ -11,13 +11,14 @@ test_that("lock helpers works in default and test schema", {
       expect_true(lock_table(conn, db_table = test_table_id, schema = schema))
 
       db_lock_table <- dplyr::tbl(conn, lock_table_id)
-      expect_identical(colnames(db_lock_table), c("schema", "table", "lock_start", "pid"))
+      expect_identical(colnames(db_lock_table), c("schema", "table", "user", "lock_start", "pid"))
 
       expect_identical(
         dplyr::collect(dplyr::select(db_lock_table, !"lock_start")),
         tibble::tibble(
           "schema" = purrr::pluck(test_table_id, "name", "schema"),
           "table"  = purrr::pluck(test_table_id, "name", "table"),
+          "user" = Sys.info()[["user"]],
           "pid" = as.numeric(Sys.getpid())
         )
       )
@@ -36,6 +37,7 @@ test_that("lock helpers works in default and test schema", {
         tibble::tibble(
           "schema" = purrr::pluck(test_table_id, "name", "schema"),
           "table"  = purrr::pluck(test_table_id, "name", "table"),
+          "user"   = "some_other_user",
           "lock_start" = as.numeric(Sys.time()),
           "pid" = 0.5
         ),
@@ -66,6 +68,7 @@ test_that("lock helpers works in default and test schema", {
         tibble::tibble(
           "schema" = purrr::pluck(test_table_id, "name", "schema"),
           "table"  = purrr::pluck(test_table_id, "name", "table"),
+          "user"   = "some_other_user",
           "lock_start" = as.numeric(Sys.time()),
           "pid" = bg_process$get_pid()
         ),
