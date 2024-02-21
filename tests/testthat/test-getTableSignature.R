@@ -29,7 +29,7 @@ data_random <- data.frame(
   "logical"   = TRUE
 )
 
-for (conn in c(list(NULL), get_test_conns())) {                                                                         # nolint: cyclocomp_linter
+for (conn in c(list(NULL), get_test_conns())) {
 
   if (is.null(conn)) {
     test_that("getTableSignature() generates signature for update_snapshot() (conn == NULL)", {
