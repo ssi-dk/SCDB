@@ -18,9 +18,9 @@ jobs:
         id: checkfile
         run: |
           if [ -f .github/sync.yaml ]; then
-            echo "::set-output name=exists::true"
+            echo "exists=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=exists::false"
+            echo "exists=false" >> $GITHUB_OUTPUT
           fi
         shell: bash
 
@@ -48,9 +48,9 @@ jobs:
         id: checkfile
         run: |
           if [ -f .github/sync_reverse.yaml ]; then
-            echo "::set-output name=exists::true"
+            echo "exists=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=exists::false"
+            echo "exists=false" >> $GITHUB_OUTPUT
           fi
         shell: bash
 
