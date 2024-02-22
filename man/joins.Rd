@@ -70,6 +70,7 @@ If a column contains \code{NA} / \code{NULL}, give the argument to na_by to matc
 If no na_by is given, the function defaults to using \verb{dplyr::*_join}.
 }
 \examples{
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
   library(dplyr, warn.conflicts = FALSE)
   library(dbplyr, warn.conflicts = FALSE)
 
@@ -97,6 +98,7 @@ If no na_by is given, the function defaults to using \verb{dplyr::*_join}.
 
   left_join(db1, db2) |> show_query()
   left_join(db1, db2, sql_on = "LHS.x < RHS.x") |> show_query()
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \link[dplyr:mutate-joins]{dplyr::mutate-joins} which this function wraps.
