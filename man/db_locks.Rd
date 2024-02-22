@@ -25,7 +25,8 @@ The process id to remove the lock for.}
 }
 \value{
 \itemize{
-\item \code{lock_table()} returns the `TRUE`` if the lock was success fully added.
+\item \code{lock_table()} returns the \code{TRUE} (\code{FALSE}) if the lock was (un)successfully added.
+If a lock exists for a non-active process, an error is thrown.
 \item \code{unlock_table()} returns \code{NULL} (called for side effects).
 }
 }

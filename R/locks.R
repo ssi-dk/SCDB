@@ -20,7 +20,8 @@ NULL
 #' @param pid (`numeric(1)`)\cr
 #'   The process id to remove the lock for.
 #' @return
-#'   * `lock_table()` returns the `TRUE`` if the lock was success fully added.
+#'   * `lock_table()` returns the `TRUE` (`FALSE`) if the lock was (un)successfully added.
+#'     If a lock exists for a non-active process, an error is thrown.
 #'
 #'   * `unlock_table()` returns `NULL` (called for side effects).
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
