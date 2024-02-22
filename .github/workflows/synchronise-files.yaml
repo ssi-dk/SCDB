@@ -13,8 +13,20 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@master
+
+      - name: Check if sync.yaml exists
+        id: checkfile
+        run: |
+          if [ -f .github/sync.yaml ]; then
+            echo "::set-output name=exists::true"
+          else
+            echo "::set-output name=exists::false"
+          fi
+        shell: bash
+
       - name: Run GitHub File Sync
         uses: RasmusSkytte/repo-file-sync-action@master
+        if: steps.checkfile.outputs.exists == 'true'
         with:
           GH_PAT: ${{ secrets.GH_PAT }}
           CONFIG_PATH: .github/sync.yaml
@@ -31,8 +43,20 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@master
+
+      - name: Check if sync_reverse.yaml exists
+        id: checkfile
+        run: |
+          if [ -f .github/sync_reverse.yaml ]; then
+            echo "::set-output name=exists::true"
+          else
+            echo "::set-output name=exists::false"
+          fi
+        shell: bash
+
       - name: Run GitHub File Sync
         uses: RasmusSkytte/repo-file-sync-action@master
+        if: steps.checkfile.outputs.exists == 'true'
         with:
           GH_PAT: ${{ secrets.GH_PAT }}
           CONFIG_PATH: .github/sync_reverse.yaml
