@@ -86,7 +86,7 @@ interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
         dplyr::select(tidyselect::all_of(by), "valid_until") |>
         dplyr::rename(valid_from = "valid_until")
     })
-  t <- union(q1, q2) |> purrr::reduce(union)
+  t <- dplyr::union(q1, q2) |> purrr::reduce(dplyr::union)
 
   # Sort and find valid_until in the combined validities
   t <- t |>

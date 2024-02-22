@@ -184,7 +184,7 @@ test_that("update_snapshot() works", {
                      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
     t <- list(t0, t1, t2) |>
-      purrr::reduce(union) |>
+      purrr::reduce(dplyr::union) |>
       dplyr::collect() |>
       dplyr::mutate(col2 = as.character(col2)) |>
       dplyr::arrange(col1, col2) |>

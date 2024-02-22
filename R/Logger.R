@@ -240,7 +240,7 @@ Logger <- R6::R6Class(                                                          
           " = NULL WHERE ",
           dbplyr::ident("log_file"),
           " = '",
-          sql(self$log_filename),
+          dplyr::sql(self$log_filename),
           "'",
           con = private$log_conn
         )
