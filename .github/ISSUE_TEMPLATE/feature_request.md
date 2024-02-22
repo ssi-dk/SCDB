@@ -6,7 +6,7 @@ labels: enhancement
 assignees: ''
 
 ---
-<!-- 
+<!--
 	Thank you for your interest in improving the SCDB package!
 	In order to more easily identify feature requests which may be arbitrarily old, please give a very brief explanation of the feature in the title.
 
@@ -14,8 +14,8 @@ assignees: ''
 
 	* Support for SQLite
 	* Testing with a Postgres container in GitHub Actions
-	* Refactor the Logger instance to a separace object
-	
+	* Refactor the Logger instance to a separate object
+
 	If your feature is simple and you already have a fork implementing this feature, feel free to skip this issue and open a pull request instead!
 -->
 **Describe the feature**
@@ -25,7 +25,7 @@ assignees: ''
 -->
 
 **What use will this feature have?**
-<!-- 
+<!--
 	Does the feature improve user-friendliness?
 	Does it address compatibility or security issues?
 	Does it provide significant performance improvements?

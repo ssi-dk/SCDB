@@ -30,7 +30,7 @@ test the changes locally before submitting a pull request if possible.
 > Please link to issues if possible
 > (see also ["Linking a pull request to an issue"](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/using-keywords-in-issues-and-pull-requests#linking-a-pull-request-to-an-issue)).
 >
-> Trivial changes, like fixing a typo, does not need an issue. 
+> Trivial changes, like fixing a typo, does not need an issue.
 
 
 ### Approach
