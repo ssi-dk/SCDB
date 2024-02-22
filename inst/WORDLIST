@@ -7,6 +7,7 @@ cloneable
 CMD
 Codecov
 coercible
+codecov
 colname
 conn
 cr
@@ -22,9 +23,12 @@ Donut
 dplyr
 drv
 
+endblock
 Engbo
 
 funder
+
+github
 
 IANA
 Institut
@@ -53,7 +57,9 @@ Postgres
 printf
 
 Rasmus
+README
 realpath
+Rmd
 RPostgres
 
 schemas
