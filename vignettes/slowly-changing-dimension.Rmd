@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 library(tidyverse)
 ```
 
-```{r setup, include = FALSE}
+```{r setup, include = FALSE, eval = requireNamespace("RSQLite")}
 
 forecasts_full <- tribble(
   ~City, ~Forecast, ~ForecastDate,
@@ -45,9 +45,6 @@ forecasts_scd <- forecasts_full %>%
   distinct() %>%
   select(!"ForecastDate") %>%
   arrange(ForecastFrom)
-
-# Only define one connection
-if (!exists("con")) con <- DBI::dbConnect(drv = RSQLite::SQLite(), dbname = ":memory:")
 
 forecasts_dated <- filter(forecasts_full, ForecastDate == "2023-09-28")
 forecasts <- select(forecasts_dated, !"ForecastDate")

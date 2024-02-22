@@ -320,6 +320,8 @@ test_that("update_snapshot checks table formats", {
 
 
 test_that("update_snapshot works with across connection", {
+  skip_if_not_installed("RSQLite")
+
   withr::local_options("SCDB.log_path" = NULL) # No file logging
 
   # Test a data transfer from a local SQLite to the test connection
