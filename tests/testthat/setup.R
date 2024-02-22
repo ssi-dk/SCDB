@@ -1,8 +1,3 @@
-# dplyr has a deprecated function called "id" that in some cases are called over the SCDB implementation if "id"
-# We here explicitly prefer our implementation for our tests
-conflicted::conflict_prefer("id", "SCDB")
-
-
 # Ensure the target connections are empty and configured correctly
 coll <- checkmate::makeAssertCollection()
 conns <- get_test_conns()
