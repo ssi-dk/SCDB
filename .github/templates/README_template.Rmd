@@ -1,0 +1,41 @@
+---
+output:
+  - github_document
+  - md_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file. -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-"
+)
+```
+
+# {{ repo_name }} <a href="https://ssi-dk.github.io/{{ repo_name }}/"><img src="man/figures/logo.png" align="right" height="138" alt="{{ repo_name }} website" /></a>
+
+<!-- badges: start -->
+
+[![CRAN status](https://www.r-pkg.org/badges/version/{{ repo_name }})](https://CRAN.R-project.org/package={{ repo_name }})
+[![CI tests](https://github.com/ssi-dk/{{ repo_name }}/actions/workflows/all-workflows.yaml/badge.svg)](https://github.com/ssi-dk/{{ repo_name }}/actions/workflows/all-workflows.yaml)
+[![codecov](https://codecov.io/gh/ssi-dk/{{ repo_name }}/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ssi-dk/{{ repo_name }})
+
+<!-- badges: end -->
+
+{% block body %}
+{% endblock %}
+
+## Installation
+```{r, eval = FALSE}
+# Install {{ repo_name }} from CRAN:
+install.packages("{{ repo_name }}")
+
+# Alternatively, install the development version from github:
+# install.packages("devtools")
+devtools::install_github("ssi-dk/{{ repo_name }}")
+```
+
+## Usage
+For basic usage examples, see `vignette("{{ repo_name }}")`.
