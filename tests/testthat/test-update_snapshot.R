@@ -240,7 +240,7 @@ test_that("update_snapshot() works", {
 
 
 test_that("update_snapshot works with Id objects", {
-  withr::local_options("SCDB.log_path" = tempdir())
+  withr::local_options("SCDB.log_path" = NULL) # No file logging
 
   for (conn in get_test_conns()) {
 
@@ -250,14 +250,15 @@ test_that("update_snapshot works with Id objects", {
                          timestamp = Sys.time(),
                          db_table = "test.mtcars_modified",
                          log_conn = NULL,
-                         log_table_id = NULL)
+                         log_table_id = NULL,
+                         warn = FALSE)
 
     expect_no_error(
       mtcars |>
         dplyr::mutate(disp = sample(mtcars$disp, nrow(mtcars))) |>
         dplyr::copy_to(dest = conn,
                        df = _,
-                       name = "mtcars_modified") |>
+                       name = unique_table_name()) |>
         update_snapshot(
           conn = conn,
           db_table = target_table,
@@ -266,7 +267,6 @@ test_that("update_snapshot works with Id objects", {
         )
     )
 
-    unlink(logger$log_realpath)
     connection_clean_up(conn)
   }
 })
@@ -316,4 +316,102 @@ test_that("update_snapshot checks table formats", {
 
     connection_clean_up(conn)
   }
+})
+
+
+test_that("update_snapshot works with across connection", {
+  withr::local_options("SCDB.log_path" = NULL) # No file logging
+
+  # Test a data transfer from a local SQLite to the test connection
+  source_conn <- DBI::dbConnect(RSQLite::SQLite())
+
+  # Create a table for the tests
+  mtcars_modified <- mtcars |>
+    dplyr::mutate(name = rownames(mtcars))
+
+  # Copy table to the source
+  .data <- dplyr::copy_to(dest = source_conn, df = mtcars_modified, name = unique_table_name())
+
+  # For each conn, we test if update_snapshot preserves data types
+  for (target_conn in get_test_conns()) {
+
+    target_table <- id("test.mtcars_modified", target_conn)
+    if (DBI::dbExistsTable(target_conn, target_table)) DBI::dbRemoveTable(target_conn, target_table)
+
+    logger <- LoggerNull$new()
+
+    # Check we can transfer without error
+    expect_no_error(
+      update_snapshot(
+        .data,
+        conn = target_conn,
+        db_table = target_table,
+        logger = logger,
+        timestamp = format(Sys.time())
+      )
+    )
+
+    # Check that if we collect the table, the signature will match the original
+    table_signature <- get_table(target_conn, target_table) |>
+      dplyr::collect() |>
+      dplyr::summarise(dplyr::across(tidyselect::everything(), ~ class(.)[1])) |>
+      as.data.frame()
+
+    expect_identical(
+      table_signature,
+      dplyr::summarise(mtcars_modified, dplyr::across(tidyselect::everything(), ~ class(.)[1]))
+    )
+
+
+    DBI::dbRemoveTable(target_conn, target_table)
+    connection_clean_up(target_conn)
+    rm(logger)
+    invisible(gc())
+  }
+  connection_clean_up(source_conn)
+
+
+  ## Now we test the reverse transfer
+
+  # Test a data transfer from the test connection to a local SQLite
+  target_conn <- DBI::dbConnect(RSQLite::SQLite())
+
+  # For each conn, we test if update_snapshot preserves data types
+  for (source_conn in get_test_conns()) {
+
+    .data <- dplyr::copy_to(dest = source_conn, df = mtcars_modified, name = unique_table_name())
+
+    target_table <- id("mtcars_modified", target_conn)
+    if (DBI::dbExistsTable(target_conn, target_table)) DBI::dbRemoveTable(target_conn, target_table)
+
+    logger <- LoggerNull$new()
+
+    # Check we can transfer without error
+    expect_no_error(
+      update_snapshot(
+        .data,
+        conn = target_conn,
+        db_table = target_table,
+        logger = logger,
+        timestamp = format(Sys.time())
+      )
+    )
+
+    # Check that if we collect the table, the signature will match the original
+    table_signature <- get_table(target_conn, target_table) |>
+      dplyr::collect() |>
+      dplyr::summarise(dplyr::across(tidyselect::everything(), ~ class(.)[1])) |>
+      as.data.frame()
+
+    expect_identical(
+      table_signature,
+      dplyr::summarise(mtcars_modified, dplyr::across(tidyselect::everything(), ~ class(.)[1]))
+    )
+
+
+    connection_clean_up(source_conn)
+    rm(logger)
+    invisible(gc())
+  }
+  connection_clean_up(target_conn)
 })
