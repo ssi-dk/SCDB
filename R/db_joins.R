@@ -134,7 +134,7 @@ join_warn_experimental <- function() {
 #'
 #' @inheritParams dbplyr::join.tbl_sql
 #' @inherit dbplyr::join.tbl_sql return
-#' @examples
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   library(dplyr, warn.conflicts = FALSE)
 #'   library(dbplyr, warn.conflicts = FALSE)
 #'
