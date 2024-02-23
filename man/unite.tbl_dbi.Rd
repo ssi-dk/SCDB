@@ -28,23 +28,26 @@ tidyverse; we support it here for backward compatibility).}
 each value.}
 }
 \value{
-A tbl_dbi with the specified columns united into a new column named according to "col"
+A tbl_dbi with the specified columns united into a new column named according to "col".
 }
 \description{
-tidyr::unite for tbl_dbi
+Convenience function to paste together multiple columns into one.
 }
 \examples{
-library(tidyr, warn.conflicts = FALSE)
+  library(tidyr, warn.conflicts = FALSE)
 
-df <- expand_grid(x = c("a", NA), y = c("b", NA))
+  df <- expand_grid(x = c("a", NA), y = c("b", NA))
 
-unite(df, "z", x:y, remove = FALSE)
+  unite(df, "z", x:y, remove = FALSE)
 
-# To remove missing values:
-unite(df, "z", x:y, na.rm = TRUE, remove = FALSE)
+  # To remove missing values:
+  unite(df, "z", x:y, na.rm = TRUE, remove = FALSE)
 
-# Separate is almost the complement of unite
-unite(df, "xy", x:y) |>
-  separate(xy, c("x", "y"))
-# (but note `x` and `y` contain now "NA" not NA)
+  # Separate is almost the complement of unite
+  unite(df, "xy", x:y) |>
+    separate(xy, c("x", "y"))
+  # (but note `x` and `y` contain now "NA" not NA)
+}
+\seealso{
+\code{\link[tidyr:separate]{separate()}}, the complement.
 }

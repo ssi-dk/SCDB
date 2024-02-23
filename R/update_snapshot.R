@@ -1,31 +1,55 @@
 #' Update a historical table
-#' @template .data_dbi
+#'
+#' @description
+#'   `update_snapshots` makes it easy to create and update a historical data table on a remote (SQL) server.
+#'   The function takes the data (`.data`) as it looks on a given point in time (`timestamp`) and then updates
+#'   (or creates) an remote table identified by `db_table`.
+#'   This update only stores the changes between the new data (`.data`) and the data currently stored on the remote.
+#'   This way, the data can be reconstructed as it looked at any point in time while taking as little space as possible.
+#'
+#'   See `vignette("basic-principles")` for further introduction to the function.
+#'
+#' @template .data
 #' @template conn
-#' @param db_table An object that inherits from `tbl_dbi`, a [DBI::Id()] object or a character string readable by [id].
-#' @param timestamp
-#'   A timestamp (POSIXct) with which to update from_ts/until_ts columns
+#' @template db_table
+#' @param timestamp (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
+#'   The timestamp describing the data being processed (not the current time).
 #' @template filters
-#' @param message
-#'   A message to add to the log-file (useful for supplying metadata to the log)
-#' @param tic
-#'   A timestamp when computation began. If not supplied, it will be created at call-time.
-#'   (Used to more accurately convey how long runtime of the update process has been)
-#' @param logger
-#'   A [Logger] instance. If none is given, one is initialized with default arguments.
-#' @param enforce_chronological_order
-#'   A logical that controls whether or not to check if timestamp of update is prior to timestamps in the DB
-#' @return No return value, called for side effects
-#' @examples
-#' conn <- get_connection(drv = RSQLite::SQLite())
+#' @param message (`character(1)`)\cr
+#'   A message to add to the log-file (useful for supplying metadata to the log).
+#' @param tic (`POSIXct(1)`)\cr
+#'   A timestamp when computation began. If not supplied, it will be created at call-time
+#'   (used to more accurately convey the runtime of the update process).
+#' @param logger (`Logger(1)`)\cr
+#'   A configured logging object. If none is given, one is initialized with default arguments.
+#' @param enforce_chronological_order (`logical(1)`)\cr
+#'   Are updates allowed if they are chronologically earlier than latest update?
+#' @return
+#'   No return value, called for side effects.
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
+#'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' data <- dplyr::copy_to(conn, mtcars)
+#'   data <- dplyr::copy_to(conn, mtcars)
 #'
-#' update_snapshot(data,
-#'                 conn = conn,
-#'                 db_table = "test.mtcars",
-#'                 timestamp = Sys.time())
+#'   # Copy the first 3 records
+#'   update_snapshot(
+#'     head(data, 3),
+#'     conn = conn,
+#'     db_table = "test.mtcars",
+#'     timestamp = Sys.time()
+#'   )
 #'
-#' close_connection(conn)
+#'   # Update with the first 5 records
+#'   update_snapshot(
+#'     head(data, 5),
+#'     conn = conn,
+#'     db_table = "test.mtcars",
+#'     timestamp = Sys.time()
+#'   )
+#'
+#'   dplyr::tbl(conn, "test.mtcars")
+#'
+#'   close_connection(conn)
 #' @seealso filter_keys
 #' @importFrom rlang .data
 #' @export

@@ -7,19 +7,22 @@
 nrow(.data)
 }
 \arguments{
-\item{.data}{lazy_query to parse}
+\item{.data}{(\code{data.frame(1)}, \code{tibble(1)}, \code{data.table(1)}, or \code{tbl_dbi(1)})\cr
+Data object.}
 }
 \value{
-The number of records in the object
+The number of records in the object.
 }
 \description{
 nrow() but also works on remote tables
 }
 \examples{
-conn <- get_connection(drv = RSQLite::SQLite())
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+  conn <- get_connection(drv = RSQLite::SQLite())
 
-m <- dplyr::copy_to(conn, mtcars)
-nrow(m) == nrow(mtcars) # TRUE
+  m <- dplyr::copy_to(conn, mtcars)
+  nrow(m) == nrow(mtcars) # TRUE
 
-close_connection(conn)
+  close_connection(conn)
+\dontshow{\}) # examplesIf}
 }

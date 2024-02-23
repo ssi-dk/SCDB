@@ -28,18 +28,15 @@ Imports:
     dplyr,
     glue,
     lintr,
-    lubridate,
     methods,
     openssl,
     parallelly,
     purrr,
     rlang,
     R6,
-    RSQLite,
     stringr,
     tidyr,
     tidyselect,
-    tidyverse,
     utils
 Suggests:
     callr,
@@ -51,9 +48,11 @@ Suggests:
     roxygen2,
     pkgdown,
     RPostgres,
+    RSQLite,
     spelling,
     testthat (>= 3.0.0),
     tibble,
+    tidyverse,
     withr
 Language: en-US
 URL: https://github.com/ssi-dk/SCDB, https://ssi-dk.github.io/SCDB/

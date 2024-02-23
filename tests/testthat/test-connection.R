@@ -8,6 +8,8 @@ test_that("get_connection() works", {
 
 
 test_that("get_connection() notifies if connection fails", {
+  skip_if_not_installed("RSQLite")
+
   for (i in 1:100) {
     random_string <- paste(sample(letters, size = 32, replace = TRUE), collapse = "")
 

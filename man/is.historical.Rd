@@ -7,22 +7,25 @@
 is.historical(.data)
 }
 \arguments{
-\item{.data}{A data frame, a tibble, a data.table or a tbl.}
+\item{.data}{(\code{data.frame(1)}, \code{tibble(1)}, \code{data.table(1)}, or \code{tbl_dbi(1)})\cr
+Data object.}
 }
 \value{
-TRUE if .data contains the columns: "checksum", "from_ts", and "until_ts". FALSE otherwise
+\code{TRUE} if \code{.data} contains the columns: "checksum", "from_ts", and "until_ts". \code{FALSE} otherwise.
 }
 \description{
 Checks if table contains historical data
 }
 \examples{
-conn <- get_connection(drv = RSQLite::SQLite())
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+  conn <- get_connection(drv = RSQLite::SQLite())
 
-dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
-create_table(mtcars, conn, db_table_id = id("mtcars_historical", conn))
+  dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
+  create_table(mtcars, conn, db_table = id("mtcars_historical", conn))
 
-is.historical(get_table(conn, "mtcars")) # FALSE
-is.historical(get_table(conn, "mtcars_historical")) # TRUE
+  is.historical(get_table(conn, "mtcars")) # FALSE
+  is.historical(get_table(conn, "mtcars_historical")) # TRUE
 
-close_connection(conn)
+  close_connection(conn)
+\dontshow{\}) # examplesIf}
 }

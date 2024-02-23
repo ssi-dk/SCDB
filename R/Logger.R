@@ -30,15 +30,15 @@ Logger <- R6::R6Class(                                                          
 
     #' @description
     #'   Create a new `Logger` object
-    #' @param db_table (`id-like object`)\cr
+    #' @param db_table (`id-like object(1)`)\cr
     #'   A table specification (coercible by `id()`) specifying the table being updated.
     #' @param timestamp (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
-    #'   A timestamp describing the data being processed (not the current time)
+    #'   A timestamp describing the data being processed (not the current time).
     #' @param output_to_console (`logical(1)`)\cr
     #'   Should the Logger output to console?
-    #' @param log_table_id (`id-like object`)\cr
+    #' @param log_table_id (`id-like object(1)`)\cr
     #'   A table specification (coercible by `id()`) specifying the location of the log table.
-    #' @param log_conn (`DBIConnection`)\cr
+    #' @param log_conn (`DBIConnection(1)`)\cr
     #'   A database connection where log table should exist.
     #' @param log_path (`character(1)`)\cr
     #'   The path where logs are stored.
@@ -117,12 +117,14 @@ Logger <- R6::R6Class(                                                          
 
     #' @description
     #'   Write a line to log (console / file).
-    #' @param ... `r log_dots <- "One or more character strings to be concatenated"; log_dots`
+    #' @param ... (`character()`)\cr
+    #'   Character strings to be concatenated as log message.
     #' @param tic (`POSIXct(1)`)\cr
     #'   The timestamp used by the log entry.
     #' @param output_to_console (`logical(1)`)\cr
     #'   Should the line be written to console?
-    #' @param log_type `r log_type <- "A character string which describes the severity of the log message"; log_type`
+    #' @param log_type (`character(1)`)\cr
+    #'   The severity of the log message.
     #' @param timestamp_format (`character(1)`)\cr
     #'   The format of the timestamp used in the log message (parsable by [strftime()]).
     #' @return
@@ -154,24 +156,28 @@ Logger <- R6::R6Class(                                                          
 
     #' @description
     #'   Write a warning to log file and generate warning.
-    #' @param ... `r log_dots`
-    #' @param log_type `r log_type`
+    #' @param ... (`character()`)\cr
+    #'   Character strings to be concatenated as log message.
+    #' @param log_type (`character(1)`)\cr
+    #'   The severity of the log message.
     log_warn = function(..., log_type = "WARNING") {
       warning(self$log_info(..., log_type = log_type))
     },
 
     #' @description
     #'   Write an error to log file and stop execution.
-    #' @param ... `r log_dots`
-    #' @param log_type `r log_type`
+    #' @param ... (`character()`)\cr
+    #'   Character strings to be concatenated as log message.
+    #' @param log_type (`character(1)`)\cr
+    #'   The severity of the log message.
     log_error = function(..., log_type = "ERROR") {
       stop(self$log_info(..., log_type = log_type))
     },
 
     #' @description
     #'   Write or update log table.
-    #' @param ...
-    #'   Name-value pairs with which to update the log table.
+    #' @param ... (`Name-value pairs`)\cr
+    #'   Structured data written to database log table. Name indicates column and value indicates value to be written.
     log_to_db = function(...) {
 
       # Only write if we have a valid connection
@@ -234,7 +240,7 @@ Logger <- R6::R6Class(                                                          
           " = NULL WHERE ",
           dbplyr::ident("log_file"),
           " = '",
-          sql(self$log_filename),
+          dplyr::sql(self$log_filename),
           "'",
           con = private$log_conn
         )
@@ -257,18 +263,18 @@ Logger <- R6::R6Class(                                                          
     .output_to_console = NULL,
 
     # @field log_path (`character(1)`)\cr
-    #   A directory where log file is written (if this is not NULL).
+    #   The location log files are written (if this is not NULL). Defaults to `getOption("SCDB.log_path")`.
     .log_path = NULL,
 
-    # @field log_tbl (`tbl_dbi`)\cr
+    # @field log_tbl (`tbl_dbi(1)`)\cr
     #   The DB table used for logging. Class is connection-specific, but inherits from `tbl_dbi`.
     .log_tbl = NULL,
 
-    # @field log_table_id (`Id`)\cr
+    # @field log_table_id (`Id(1)`)\cr
     #   The Id of the DB table used for logging.
     log_table_id = NULL,
 
-    # @field log_conn (`DBIConnection`)\cr
+    # @field log_conn (`DBIConnection(1)`)\cr
     #   A database connection where log table should exist.
     log_conn = NULL,
 
@@ -280,7 +286,7 @@ Logger <- R6::R6Class(                                                          
     #   The filename (basename) of the file that the `Logger` instance will output to.
     .log_filename = NULL,
 
-    # @field db_table (`Id`)\cr
+    # @field db_table (`Id(1)`)\cr
     #   A table specification specifying the table being updated.
     db_table = NULL,
 
@@ -349,7 +355,7 @@ Logger <- R6::R6Class(                                                          
     },
 
     #' @field log_path (`character(1)`)\cr
-    #'   A directory where log file is written (if this is not NULL). Read only.
+    #'   The location log files are written (if this is not NULL). Defaults to `getOption("SCDB.log_path")`. Read only.
     log_path = function(value) {
       if (missing(value)) {
         return(private$.log_path)
@@ -358,8 +364,8 @@ Logger <- R6::R6Class(                                                          
       }
     },
 
-    #' @field log_tbl (`tbl_dbi`)\cr
-    #'   The DB table used for logging. Class is connection-specific, but inherits from `tbl_dbi`. Read Only.
+    #' @field log_tbl (`tbl_dbi(1)`)\cr
+    #'   The DB table used for logging. Class is connection-specific, but inherits from `tbl_dbi`. Read only.
     log_tbl = function(value) {
       if (missing(value)) {
         return(private$.log_tbl)
@@ -378,7 +384,7 @@ Logger <- R6::R6Class(                                                          
       }
     },
 
-    #' @field log_filename `character(1)`\cr
+    #' @field log_filename (`character(1)`)\cr
     #'   The filename (basename) of the file that the `Logger` instance will output to.  Read only.
     log_filename = function() {
 
@@ -418,7 +424,7 @@ Logger <- R6::R6Class(                                                          
       return(filename)
     },
 
-    #' @field log_realpath `character(1)`\cr
+    #' @field log_realpath (`character(1)`)\cr
     #'   The full path to the logger's log file. Read only.
     log_realpath = function() {
       if (is.null(self$log_path)) {

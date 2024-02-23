@@ -1,8 +1,3 @@
-# dplyr has a deprecated function called "id" that in some cases are called over the SCDB implementation if "id"
-# We here explicitly prefer our implementation for our tests
-conflicted::conflict_prefer("id", "SCDB")
-
-
 # Ensure the target connections are empty and configured correctly
 coll <- checkmate::makeAssertCollection()
 conns <- get_test_conns()
@@ -68,7 +63,7 @@ for (conn in get_test_conns()) {
 #' Clean up and test function
 #' @description
 #'   This function checks for the existence of "dbplyr_###" tables on the connection before closing the connection
-#' @param conn The connection to test
+#' @template conn
 #' @return NULL (called for side effects)
 #' @import rlang .data
 #' @noRd

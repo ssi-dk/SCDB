@@ -7,7 +7,8 @@
 unique_table_name(scope = "SCDB")
 }
 \arguments{
-\item{scope}{A naming scope to generate the table name within.}
+\item{scope}{(\code{character(1)})\cr
+A naming scope to generate the table name within.}
 }
 \value{
 A character string for a table name based on the given scope parameter

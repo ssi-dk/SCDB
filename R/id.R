@@ -1,40 +1,39 @@
 #' Convenience function for DBI::Id
 #'
-#' @template db_table_id
+#' @template db_table
 #' @template conn
-#' @param allow_table_only
-#'  logical. If `TRUE`, allows for returning an `DBI::Id` with `table` = `myschema.table` if schema `myschema`
-#'  is not found in `conn`.
-#'  If `FALSE`, the function will raise an error if the implied schema cannot be found in `conn`
 #' @param ... Further arguments passed to methods.
-#' @details The given `db_table_id` is parsed to a DBI::Id depending on the type of input:
-#'  * `character`: db_table_id is parsed to a DBI::Id object using an assumption of "schema.table" syntax
-#'    with corresponding schema (if found in `conn`) and table values.
-#'    If no schema is implied, the default schema of `conn` will be used.
+#' @details
+#'   The given `db_table` is parsed to a DBI::Id depending on the type of input:
 #'
-#'  * `DBI::Id`: if schema is not specified in `Id`, the schema is set to the default schema for `conn` (if given).
+#'   * `character`: db_table is parsed to a DBI::Id object using an assumption of "schema.table" syntax
+#'     with corresponding schema (if found in `conn`) and table values.
+#'     If no schema is implied, the default schema of `conn` will be used.
 #'
-#'  * `tbl_sql`: the remote name is used to resolve the table identification.
+#'   * `DBI::Id`: if schema is not specified in `Id`, the schema is set to the default schema for `conn` (if given).
 #'
-#'  * `data.frame`: A Id is built from the data.frame (columns `catalog`, `schema`, and `table`).
-#'    Can be used in conjunction with `get_tables(conn, pattern)`.
+#'   * `tbl_sql`: the remote name is used to resolve the table identification.
 #'
-#' @return A DBI::Id object parsed from db_table_id (see details)
+#'   * `data.frame`: A Id is built from the data.frame (columns `catalog`, `schema`, and `table`).
+#'     Can be used in conjunction with `get_tables(conn, pattern)`.
+#'
+#' @return
+#'   A `DBI::Id` object parsed from db_table (see details).
 #' @examples
 #'   id("schema.table")
 #' @seealso [DBI::Id] which this function wraps.
 #' @export
-id <- function(db_table_id, ...) {
+id <- function(db_table, ...) {
   UseMethod("id")
 }
 
 
 #' @export
 #' @rdname id
-id.Id <- function(db_table_id, conn = NULL, ...) {
+id.Id <- function(db_table, conn = NULL, ...) {
 
   # Store the table_name for computations down the line
-  table_name <- purrr::pluck(db_table_id, "name", "table")
+  table_name <- purrr::pluck(db_table, "name", "table")
 
   # Determine if the table would be in a temporary database / catalog
   if (inherits(conn, "Microsoft SQL Server")) {
@@ -44,8 +43,8 @@ id.Id <- function(db_table_id, conn = NULL, ...) {
   }
 
   fully_qualified_id <- DBI::Id(
-    catalog = purrr::pluck(db_table_id, "name", "catalog", .default = catalog),
-    schema = purrr::pluck(db_table_id, "name", "schema", .default = get_schema(conn)),
+    catalog = purrr::pluck(db_table, "name", "catalog", .default = catalog),
+    schema = purrr::pluck(db_table, "name", "schema", .default = get_schema(conn)),
     table = table_name
   )
 
@@ -53,26 +52,30 @@ id.Id <- function(db_table_id, conn = NULL, ...) {
 }
 
 
+#' @param allow_table_only (`logical(1)`)\cr
+#'   If `TRUE`, allows for returning an `DBI::Id` with `table` = "myschema.table" if schema "myschema"
+#'   is not found in `conn`.
+#'   If `FALSE`, the function will raise an error if the implied schema cannot be found in `conn`.
 #' @export
 #' @rdname id
-id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE, ...) {
+id.character <- function(db_table, conn = NULL, allow_table_only = TRUE, ...) {
 
   checkmate::assert(is.null(conn), DBI::dbIsValid(conn), combine = "or")
 
-  if (stringr::str_detect(db_table_id, stringr::fixed("."))) {
-    db_name <- stringr::str_split(db_table_id, stringr::fixed("."))[[1]]
+  if (stringr::str_detect(db_table, stringr::fixed("."))) {
+    db_name <- stringr::str_split(db_table, stringr::fixed("."))[[1]]
     db_name <- db_name[rev(seq_along(db_name))] # Reverse order (table, schema?, catalog?)
 
     table <- purrr::pluck(db_name, 1)
     schema <- purrr::pluck(db_name, 2)
     catalog <- purrr::pluck(db_name, 3, .default = get_catalog(conn))
 
-    # If no matching implied schema is found, return the unmodified db_table_id in the default schema
+    # If no matching implied schema is found, return the unmodified db_table in the default schema
     if (allow_table_only && !is.null(conn) && !schema_exists(conn, schema)) {
-      return(DBI::Id(catalog = catalog, schema = get_schema(conn), table = db_table_id))
+      return(DBI::Id(catalog = catalog, schema = get_schema(conn), table = db_table))
     }
   } else {
-    table <- db_table_id
+    table <- db_table
     schema <- get_schema(conn)
     catalog <- get_catalog(conn)
   }
@@ -82,9 +85,9 @@ id.character <- function(db_table_id, conn = NULL, allow_table_only = TRUE, ...)
 
 
 #' @export
-id.tbl_dbi <- function(db_table_id, ...) {
+id.tbl_dbi <- function(db_table, ...) {
 
-  if (is.null(dbplyr::remote_table(db_table_id))) {
+  if (is.null(dbplyr::remote_table(db_table))) {
     stop(
       "Table identification can only be determined if the lazy query is unmodified ",
       "(i.e. no dplyr manipulation steps can be made)!"
@@ -92,13 +95,13 @@ id.tbl_dbi <- function(db_table_id, ...) {
   }
 
   # Store currently known information about table
-  table_conn <- dbplyr::remote_con(db_table_id)
-  table_ident <- dbplyr::remote_table(db_table_id) |>
+  table_conn <- dbplyr::remote_con(db_table)
+  table_ident <- dbplyr::remote_table(db_table) |>
     unclass() |>
     purrr::discard(is.na)
 
   # Check table still exists
-  if (!table_exists(table_conn, db_table_id)) {
+  if (!table_exists(table_conn, db_table)) {
     stop("Table does not exist (anymore) and id cannot be determined!")
   }
 
@@ -108,7 +111,7 @@ id.tbl_dbi <- function(db_table_id, ...) {
 
   # Match against known tables
   # In some cases, tables may have been added to the DB that makes the id ambiguous.
-  matches <- get_tables(dbplyr::remote_con(db_table_id), show_temporary = TRUE) |>
+  matches <- get_tables(dbplyr::remote_con(db_table), show_temporary = TRUE) |>
     dplyr::filter(.data$table == !!table)
 
   if (!is.null(schema)) matches <- dplyr::filter(matches, .data$schema == !!schema)
@@ -128,11 +131,11 @@ id.tbl_dbi <- function(db_table_id, ...) {
 
 #' @export
 #' @rdname id
-id.data.frame <- function(db_table_id, ...) {
+id.data.frame <- function(db_table, ...) {
 
-  checkmate::assert_data_frame(db_table_id, nrows = 1)
+  checkmate::assert_data_frame(db_table, nrows = 1)
   checkmate::assert_names(
-    names(db_table_id),
+    names(db_table),
     must.include = c("schema", "table"),
     subset.of = c("catalog", "schema", "table")
   )
@@ -140,16 +143,28 @@ id.data.frame <- function(db_table_id, ...) {
   # Convert the given data.frame to DBI::Id
   return(
     DBI::Id(
-      "catalog" = purrr::pluck(db_table_id, "catalog"),
-      "schema" = purrr::pluck(db_table_id, "schema"),
-      "table" = purrr::pluck(db_table_id, "table")
+      "catalog" = purrr::pluck(db_table, "catalog"),
+      "schema" = purrr::pluck(db_table, "schema"),
+      "table" = purrr::pluck(db_table, "table")
     )
   )
 }
 
 
+#' Convert Id object to character
+#'
+#' @description
+#'   This method extends the `as.character` function for objects of class `Id`.
+#'   It converts an `Id` object to a character string on the form "catalog.schema.table".
+#' @param x (`Id(1)`)\cr
+#'   Id object to convert to character.
+#' @param explicit (`logical(1)`)\cr
+#'   Should Id elements be quoted explicitly?
+#' @seealso
+#'   \code{\link[base]{as.character}} for the base method.
 #' @export
-as.character.Id <- function(x, ...) {
+#' @noRd
+as.character.Id <- function(x, explicit = FALSE, ...) {
 
   info <- x@name |>
     purrr::discard(is.na)

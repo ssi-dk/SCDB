@@ -1,14 +1,17 @@
 #' Create a table with the SCDB log structure if it does not exists
+#'
 #' @template conn
-#' @param log_table A specification of where the logs should exist ("schema.table")
-#' @return A tbl_dbi with the generated (or existing) log table
-#' @examples
-#' conn <- get_connection(drv = RSQLite::SQLite())
-#' log_table_id <- id("test.logs", conn = conn, allow_table_only = TRUE)
+#' @param log_table (`id-like object`)\cr
+#'   A table specification where the logs should exist (coercible by `id()`).
+#' @return
+#'   Invisibly returns the generated (or existing) log table.
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
+#'   conn <- get_connection(drv = RSQLite::SQLite())
+#'   log_table <- id("test.logs", conn = conn, allow_table_only = TRUE)
 #'
-#' create_logs_if_missing(conn, log_table_id)
+#'   create_logs_if_missing(conn, log_table)
 #'
-#' close_connection(conn)
+#'   close_connection(conn)
 #' @export
 create_logs_if_missing <- function(conn, log_table) {
 

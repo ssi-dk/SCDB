@@ -19,8 +19,8 @@ get_schema(obj, ...)
 \method{get_schema}{SQLiteConnection}(obj, temporary = FALSE, ...)
 }
 \arguments{
-\item{obj}{(\code{any(1)}\cr
-The object from which to retrieve a schema/catalog}
+\item{obj}{(\code{DBIConnection(1)}, \code{tbl_dbi(1)}, \code{Id(1)})\cr
+The object from which to retrieve a schema/catalog.}
 
 \item{...}{Further arguments passed to methods.}
 
@@ -28,18 +28,21 @@ The object from which to retrieve a schema/catalog}
 Should the reference be to the temporary schema/catalog?}
 }
 \value{
+The catalog is extracted from \code{obj} depending on the type of input:
 \itemize{
 \item For \verb{get_catalog.Microsoft SQL Server}, the current database context of the connection or "tempdb" if
 \code{temporary = TRUE}.
 \item For \code{get_schema.tbl_dbi} the catalog is determined via \code{id()}.
-\item For \verb{get_catalog.\\*}, \code{NULL} is returned.
+\item For \verb{get_catalog.\\\\*}, \code{NULL} is returned.
 }
 
+The schema is extracted from \code{obj} depending on the type of input:
 \itemize{
-\item For \code{get_schema.DBIConnection}, the current schema of the connection if \code{temporary = FALSE}.
+\item For \code{get_schema.DBIConnection()}, the current schema of the connection if \code{temporary = FALSE}.
 See "Default schema" for more.
 If \code{temporary = TRUE}, the temporary schema of the connection is returned.
-\item For \code{get_schema.tbl_dbi} the schema is determined via \code{id()}.
+\item For \code{get_schema.tbl_dbi()} the schema is determined via \code{id()}.
+\item For \code{get_schema.Id()}, the schema is extracted from the \code{Id} specification.
 }
 }
 \description{
@@ -60,6 +63,7 @@ always be \code{main}.
 }
 
 \examples{
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
   conn <- get_connection(drv = RSQLite::SQLite())
 
   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
@@ -71,4 +75,5 @@ always be \code{main}.
   get_catalog(get_table(conn, id("mtcars", conn = conn)))
 
   close_connection(conn)
+\dontshow{\}) # examplesIf}
 }

@@ -2,11 +2,11 @@
 #'
 #' @template .data
 #' @param slice_ts (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
-#'   The time / date to slice by
+#'   The time / date to slice by.
 #' @param from_ts,until_ts (`character(1)`)\cr
-#'   The name of the columns in .data specifying valid from and valid until time
+#'   The name of the columns in .data specifying valid from and valid until time.
 #' @template .data_return
-#' @examples
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   m <- mtcars |>

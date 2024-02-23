@@ -19,23 +19,31 @@ get_connection(
 )
 }
 \arguments{
-\item{drv}{An object that inherits from DBIDriver or an existing DBIConnection (default: RPostgres::Postgres())}
+\item{drv}{(\code{DBIDriver(1)} or \code{DBIConnection(1)})\cr
+The driver for the connection.}
 
-\item{host}{Character string giving the ip of the host to connect to}
+\item{host}{(\code{character(1)})\cr
+The ip of the host to connect to.}
 
-\item{port}{Host port to connect to. Must be a number or a numeric string.}
+\item{port}{(\code{numeric(1)} or \code{character(1)})\cr
+Host port to connect to.}
 
-\item{dbname}{Name of the database located at the host}
+\item{dbname}{(\code{character(1)})\cr
+Name of the database located at the host.}
 
-\item{user}{Username to login with}
+\item{user}{(\code{character(1)})\cr
+Username to login with.}
 
-\item{password}{Password to login with}
+\item{password}{(\code{character(1)})\cr
+Password to login with.}
 
-\item{timezone}{Sets the timezone of DBI::dbConnect(). Must be in \code{\link[=OlsonNames]{OlsonNames()}}.}
+\item{timezone}{(\code{character(1)})\cr
+Sets the timezone of DBI::dbConnect(). Must be in \code{\link[=OlsonNames]{OlsonNames()}}.}
 
-\item{timezone_out}{Sets the timezone_out of DBI::dbConnect(). Must be in \code{\link[=OlsonNames]{OlsonNames()}}.}
+\item{timezone_out}{(\code{character(1)})\cr
+Sets the timezone_out of DBI::dbConnect(). Must be in \code{\link[=OlsonNames]{OlsonNames()}}.}
 
-\item{...}{Additional parameters sent to DBI::dbConnect()}
+\item{...}{Additional parameters sent to DBI::dbConnect().}
 
 \item{bigint}{The R type that 64-bit integer types should be mapped to,
 default is \link[bit64:bit64-package]{bit64::integer64}, which allows the full range of 64 bit
@@ -46,21 +54,21 @@ first row of data is available)? Setting to \code{TRUE} allows interruption of q
 running too long.}
 }
 \value{
-An object that inherits from DBIConnection driver specified in drv
+An object that inherits from \code{DBIConnection} driver specified in \code{drv}.
 }
 \description{
 Connects to the specified dbname of host:port using user and password from given arguments.
-Certain drivers may use credentials stored in a file, such as ~/.pgpass (PostgreSQL)
+Certain drivers may use credentials stored in a file, such as ~/.pgpass (PostgreSQL).
 }
 \examples{
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-conn <- get_connection(drv = RSQLite::SQLite(), dbname = ":memory:")
+  conn <- get_connection(drv = RSQLite::SQLite(), dbname = ":memory:")
 
-DBI::dbIsValid(conn) # TRUE
+  DBI::dbIsValid(conn) # TRUE
 
-close_connection(conn)
+  close_connection(conn)
 
-DBI::dbIsValid(conn) # FALSE
+  DBI::dbIsValid(conn) # FALSE
 \dontshow{\}) # examplesIf}
 }
 \seealso{
