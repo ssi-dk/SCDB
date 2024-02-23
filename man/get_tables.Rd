@@ -17,7 +17,7 @@ Regex pattern with which to subset the returned tables.}
 Should temporary tables be listed?}
 }
 \value{
-A data.frame containing table names in the DB.
+A data.frame containing table names including schema (and catalog when available) in the database.
 }
 \description{
 List the available tables on the connection

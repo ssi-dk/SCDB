@@ -12,7 +12,7 @@
 #' @param exclude (`character()`)\cr
 #'   Columns to exclude from the checksum generation.
 #' @return
-#'   .data with an checksum column added.
+#'   .data with a checksum column added.
 #' @examples
 #'   digest_to_checksum(mtcars)
 #' @export

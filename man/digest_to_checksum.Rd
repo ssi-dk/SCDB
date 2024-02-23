@@ -17,7 +17,7 @@ Name of the column to put the checksums in. Will be generated if missing.}
 Columns to exclude from the checksum generation.}
 }
 \value{
-.data with an checksum column added.
+.data with a checksum column added.
 }
 \description{
 Computes an checksum from columns

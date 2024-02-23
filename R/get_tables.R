@@ -6,7 +6,7 @@
 #' @param show_temporary (`logical(1)`)\cr
 #'   Should temporary tables be listed?
 #' @return
-#'   A data.frame containing table names in the DB.
+#'   A data.frame containing table names including schema (and catalog when available) in the database.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
