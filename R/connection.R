@@ -1,20 +1,17 @@
 #' Opens connection to the database
 #'
 #' @description
-#'   Connects to the specified dbname of host:port using user and password from given arguments.
+#'   This is a convenience wrapper for DBI::dbConnect() for different database backends.
+#'
+#'   Connects to the specified dbname of host:port using user and password from given arguments (if applicable).
 #'   Certain drivers may use credentials stored in a file, such as ~/.pgpass (PostgreSQL).
 #' @param drv (`DBIDriver(1)` or `DBIConnection(1)`)\cr
 #'   The driver for the connection.
-#' @param host (`character(1)`)\cr
-#'   The ip of the host to connect to.
-#' @param port (`numeric(1)` or `character(1)`)\cr
-#'   Host port to connect to.
 #' @param dbname (`character(1)`)\cr
 #'   Name of the database located at the host.
-#' @param user (`character(1)`)\cr
-#'   Username to login with.
-#' @param password (`character(1)`)\cr
-#'   Password to login with.
+#' @param bigint (`character(1)`)\cr
+#'   The datatype to convert integers to.
+#'   Support depends on the database backend.
 #' @param timezone (`character(1)`)\cr
 #'   Sets the timezone of DBI::dbConnect(). Must be in [OlsonNames()].
 #' @param timezone_out (`character(1)`)\cr
@@ -34,39 +31,26 @@
 #'   DBI::dbIsValid(conn) # FALSE
 #' @seealso [RPostgres::Postgres]
 #' @export
-get_connection <- function(drv = RPostgres::Postgres(),
-                           host = NULL,
-                           port = NULL,
-                           dbname = NULL,
-                           user = NULL,
-                           password = NULL,
-                           timezone = NULL,
-                           timezone_out = NULL,
-                           ...,
-                           bigint = "integer",
-                           check_interrupts = TRUE) {
+get_connection <- function(drv = RPostgres::Postgres(), ...) {
+  UseMethod("get_connection")
+}
+
+#' @rdname get_connection
+#' @seealso [RSQLite::SQLite]
+#' @export
+get_connection.SQLiteDriver <- function(
+    drv,
+    dbname = ":memory:",
+    ...,
+    bigint = c("integer", "bigint64", "numeric", "character")) {
+
+  # Resolve the bigint argument (if not set, first of default vector is used)
+  bigint <- match.arg(bigint)
 
   # Check arguments
-  checkmate::assert_character(host, null.ok = TRUE)
-  if (is.character(port)) {
-    checkmate::assert_character(port, pattern = "^[:digit:]*$")
-    port <- as.numeric(port) # nocov
-  }
-  checkmate::assert_numeric(port, null.ok = TRUE)
-  checkmate::assert_character(dbname,   null.ok = TRUE)
-  checkmate::assert_character(user,     null.ok = TRUE)
-  checkmate::assert_character(password, null.ok = TRUE)
-  checkmate::assert_choice(timezone, OlsonNames(), null.ok = TRUE)
-  checkmate::assert_choice(timezone_out, OlsonNames(), null.ok = TRUE)
-
-  # Set PostgreSQL-specific options
-  if (inherits(drv, "PqDriver")) {
-    if (is.null(timezone)) timezone <- Sys.timezone()
-    if (is.null(timezone_out)) timezone_out <- timezone
-  }
-
-  # Default SQLite connections to temporary on-disk database
-  if (inherits(drv, "SQLiteDriver") && is.null(dbname)) dbname <- ""
+  coll <- checkmate::makeAssertCollection()
+  checkmate::assert_character(dbname, null.ok = TRUE, add = coll)
+  checkmate::reportAssertions(coll)
 
   args <- list(...) |>
     append(as.list(rlang::current_env())) |>
@@ -76,21 +60,157 @@ get_connection <- function(drv = RPostgres::Postgres(),
 
   # Check if connection can be established given these settings
   status <- do.call(DBI::dbCanConnect, args = args)
-  if (!status) rlang::abort(attr(status, "reason"))
+  if (!status) stop(attr(status, "reason"))
+
+  return(do.call(DBI::dbConnect, args = args))
+}
+
+#' @rdname get_connection
+#' @param host (`character(1)`)\cr
+#'   The ip of the host to connect to.
+#' @param port (`numeric(1)` or `character(1)`)\cr
+#'   Host port to connect to.
+#' @param password (`character(1)`)\cr
+#'   Password to login with.
+#' @param user (`character(1)`)\cr
+#'   Username to login with.
+#' @seealso [RPostgres::Postgres]
+#' @export
+get_connection.PqDriver <- function(
+    drv,
+    dbname = NULL,
+    host = NULL,
+    port = NULL,
+    password = NULL,
+    user = NULL,
+    ...,
+    bigint = c("integer", "bigint64", "numeric", "character"),
+    check_interrupts = TRUE,
+    timezone = Sys.timezone(),
+    timezone_out = Sys.timezone()) {
+
+  # Resolve the bigint argument (if not set, first of default vector is used)
+  bigint <- match.arg(bigint)
+
+  # Check arguments
+  coll <- checkmate::makeAssertCollection()
+  checkmate::assert_character(dbname, null.ok = TRUE, add = coll)
+  checkmate::assert_character(host, null.ok = TRUE, add = coll)
+  if (is.character(port)) {
+    checkmate::assert_character(port, pattern = "^[:digit:]*$", add = coll)
+    port <- as.numeric(port)
+  }
+  checkmate::assert_numeric(port, null.ok = TRUE, add = coll)
+  checkmate::assert_character(password, null.ok = TRUE, add = coll)
+  checkmate::assert_character(user, null.ok = TRUE, add = coll)
+  checkmate::assert_logical(check_interrupts, add = coll)
+  checkmate::assert_choice(timezone, OlsonNames(), null.ok = TRUE, add = coll)
+  checkmate::assert_choice(timezone_out, OlsonNames(), null.ok = TRUE, add = coll)
+  checkmate::reportAssertions(coll)
+
+  args <- list(...) |>
+    append(as.list(rlang::current_env())) |>
+    unlist()
+
+  args <- args[match(unique(names(args)), names(args))]
+
+  # Check if connection can be established given these settings
+  status <- do.call(DBI::dbCanConnect, args = args)
+  if (!status) stop(attr(status, "reason"))
+
+  return(do.call(DBI::dbConnect, args = args))
+}
+
+#' @rdname get_connection
+#' @param dsn (`character(1)`)\cr
+#'   The data source name to connect to.
+#' @seealso [odbc::odbc]
+#' @export
+get_connection.OdbcDriver <- function(
+    drv,
+    dsn = NULL,
+    ...,
+    bigint = c("integer", "bigint64", "numeric", "character"),
+    timezone = Sys.timezone(),
+    timezone_out = Sys.timezone()) {
+
+  # Resolve the bigint argument (if not set, first of default vector is used)
+  bigint <- match.arg(bigint)
+
+  # Check arguments
+  coll <- checkmate::makeAssertCollection()
+  checkmate::assert_character(dsn, null.ok = TRUE, add = coll)
+  checkmate::assert_choice(timezone, OlsonNames(), null.ok = TRUE, add = coll)
+  checkmate::assert_choice(timezone_out, OlsonNames(), null.ok = TRUE, add = coll)
+
+  args <- list(...) |>
+    append(as.list(rlang::current_env())) |>
+    unlist()
+
+  args <- args[match(unique(names(args)), names(args))]
+
+  # Check if connection can be established given these settings
+  status <- do.call(DBI::dbCanConnect, args = args)
+  if (!status) stop(attr(status, "reason"))
+
+  return(do.call(DBI::dbConnect, args = args))
+}
+
+#' @rdname get_connection
+#' @param dbdir (`character(1)`)\cr
+#'   The directory where the database is located.
+#' @seealso [duckdb::duckdb]
+#' @export
+get_connection.duckdb_driver <- function(
+    drv,
+    dbdir = ":memory:",
+    ...,
+    bigint = c("numeric", "character"),
+    timezone_out = Sys.timezone()) {
+
+  # Resolve the bigint argument (if not set, first of default vector is used)
+  bigint <- match.arg(bigint)
+
+  # Check arguments
+  coll <- checkmate::makeAssertCollection()
+  checkmate::assert(
+    checkmate::check_path_for_output(dbdir),
+    checkmate::check_character(dbdir, pattern = ":memory:", fixed = TRUE),
+    add = coll
+  )
+  checkmate::assert_choice(timezone_out, OlsonNames(), null.ok = TRUE)
+
+  args <- list(...) |>
+    append(as.list(rlang::current_env())) |>
+    unlist()
+
+  args <- args[match(unique(names(args)), names(args))]
+
+  # Connect, don't check if connection can be established
+  # (we are getting errors when testing for connectability first)
+  return(do.call(DBI::dbConnect, args = args))
+}
+
+#' @rdname get_connection
+#' @export
+get_connection.default <- function(drv, ...) {
+
+  args <- list(...) |>
+    append(as.list(rlang::current_env())) |>
+    unlist()
+
+  args <- args[match(unique(names(args)), names(args))]
+
+  # Check if connection can be established given these settings
+  status <- do.call(DBI::dbCanConnect, args = args)
+  if (!status) stop(attr(status, "reason"))
 
   conn <- do.call(DBI::dbConnect, args = args)
 
-  .supported <- c(
-    "PqConnection",
-    "SQLiteConnection",
-    "Microsoft SQL Server"
+  warning(
+    "Connections of class '", class(conn),
+    "' is currently not formally supported and SCDB may not perform as expected."
   )
-
-  if (!checkmate::test_choice(class(conn), .supported)) {
-    warning("Connections of class '",
-            class(conn),
-            "' is currently not fully supported and SCDB may not perform as expected.")
-  }
 
   return(conn)
 }
@@ -110,5 +230,5 @@ close_connection <- function(conn) {
   # Check arguments
   checkmate::assert_class(conn, "DBIConnection")
 
-  DBI::dbDisconnect(conn)
+  DBI::dbDisconnect(conn, shutdown = TRUE)
 }
