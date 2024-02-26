@@ -111,6 +111,26 @@ for (conn in c(list(NULL), get_test_conns())) {
     })
   }
 
+  if (inherits(conn, "duckdb_connection")) {
+    test_that("getTableSignature() generates signature for update_snapshot() (duckdb_connection)", {
+      expect_identical(
+        getTableSignature(data_update_snapsnot, conn),
+        c(
+          "Date"      = "DATE",
+          "POSIXct"   = "TIMESTAMP",
+          "character" = "STRING",
+          "integer"   = "INTEGER",
+          "numeric"   = "DOUBLE",
+          "logical"   = "BOOLEAN",
+          # ..
+          "checksum"  = "varchar(32)",
+          "from_ts"   = "TIMESTAMP",
+          "until_ts"  = "TIMESTAMP"
+        )
+      )
+    })
+  }
+
 
   if (is.null(conn)) {
     test_that("getTableSignature() generates signature for random data (conn == NULL)", {
@@ -196,6 +216,27 @@ for (conn in c(list(NULL), get_test_conns())) {
     })
   }
 
+  if (inherits(conn, "duckdb_connection")) {
+    test_that("getTableSignature() generates signature for random data (duckdb_connection)", {
+      expect_identical(
+        getTableSignature(data_random, conn),
+        c(
+          "Date"      = "DATE",
+          "POSIXct"   = "TIMESTAMP",
+          "character" = "STRING",
+          # ..
+          "checksum"  = "STRING",
+          "from_ts"   = "TIMESTAMP",
+          "until_ts"  = "TIMESTAMP",
+          # ..
+          "integer"   = "INTEGER",
+          "numeric"   = "DOUBLE",
+          "logical"   = "BOOLEAN"
+        )
+      )
+    })
+  }
+
 
   if (inherits(conn, "SQLiteConnection")) {
     test_that("getTableSignature() generates signature for random data on remote (SQLiteConnection)", {
@@ -255,6 +296,27 @@ for (conn in c(list(NULL), get_test_conns())) {
           "integer"   = "INT",
           "numeric"   = "FLOAT",
           "logical"   = "BIT"
+        )
+      )
+    })
+  }
+
+  if (inherits(conn, "duckdb_connection")) {
+    test_that("getTableSignature() generates signature for random data on remote (duckdb_connection)", {
+      expect_identical(
+        getTableSignature(dplyr::copy_to(conn, data_random), conn),
+        c(
+          "Date"      = "DATE",
+          "POSIXct"   = "TIMESTAMP",
+          "character" = "STRING",
+          # ..
+          "checksum"  = "STRING",
+          "from_ts"   = "TIMESTAMP",
+          "until_ts"  = "TIMESTAMP",
+          # ..
+          "integer"   = "INTEGER",
+          "numeric"   = "DOUBLE",
+          "logical"   = "BOOLEAN"
         )
       )
     })
