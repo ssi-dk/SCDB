@@ -37,6 +37,16 @@ get_catalog.Id <- function(obj, ...) {
 }
 
 #' @export
+get_catalog.duckdb_connection <- function(obj, temporary = FALSE,  ...) {
+  if (temporary) {
+    return("temp")
+  } else {
+    query <- paste("SELECT current_catalog() AS current_database;")
+    return(DBI::dbGetQuery(obj, query)$current_database)
+  }
+}
+
+#' @export
 get_catalog.default <- function(obj, ...) {
   return(NULL)
 }
