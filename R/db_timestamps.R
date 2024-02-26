@@ -18,7 +18,6 @@ db_timestamp <- function(timestamp, conn = NULL) {
   else UseMethod("db_timestamp", conn)
 }
 
-#' @rdname db_timestamp
 #' @export
 db_timestamp.default <- function(timestamp, conn) {
   if (inherits(timestamp, "POSIXt")) timestamp <- format(timestamp)
@@ -31,7 +30,6 @@ db_timestamp.NULL <- function(timestamp, conn) {
   return(timestamp)
 }
 
-#' @rdname db_timestamp
 #' @export
 db_timestamp.SQLiteConnection <- function(timestamp, conn) {
   if (is.na(timestamp)) {
