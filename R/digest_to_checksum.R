@@ -123,4 +123,7 @@ digest_to_checksum_native_md5 <- function(
 digest_to_checksum.tbl_PqConnection <- digest_to_checksum_native_md5
 
 #' @export
-digest_to_checksum.data.frame       <- digest_to_checksum_native_md5
+digest_to_checksum.tbl_duckdb_connection <- digest_to_checksum_native_md5
+
+#' @export
+digest_to_checksum.data.frame <- digest_to_checksum_native_md5
