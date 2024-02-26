@@ -76,9 +76,8 @@ Password to login with.}
 \item{user}{(\code{character(1)})\cr
 Username to login with.}
 
-\item{check_interrupts}{Should user interrupts be checked during the query execution (before
-first row of data is available)? Setting to \code{TRUE} allows interruption of queries
-running too long.}
+\item{check_interrupts}{(\code{logical(1)})\cr
+Should user interrupts be checked during the query execution?}
 
 \item{timezone}{(\code{character(1)})\cr
 Sets the timezone of DBI::dbConnect(). Must be in \code{\link[=OlsonNames]{OlsonNames()}}.}

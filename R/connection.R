@@ -74,6 +74,8 @@ get_connection.SQLiteDriver <- function(
 #'   Password to login with.
 #' @param user (`character(1)`)\cr
 #'   Username to login with.
+#' @param check_interrupts (`logical(1)`)\cr
+#'   Should user interrupts be checked during the query execution?
 #' @seealso [RPostgres::Postgres]
 #' @export
 get_connection.PqDriver <- function(
