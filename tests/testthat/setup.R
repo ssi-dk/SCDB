@@ -20,7 +20,7 @@ for (conn_id in seq_along(conns)) {
     coll$push(glue::glue("Tests require the schema 'test.one' to exist in connection ({names(conns)[[conn_id]]})."))
   }
 
-  DBI::dbDisconnect(conn)
+  DBI::dbDisconnect(conn, shutdown = TRUE)
 }
 checkmate::reportAssertions(coll)
 
@@ -56,7 +56,7 @@ for (conn in get_test_conns()) {
                                  until_ts = as.POSIXct(NA)),
                  name = id("__mtcars_historical", conn), temporary = FALSE, overwrite = TRUE)
 
-  DBI::dbDisconnect(conn)
+  DBI::dbDisconnect(conn, shutdown = TRUE)
 }
 
 
@@ -71,5 +71,5 @@ connection_clean_up <- function(conn) {
   if (nrow(dplyr::filter(get_tables(conn, show_temporary = TRUE), stringr::str_detect(.data$table, "^#?dbplyr_")))) {
     warning("Temporary dbplyr tables ('dbplyr_###') are not cleaned up!")
   }
-  DBI::dbDisconnect(conn)
+  DBI::dbDisconnect(conn, shutdown = TRUE)
 }
