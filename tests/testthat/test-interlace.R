@@ -34,11 +34,22 @@ test_that("interlace.tbl_sql() works", {
     )
 
 
-    expect_identical(interlace(list(t1, t2), by = "key") |> dplyr::collect(),
-                     t_ref |> dplyr::collect())
+    # Order of records may be different, so we arrange then check if they are identical
+    expect_identical(interlace(list(t1, t2), by = "key") |>
+                       dplyr::collect() |>
+                       dplyr::arrange(.data$key, .data$valid_from),
+                     t_ref |>
+                       dplyr::collect() |>
+                       dplyr::arrange(.data$key, .data$valid_from))
 
-    expect_mapequal(interlace(list(t1, t2), by = "key") |> dplyr::collect(),
-                    interlace(list(t2, t1), by = "key") |> dplyr::collect())
+    # Order of columns will be different, so we only require a mapequal
+    # .. but order of records can still be different
+    expect_mapequal(interlace(list(t1, t2), by = "key") |>
+                      dplyr::collect() |>
+                      dplyr::arrange(.data$key, .data$valid_from),
+                    interlace(list(t2, t1), by = "key") |>
+                      dplyr::collect() |>
+                      dplyr::arrange(.data$key, .data$valid_from))
 
     connection_clean_up(conn)
   }
