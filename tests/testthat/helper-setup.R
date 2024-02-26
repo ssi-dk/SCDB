@@ -78,40 +78,36 @@ get_test_conns <- function() {
 
     # Skip unavailable packages
     if (!requireNamespace(parts[1], quietly = TRUE)) {
-      return()
+      warning("Library ", parts[1], " not available!")
+      return(NULL)
     }
 
-    drv <- getExportedValue(parts[1], parts[2])
-
-    conn <- tryCatch(
-      SCDB::get_connection(drv = drv(), ...),
-      error = function(e) {
-        return(NULL) # Return NULL, if we cannot connect
-      }
-    )
-
-    # SQLite back end gives an error in SCDB if there are no tables (it assumes a bad configuration)
-    # We create a table to suppress this warning
-    if (checkmate::test_class(conn, "SQLiteConnection")) {
-      DBI::dbWriteTable(conn, "iris", iris, overwrite = TRUE)
-    }
-
-    return(conn)
+    return(getExportedValue(parts[1], parts[2])())
   }
 
   # Check all conn_args have associated entry in conn_list
   checkmate::assert_subset(names(conn_args), names(conn_list))
 
   # Open connections
-  test_conns <- names(conn_list) |>
-    purrr::map(~ do.call(get_driver, c(list(x = purrr::pluck(conn_list, .)), purrr::pluck(conn_args, .)))) |>
+  drivers <- names(conn_list) |>
+    purrr::map(~ do.call(get_driver, list(x = purrr::pluck(conn_list, .)))) |>
     stats::setNames(names(conn_list)) |>
+    purrr::discard(is.null)
+
+  test_conns <- names(drivers) |>
+    purrr::map(~ do.call(get_connection, c(list(drv = purrr::pluck(drivers, .)), purrr::pluck(conn_args, .)))) |>
+    stats::setNames(names(drivers)) |>
     purrr::discard(is.null)
 
   # Run post_connect commands on the connections
   purrr::walk2(test_conns, names(test_conns),
                \(conn, conn_name) purrr::walk(purrr::pluck(conn_post_connect, conn_name), ~ DBI::dbExecute(conn, .)))
 
+  # SQLite back end gives an error in SCDB if there are no tables (it assumes a bad configuration)
+  # We create a table to suppress this warning
+  purrr::walk(test_conns, ~ if (checkmate::test_class(., "SQLiteConnection")) {
+    DBI::dbWriteTable(., "iris", iris, overwrite = TRUE)
+  })
 
   # Inform the user about the tested back ends:
   msg <- paste(sep = "\n",
