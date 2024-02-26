@@ -18,7 +18,6 @@
 #'   Sets the timezone_out of DBI::dbConnect(). Must be in [OlsonNames()].
 #' @param ...
 #'  Additional parameters sent to DBI::dbConnect().
-#' @inheritParams RPostgres::dbConnect_PqDriver
 #' @return
 #'   An object that inherits from `DBIConnection` driver specified in `drv`.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
