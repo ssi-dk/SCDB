@@ -51,10 +51,6 @@ get_tables.SQLiteConnection <- function(conn, pattern = NULL, show_temporary = T
       dplyr::select(!"db_table_str")
   }
 
-  if (!conn@dbname %in% c("", ":memory:") && nrow(tables) == 0) {
-    warning("No tables found. Check user privileges / database configuration")
-  }
-
   return(tables)
 }
 
