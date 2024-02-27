@@ -46,16 +46,14 @@ get_connection.SQLiteDriver <- function(
   # Resolve the bigint argument (if not set, first of default vector is used)
   bigint <- match.arg(bigint)
 
-  # Check arguments
-  coll <- checkmate::makeAssertCollection()
-  checkmate::assert_character(dbname, null.ok = TRUE, add = coll)
-  checkmate::reportAssertions(coll)
-
+  # Store the given arguments
   args <- list(...) |>
     append(as.list(rlang::current_env())) |>
     unlist()
-
   args <- args[match(unique(names(args)), names(args))]
+
+  # Check arguments
+  checkmate::assert_character(dbname, null.ok = TRUE)
 
   # Check if connection can be established given these settings
   status <- do.call(DBI::dbCanConnect, args = args)
@@ -93,6 +91,12 @@ get_connection.PqDriver <- function(
   # Resolve the bigint argument (if not set, first of default vector is used)
   bigint <- match.arg(bigint)
 
+  # Store the given arguments
+  args <- list(...) |>
+    append(as.list(rlang::current_env())) |>
+    unlist()
+  args <- args[match(unique(names(args)), names(args))]
+
   # Check arguments
   coll <- checkmate::makeAssertCollection()
   checkmate::assert_character(dbname, null.ok = TRUE, add = coll)
@@ -108,16 +112,6 @@ get_connection.PqDriver <- function(
   checkmate::assert_choice(timezone, OlsonNames(), null.ok = TRUE, add = coll)
   checkmate::assert_choice(timezone_out, OlsonNames(), null.ok = TRUE, add = coll)
   checkmate::reportAssertions(coll)
-
-  args <- list(...) |>
-    append(as.list(rlang::current_env())) |>
-    unlist()
-
-  args <- args[match(unique(names(args)), names(args))]
-
-  warning(toString(names(args)))
-  warning(toString(args))
-  warning(toString(Map(class, args)))
 
   # Check if connection can be established given these settings
   status <- do.call(DBI::dbCanConnect, args = args)
@@ -142,17 +136,18 @@ get_connection.OdbcDriver <- function(
   # Resolve the bigint argument (if not set, first of default vector is used)
   bigint <- match.arg(bigint)
 
+  # Store the given arguments
+  args <- list(...) |>
+    append(as.list(rlang::current_env())) |>
+    unlist()
+  args <- args[match(unique(names(args)), names(args))]
+
   # Check arguments
   coll <- checkmate::makeAssertCollection()
   checkmate::assert_character(dsn, null.ok = TRUE, add = coll)
   checkmate::assert_choice(timezone, OlsonNames(), null.ok = TRUE, add = coll)
   checkmate::assert_choice(timezone_out, OlsonNames(), null.ok = TRUE, add = coll)
-
-  args <- list(...) |>
-    append(as.list(rlang::current_env())) |>
-    unlist()
-
-  args <- args[match(unique(names(args)), names(args))]
+  checkmate::reportAssertions(coll)
 
   # Check if connection can be established given these settings
   status <- do.call(DBI::dbCanConnect, args = args)
@@ -176,6 +171,12 @@ get_connection.duckdb_driver <- function(
   # Resolve the bigint argument (if not set, first of default vector is used)
   bigint <- match.arg(bigint)
 
+  # Store the given arguments
+  args <- list(...) |>
+    append(as.list(rlang::current_env())) |>
+    unlist()
+  args <- args[match(unique(names(args)), names(args))]
+
   # Check arguments
   coll <- checkmate::makeAssertCollection()
   checkmate::assert(
@@ -184,12 +185,7 @@ get_connection.duckdb_driver <- function(
     add = coll
   )
   checkmate::assert_choice(timezone_out, OlsonNames(), null.ok = TRUE)
-
-  args <- list(...) |>
-    append(as.list(rlang::current_env())) |>
-    unlist()
-
-  args <- args[match(unique(names(args)), names(args))]
+  checkmate::reportAssertions(coll)
 
   # Connect, don't check if connection can be established
   # (we are getting errors when testing for connectability first)
@@ -200,10 +196,10 @@ get_connection.duckdb_driver <- function(
 #' @export
 get_connection.default <- function(drv, ...) {
 
+  # Store the given arguments
   args <- list(...) |>
     append(as.list(rlang::current_env())) |>
     unlist()
-
   args <- args[match(unique(names(args)), names(args))]
 
   # Check if connection can be established given these settings
