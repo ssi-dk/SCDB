@@ -53,7 +53,10 @@ get_connection.SQLiteDriver <- function(
   args <- args[match(unique(names(args)), names(args))]
 
   # Check arguments
-  checkmate::assert_character(dbname, null.ok = TRUE)
+  checkmate::assert(
+    checkmate::check_path_for_output(dbname, overwrite = TRUE),
+    checkmate::check_character(dbname, pattern = ":memory:", fixed = TRUE)
+  )
 
   # Check if connection can be established given these settings
   status <- do.call(DBI::dbCanConnect, args = args)
@@ -180,7 +183,7 @@ get_connection.duckdb_driver <- function(
   # Check arguments
   coll <- checkmate::makeAssertCollection()
   checkmate::assert(
-    checkmate::check_path_for_output(dbdir),
+    checkmate::check_path_for_output(dbdir, overwrite = TRUE),
     checkmate::check_character(dbdir, pattern = ":memory:", fixed = TRUE),
     add = coll
   )
