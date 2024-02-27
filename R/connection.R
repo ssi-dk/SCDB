@@ -115,6 +115,10 @@ get_connection.PqDriver <- function(
 
   args <- args[match(unique(names(args)), names(args))]
 
+  warning(toString(names(args)))
+  warning(toString(args))
+  warning(toString(Map(class, args)))
+
   # Check if connection can be established given these settings
   status <- do.call(DBI::dbCanConnect, args = args)
   if (!status) stop(attr(status, "reason"))
