@@ -12,9 +12,10 @@ methods::setGeneric("getTableSignature",
                     function(.data, conn = NULL) standardGeneric("getTableSignature"),
                     signature = "conn")
 
+#' @importClassesFrom DBI DBIConnection
 methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
 
-  # Retrive the translated data types
+  # Retrieve the translated data types
   signature <- as.list(DBI::dbDataType(conn, dplyr::collect(utils::head(.data, 0))))
 
   # Define the column types to be updated based on backend class
