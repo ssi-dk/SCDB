@@ -96,8 +96,6 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE)
       dplyr::select(!"db_table_str")
   }
 
-  if (nrow(tables) == 0) warning("No tables found. Check user privileges / database configuration")
-
   return(tables)
 }
 
@@ -140,8 +138,6 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE)
       dplyr::filter(grepl(pattern, .data$db_table_str)) |>
       dplyr::select(!"db_table_str")
   }
-
-  if (nrow(tables) == 0) warning("No tables found. Check user privileges / database configuration")
 
   return(tables)
 }
@@ -208,8 +204,6 @@ get_tables.DBIConnection <- function(conn, pattern = NULL, show_temporary = TRUE
 
   # purrr::map fails if .x is empty, avoid by returning early
   if (nrow(objs) == 0) {
-    warning("No tables found. Check user privileges / database configuration")
-
     return(data.frame(schema = character(), table = character()))
   }
 
