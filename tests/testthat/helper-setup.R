@@ -103,6 +103,11 @@ get_test_conns <- function() {
   purrr::walk2(test_conns, names(test_conns),
                \(conn, conn_name) purrr::walk(purrr::pluck(conn_post_connect, conn_name), ~ DBI::dbExecute(conn, .)))
 
+  # Shutdown drivers that needs it
+  drivers |>
+    purrr::keep(~ inherits(., "duckdb_driver")) |>
+    purrr::walk(~ duckdb::duckdb_shutdown(.))
+
   # SQLite back end gives an error in SCDB if there are no tables (it assumes a bad configuration)
   # We create a table to suppress this warning
   purrr::walk(test_conns, ~ if (checkmate::test_class(., "SQLiteConnection")) {
