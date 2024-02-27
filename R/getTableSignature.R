@@ -33,6 +33,11 @@ methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
       checksum = "varchar(40)",
       from_ts  = "DATETIME",
       until_ts = "DATETIME"
+    ),
+    "duckdb_connection" = c(
+      checksum = "varchar(32)",
+      from_ts  = "TIMESTAMP",
+      until_ts = "TIMESTAMP"
     )
   )
 

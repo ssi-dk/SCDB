@@ -51,10 +51,6 @@ get_tables.SQLiteConnection <- function(conn, pattern = NULL, show_temporary = T
       dplyr::select(!"db_table_str")
   }
 
-  if (!conn@dbname %in% c("", ":memory:") && nrow(tables) == 0) {
-    warning("No tables found. Check user privileges / database configuration")
-  }
-
   return(tables)
 }
 
@@ -142,6 +138,37 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE)
 
   return(tables)
 }
+
+
+#' @importFrom rlang .data
+#' @export
+get_tables.duckdb_connection <- function(conn, pattern = NULL, show_temporary = TRUE) {
+  query <- paste("SHOW ALL TABLES;")
+
+  tables <- DBI::dbGetQuery(conn, query) |>
+    dplyr::transmute("catalog" = .data$database, .data$schema, "table" = .data$name, .data$temporary)
+
+  if (!show_temporary) {
+    tables <- tables |>
+      dplyr::filter(!.data$temporary)
+  }
+
+  tables <- tables |>
+    dplyr::select(!"temporary")
+
+  if (!is.null(pattern)) {
+    tables <- tables |>
+      dplyr::mutate(db_table_str = ifelse(
+        is.na(.data$schema), .data$table,
+        paste(.data$schema, .data$table, sep = ".")
+      )) |>
+      dplyr::filter(grepl(pattern, .data$db_table_str)) |>
+      dplyr::select(!"db_table_str")
+  }
+
+  return(tables)
+}
+
 
 #' @export
 get_tables.OdbcConnection <- function(conn, pattern = NULL, show_temporary = TRUE) {

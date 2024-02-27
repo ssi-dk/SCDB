@@ -50,6 +50,8 @@
 
 ## New features
 
+* Added support for DuckDB (#121).
+
 * The S3 method `as.character.Id()` is added which converts `DBI::Id()` to `character` (#93).
 
 * A new `id.data.frame()` which converts `data.frame` to `DBI::Id()` (#108).

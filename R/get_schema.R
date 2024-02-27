@@ -87,6 +87,11 @@ get_schema.SQLiteConnection <- function(obj, temporary = FALSE,  ...) {
 }
 
 #' @export
+get_schema.duckdb_connection <- function(obj,  ...) {
+  return("main")
+}
+
+#' @export
 get_schema.NULL <- function(obj, ...) {
   return(NULL)
 }
