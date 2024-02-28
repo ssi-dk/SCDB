@@ -34,7 +34,8 @@ get_tables.SQLiteConnection <- function(conn, pattern = NULL, show_temporary = T
                  "WHERE NOT name IN ('sqlite_schema', 'sqlite_temp_schema')",
                  "AND NOT name LIKE 'sqlite_stat%'")
 
-  tables <- DBI::dbGetQuery(conn, query)
+  tables <- DBI::dbGetQuery(conn, query) |>
+    dplyr::mutate("schema" = as.character(.data$schema)) # Ensure schema is character (even if empty)
 
   if (!show_temporary) {
     tables <- tables |>

@@ -27,6 +27,7 @@ Imports:
     dbplyr (>= 2.4.0),
     dplyr,
     glue,
+    lifecycle,
     lintr,
     methods,
     openssl,

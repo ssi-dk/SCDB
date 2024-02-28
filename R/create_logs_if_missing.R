@@ -18,17 +18,24 @@ create_logs_if_missing <- function(conn, log_table) {
   checkmate::assert_class(conn, "DBIConnection")
 
   if (!table_exists(conn, log_table)) {
-    log_signature <- data.frame(date = as.POSIXct(NA),
-                                schema = NA_character_,
-                                table = NA_character_,
-                                n_insertions = NA_integer_,
-                                n_deactivations = NA_integer_,
-                                start_time = as.POSIXct(NA),
-                                end_time = as.POSIXct(NA),
-                                duration = NA_character_,
-                                success = NA,
-                                message = NA_character_,
-                                log_file = NA_character_)
+    log_signature <- data.frame(
+      date = as.POSIXct(character(0)),
+      catalog = character(0),
+      schema = character(0),
+      table = character(0),
+      n_insertions = integer(0),
+      n_deactivations = integer(0),
+      start_time = as.POSIXct(character(0)),
+      end_time = as.POSIXct(character(0)),
+      duration = character(0),
+      success = logical(),
+      message = character(0),
+      log_file = character(0)
+    )
+
+    if (!checkmate::test_multi_class(conn, c("Microsoft SQL Server", "duckdb_connection"))) {
+      log_signature <- dplyr::select(log_signature, !"catalog")
+    }
 
     DBI::dbCreateTable(conn, id(log_table, conn), log_signature)
   }

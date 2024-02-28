@@ -141,7 +141,7 @@ test_that("id() works for data.frame inputs", {
 })
 
 
-test_that("as.character.id() works", {
+test_that("as.character.id() works with implicit output", {
   expect_identical(as.character(DBI::Id(table = "table")), "table")
   expect_identical(as.character(DBI::Id(schema = "schema", table = "table")), "schema.table")
   expect_identical(as.character(DBI::Id(catalog = "catalog", schema = "schema", table = "table")),
@@ -150,4 +150,16 @@ test_that("as.character.id() works", {
   expect_identical(as.character(DBI::Id(table = "table", schema = "schema")), "schema.table")
   expect_identical(as.character(DBI::Id(table = "table", schema = "schema", catalog = "catalog")),
                    "catalog.schema.table")
+})
+
+
+test_that("as.character.id() works with explicit output", {
+  expect_identical(as.character(DBI::Id(table = "table"), explicit = TRUE), "\"table\"")
+  expect_identical(as.character(DBI::Id(schema = "schema", table = "table"), explicit = TRUE), "\"schema\".\"table\"")
+  expect_identical(as.character(DBI::Id(catalog = "catalog", schema = "schema", table = "table"), explicit = TRUE),
+                   "\"catalog\".\"schema\".\"table\"")
+
+  expect_identical(as.character(DBI::Id(table = "table", schema = "schema"), explicit = TRUE), "\"schema\".\"table\"")
+  expect_identical(as.character(DBI::Id(table = "table", schema = "schema", catalog = "catalog"), explicit = TRUE),
+                   "\"catalog\".\"schema\".\"table\"")
 })

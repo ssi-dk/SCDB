@@ -122,3 +122,13 @@ interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
 
   return(purrr::reduce(tables, joiner, .init = t))
 }
+
+#' interlace_sql
+#'
+#' @inherit interlace
+#' @export
+interlace_sql <- function(tables, by = NULL, colnames = NULL) {
+  # Lifecycle deprecate function
+  lifecycle::deprecate_soft("0.4.0", "interlace_sql()", "interlace()")
+  interlace(tables, by, colnames)
+}

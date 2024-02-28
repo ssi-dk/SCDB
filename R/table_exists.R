@@ -74,15 +74,10 @@ table_exists.DBIConnection <- function(conn, db_table) {
 
   } else if (inherits(db_table, "character")) {
 
-    # Check if schema is implied -- use default if not implied
-    if (!stringr::str_detect(db_table, r"{\w*\.\w*}")) {
-      db_table <- paste(get_schema(conn), db_table, sep = ".")
-    }
-
     # Then heuristically match with tables in conn
     matches <- dplyr::union_all(
       tables,
-      dplyr::mutate(dplyr::filter(tables, .data$schema == get_schema(conn)), schema = NA)
+      dplyr::mutate(dplyr::filter(tables, .data$schema == get_schema(conn)), schema = NA_character_)
     ) |>
       tidyr::unite("table_str", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
       dplyr::filter(.data$table_str == !!db_table) |>
