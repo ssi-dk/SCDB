@@ -21,8 +21,15 @@ test_that("get_tables() works", {
     # Our test tables should be present
     checkmate::expect_subset(c(table_1, table_2), db_table_names)
 
+    connection_clean_up(conn)
+  }
+})
 
-    # Now test with pattern
+
+test_that("get_tables() works with pattern", {
+  for (conn in get_test_conns()) {
+
+    # Call with pattern
     db_table_names <- get_tables(conn, pattern = "__mt") |>
       tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
       dplyr::pull(db_table_name)
@@ -34,20 +41,15 @@ test_that("get_tables() works", {
     expect_false(table_1 %in% db_table_names)
     expect_true(table_2 %in% db_table_names)
 
-
-    # Now test with temporary tables
-    tmp <- dplyr::copy_to(conn, mtcars, unique_table_name(), temporary = TRUE)
-    tmp_id <- id(tmp)
-    tmp_name <- paste(tmp_id@name["schema"], tmp_id@name["table"], sep = ".")
-
-    db_table_names <- get_tables(conn, show_temporary = TRUE) |>
-      tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
-      dplyr::pull(db_table_name)
-
-    checkmate::expect_subset(c(table_1, table_2, tmp_name), db_table_names)
+    connection_clean_up(conn)
+  }
+})
 
 
-    # Now test with temporary tables
+test_that("get_tables() works with temporary tables", {
+  for (conn in get_test_conns()) {
+
+    # Create temporary table
     tmp <- dplyr::copy_to(conn, mtcars, "__mtcars_2", temporary = TRUE)
     tmp_id <- id(tmp)
     tmp_name <- paste(tmp_id@name["schema"], tmp_id@name["table"], sep = ".")
