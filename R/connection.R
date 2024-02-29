@@ -30,7 +30,7 @@
 #'   DBI::dbIsValid(conn) # FALSE
 #' @seealso [RPostgres::Postgres]
 #' @export
-get_connection <- function(drv = RPostgres::Postgres(), ...) {
+get_connection <- function(drv = RSQLite::SQLite(), ...) {
   UseMethod("get_connection")
 }
 
