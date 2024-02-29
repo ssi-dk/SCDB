@@ -58,17 +58,22 @@ get_tables.SQLiteConnection <- function(conn, pattern = NULL, show_temporary = T
 #' @export
 #' @importFrom rlang .data
 get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE) {
-  query <- paste("SELECT",
-                 "schemaname AS schema,",
-                 "tablename AS table,",
-                 "is_temporary",
-                 "FROM (",
-                 "SELECT *, 0 AS is_temporary FROM pg_tables",
-                 "WHERE NOT (schemaname LIKE 'pg_%' OR schemaname = 'information_schema')",
-                 "UNION ALL",
-                 "SELECT *, 1 AS is_temporary FROM pg_tables",
-                 "WHERE schemaname LIKE 'pg_temp_%'",
-                 ")")
+  query <- paste(
+    "SELECT",
+    "schemaname AS schema,",
+    "tablename AS table,",
+    "is_temporary",
+    "FROM (",
+    "SELECT schemaname, tablename, 0 AS is_temporary FROM pg_tables",
+    "WHERE NOT (schemaname LIKE 'pg_%' OR schemaname = 'information_schema')",
+    "UNION ALL",
+    "SELECT schemaname, viewname AS tablename, 0 AS is_temporary FROM pg_views",
+    "WHERE NOT (schemaname LIKE 'pg_%' OR schemaname = 'information_schema')",
+    "UNION ALL",
+    "SELECT schemaname, tablename, 1 AS is_temporary FROM pg_tables",
+    "WHERE schemaname LIKE 'pg_temp_%'",
+    ")"
+  )
 
   tables <- DBI::dbGetQuery(conn, query)
 
@@ -106,9 +111,10 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE)
     "t.name AS [table],",
     "t.is_temporary",
     "FROM (",
-    "SELECT *, 0 AS is_temporary, DB_NAME() AS [catalog] FROM sys.tables WHERE NOT name LIKE '#%'",
+    "SELECT name, schema_id, 0 AS is_temporary, DB_NAME() AS [catalog]",
+    "FROM sys.objects WHERE type_desc IN ('USER_TABLE', 'VIEW') AND NOT name LIKE '#%'",
     "UNION ALL",
-    "SELECT *, 1 AS is_temporary, 'tempdb' AS [catalog] FROM tempdb.sys.tables WHERE name LIKE '#%'",
+    "SELECT name, schema_id, 1 AS is_temporary, 'tempdb' AS [catalog] FROM tempdb.sys.tables WHERE name LIKE '#%'",
     ") AS t",
     "INNER JOIN sys.schemas AS s",
     "ON t.schema_id = s.schema_id"

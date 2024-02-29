@@ -11,12 +11,12 @@ test_that("get_table() returns list of tables if no table is requested", {
 })
 
 
-test_that("get_table() works when tables exist", {
+test_that("get_table() works when tables/view exist", {
   for (conn in get_test_conns()) {
 
     mtcars_t <- tibble::tibble(mtcars |> dplyr::mutate(name = rownames(mtcars)))
 
-    # Lets try different ways to read __mtcars
+    # Lets try different ways to read __mtcars (added during setup)
     expect_mapequal(get_table(conn, "__mtcars")  |> dplyr::collect(), mtcars_t)
     expect_equal(get_table(conn, id("__mtcars")) |> dplyr::collect(), mtcars_t)
     t <- "__mtcars"
@@ -24,13 +24,37 @@ test_that("get_table() works when tables exist", {
     t <- id("__mtcars")
     expect_equal(get_table(conn, t) |> dplyr::collect(), mtcars_t)
 
-    # And test.mtcars
+    # And test.mtcars (added during setup)
     expect_equal(get_table(conn, "test.mtcars") |> dplyr::collect(), mtcars_t)
     expect_equal(get_table(conn, id("test.mtcars", conn)) |> dplyr::collect(), mtcars_t)
     t <- "test.mtcars"
     expect_equal(get_table(conn, t) |> dplyr::collect(), mtcars_t)
     t <- id("test.mtcars", conn)
     expect_equal(get_table(conn, t) |> dplyr::collect(), mtcars_t)
+
+
+    # Check for the existence of views on backends that support it (added here)
+    if (inherits(conn, "PqConnection")) {
+
+      DBI::dbExecute(conn, "CREATE VIEW __mtcars_view AS SELECT * FROM __mtcars LIMIT 10")
+      view_1 <- paste(c(get_schema(conn), "__mtcars_view"), collapse = ".")
+
+    } else if (inherits(conn, "Microsoft SQL Server")) {
+
+      DBI::dbExecute(conn, "CREATE VIEW __mtcars_view AS SELECT TOP 10 * FROM __mtcars")
+      view_1 <- paste(c(get_schema(conn), "__mtcars_view"), collapse = ".")
+    }
+
+    if (checkmate::test_multi_class(conn, c("PqConnection", "Microsoft SQL Server"))) {
+      expect_identical(nrow(get_table(conn, view_1)), 10)
+      expect_identical(
+        dplyr::collect(get_table(conn, view_1)),
+        dplyr::collect(utils::head(get_table(conn, "__mtcars"), 10))
+      )
+
+      DBI::dbExecute(conn, glue::glue("DROP VIEW {view_1}"))
+    }
+
 
     connection_clean_up(conn)
   }

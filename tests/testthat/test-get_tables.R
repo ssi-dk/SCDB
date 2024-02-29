@@ -1,13 +1,5 @@
-test_that("get_tables() works", {
+test_that("get_tables() works without pattern", {
   for (conn in get_test_conns()) {
-
-    tables <- get_tables(conn)
-    expect_s3_class(tables, "data.frame")
-
-    db_table_names <- tables |>
-      tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
-      dplyr::pull(db_table_name)
-
 
     # Check for the existence of "test.mtcars" and "__mtcars" (added during test setup)
     # For SQLite connections, we don't always have the "test" schema, so we check for its existence
@@ -15,11 +7,41 @@ test_that("get_tables() works", {
     table_1 <- paste(c(switch(!schema_exists(conn, "test"), get_schema(conn)), "test.mtcars"), collapse = ".")
     table_2 <- paste(c(get_schema(conn), "__mtcars"), collapse = ".")
 
+    # Check for the existence of views on backends that support it (added here)
+    if (inherits(conn, "PqConnection")) {
+
+      DBI::dbExecute(conn, "CREATE VIEW __mtcars_view AS SELECT * FROM __mtcars LIMIT 10")
+      view_1 <- paste(c(get_schema(conn), "__mtcars_view"), collapse = ".")
+
+    } else if (inherits(conn, "Microsoft SQL Server")) {
+
+      DBI::dbExecute(conn, "CREATE VIEW __mtcars_view AS SELECT TOP 10 * FROM __mtcars")
+      view_1 <- paste(c(get_schema(conn), "__mtcars_view"), collapse = ".")
+
+    } else {
+      view_1 <- NULL
+    }
+
+
+    # Pull the tables and compare with expectation
+    tables <- get_tables(conn)
+    expect_s3_class(tables, "data.frame")
+
+    db_table_names <- tables |>
+      tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
+      dplyr::pull(db_table_name)
+
     # We should not get tables twice
     expect_setequal(db_table_names, unique(db_table_names))
 
     # Our test tables should be present
-    checkmate::expect_subset(c(table_1, table_2), db_table_names)
+    checkmate::expect_subset(c(table_1, table_2, view_1), db_table_names)
+
+
+    # Drop the view
+    if (checkmate::test_multi_class(conn, c("PqConnection", "Microsoft SQL Server"))) {
+      DBI::dbExecute(conn, glue::glue("DROP VIEW {view_1}"))
+    }
 
     connection_clean_up(conn)
   }
@@ -34,8 +56,15 @@ test_that("get_tables() works with pattern", {
       tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
       dplyr::pull(db_table_name)
 
+
     # We should not get tables twice
     expect_setequal(db_table_names, unique(db_table_names))
+
+    # Check for the existence of "test.mtcars" and "__mtcars" (added during test setup)
+    # For SQLite connections, we don't always have the "test" schema, so we check for its existence
+    # and use default schema if it does not exist.
+    table_1 <- paste(c(switch(!schema_exists(conn, "test"), get_schema(conn)), "test.mtcars"), collapse = ".")
+    table_2 <- paste(c(get_schema(conn), "__mtcars"), collapse = ".")
 
     # Our test table that matches the pattern should be present
     expect_false(table_1 %in% db_table_names)
@@ -61,6 +90,12 @@ test_that("get_tables() works with temporary tables", {
 
     # We should not get tables twice
     expect_setequal(db_table_names, unique(db_table_names))
+
+    # Check for the existence of "test.mtcars" and "__mtcars" (added during test setup)
+    # For SQLite connections, we don't always have the "test" schema, so we check for its existence
+    # and use default schema if it does not exist.
+    table_1 <- paste(c(switch(!schema_exists(conn, "test"), get_schema(conn)), "test.mtcars"), collapse = ".")
+    table_2 <- paste(c(get_schema(conn), "__mtcars"), collapse = ".")
 
     # Our test tables should be present
     checkmate::expect_subset(c(table_1, table_2, tmp_name), db_table_names)
