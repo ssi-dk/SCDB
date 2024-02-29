@@ -35,18 +35,18 @@ Should the Logger output to console? Read only.
 This can always be overridden by Logger$log_info(..., output_to_console = FALSE).}
 
 \item{\code{log_path}}{(\code{character(1)})\cr
-A directory where log file is written (if this is not NULL). Read only.}
+The location log files are written (if this is not NULL). Defaults to \code{getOption("SCDB.log_path")}. Read only.}
 
-\item{\code{log_tbl}}{(\code{tbl_dbi})\cr
-The DB table used for logging. Class is connection-specific, but inherits from \code{tbl_dbi}. Read Only.}
+\item{\code{log_tbl}}{(\code{tbl_dbi(1)})\cr
+The DB table used for logging. Class is connection-specific, but inherits from \code{tbl_dbi}. Read only.}
 
 \item{\code{start_time}}{(\code{POSIXct(1)})\cr
 The time at which data processing was started. Read only.}
 
-\item{\code{log_filename}}{\code{character(1)}\cr
+\item{\code{log_filename}}{(\code{character(1)})\cr
 The filename (basename) of the file that the \code{Logger} instance will output to.  Read only.}
 
-\item{\code{log_realpath}}{\code{character(1)}\cr
+\item{\code{log_realpath}}{(\code{character(1)})\cr
 The full path to the logger's log file. Read only.}
 }
 \if{html}{\out{</div>}}
@@ -85,19 +85,19 @@ Create a new \code{Logger} object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_table}}{(\verb{id-like object})\cr
+\item{\code{db_table}}{(\verb{id-like object(1)})\cr
 A table specification (coercible by \code{id()}) specifying the table being updated.}
 
 \item{\code{timestamp}}{(\code{POSIXct(1)}, \code{Date(1)}, or \code{character(1)})\cr
-A timestamp describing the data being processed (not the current time)}
+A timestamp describing the data being processed (not the current time).}
 
 \item{\code{output_to_console}}{(\code{logical(1)})\cr
 Should the Logger output to console?}
 
-\item{\code{log_table_id}}{(\verb{id-like object})\cr
+\item{\code{log_table_id}}{(\verb{id-like object(1)})\cr
 A table specification (coercible by \code{id()}) specifying the location of the log table.}
 
-\item{\code{log_conn}}{(\code{DBIConnection})\cr
+\item{\code{log_conn}}{(\code{DBIConnection(1)})\cr
 A database connection where log table should exist.}
 
 \item{\code{log_path}}{(\code{character(1)})\cr
@@ -141,7 +141,8 @@ Write a line to log (console / file).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{One or more character strings to be concatenated}
+\item{\code{...}}{(\code{character()})\cr
+Character strings to be concatenated as log message.}
 
 \item{\code{tic}}{(\code{POSIXct(1)})\cr
 The timestamp used by the log entry.}
@@ -149,7 +150,8 @@ The timestamp used by the log entry.}
 \item{\code{output_to_console}}{(\code{logical(1)})\cr
 Should the line be written to console?}
 
-\item{\code{log_type}}{A character string which describes the severity of the log message}
+\item{\code{log_type}}{(\code{character(1)})\cr
+The severity of the log message.}
 
 \item{\code{timestamp_format}}{(\code{character(1)})\cr
 The format of the timestamp used in the log message (parsable by \code{\link[=strftime]{strftime()}}).}
@@ -172,9 +174,11 @@ Write a warning to log file and generate warning.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{One or more character strings to be concatenated}
+\item{\code{...}}{(\code{character()})\cr
+Character strings to be concatenated as log message.}
 
-\item{\code{log_type}}{A character string which describes the severity of the log message}
+\item{\code{log_type}}{(\code{character(1)})\cr
+The severity of the log message.}
 }
 \if{html}{\out{</div>}}
 }
@@ -191,9 +195,11 @@ Write an error to log file and stop execution.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{One or more character strings to be concatenated}
+\item{\code{...}}{(\code{character()})\cr
+Character strings to be concatenated as log message.}
 
-\item{\code{log_type}}{A character string which describes the severity of the log message}
+\item{\code{log_type}}{(\code{character(1)})\cr
+The severity of the log message.}
 }
 \if{html}{\out{</div>}}
 }
@@ -210,7 +216,8 @@ Write or update log table.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{Name-value pairs with which to update the log table.}
+\item{\code{...}}{(\verb{Name-value pairs})\cr
+Structured data written to database log table. Name indicates column and value indicates value to be written.}
 }
 \if{html}{\out{</div>}}
 }

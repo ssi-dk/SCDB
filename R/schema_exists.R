@@ -1,14 +1,16 @@
 #' Test if a schema exists in given connection
-#' @param schema A character string giving the schema name
+#'
+#' @param schema (`character(1)`)\cr
+#'   The schema name to test existence for.
 #' @template conn
-#' @return TRUE if the given schema is found on conn
-#' @examples
+#' @return
+#'   TRUE if the given schema is found on `conn`.
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
+#'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' conn <- get_connection(drv = RSQLite::SQLite())
+#'   schema_exists(conn, "test")
 #'
-#' schema_exists(conn, "test")
-#'
-#' close_connection(conn)
+#'   close_connection(conn)
 #' @export
 schema_exists <- function(conn, schema) {
   UseMethod("schema_exists")

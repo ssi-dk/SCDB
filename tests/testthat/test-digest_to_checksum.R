@@ -38,16 +38,19 @@ test_that("digest_to_checksum() works", {
 test_that("digest_to_checksum() warns works correctly when overwriting", {
   for (conn in get_test_conns()) {
 
-    checksum_vector <- mtcars |>
+    checksum_vector_1 <- mtcars |>
       digest_to_checksum() |>
       dplyr::pull(checksum)
 
-    expect_warning(checksum_vector2 <- mtcars |>
-                     digest_to_checksum(col = "checksum") |>
-                     digest_to_checksum(col = "checksum") |>
-                     dplyr::pull(checksum))
+    expect_warning(
+      checksum_vector_2 <- mtcars |>                                                                                    # nolint: implicit_assignment_linter
+        digest_to_checksum(col = "checksum") |>
+        digest_to_checksum(col = "checksum") |>
+        dplyr::pull(checksum),
+      "Column checksum already exists in data and will be overwritten!"
+    )
 
-    expect_identical(checksum_vector, checksum_vector2)
+    expect_identical(checksum_vector_1, checksum_vector_2)
 
     connection_clean_up(conn)
   }

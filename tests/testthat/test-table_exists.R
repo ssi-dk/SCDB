@@ -94,3 +94,18 @@ test_that("table_exists() fails when multiple matches are found", {
     connection_clean_up(conn)
   }
 })
+
+
+test_that("table_exists() works when starting from empty", {
+  skip_if_not_installed("RSQLite")
+
+  conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+
+  expect_false(table_exists(conn, "mtcars"))
+
+  dplyr::copy_to(conn, mtcars, "mtcars", temporary = FALSE)
+
+  expect_true(table_exists(conn, "mtcars"))
+
+  connection_clean_up(conn)
+})

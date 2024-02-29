@@ -7,6 +7,7 @@ cloneable
 CMD
 Codecov
 coercible
+codecov
 colname
 conn
 cr
@@ -21,10 +22,14 @@ dbplyr's
 Donut
 dplyr
 drv
+DuckDB
 
+endblock
 Engbo
 
 funder
+
+github
 
 IANA
 Institut
@@ -37,6 +42,7 @@ LoggerNull
 
 Margy
 md
+myschema
 
 na
 notin
@@ -53,7 +59,9 @@ Postgres
 printf
 
 Rasmus
+README
 realpath
+Rmd
 RPostgres
 
 schemas
@@ -70,3 +78,6 @@ tempdb
 tibble
 tidyr
 tidyverse
+
+un
+unmanipulated

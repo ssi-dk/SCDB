@@ -1,0 +1,65 @@
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+name: Sync
+jobs:
+  sync:
+    name: 🔄 Synchronise AEF-DDF files
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@master
+
+      - name: Check if sync.yaml exists
+        id: checkfile
+        run: |
+          if [ -f .github/sync.yaml ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+
+      - name: Run GitHub File Sync
+        uses: RasmusSkytte/repo-file-sync-action@master
+        if: steps.checkfile.outputs.exists == 'true'
+        with:
+          GH_PAT: ${{ secrets.GH_PAT }}
+          CONFIG_PATH: .github/sync.yaml
+          COMMIT_PREFIX: "chore: "
+          PR_BODY: Automatically synchronise AEF-DDF files between repositories
+          COMMIT_EACH_FILE: false
+
+
+  sync-reverse:
+    if: ${{ github.repository != 'ssi-dk/AEF-DDF' }}
+    name: 🔄 Synchronise AEF-DDF files back to AEF-DDF
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@master
+
+      - name: Check if sync_reverse.yaml exists
+        id: checkfile
+        run: |
+          if [ -f .github/sync_reverse.yaml ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+
+      - name: Run GitHub File Sync
+        uses: RasmusSkytte/repo-file-sync-action@master
+        if: steps.checkfile.outputs.exists == 'true'
+        with:
+          GH_PAT: ${{ secrets.GH_PAT }}
+          CONFIG_PATH: .github/sync_reverse.yaml
+          COMMIT_PREFIX: "chore: "
+          PR_BODY: Automatically synchronise AEF-DDF files between repositories
+          COMMIT_EACH_FILE: false

@@ -58,35 +58,40 @@ test_that("update_snapshot() works", {
     # Check file log outputs exists
     log_pattern <- glue::glue("{stringr::str_replace_all(as.Date(timestamp), '-', '_')}.{id(db_table, conn)}.log")
     log_file <- purrr::keep(dir(log_path), ~stringr::str_detect(., log_pattern))
-    expect_true(length(log_file) == 1)
-    expect_true(file.info(file.path(log_path, log_file))$size > 0)
-    expect_true(nrow(get_table(conn, "test.SCDB_logs")) == 1)
-    expect_true(nrow(dplyr::filter(get_table(conn, "test.SCDB_logs"),
-                                   dplyr::if_any(.cols = !c(log_file), .fns = ~ !is.na(.)))) == 1)
+    expect_length(log_file, 1)
+    expect_gt(file.info(file.path(log_path, log_file))$size, 0)
+    expect_identical(nrow(get_table(conn, "test.SCDB_logs")), 1)
 
-    # Check db log output exists
+    db_logs_with_log_file <- get_table(conn, "test.SCDB_logs") |>
+      dplyr::filter(!is.na(.data$log_file))
+    expect_identical(nrow(db_logs_with_log_file), 1)
+
+    # Check db log output
     logs <- get_table(conn, "test.SCDB_logs") |> dplyr::collect()
 
-    checkmate::expect_data_frame(logs,
-      nrows = 1,
-      types = c(
-        "date" = "POSIXct",
-        "date" = "character", # SQLite does not support POSIXct
-        "catalog" = "character",
-        "schema" = "character",
-        "table" = "character",
-        "n_insertions" = "numeric",
-        "n_deactivations" = "numeric",
-        "start_time" = "POSIXct",
-        "start_time" = "character", # SQLite does not support POSIXct
-        "end_time" = "POSIXct",
-        "end_time" = "character", # SQLite does not support POSIXct
-        "duration" = "character",
-        "success" = "logical",
-        "success" = "numeric", # SQLite does not support logical
-        "message" = "character"
-      )
+    # The logs should have specified data types
+    types <- c(
+      "date" = "POSIXct",
+      "catalog" = "character",
+      "schema" = "character",
+      "table" = "character",
+      "n_insertions" = "numeric",
+      "n_deactivations" = "numeric",
+      "start_time" = "POSIXct",
+      "end_time" = "POSIXct",
+      "duration" = "character",
+      "success" = "logical",
+      "message" = "character"
     )
+
+    if (inherits(conn, "SQLiteConnection")) {
+      types <- types |>
+        purrr::map_if(~ identical(., "POSIXct"), "character") |> # SQLite does not support POSIXct
+        purrr::map_if(~ identical(., "logical"), "numneric") |>  # SQLite does not support logical
+        as.character()
+    }
+
+    checkmate::expect_data_frame(logs, nrows = 1, types)
 
 
     # We now attempt to do another update on the same date
@@ -179,7 +184,7 @@ test_that("update_snapshot() works", {
                      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
     t <- list(t0, t1, t2) |>
-      purrr::reduce(union) |>
+      purrr::reduce(dplyr::union) |>
       dplyr::collect() |>
       dplyr::mutate(col2 = as.character(col2)) |>
       dplyr::arrange(col1, col2) |>
@@ -235,7 +240,7 @@ test_that("update_snapshot() works", {
 
 
 test_that("update_snapshot works with Id objects", {
-  withr::local_options("SCDB.log_path" = tempdir())
+  withr::local_options("SCDB.log_path" = NULL) # No file logging
 
   for (conn in get_test_conns()) {
 
@@ -245,14 +250,15 @@ test_that("update_snapshot works with Id objects", {
                          timestamp = Sys.time(),
                          db_table = "test.mtcars_modified",
                          log_conn = NULL,
-                         log_table_id = NULL)
+                         log_table_id = NULL,
+                         warn = FALSE)
 
     expect_no_error(
       mtcars |>
         dplyr::mutate(disp = sample(mtcars$disp, nrow(mtcars))) |>
         dplyr::copy_to(dest = conn,
                        df = _,
-                       name = "mtcars_modified") |>
+                       name = unique_table_name()) |>
         update_snapshot(
           conn = conn,
           db_table = target_table,
@@ -261,7 +267,6 @@ test_that("update_snapshot works with Id objects", {
         )
     )
 
-    unlink(logger$log_realpath)
     connection_clean_up(conn)
   }
 })
@@ -277,12 +282,12 @@ test_that("update_snapshot checks table formats", {
     timestamp <- Sys.time()
 
     expect_warning(
-      logger <- Logger$new(log_path = NULL, log_table_id = NULL, output_to_console = FALSE),
+      logger <- Logger$new(log_path = NULL, log_table_id = NULL, output_to_console = FALSE),                            # nolint: implicit_assignment_linter
       "NO file or DB logging will be done."
     )
 
     # Test columns not matching
-    broken_table <- dplyr::copy_to(conn, dplyr::select(mtcars, -"mpg"), name = "mtcars_broken", overwrite = TRUE)
+    broken_table <- dplyr::copy_to(conn, dplyr::select(mtcars, !"mpg"), name = "mtcars_broken", overwrite = TRUE)
 
     expect_error(
       update_snapshot(
@@ -311,4 +316,104 @@ test_that("update_snapshot checks table formats", {
 
     connection_clean_up(conn)
   }
+})
+
+
+test_that("update_snapshot works with across connection", {
+  skip_if_not_installed("RSQLite")
+
+  withr::local_options("SCDB.log_path" = NULL) # No file logging
+
+  # Test a data transfer from a local SQLite to the test connection
+  source_conn <- DBI::dbConnect(RSQLite::SQLite())
+
+  # Create a table for the tests
+  mtcars_modified <- mtcars |>
+    dplyr::mutate(name = rownames(mtcars))
+
+  # Copy table to the source
+  .data <- dplyr::copy_to(dest = source_conn, df = mtcars_modified, name = unique_table_name())
+
+  # For each conn, we test if update_snapshot preserves data types
+  for (target_conn in get_test_conns()) {
+
+    target_table <- id("test.mtcars_modified", target_conn)
+    if (DBI::dbExistsTable(target_conn, target_table)) DBI::dbRemoveTable(target_conn, target_table)
+
+    logger <- LoggerNull$new()
+
+    # Check we can transfer without error
+    expect_no_error(
+      update_snapshot(
+        .data,
+        conn = target_conn,
+        db_table = target_table,
+        logger = logger,
+        timestamp = format(Sys.time())
+      )
+    )
+
+    # Check that if we collect the table, the signature will match the original
+    table_signature <- get_table(target_conn, target_table) |>
+      dplyr::collect() |>
+      dplyr::summarise(dplyr::across(tidyselect::everything(), ~ class(.)[1])) |>
+      as.data.frame()
+
+    expect_identical(
+      table_signature,
+      dplyr::summarise(mtcars_modified, dplyr::across(tidyselect::everything(), ~ class(.)[1]))
+    )
+
+
+    DBI::dbRemoveTable(target_conn, target_table)
+    connection_clean_up(target_conn)
+    rm(logger)
+    invisible(gc())
+  }
+  connection_clean_up(source_conn)
+
+
+  ## Now we test the reverse transfer
+
+  # Test a data transfer from the test connection to a local SQLite
+  target_conn <- DBI::dbConnect(RSQLite::SQLite())
+
+  # For each conn, we test if update_snapshot preserves data types
+  for (source_conn in get_test_conns()) {
+
+    .data <- dplyr::copy_to(dest = source_conn, df = mtcars_modified, name = unique_table_name())
+
+    target_table <- id("mtcars_modified", target_conn)
+    if (DBI::dbExistsTable(target_conn, target_table)) DBI::dbRemoveTable(target_conn, target_table)
+
+    logger <- LoggerNull$new()
+
+    # Check we can transfer without error
+    expect_no_error(
+      update_snapshot(
+        .data,
+        conn = target_conn,
+        db_table = target_table,
+        logger = logger,
+        timestamp = format(Sys.time())
+      )
+    )
+
+    # Check that if we collect the table, the signature will match the original
+    table_signature <- get_table(target_conn, target_table) |>
+      dplyr::collect() |>
+      dplyr::summarise(dplyr::across(tidyselect::everything(), ~ class(.)[1])) |>
+      as.data.frame()
+
+    expect_identical(
+      table_signature,
+      dplyr::summarise(mtcars_modified, dplyr::across(tidyselect::everything(), ~ class(.)[1]))
+    )
+
+
+    connection_clean_up(source_conn)
+    rm(logger)
+    invisible(gc())
+  }
+  connection_clean_up(target_conn)
 })

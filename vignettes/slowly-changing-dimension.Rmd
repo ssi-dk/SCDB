@@ -7,14 +7,18 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
-```{r setup, include = FALSE}
+```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+```
 
+```{r library, eval = requireNamespace("tidyverse")}
 library(tidyverse)
+```
+
+```{r setup, include = FALSE, eval = requireNamespace("tidyverse")}
 
 forecasts_full <- tribble(
   ~City, ~Forecast, ~ForecastDate,
@@ -42,9 +46,6 @@ forecasts_scd <- forecasts_full %>%
   select(!"ForecastDate") %>%
   arrange(ForecastFrom)
 
-# Only define one connection
-if (!exists("con")) con <- DBI::dbConnect(drv = RSQLite::SQLite(), dbname = ":memory:")
-
 forecasts_dated <- filter(forecasts_full, ForecastDate == "2023-09-28")
 forecasts <- select(forecasts_dated, !"ForecastDate")
 
@@ -58,7 +59,7 @@ A slowly changing dimension is a concept in data warehousing which refers to dat
 ## Type 1 and Type 2 history
 
 For example, consider the following table of forecasts for a number of cities:
-```{r forecasts}
+```{r forecasts, eval = requireNamespace("tidyverse")}
 # Current date: 2023-09-28
 forecasts
 ```
@@ -69,7 +70,7 @@ In this example, most (if not all) of the values of the `Forecast` column will c
 Putting it into other words, the table is a *snapshot*^[A *snapshot* is a static view of (part of) a database at a specific point in time] of forecasts at the last time of update.
 
 The following day, the forecasts naturally change:
-```{r forecasts2a}
+```{r forecasts2a, eval = requireNamespace("tidyverse")}
 # Current date: 2023-09-29
 forecasts2
 ```
@@ -80,14 +81,13 @@ Databases are thankfully a rather efficient way of storing and accessing data, s
 Also, in order to keep our data organized, we add a column with the date of the forecast, aptly named `ForecastDate`.
 
 The full table of forecasts for the two days now looks like below, and we are slowly building a full history of forecasts:
-```{r forecasts_full}
+```{r forecasts_full, eval = requireNamespace("tidyverse")}
 forecasts_full
 ```
 Managing historical data by inserting new data in this manner is often referred to as Type 2 methodology or Type 2 history.
 
 Our table now provides much more information for the user through filtering:
-```{r forecasts_full_examples}
-library(tidyverse)
+```{r forecasts_full_examples, eval = requireNamespace("tidyverse")}
 
 # Current forecasts
 forecasts_full %>%
@@ -108,7 +108,7 @@ Now, we note that the forecast for Houston has not changed between the two days.
 In order to keep our data as minimized as possible, we modify the table again, now expanding `ForecastDate` into `ForecastFrom` and `ForecastUntil`.
 
 Our table of forecasts now looks like this:
-```{r forecasts_scd}
+```{r forecasts_scd, eval = requireNamespace("tidyverse")}
 forecasts_scd
 ```
 For now, the `ForecastUntil` value is set to `NA`, as it is not known when these rows will "expire" (if ever).
@@ -119,7 +119,7 @@ Adding a new column to save a single row of data naturally seems a bit overkill,
 ## A "timeline of timelines"
 Let's now introduce additional information and see how managing slowly changing dimensions enables us to easily navigate large amounts of data over large periods of time.
 
-```{r adresses_setup, include = FALSE}
+```{r adresses_setup, include = FALSE, eval = requireNamespace("tidyverse")}
 addresses <- tibble::tibble(
   ID = c(1,
          2,
@@ -183,7 +183,7 @@ This is where managing a slowly changing dimension becomes very powerful, compar
 
 One day, Alice Doe meets [Robert "Bobby" Tables](https://xkcd.com/327/), and they move in together:
 
-```{r addresses1}
+```{r addresses1, eval = requireNamespace("tidyverse")}
 addresses
 ```
 
@@ -191,13 +191,13 @@ First thing to notice is that the registry is not updated in real-time, as citiz
 This can be seen when comparing the values of `MovedIn` and `ValidFrom` for row 4.
 
 When using Type 2 history, this feature is correctly replicated when reconstructing historical data:
-```{r addresses1a}
+```{r addresses1a, eval = requireNamespace("tidyverse")}
 slice_timestamp <- "2021-03-02"
 
 addresses %>%
   filter(ID == 1,
-         ValidFrom < !!slice_timestamp &
-           (ValidUntil >= !!slice_timestamp | is.na(ValidUntil))) %>%
+         ValidFrom < !!slice_timestamp,
+         ValidUntil >= !!slice_timestamp | is.na(ValidUntil)) %>%
   select(!c("ValidFrom", "ValidUntil"))
 ```
 In other words, even though Alice's address was subsequently updated in the registry, we can still see that she *was* registered as living in Donut Plains at this time.
@@ -205,7 +205,7 @@ This modeling of "timelines of timelines" is also called bitemporal modeling.
 
 By now, things are going well between Alice and Robert; they get married, with Alice taking Robert's surname.
 It is the same person that has lived with Robert, but as of the day of marriage, she has a different name:
-```{r addresses2}
+```{r addresses2, eval = requireNamespace("tidyverse")}
 filter(addresses2,
        ID == 1,
        Address == "Rainbow Road 8") %>%
@@ -213,14 +213,14 @@ filter(addresses2,
 ```
 
 This is now also reflected in the data; the `MovedIn` date is persistent across the date of the name change, only the `Surname` changes:
-```{r addresses3}
+```{r addresses3, eval = requireNamespace("tidyverse")}
 slice_timestamp <- "2022-03-04"
 
 addresses2 %>%
   filter(Address == "Rainbow Road 8",
          is.na(MovedOut),
-         ValidFrom < !!slice_timestamp &
-           (ValidUntil >= !!slice_timestamp | is.na(ValidUntil))) %>%
+         ValidFrom < !!slice_timestamp,
+         ValidUntil >= !!slice_timestamp | is.na(ValidUntil)) %>%
   select(ID, GivenName, Surname, MovedIn, MovedOut)
 
 slice_timestamp <- "2023-09-29"
@@ -228,8 +228,8 @@ slice_timestamp <- "2023-09-29"
 addresses2 %>%
   filter(Address == "Rainbow Road 8",
          is.na(MovedOut),
-         ValidFrom < !!slice_timestamp &
-           (ValidUntil >= !!slice_timestamp | is.na(ValidUntil))) %>%
+         ValidFrom < !!slice_timestamp,
+         ValidUntil >= !!slice_timestamp | is.na(ValidUntil)) %>%
   select(ID, GivenName, Surname, MovedIn, MovedOut)
 ```
 

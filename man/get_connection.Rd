@@ -2,67 +2,123 @@
 % Please edit documentation in R/connection.R
 \name{get_connection}
 \alias{get_connection}
+\alias{get_connection.SQLiteDriver}
+\alias{get_connection.PqDriver}
+\alias{get_connection.OdbcDriver}
+\alias{get_connection.duckdb_driver}
+\alias{get_connection.default}
 \title{Opens connection to the database}
 \usage{
-get_connection(
-  drv = RPostgres::Postgres(),
+get_connection(drv = RPostgres::Postgres(), ...)
+
+\method{get_connection}{SQLiteDriver}(
+  drv,
+  dbname = ":memory:",
+  ...,
+  bigint = c("integer", "bigint64", "numeric", "character")
+)
+
+\method{get_connection}{PqDriver}(
+  drv,
+  dbname = NULL,
   host = NULL,
   port = NULL,
-  dbname = NULL,
-  user = NULL,
   password = NULL,
-  timezone = NULL,
-  timezone_out = NULL,
+  user = NULL,
   ...,
-  bigint = "integer",
-  check_interrupts = TRUE
+  bigint = c("integer", "bigint64", "numeric", "character"),
+  check_interrupts = TRUE,
+  timezone = Sys.timezone(),
+  timezone_out = Sys.timezone()
 )
+
+\method{get_connection}{OdbcDriver}(
+  drv,
+  dsn = NULL,
+  ...,
+  bigint = c("integer", "bigint64", "numeric", "character"),
+  timezone = Sys.timezone(),
+  timezone_out = Sys.timezone()
+)
+
+\method{get_connection}{duckdb_driver}(
+  drv,
+  dbdir = ":memory:",
+  ...,
+  bigint = c("numeric", "character"),
+  timezone_out = Sys.timezone()
+)
+
+\method{get_connection}{default}(drv, ...)
 }
 \arguments{
-\item{drv}{An object that inherits from DBIDriver or an existing DBIConnection (default: RPostgres::Postgres())}
+\item{drv}{(\code{DBIDriver(1)} or \code{DBIConnection(1)})\cr
+The driver for the connection.}
 
-\item{host}{Character string giving the ip of the host to connect to}
+\item{...}{Additional parameters sent to DBI::dbConnect().}
 
-\item{port}{Host port to connect to. Must be a number or a numeric string.}
+\item{dbname}{(\code{character(1)})\cr
+Name of the database located at the host.}
 
-\item{dbname}{Name of the database located at the host}
+\item{bigint}{(\code{character(1)})\cr
+The datatype to convert integers to.
+Support depends on the database backend.}
 
-\item{user}{Username to login with}
+\item{host}{(\code{character(1)})\cr
+The ip of the host to connect to.}
 
-\item{password}{Password to login with}
+\item{port}{(\code{numeric(1)} or \code{character(1)})\cr
+Host port to connect to.}
 
-\item{timezone}{Sets the timezone of DBI::dbConnect(). Must be in \code{\link[=OlsonNames]{OlsonNames()}}.}
+\item{password}{(\code{character(1)})\cr
+Password to login with.}
 
-\item{timezone_out}{Sets the timezone_out of DBI::dbConnect(). Must be in \code{\link[=OlsonNames]{OlsonNames()}}.}
+\item{user}{(\code{character(1)})\cr
+Username to login with.}
 
-\item{...}{Additional parameters sent to DBI::dbConnect()}
+\item{check_interrupts}{(\code{logical(1)})\cr
+Should user interrupts be checked during the query execution?}
 
-\item{bigint}{The R type that 64-bit integer types should be mapped to,
-default is \link[bit64:bit64-package]{bit64::integer64}, which allows the full range of 64 bit
-integers.}
+\item{timezone}{(\code{character(1)})\cr
+Sets the timezone of DBI::dbConnect(). Must be in \code{\link[=OlsonNames]{OlsonNames()}}.}
 
-\item{check_interrupts}{Should user interrupts be checked during the query execution (before
-first row of data is available)? Setting to \code{TRUE} allows interruption of queries
-running too long.}
+\item{timezone_out}{(\code{character(1)})\cr
+Sets the timezone_out of DBI::dbConnect(). Must be in \code{\link[=OlsonNames]{OlsonNames()}}.}
+
+\item{dsn}{(\code{character(1)})\cr
+The data source name to connect to.}
+
+\item{dbdir}{(\code{character(1)})\cr
+The directory where the database is located.}
 }
 \value{
-An object that inherits from DBIConnection driver specified in drv
+An object that inherits from \code{DBIConnection} driver specified in \code{drv}.
 }
 \description{
-Connects to the specified dbname of host:port using user and password from given arguments.
-Certain drivers may use credentials stored in a file, such as ~/.pgpass (PostgreSQL)
+This is a convenience wrapper for DBI::dbConnect() for different database backends.
+
+Connects to the specified dbname of host:port using user and password from given arguments (if applicable).
+Certain drivers may use credentials stored in a file, such as ~/.pgpass (PostgreSQL).
 }
 \examples{
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-conn <- get_connection(drv = RSQLite::SQLite(), dbname = ":memory:")
+  conn <- get_connection(drv = RSQLite::SQLite(), dbname = ":memory:")
 
-DBI::dbIsValid(conn) # TRUE
+  DBI::dbIsValid(conn) # TRUE
 
-close_connection(conn)
+  close_connection(conn)
 
-DBI::dbIsValid(conn) # FALSE
+  DBI::dbIsValid(conn) # FALSE
 \dontshow{\}) # examplesIf}
 }
 \seealso{
 \link[RPostgres:Postgres]{RPostgres::Postgres}
+
+\link[RSQLite:SQLite]{RSQLite::SQLite}
+
+\link[RPostgres:Postgres]{RPostgres::Postgres}
+
+\link[odbc:dbConnect-OdbcDriver-method]{odbc::odbc}
+
+\link[duckdb:duckdb]{duckdb::duckdb}
 }

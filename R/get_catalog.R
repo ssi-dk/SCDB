@@ -1,11 +1,13 @@
 #' @rdname get_schema
 #' @return
+#'   The catalog is extracted from `obj` depending on the type of input:
+#'
 #'   * For `get_catalog.Microsoft SQL Server`, the current database context of the connection or "tempdb" if
-#'   `temporary = TRUE`.
+#'     `temporary = TRUE`.
 #'
 #'   * For `get_schema.tbl_dbi` the catalog is determined via `id()`.
 #'
-#'   * For `get_catalog.\*`, `NULL` is returned.
+#'   * For `get_catalog.\\*`, `NULL` is returned.
 #' @export
 get_catalog <- function(obj, ...) {
   UseMethod("get_catalog")
@@ -30,6 +32,16 @@ get_catalog.Id <- function(obj, ...) {
     return("tempdb")
   } else {
     query <- paste("SELECT DB_NAME() AS current_database;")
+    return(DBI::dbGetQuery(obj, query)$current_database)
+  }
+}
+
+#' @export
+get_catalog.duckdb_connection <- function(obj, temporary = FALSE,  ...) {
+  if (temporary) {
+    return("temp")
+  } else {
+    query <- paste("SELECT current_catalog() AS current_database;")
     return(DBI::dbGetQuery(obj, query)$current_database)
   }
 }

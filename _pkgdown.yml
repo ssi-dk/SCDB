@@ -8,3 +8,45 @@ authors:
     html: >-
       <img src="https://www.ssi.dk/assets/images/ssi-logo-optimeret.svg"
       alt="SSI" height="64" style="margin-bottom: 0.5em; margin-top: 1.5em;" />
+
+reference:
+  - title: Connect and retrieve data
+    contents:
+    - get_connection
+    - close_connection
+    - id
+    - get_tables
+    - get_table
+    - get_schema
+    - table_exists
+    - schema_exists
+
+  - title: Create or manage tables
+    contents:
+    - create_table
+    - create_logs_if_missing
+    - update_snapshot
+    - filter_keys
+    - Logger
+    - LoggerNull
+
+  - title: Manipulate tables
+    contents:
+    - slice_time
+    - joins
+    - unite.tbl_dbi
+    - interlace
+    - interlace_sql
+
+  - title:  Query table information
+    contents:
+    - is.historical
+    - nrow
+
+  - title: Developer functions
+    contents:
+    - db_locks
+    - db_timestamp
+    - defer_db_cleanup
+    - digest_to_checksum
+    - unique_table_name

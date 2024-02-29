@@ -1,0 +1,11 @@
+ssi-dk/AEF-DDF:
+  - source: tests/testthat/test-0_rd_files.R
+    dest: testthat/test-0_rd_files.R
+
+  # Lintr related files
+  - source: .lintr
+    dest: linting/.lintr
+  - source: R/0_linters.R
+    dest: linting/0_linters.R
+  - source: tests/testthat/test-0_linters.R
+    dest: linting/test-0_linters.R

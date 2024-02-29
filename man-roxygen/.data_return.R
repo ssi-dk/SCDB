@@ -1,1 +1,1 @@
-#' @return An object similar to .data
+#' @return An object of same class as .data

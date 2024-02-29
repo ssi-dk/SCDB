@@ -28,6 +28,10 @@
 
 * `get_schema()` now returns `NULL` instead of `NA` if schema is undefined (#99).
 
+* The `db_table_id` argument in `create_table()`, `get_table()`, `table_exists()` and `id()` is renamed to `db_table`
+  (#115).
+  Any object coercible by `id()` can now be passed to these functions.
+
 * The order of arguments in `create_logs_if_missing()` has been swapped to match the rest of the package (#??).
   The `conn` argument is now before the `log_table` argument.
 
@@ -45,6 +49,8 @@
 * The `interlace_sql()` function is converted to the S3 generic `interlace()` (#113).
 
 ## New features
+
+* Added support for DuckDB (#121).
 
 * The S3 method `as.character.Id()` is added which converts `DBI::Id()` to `character` (#93).
 

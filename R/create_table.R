@@ -1,24 +1,24 @@
 #' Create a historical table from input data
 #'
-#' @name create_table
-#'
 #' @template .data
 #' @template conn
-#' @template db_table_id
-#' @param ... Other arguments passed to [DBI::dbCreateTable()]
-#' @return Invisibly returns the table as it looks on the destination (or locally if conn is NULL)
-#' @examples
-#' conn <- get_connection(drv = RSQLite::SQLite())
+#' @template db_table
+#' @param ...
+#'   Other arguments passed to [DBI::dbCreateTable()].
+#' @return
+#'   Invisibly returns the table as it looks on the destination (or locally if `conn` is `NULL`).
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
+#'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
-#' create_table(mtcars, conn = conn, db_table_id = "mtcars")
+#'   create_table(mtcars, conn = conn, db_table = "mtcars")
 #'
-#' close_connection(conn)
+#'   close_connection(conn)
 #' @export
-create_table <- function(.data, conn = NULL, db_table_id, ...) {
+create_table <- function(.data, conn = NULL, db_table, ...) {                                                           # nolint: function_argument_linter
 
   checkmate::assert_class(.data, "data.frame")
   checkmate::assert_class(conn, "DBIConnection", null.ok = TRUE)
-  assert_id_like(db_table_id)
+  assert_id_like(db_table)
 
   # Assert unique column names (may cause unexpected getTableSignature results)
   checkmate::assert_character(names(.data), unique = TRUE)
@@ -39,7 +39,7 @@ create_table <- function(.data, conn = NULL, db_table_id, ...) {
 
   # Convert to id
   # But supply no "conn" argument to prevent inference of (default) schema
-  db_table_id <- id(db_table_id)
+  db_table_id <- id(db_table)
 
   # Check db_table_id conforms to requirements:
   # 1) Temporary tables on some backends must to begin with "#".

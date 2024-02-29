@@ -5,8 +5,8 @@ data_update_snapsnot <- data.frame(
   "Date"      = Sys.Date(),
   "POSIXct"   = Sys.time(),
   "character" = "test",
-  "integer"   = as.integer(1),
-  "numeric"   = as.numeric(1),
+  "integer"   = 1L,
+  "numeric"   = 1,
   "logical"   = TRUE,
   # .. and our special columns
   "checksum"  = "test",
@@ -24,12 +24,12 @@ data_random <- data.frame(
   "from_ts"   = Sys.time(),
   "until_ts"  = Sys.time(),
   # ..
-  "integer"   = as.integer(1),
-  "numeric"   = as.numeric(1),
+  "integer"   = 1L,
+  "numeric"   = 1,
   "logical"   = TRUE
 )
 
-for (conn in c(list(NULL), get_test_conns())) {                                                                            # nolint: cyclocomp_linter
+for (conn in c(list(NULL), get_test_conns())) {
 
   if (is.null(conn)) {
     test_that("getTableSignature() generates signature for update_snapshot() (conn == NULL)", {
@@ -106,6 +106,26 @@ for (conn in c(list(NULL), get_test_conns())) {                                 
           "checksum"  = "varchar(40)",
           "from_ts"   = "DATETIME",
           "until_ts"  = "DATETIME"
+        )
+      )
+    })
+  }
+
+  if (inherits(conn, "duckdb_connection")) {
+    test_that("getTableSignature() generates signature for update_snapshot() (duckdb_connection)", {
+      expect_identical(
+        getTableSignature(data_update_snapsnot, conn),
+        c(
+          "Date"      = "DATE",
+          "POSIXct"   = "TIMESTAMP",
+          "character" = "STRING",
+          "integer"   = "INTEGER",
+          "numeric"   = "DOUBLE",
+          "logical"   = "BOOLEAN",
+          # ..
+          "checksum"  = "varchar(32)",
+          "from_ts"   = "TIMESTAMP",
+          "until_ts"  = "TIMESTAMP"
         )
       )
     })
@@ -196,6 +216,27 @@ for (conn in c(list(NULL), get_test_conns())) {                                 
     })
   }
 
+  if (inherits(conn, "duckdb_connection")) {
+    test_that("getTableSignature() generates signature for random data (duckdb_connection)", {
+      expect_identical(
+        getTableSignature(data_random, conn),
+        c(
+          "Date"      = "DATE",
+          "POSIXct"   = "TIMESTAMP",
+          "character" = "STRING",
+          # ..
+          "checksum"  = "STRING",
+          "from_ts"   = "TIMESTAMP",
+          "until_ts"  = "TIMESTAMP",
+          # ..
+          "integer"   = "INTEGER",
+          "numeric"   = "DOUBLE",
+          "logical"   = "BOOLEAN"
+        )
+      )
+    })
+  }
+
 
   if (inherits(conn, "SQLiteConnection")) {
     test_that("getTableSignature() generates signature for random data on remote (SQLiteConnection)", {
@@ -260,6 +301,27 @@ for (conn in c(list(NULL), get_test_conns())) {                                 
     })
   }
 
+  if (inherits(conn, "duckdb_connection")) {
+    test_that("getTableSignature() generates signature for random data on remote (duckdb_connection)", {
+      expect_identical(
+        getTableSignature(dplyr::copy_to(conn, data_random), conn),
+        c(
+          "Date"      = "DATE",
+          "POSIXct"   = "TIMESTAMP",
+          "character" = "STRING",
+          # ..
+          "checksum"  = "STRING",
+          "from_ts"   = "TIMESTAMP",
+          "until_ts"  = "TIMESTAMP",
+          # ..
+          "integer"   = "INTEGER",
+          "numeric"   = "DOUBLE",
+          "logical"   = "BOOLEAN"
+        )
+      )
+    })
+  }
+
 
   if (!is.null(conn)) {
     test_that(glue::glue("getTableSignature() generates consistent data types ({class(conn)})"), {
@@ -281,11 +343,11 @@ for (conn in c(list(NULL), get_test_conns())) {                                 
 
       # The table signatures are not always the same (eg. SQLiteConnection).
       if (inherits(conn, "SQLiteConnection")) {
-        expect_false(identical( # In leui of expect_not_identical
+        expect_false(identical( # In lieu of expect_not_identical
           getTableSignature(data_random, conn),
           getTableSignature(remote_data_1, conn)
         ))
-        expect_identical(
+        expect_identical(                                                                                               # nolint: expect_named_linter
           names(getTableSignature(data_random, conn)),
           names(getTableSignature(remote_data_1, conn))
         )

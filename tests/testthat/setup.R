@@ -1,8 +1,3 @@
-# dplyr has a deprecated function called "id" that in some cases are called over the SCDB implementation if "id"
-# We here explicitly prefer our implementation for our tests
-conflicted::conflict_prefer("id", "SCDB")
-
-
 # Ensure the target connections are empty and configured correctly
 coll <- checkmate::makeAssertCollection()
 conns <- get_test_conns()
@@ -25,7 +20,7 @@ for (conn_id in seq_along(conns)) {
     coll$push(glue::glue("Tests require the schema 'test.one' to exist in connection ({names(conns)[[conn_id]]})."))
   }
 
-  DBI::dbDisconnect(conn)
+  DBI::dbDisconnect(conn, shutdown = TRUE)
 }
 checkmate::reportAssertions(coll)
 
@@ -47,7 +42,7 @@ for (conn in get_test_conns()) {
   tryCatch(
     dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
                    name = id("test.mtcars", conn), temporary = FALSE, overwrite = TRUE),
-    message = \(m) if (!stringr::str_detect(m$message, "check_from = FALSE")) message(m)
+    message = \(m) if (!stringr::str_detect(m$message, stringr::fixed("check_from = FALSE"))) message(m)
   )
 
   dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
@@ -61,14 +56,14 @@ for (conn in get_test_conns()) {
                                  until_ts = as.POSIXct(NA)),
                  name = id("__mtcars_historical", conn), temporary = FALSE, overwrite = TRUE)
 
-  DBI::dbDisconnect(conn)
+  DBI::dbDisconnect(conn, shutdown = TRUE)
 }
 
 
 #' Clean up and test function
 #' @description
 #'   This function checks for the existence of "dbplyr_###" tables on the connection before closing the connection
-#' @param conn The connection to test
+#' @template conn
 #' @return NULL (called for side effects)
 #' @import rlang .data
 #' @noRd
@@ -76,5 +71,5 @@ connection_clean_up <- function(conn) {
   if (nrow(dplyr::filter(get_tables(conn, show_temporary = TRUE), stringr::str_detect(.data$table, "^#?dbplyr_")))) {
     warning("Temporary dbplyr tables ('dbplyr_###') are not cleaned up!")
   }
-  DBI::dbDisconnect(conn)
+  DBI::dbDisconnect(conn, shutdown = TRUE)
 }

@@ -1,20 +1,21 @@
-#' Combine any number of tables, where each has their own time axis of
-#' validity (valid_from and valid_until)
+#' Combine any number of tables, where each has their own time axis of validity
 #'
 #' @description
-#' The function "interlaces" the queries and combines their validity time axes
-#' onto a single time axis
+#'   The function "interlaces" the queries and combines their validity time axes (valid_from and valid_until)
+#'   onto a single time axis.
 #'
-#' @param tables    A list(!) of tables you want to combine is supplied here as
-#'                  lazy_queries.
-#' @param by        The (group) variable to merge by
-#' @param colnames  If the time axes of validity is not called "valid_to" and
-#'                  "valid_until" inside each lazy_query, you can specify their
-#'                  names by supplying the arguments as a list
-#'                  (e.g. c(t1.from = "\<colname\>", t2.until = "\<colname\>").
-#'                  colnames must be named in same order as as given in tables
-#'                  (i.e. t1, t2, t3, ...).
-#' @examples
+#' @param tables (`list`(`tbl_dbi(1)`))\cr
+#'   The historical tables to combine.
+#' @param by (`character()`)\cr
+#'   The variable to merge by.
+#' @param colnames (`named list()`)\cr
+#'   If the time axes of validity is not called "valid_to" and "valid_until" inside each `tbl_dbi`,
+#'   you can specify their names by supplying the arguments as a list:
+#'   e.g. c(t1.from = "\<colname\>", t2.until = "\<colname\>").
+#'   colnames must be named in same order as as given in tables (i.e. t1, t2, t3, ...).
+#' @return
+#'   The combination of input queries with a single, interlaced valid_from / valid_until time axis.
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection(drv = RSQLite::SQLite())
 #'
 #'   t1 <- data.frame(key = c("A", "A", "B"),
@@ -38,11 +39,18 @@
 #' @export
 interlace <- function(tables, by = NULL, colnames = NULL) {
   # Check arguments
-  checkmate::assert_character(by)
-  # TODO: how to checkmate tables and colnames?
+  coll <- checkmate::makeAssertCollection()
+  checkmate::assert_list(tables, types = c("tbl_dbi", "data.frame"), add = coll)
+  checkmate::assert_character(by, null.ok = TRUE, add = coll)
+  checkmate::assert_character(colnames, null.ok = TRUE, add = coll)
+  checkmate::assert_character(names(colnames), pattern = r"{t\d+\.(from|until)}", null.ok = TRUE, add = coll)
+  checkmate::reportAssertions(coll)
 
-  # Check edgecase
-  if (length(tables) == 1) return(purrr::pluck(tables, 1))
+
+  # Check edge case
+  if (length(tables) == 1) {
+    return(purrr::pluck(tables, 1))
+  }
 
   UseMethod("interlace", tables[[1]])
 }
@@ -78,7 +86,7 @@ interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
         dplyr::select(tidyselect::all_of(by), "valid_until") |>
         dplyr::rename(valid_from = "valid_until")
     })
-  t <- union(q1, q2) |> purrr::reduce(union)
+  t <- dplyr::union(q1, q2) |> purrr::reduce(dplyr::union)
 
   # Sort and find valid_until in the combined validities
   t <- t |>
@@ -86,7 +94,7 @@ interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
     dbplyr::window_order(.data$valid_from) |>
     dplyr::mutate(.row = dplyr::if_else(is.na(.data$valid_from),  # Some DB backends considers NULL to be the
                                         dplyr::n(),               # smallest, so we need to adjust for that
-                                        dplyr::row_number() - ifelse(is.na(dplyr::first(.data$valid_from)), 1, 0)))
+                                        dplyr::row_number() - ifelse(is.na(dplyr::first(.data$valid_from)), 1, 0)))     # nolint: redundant_ifelse_linter
 
   t <- dplyr::left_join(t |>
                           dplyr::filter(.data$.row < dplyr::n()),
@@ -113,4 +121,14 @@ interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
   }
 
   return(purrr::reduce(tables, joiner, .init = t))
+}
+
+#' interlace_sql
+#'
+#' @inherit interlace
+#' @export
+interlace_sql <- function(tables, by = NULL, colnames = NULL) {
+  # Lifecycle deprecate function
+  lifecycle::deprecate_soft("0.4.0", "interlace_sql()", "interlace()")
+  interlace(tables, by, colnames)
 }

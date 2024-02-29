@@ -27,22 +27,22 @@ Imports:
     dbplyr (>= 2.4.0),
     dplyr,
     glue,
-    lubridate,
+    lifecycle,
+    lintr,
     methods,
     openssl,
     parallelly,
     purrr,
     rlang,
     R6,
-    RSQLite,
     stringr,
     tidyr,
     tidyselect,
-    tidyverse,
     utils
 Suggests:
     callr,
     conflicted,
+    duckdb,
     jsonlite,
     knitr,
     odbc,
@@ -50,9 +50,11 @@ Suggests:
     roxygen2,
     pkgdown,
     RPostgres,
+    RSQLite,
     spelling,
     testthat (>= 3.0.0),
     tibble,
+    tidyverse,
     withr
 Language: en-US
 URL: https://github.com/ssi-dk/SCDB, https://ssi-dk.github.io/SCDB/

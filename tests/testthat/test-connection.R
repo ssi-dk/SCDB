@@ -8,13 +8,15 @@ test_that("get_connection() works", {
 
 
 test_that("get_connection() notifies if connection fails", {
+  skip_if_not_installed("RSQLite")
+
   for (i in 1:100) {
     random_string <- paste(sample(letters, size = 32, replace = TRUE), collapse = "")
 
     if (dir.exists(random_string)) next
 
-    expect_error(get_connection(drv = RSQLite::SQLite(), dbname = paste0(random_string, "/invalid_path")),
-                 regexp = "Could not connect to database:\nunable to open database file")
+    expect_error(get_connection(drv = RSQLite::SQLite(), dbname = file.path(random_string, "/invalid_path")),
+                 regexp = r"{checkmate::check_path_for_output\(dbname\)}")
   }
 })
 

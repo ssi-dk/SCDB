@@ -15,7 +15,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, echo = FALSE, results = 'hide'}
+```{r library}
+library(SCDB)
+```
+
+```{r setup, echo = FALSE, results = "hide", eval = requireNamespace("RSQLite", quietly = TRUE)}
 suppressPackageStartupMessages(library(SCDB))
 
 # Setup conn to be used for examples
@@ -57,8 +61,7 @@ See also the [PostgreSQL documentation](https://www.postgresql.org/docs/current/
 ]
 
 Our example data is `datasets::mtcars` reduced to only two columns: row names converted to a column `car`, and `hp`
-```{r example_data}
-library(SCDB)
+```{r example_data, eval = requireNamespace("RSQLite", quietly = TRUE)}
 if (!exists("conn")) conn <- get_connection(drv = RSQLite::SQLite())
 
 example_data <- dplyr::tbl(conn, DBI::Id(table = "example_data"))
@@ -67,7 +70,7 @@ example_data
 
 Imagine on Day 1, in this case January 1st, 2020, our currently available data is the first three records of the example_data.
 We then store this data in a table `mtcars`:
-```{r example_1}
+```{r example_1, eval = requireNamespace("RSQLite", quietly = TRUE)}
 data <- head(example_data, 3)
 
 update_snapshot(.data = data,
@@ -77,7 +80,7 @@ update_snapshot(.data = data,
 ```
 
 We can then access out data using the `get_table` function, and include information on data validity period using `include_slice_info = TRUE`:
-```{r example_1_results}
+```{r example_1_results, eval = requireNamespace("RSQLite", quietly = TRUE)}
 get_table(conn, "mtcars")
 
 get_table(conn, "mtcars", include_slice_info = TRUE)
@@ -87,7 +90,7 @@ Note that where e.g. `dplyr::tbl` requires a more exact specification of the tab
 The following day, the current data is now the first five rows of our example data.
 We then store this data in the database using update_snapshot:
 
-```{r example_2}
+```{r example_2, eval = requireNamespace("RSQLite", quietly = TRUE)}
 # Let's say that the next day, our data set is now the first 5 of our example data
 data <- head(example_data, 5)
 
@@ -97,20 +100,20 @@ update_snapshot(.data = data,
                 timestamp = as.POSIXct("2020-01-02 12:00:00"))
 ```
 We can again use the `get_table` function to see the latest available data, including time-keeping with `include_slice_info = TRUE`:
-```{r example_2_results_a}
+```{r example_2_results_a, eval = requireNamespace("RSQLite", quietly = TRUE)}
 get_table(conn, "mtcars")
 
 get_table(conn, "mtcars", include_slice_info = TRUE)
 ```
 
 Since our data is time-versioned, we can recover the data from the day before
-```{r example_2_results_b}
+```{r example_2_results_b, eval = requireNamespace("RSQLite", quietly = TRUE)}
 get_table(conn, "mtcars", slice_ts = "2020-01-01 11:00:00")
 ```
 
 On day 3, we imagine that we have the same 5 records, but one of them is altered
 
-```{r example_3}
+```{r example_3, eval = requireNamespace("RSQLite", quietly = TRUE)}
 data <- head(example_data, 5) |>
   dplyr::mutate(hp = ifelse(car == "Mazda RX4", hp / 2, hp))
 
@@ -122,12 +125,12 @@ update_snapshot(.data = data,
 
 We can again access our data using the `get_table` function and see that the currently
 available data (with the changed hp value for Mazda RX4)
-```{r example_3_results_a}
+```{r example_3_results_a, eval = requireNamespace("RSQLite", quietly = TRUE)}
 get_table(conn, "mtcars")
 ```
 
 Finally, using `slice_ts = NULL`, the full history (and time-keeping information) is returned:
-```{r example_3_results_b}
+```{r example_3_results_b, eval = requireNamespace("RSQLite", quietly = TRUE)}
 get_table(conn, "mtcars", slice_ts = NULL)
 ```
 

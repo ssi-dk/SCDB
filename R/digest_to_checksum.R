@@ -7,12 +7,14 @@
 #' @name digest_to_checksum
 #'
 #' @template .data
-#' @param col Name of the column to put the checksums in
-#' @param exclude Columns to exclude from the checksum generation
+#' @param col (`character(1)`)\cr
+#'   Name of the column to put the checksums in. Will be generated if missing.
+#' @param exclude (`character()`)\cr
+#'   Columns to exclude from the checksum generation.
+#' @return
+#'   .data with a checksum column added.
 #' @examples
-#' digest_to_checksum(mtcars)
-#'
-#' @return .data with an checksum column added
+#'   digest_to_checksum(mtcars)
 #' @export
 digest_to_checksum <- function(.data, col = "checksum", exclude = NULL) {
 
@@ -121,4 +123,7 @@ digest_to_checksum_native_md5 <- function(
 digest_to_checksum.tbl_PqConnection <- digest_to_checksum_native_md5
 
 #' @export
-digest_to_checksum.data.frame       <- digest_to_checksum_native_md5
+digest_to_checksum.tbl_duckdb_connection <- digest_to_checksum_native_md5
+
+#' @export
+digest_to_checksum.data.frame <- digest_to_checksum_native_md5
