@@ -103,21 +103,16 @@ id.tbl_dbi <- function(db_table_id, ...) {
 
   if (inherits(table_ident, "dbplyr_table_path")) { # dbplyr >= 2.5.0
     components <- dbplyr::table_path_components(table_ident, table_conn)[[1]]
-    if (length(components) == 1) {
-      catalog <- NULL
-      schema <- NULL
-      table <- components[[1]]
-    } else if (length(components) == 2) {
-      catalog <- NULL
-      schema <- components[[1]]
-      table <- components[[2]]
-    } else if (length(components) == 3) {
-      catalog <- components[[1]]
-      schema <- components[[2]]
-      table <- components[[3]]
-    } else {
+
+    components <- components[rev(seq_along(components))] # Reverse order (table, schema?, catalog?)
+
+    if (length(components) > 3) {
       stop("Unknown table specification")
     }
+
+    table <- purrr::pluck(components, 1)
+    schema <- purrr::pluck(components, 2)
+    catalog <- purrr::pluck(components, 3)
 
   } else {
 
