@@ -10,7 +10,7 @@
 #' @return
 #'   `TRUE` if db_table can be parsed to a table found in `conn`.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection(drv = RSQLite::SQLite())
+#'   conn <- get_connection()
 #'
 #'   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
 #'   dplyr::copy_to(conn, iris, name = "iris")

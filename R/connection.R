@@ -225,7 +225,7 @@ get_connection.default <- function(drv, ...) {
 #' @template conn
 #' @inherit DBI::dbDisconnect return
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection(drv = RSQLite::SQLite())
+#'   conn <- get_connection()
 #'
 #'   close_connection(conn)
 #' @export

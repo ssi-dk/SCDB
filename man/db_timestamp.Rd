@@ -21,7 +21,7 @@ Determine the type of timestamps the DB supports
 }
 \examples{
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-  conn <- get_connection(drv = RSQLite::SQLite())
+  conn <- get_connection()
 
   db_timestamp(Sys.time(), conn)
 

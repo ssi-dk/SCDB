@@ -9,7 +9,7 @@
 \alias{get_connection.default}
 \title{Opens connection to the database}
 \usage{
-get_connection(drv = RPostgres::Postgres(), ...)
+get_connection(drv = RSQLite::SQLite(), ...)
 
 \method{get_connection}{SQLiteDriver}(
   drv,

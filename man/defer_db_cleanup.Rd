@@ -18,7 +18,7 @@ This function marks a table for deletion once the current function exits.
 }
 \examples{
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-  conn <- get_connection(drv = RSQLite::SQLite())
+  conn <- get_connection()
 
   mt <- dplyr::copy_to(conn, mtcars)
   id_mt <- id(mt)

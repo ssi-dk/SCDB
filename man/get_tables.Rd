@@ -24,7 +24,7 @@ List the available tables on the connection
 }
 \examples{
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-  conn <- get_connection(drv = RSQLite::SQLite())
+  conn <- get_connection()
 
   dplyr::copy_to(conn, mtcars, name = "my_test_table_1", temporary = FALSE)
   dplyr::copy_to(conn, mtcars, name = "my_test_table_2")

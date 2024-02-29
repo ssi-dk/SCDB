@@ -6,7 +6,7 @@
 #' @return
 #'   Invisibly returns the generated (or existing) log table.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection(drv = RSQLite::SQLite())
+#'   conn <- get_connection()
 #'   log_table <- id("test.logs", conn = conn, allow_table_only = TRUE)
 #'
 #'   create_logs_if_missing(conn, log_table)
