@@ -34,18 +34,16 @@ test_that("get_table() works when tables/view exist", {
 
 
     # Check for the existence of views on backends that support it (added here)
-    if (inherits(conn, "PqConnection")) {
-
-      DBI::dbExecute(conn, "CREATE VIEW __mtcars_view AS SELECT * FROM __mtcars LIMIT 10")
-      view_1 <- paste(c(get_schema(conn), "__mtcars_view"), collapse = ".")
-
-    } else if (inherits(conn, "Microsoft SQL Server")) {
-
-      DBI::dbExecute(conn, "CREATE VIEW __mtcars_view AS SELECT TOP 10 * FROM __mtcars")
-      view_1 <- paste(c(get_schema(conn), "__mtcars_view"), collapse = ".")
-    }
-
     if (checkmate::test_multi_class(conn, c("PqConnection", "Microsoft SQL Server"))) {
+
+      if (inherits(conn, "PqConnection")) {
+        DBI::dbExecute(conn, "CREATE VIEW __mtcars_view AS SELECT * FROM __mtcars LIMIT 10")
+      } else if (inherits(conn, "Microsoft SQL Server")) {
+        DBI::dbExecute(conn, "CREATE VIEW __mtcars_view AS SELECT TOP 10 * FROM __mtcars")
+      }
+
+      view_1 <- paste(c(get_schema(conn), "__mtcars_view"), collapse = ".")
+
       expect_identical(nrow(get_table(conn, view_1)), 10)
       expect_identical(
         dplyr::collect(get_table(conn, view_1)),
