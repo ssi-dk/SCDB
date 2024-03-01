@@ -180,6 +180,11 @@ Logger <- R6::R6Class(                                                          
     #'   Structured data written to database log table. Name indicates column and value indicates value to be written.
     log_to_db = function(...) {
 
+      # If log is finalized, throw an error to the user
+      if (private$finalized) {
+        stop("Logger has already been finalized. Cannot write to database log table.")
+      }
+
       # Only write if we have a valid connection
       if (!is.null(private$log_conn) && DBI::dbIsValid(private$log_conn) && !is.null(self$log_tbl) &&
             table_exists(private$log_conn, private$log_table_id)) {
