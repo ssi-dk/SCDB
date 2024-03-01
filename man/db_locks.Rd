@@ -36,6 +36,11 @@ This set of function adds a simple locking system to db tables.
 \item \code{lock_table()} adds a record in the schema.locks table with the current time and R-session process id.
 \item \code{unlock_table()} removes records in the schema.locks table with the target table and the R-session process id.
 }
+
+When locking a table, the function will check for existing locks on the table and produce an error a lock is held
+by a process which no longer exists.
+In this case, the lock needs to be removed manually by removing the record from the lock table.
+In addition, the error implies that a table may have partial updates that needs to be manually rolled back.
 }
 \examples{
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
