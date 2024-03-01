@@ -31,7 +31,7 @@
 #' @export
 get_connection <- function(drv, ...) {
   if (missing(drv)) {
-    get_connection.SQLiteDriver(drv = RSQLite::SQLite())
+    get_connection.SQLiteDriver(drv = RSQLite::SQLite(), ...)
   } else {
     UseMethod("get_connection")
   }
