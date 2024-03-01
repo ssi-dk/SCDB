@@ -389,6 +389,13 @@ test_that("Logger: log_file is NULL in DB if not writing to file", {
     db_log_file <- dplyr::pull(dplyr::filter(logger$log_tbl, log_file == !!logger$log_filename))
     expect_length(db_log_file, 0)
 
+    # Test that an error is thrown if the database record has been finalized
+    expect_error(
+      logger$log_to_db(message = "This should produce an error"),
+      r"{Logger has already been finalized\. Cannot write to database log table\.}"
+    )
+
+
     # Clean up
     rm(logger)
     invisible(gc())
