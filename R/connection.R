@@ -6,7 +6,7 @@
 #'   Connects to the specified dbname of host:port using user and password from given arguments (if applicable).
 #'   Certain drivers may use credentials stored in a file, such as ~/.pgpass (PostgreSQL).
 #' @param drv (`DBIDriver(1)` or `DBIConnection(1)`)\cr
-#'   The driver for the connection.
+#'   The driver for the connection (defaults to `SQLiteDriver`).
 #' @param dbname (`character(1)`)\cr
 #'   Name of the database located at the host.
 #' @param bigint (`character(1)`)\cr
@@ -28,10 +28,13 @@
 #'   close_connection(conn)
 #'
 #'   DBI::dbIsValid(conn) # FALSE
-#' @seealso [RPostgres::Postgres]
 #' @export
-get_connection <- function(drv = RSQLite::SQLite(), ...) {
-  UseMethod("get_connection")
+get_connection <- function(drv, ...) {
+  if (missing(drv)) {
+    get_connection.SQLiteDriver(drv = RSQLite::SQLite())
+  } else {
+    UseMethod("get_connection")
+  }
 }
 
 #' @rdname get_connection
