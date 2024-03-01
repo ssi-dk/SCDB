@@ -123,7 +123,7 @@ lock_table <- function(conn, db_table, schema = NULL) {
     # If pid_exists is not available we cannot determine invalid locks and we throw an error to prevent infinite looping
     checkmate::assert_function(pid_exists)
 
-    if (!pid_exists(lock_owner_pid)) {
+    if (isFALSE(pid_exists(lock_owner_pid))) {
       stop(
         glue::glue(
           "Active lock (user = {lock_owner_user}, PID = {lock_owner_pid}) ",
