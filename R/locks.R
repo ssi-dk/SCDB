@@ -12,6 +12,11 @@ NULL
 #'   * `lock_table()` adds a record in the schema.locks table with the current time and R-session process id.
 #'
 #'   * `unlock_table()` removes records in the schema.locks table with the target table and the R-session process id.
+#'
+#'   When locking a table, the function will check for existing locks on the table and produce an error a lock is held
+#'   by a process which no longer exists.
+#'   In this case, the lock needs to be removed manually by removing the record from the lock table.
+#'   In addition, the error implies that a table may have partial updates that needs to be manually rolled back.
 #' @template conn
 #' @param db_table (`character(1)`)\cr
 #'   A specification of "schema.table" to modify lock for.
@@ -123,7 +128,7 @@ lock_table <- function(conn, db_table, schema = NULL) {
     # If pid_exists is not available we cannot determine invalid locks and we throw an error to prevent infinite looping
     checkmate::assert_function(pid_exists)
 
-    if (!pid_exists(lock_owner_pid)) {
+    if (isFALSE(pid_exists(lock_owner_pid))) {
       stop(
         glue::glue(
           "Active lock (user = {lock_owner_user}, PID = {lock_owner_pid}) ",
