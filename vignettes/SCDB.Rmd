@@ -48,9 +48,6 @@ In practice, this is done by labeling each record in the data with three additio
 
 This strategy of time versioning is often called "type 2" history [@Kimball2013].
 
-Note that identical records may be removed and introduced more than once; for example, in a table of names and
-addresses, a person may change their address (or name) back to a previous value.
-
 The SCDB package provides the function `update_snapshot` to handle the insertion and deactivation of records using
 this strategy.
 It further includes several functions to improve the Quality of life for working with database data.
