@@ -8,7 +8,7 @@
 #' @return
 #'   Invisibly returns the table as it looks on the destination (or locally if `conn` is `NULL`).
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection(drv = RSQLite::SQLite())
+#'   conn <- get_connection()
 #'
 #'   create_table(mtcars, conn = conn, db_table = "mtcars")
 #'

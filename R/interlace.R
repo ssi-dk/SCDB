@@ -16,7 +16,7 @@
 #' @return
 #'   The combination of input queries with a single, interlaced valid_from / valid_until time axis.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection(drv = RSQLite::SQLite())
+#'   conn <- get_connection()
 #'
 #'   t1 <- data.frame(key = c("A", "A", "B"),
 #'                    obs_1   = c(1, 2, 2),

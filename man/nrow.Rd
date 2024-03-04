@@ -18,7 +18,7 @@ nrow() but also works on remote tables
 }
 \examples{
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-  conn <- get_connection(drv = RSQLite::SQLite())
+  conn <- get_connection()
 
   m <- dplyr::copy_to(conn, mtcars)
   nrow(m) == nrow(mtcars) # TRUE

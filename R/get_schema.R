@@ -30,7 +30,7 @@
 #'   always be `main`.
 #'
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection(drv = RSQLite::SQLite())
+#'   conn <- get_connection()
 #'
 #'   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
 #'

@@ -32,7 +32,7 @@ onto a single time axis.
 }
 \examples{
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-  conn <- get_connection(drv = RSQLite::SQLite())
+  conn <- get_connection()
 
   t1 <- data.frame(key = c("A", "A", "B"),
                    obs_1   = c(1, 2, 2),

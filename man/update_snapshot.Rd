@@ -61,7 +61,7 @@ See \code{vignette("basic-principles")} for further introduction to the function
 }
 \examples{
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-  conn <- get_connection(drv = RSQLite::SQLite())
+  conn <- get_connection()
 
   data <- dplyr::copy_to(conn, mtcars)
 

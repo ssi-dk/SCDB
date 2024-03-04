@@ -23,7 +23,7 @@ library(SCDB)
 suppressPackageStartupMessages(library(SCDB))
 
 # Setup conn to be used for examples
-conn <- get_connection(drv = RSQLite::SQLite())
+conn <- get_connection()
 
 # Use a wrapper for update_snapshot which uses LoggerNull to suppress all logging
 if (!"update_snapshot" %in% ls(envir = globalenv())) {
@@ -62,7 +62,7 @@ See also the [PostgreSQL documentation](https://www.postgresql.org/docs/current/
 
 Our example data is `datasets::mtcars` reduced to only two columns: row names converted to a column `car`, and `hp`
 ```{r example_data, eval = requireNamespace("RSQLite", quietly = TRUE)}
-if (!exists("conn")) conn <- get_connection(drv = RSQLite::SQLite())
+if (!exists("conn")) conn <- get_connection()
 
 example_data <- dplyr::tbl(conn, DBI::Id(table = "example_data"))
 example_data

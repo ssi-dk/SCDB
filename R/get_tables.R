@@ -8,7 +8,7 @@
 #' @return
 #'   A data.frame containing table names including schema (and catalog when available) in the database.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection(drv = RSQLite::SQLite())
+#'   conn <- get_connection()
 #'
 #'   dplyr::copy_to(conn, mtcars, name = "my_test_table_1", temporary = FALSE)
 #'   dplyr::copy_to(conn, mtcars, name = "my_test_table_2")

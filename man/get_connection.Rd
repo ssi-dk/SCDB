@@ -9,7 +9,7 @@
 \alias{get_connection.default}
 \title{Opens connection to the database}
 \usage{
-get_connection(drv = RPostgres::Postgres(), ...)
+get_connection(drv, ...)
 
 \method{get_connection}{SQLiteDriver}(
   drv,
@@ -53,7 +53,7 @@ get_connection(drv = RPostgres::Postgres(), ...)
 }
 \arguments{
 \item{drv}{(\code{DBIDriver(1)} or \code{DBIConnection(1)})\cr
-The driver for the connection.}
+The driver for the connection (defaults to \code{SQLiteDriver}).}
 
 \item{...}{Additional parameters sent to DBI::dbConnect().}
 
@@ -112,8 +112,6 @@ Certain drivers may use credentials stored in a file, such as ~/.pgpass (Postgre
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\link[RPostgres:Postgres]{RPostgres::Postgres}
-
 \link[RSQLite:SQLite]{RSQLite::SQLite}
 
 \link[RPostgres:Postgres]{RPostgres::Postgres}

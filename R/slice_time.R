@@ -7,7 +7,7 @@
 #'   The name of the columns in .data specifying valid from and valid until time.
 #' @template .data_return
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection(drv = RSQLite::SQLite())
+#'   conn <- get_connection()
 #'
 #'   m <- mtcars |>
 #'     dplyr::mutate(

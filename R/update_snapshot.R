@@ -27,7 +27,7 @@
 #' @return
 #'   No return value, called for side effects.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection(drv = RSQLite::SQLite())
+#'   conn <- get_connection()
 #'
 #'   data <- dplyr::copy_to(conn, mtcars)
 #'
