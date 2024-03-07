@@ -143,19 +143,18 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   # Compute .data immediately to reduce runtime and compute checksum
   .data <- .data |>
     dplyr::ungroup() |>
-    dplyr::select(
-      colnames(dplyr::select(db_table, !tidyselect::any_of(c("checksum", "from_ts", "until_ts"))))
-    ) |>
-    digest_to_checksum(col = "checksum") |>
     filter_keys(filters) |>
-    dplyr::compute()
+    dplyr::select(colnames(dplyr::select(db_table, !tidyselect::any_of(c("checksum", "from_ts", "until_ts")))))
 
-  defer_db_cleanup(.data)
-
+  # Copy to the target connection if needed
   if (!identical(dbplyr::remote_con(.data), conn)) {
     .data <- dplyr::copy_to(conn, .data, name = unique_table_name())
     defer_db_cleanup(.data)
   }
+
+  # Once we ensure .data is on the same connection as the target, we compute the checksums
+  .data <- dplyr::compute(digest_to_checksum(.data, col = "checksum"))
+  defer_db_cleanup(.data)
 
   # Apply filter to current records
   if (!is.null(filters) && !identical(dbplyr::remote_con(filters), conn)) {
