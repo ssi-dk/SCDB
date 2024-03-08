@@ -139,9 +139,11 @@ id.tbl_dbi <- function(db_table, ...) {
 
   if (nrow(matches) > 1)  {
     stop(
-      "Table identification has been corrupted! ",
-      "This table does not contain information about its schema and ",
-      "multiple tables with this name were found across schemas."
+      glue::glue(
+        "Table identification has been corrupted! ",
+        "The table ({paste(c(catalog, schema, table), collapse = '.')}) does not contain enough information about its ",
+        "schema/catalog and multiple tables were matched."
+      )
     )
   }
 
