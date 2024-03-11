@@ -1,5 +1,4 @@
-on:
-  workflow_dispatch
+on: [push, workflow_dispatch]
 
 
 name: "⏱️ Benchmark"
