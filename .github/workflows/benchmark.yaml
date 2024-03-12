@@ -128,7 +128,8 @@ jobs:
           ) +
             ggplot2::geom_boxplot() +
             ggplot2::facet_grid(~ expr) +
-            ggplot2::labs(x = "Codebase version", y = "Time (s)")
+            ggplot2::labs(x = "Codebase version", y = "Time (s)") +
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5))
 
           ggplot2::ggsave("benchmarks.pdf")
 
