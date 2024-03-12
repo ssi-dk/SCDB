@@ -1,3 +1,5 @@
+withr::local_options("odbc.batch_rows" = 1000)
+
 # Load the connection helper
 source("tests/testthat/helper-setup.R")
 
