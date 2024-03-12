@@ -1,8 +1,6 @@
 # Load the connection helper
 source("tests/testthat/helper-setup.R")
 
-dir.create("SCDB_installation")
-
 for (version in c("CRAN", "main", "branch")) {
   branch <- system("git symbolic-ref --short HEAD", intern = TRUE)
   if (version == "branch" && branch == "main") {
@@ -95,10 +93,10 @@ for (version in c("CRAN", "main", "branch")) {
 
     dir.create("data", showWarnings = FALSE)
     saveRDS(update_snapshot_benchmark, glue::glue("data/update_snapshot_benchmark_{names(conns)[[1]]}_{version}.rds"))
-  })
 
-  # Clean up
-  purrr::walk(conns, DBI::dbDisconnect)
+    # Clean up
+    purrr::walk(conns, ~ DBI::dbDisconnect(., shutdown = TRUE))
+  })
 
   detach("package:SCDB", unload = TRUE)
 }
