@@ -3,6 +3,7 @@ withr::local_options("odbc.batch_rows" = 1000)
 # Load the connection helper
 source("tests/testthat/helper-setup.R")
 
+# Install all needed package versions
 for (version in c("CRAN", "main", "branch")) {
   branch <- system("git symbolic-ref --short HEAD", intern = TRUE)
   if (version == "branch" && branch == "main") {
@@ -16,6 +17,21 @@ for (version in c("CRAN", "main", "branch")) {
   )
 
   pak::pkg_install(source, lib = glue::glue("SCDB_installation/{source}"))
+}
+
+# Then loop over each and benchmark the update_snapshot function
+for (version in c("CRAN", "main", "branch")) {
+  branch <- system("git symbolic-ref --short HEAD", intern = TRUE)
+  if (version == "branch" && branch == "main") {
+    next
+  }
+
+  source <- dplyr::case_when(
+    version == "CRAN" ~ "SCDB",
+    version == "main" ~ "ssi-dk/SCDB",
+    version == "branch" ~ glue::glue("ssi-dk/SCDB@{branch}")
+  )
+
   library("SCDB", lib.loc = glue::glue("SCDB_installation/{source}"))
 
   try({
