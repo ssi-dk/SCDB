@@ -100,7 +100,7 @@ unique_table_name <- function(scope = "SCDB") {
   option <- paste(scope, "table_name", sep = "_")
   index <- getOption(option, default = 0) + 1
   options(tibble::lst(!!option := index))
-  return(glue::glue("{scope}_{sprintf('%03i', index)}"))
+  return(glue::glue("{scope}_{Sys.getpid()}_{sprintf('%03i', index)}"))
 }
 
 
