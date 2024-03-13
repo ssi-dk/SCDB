@@ -52,11 +52,11 @@ test_that("unique_table_name() works", {
   # Store options before tests and reset (tests modify options)
   opts <- options("SCDB_table_name" = NULL, "test_table_name" = NULL)
 
-  expect_equal(unique_table_name(), "SCDB_001")
-  expect_equal(unique_table_name(), "SCDB_002")
+  expect_equal(unique_table_name(), glue::glue("SCDB_{Sys.getpid()}_001"))
+  expect_equal(unique_table_name(), glue::glue("SCDB_{Sys.getpid()}_002"))
 
-  expect_equal(unique_table_name("test"), "test_001")
-  expect_equal(unique_table_name("test"), "test_002")
+  expect_equal(unique_table_name("test"), glue::glue("test_{Sys.getpid()}_001"))
+  expect_equal(unique_table_name("test"), glue::glue("test_{Sys.getpid()}_002"))
 
   # Reset options
   options(opts)
