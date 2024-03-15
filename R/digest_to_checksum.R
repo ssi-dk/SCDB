@@ -30,7 +30,7 @@ digest_to_checksum <- function(.data, col = "checksum", exclude = NULL) {
   UseMethod("digest_to_checksum", .data)
 }
 
-#' @noRd
+#' @export
 `digest_to_checksum.tbl_Microsoft SQL Server` <- function(
     .data,
     col = formals(digest_to_checksum)$col,
