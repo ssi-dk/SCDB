@@ -3,11 +3,11 @@
 NULL
 
 
-#' Sets, queries and removes locks for db tables
+#' Sets, queries and removes locks for database tables
 #'
 #' @name db_locks
 #' @description
-#'   This set of function adds a simple locking system to db tables.
+#'   This set of function adds a simple locking system to database tables.
 #'
 #'   * `lock_table()` adds a record in the schema.locks table with the current time and R-session process id.
 #'

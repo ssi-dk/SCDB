@@ -66,7 +66,7 @@ test_that("update_snapshot() works", {
       dplyr::filter(!is.na(.data$log_file))
     expect_identical(nrow(db_logs_with_log_file), 1)
 
-    # Check db log output
+    # Check database log output
     logs <- get_table(conn, "test.SCDB_logs") |> dplyr::collect()
 
     # The logs should have specified data types
@@ -283,7 +283,7 @@ test_that("update_snapshot checks table formats", {
 
     expect_warning(
       logger <- Logger$new(log_path = NULL, log_table_id = NULL, output_to_console = FALSE),                            # nolint: implicit_assignment_linter
-      "NO file or DB logging will be done."
+      "NO file or database logging will be done."
     )
 
     # Test columns not matching

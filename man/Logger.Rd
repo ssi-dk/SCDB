@@ -38,7 +38,7 @@ This can always be overridden by Logger$log_info(..., output_to_console = FALSE)
 The location log files are written (if this is not NULL). Defaults to \code{getOption("SCDB.log_path")}. Read only.}
 
 \item{\code{log_tbl}}{(\code{tbl_dbi(1)})\cr
-The DB table used for logging. Class is connection-specific, but inherits from \code{tbl_dbi}. Read only.}
+The database table used for logging. Class is connection-specific, but inherits from \code{tbl_dbi}. Read only.}
 
 \item{\code{start_time}}{(\code{POSIXct(1)})\cr
 The time at which data processing was started. Read only.}

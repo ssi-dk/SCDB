@@ -61,7 +61,7 @@
 
 * A logger is introduced `LoggerNull` (#98):
 
-  * `Logger` facilitates logging to file/console and logging to db.
+  * `Logger` facilitates logging to file/console and logging to database.
 
   * `LoggerNull` is "no-logging" logger that can be used to suppress all logging.
 
@@ -154,7 +154,7 @@
 
 * Added a vignette describing the concept of a slowly changing dimension using examples (#53).
 
-* Added a `Logger$finalize` method, which removes the `log_file` in the DB when not writing to a file (#66).
+* Added a `Logger$finalize` method, which removes the `log_file` in the database when not writing to a file (#66).
 
 ## Other news
 
@@ -202,11 +202,11 @@
 
 ## Features
 
-* Functions to handle DB connections:
+* Functions to handle database connections:
 
   - `get_connection()`, `close_connection()`, `id()`
 
-* Functions to interface with DB:
+* Functions to interface with database:
 
   - `get_tables()`, `table_exists()`, `get_schema()`, `schema_exists()`
 
@@ -244,7 +244,7 @@
 
 * Helper functions:
 
-  - `nrow()` - DB compliant `nrow()`
+  - `nrow()` - database compliant `nrow()`
 
   - `%notin%` - negated `%in%`
 

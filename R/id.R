@@ -130,7 +130,7 @@ id.tbl_dbi <- function(db_table, ...) {
   }
 
   # Match against known tables
-  # In some cases, tables may have been added to the DB that makes the id ambiguous.
+  # In some cases, tables may have been added to the database that makes the id ambiguous.
   matches <- get_tables(dbplyr::remote_con(db_table), show_temporary = TRUE) |>
     dplyr::filter(.data$table == !!table)
 

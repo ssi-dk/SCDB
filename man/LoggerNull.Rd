@@ -14,7 +14,7 @@ Errors and warnings are still produced.
   logger <- LoggerNull$new()
 
   logger$log_info("This message will not print!")
-  logger$log_to_db(message = "This message will no be written in DB!")
+  logger$log_to_db(message = "This message will no be written in database!")
   try(logger$log_warn("This is a warning!"))
   try(logger$log_error("This is an error!"))
 }
