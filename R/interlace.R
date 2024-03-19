@@ -125,7 +125,9 @@ interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
 
 #' interlace_sql
 #'
-#' @inherit interlace
+#' @rdname interlace
+#' @description
+#'  `interlace_sql()` is deprecated in favor of `interlace()`
 #' @export
 interlace_sql <- function(tables, by = NULL, colnames = NULL) {
   # Lifecycle deprecate function
