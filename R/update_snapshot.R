@@ -103,12 +103,20 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
   # Opening checks
   if (!is.historical(db_table)) {
+
+    # Release table lock
+    unlock_table(conn, db_table_id, get_schema(db_table_id))
+
     logger$log_to_db(success = FALSE, end_time = !!db_timestamp(tic, conn))
     logger$log_error("Table does not seem like a historical table", tic = tic) # Use input time in log
   }
 
   if (!setequal(colnames(.data),
                 colnames(dplyr::select(db_table, !c("checksum", "from_ts", "until_ts"))))) {
+
+    # Release table lock
+    unlock_table(conn, db_table_id, get_schema(db_table_id))
+
     logger$log_to_db(success = FALSE, end_time = !!db_timestamp(tic, conn))
     logger$log_error(
       "Columns do not match!\n",
@@ -135,6 +143,10 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   db_latest <- strftime(db_latest)
 
   if (enforce_chronological_order && timestamp < db_latest) {
+
+    # Release the table lock
+    unlock_table(conn, db_table_id, get_schema(db_table_id))
+
     logger$log_to_db(success = FALSE, end_time = !!db_timestamp(tic, conn))
     logger$log_error("Given timestamp", timestamp, "is earlier than latest",
                      "timestamp in table:", db_latest, tic = tic) # Use input time in log
