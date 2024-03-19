@@ -62,12 +62,14 @@ query, and use \code{\link[dbplyr:collect.tbl_sql]{collect()}} to execute the qu
 and return data to R.
 }
 \description{
-Overloads the dplyr \verb{*_join} to accept an na_by argument.
+Overloads the dplyr \verb{*_join} to accept an \code{na_by} argument.
 By default, joining using SQL does not match on \code{NA} / \code{NULL}.
-dbplyr has the option "na_matches = na" to match on \code{NA} / \code{NULL} but this is very inefficient.
-This function does the matching more efficiently.
-If a column contains \code{NA} / \code{NULL}, give the argument to na_by to match during the join.
-If no na_by is given, the function defaults to using \verb{dplyr::*_join}.
+dbplyr \verb{*_join}s has the option "na_matches = na" to match on \code{NA} / \code{NULL} but this is very inefficient in some
+cases.
+This function does the matching more efficiently:
+If a column contains \code{NA} / \code{NULL}, the names of these columns can be passed via the \code{na_by} argument and
+efficiently match as if "na_matches = na".
+If no \code{na_by} argument is given is given, the function defaults to using \verb{dplyr::*_join}.
 }
 \examples{
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

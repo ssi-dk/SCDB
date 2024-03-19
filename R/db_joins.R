@@ -125,12 +125,14 @@ join_warn_experimental <- function() {
 #' @name joins
 #'
 #' @description
-#'   Overloads the dplyr `*_join` to accept an na_by argument.
+#'   Overloads the dplyr `*_join` to accept an `na_by` argument.
 #'   By default, joining using SQL does not match on `NA` / `NULL`.
-#'   dbplyr has the option "na_matches = na" to match on `NA` / `NULL` but this is very inefficient.
-#'   This function does the matching more efficiently.
-#'   If a column contains `NA` / `NULL`, give the argument to na_by to match during the join.
-#'   If no na_by is given, the function defaults to using `dplyr::*_join`.
+#'   dbplyr `*_join`s has the option "na_matches = na" to match on `NA` / `NULL` but this is very inefficient in some
+#'   cases.
+#'   This function does the matching more efficiently:
+#'   If a column contains `NA` / `NULL`, the names of these columns can be passed via the `na_by` argument and
+#'   efficiently match as if "na_matches = na".
+#'   If no `na_by` argument is given is given, the function defaults to using `dplyr::*_join`.
 #'
 #' @inheritParams dbplyr::join.tbl_sql
 #' @inherit dbplyr::join.tbl_sql return
