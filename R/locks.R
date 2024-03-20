@@ -75,7 +75,7 @@ lock_table <- function(conn, db_table, schema = NULL) {
   }
 
   # Get a reference to the tables
-  db_lock_table <- dplyr::tbl(conn, db_lock_table_id, check_from = FALSE)
+  db_lock_table <- dplyr::tbl(conn, db_lock_table_id)
   db_table_id <- id(db_table, conn)
 
   # We then try to insert a lock, if none exists, our process ID (pid) will be assigned to the table-
@@ -160,7 +160,7 @@ unlock_table <- function(conn, db_table, schema = NULL, pid = Sys.getpid()) {
   }
 
   # Get a reference to the table
-  db_lock_table <- dplyr::tbl(conn, db_lock_table_id, check_from = FALSE)
+  db_lock_table <- dplyr::tbl(conn, db_lock_table_id)
 
   # Delete locks matching  our process ID (pid) and the given db_table
   tryCatch(

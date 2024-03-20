@@ -97,11 +97,11 @@ test_that("id() works for DBI::Id inputs", {
 test_that("id() is consistent for tbl_dbi inputs", {
   for (conn in get_test_conns()) {
 
-    expectation <- id(dplyr::tbl(conn, id("test.mtcars", conn), check_from = FALSE))
+    expectation <- id(dplyr::tbl(conn, id("test.mtcars", conn)))
 
     expect_identical(
       expectation,
-      id.tbl_dbi(dplyr::tbl(conn, id("test.mtcars", conn), check_from = FALSE))
+      id.tbl_dbi(dplyr::tbl(conn, id("test.mtcars", conn)))
     )
 
     connection_clean_up(conn)

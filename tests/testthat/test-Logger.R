@@ -176,7 +176,7 @@ test_that("Logger: logging to database works", {
                          log_conn = conn,
                          warn = FALSE)
 
-    log_table_id <- dplyr::tbl(conn, id(db_table, conn), check_from = FALSE)
+    log_table_id <- dplyr::tbl(conn, id(db_table, conn))
     expect_equal(logger$log_tbl, log_table_id)
 
 
@@ -222,7 +222,7 @@ test_that("Logger: all logging simultaneously works", {
     logger <- Logger$new(db_table = db_table, timestamp = timestamp, log_path = log_path,
                          log_table_id = db_table, log_conn = conn, warn = FALSE)
 
-    log_table_id <- dplyr::tbl(conn, id(db_table, conn), check_from = FALSE)
+    log_table_id <- dplyr::tbl(conn, id(db_table, conn))
     expect_equal(logger$log_path, log_path)
     expect_equal(logger$log_tbl, log_table_id)
     expect_equal(

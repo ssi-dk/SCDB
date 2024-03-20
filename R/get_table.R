@@ -49,7 +49,7 @@ get_table <- function(conn, db_table = NULL, slice_ts = NA, include_slice_info =
   }
 
   # Look-up table in database
-  q <- dplyr::tbl(conn, db_table_id, check_from = FALSE)
+  q <- dplyr::tbl(conn, db_table_id)
 
   # Check whether data is historical
   if (is.historical(q) && !is.null(slice_ts)) {
