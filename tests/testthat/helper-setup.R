@@ -78,7 +78,7 @@ get_test_conns <- function() {
 
     # Skip unavailable packages
     if (!requireNamespace(parts[1], quietly = TRUE)) {
-      warning("Library ", parts[1], " not available!")
+      message("Library ", parts[1], " not available!")
       return(NULL)
     }
 
@@ -95,7 +95,7 @@ get_test_conns <- function() {
     purrr::discard(is.null)
 
   test_conns <- names(drivers) |>
-    purrr::map(~ do.call(get_connection, c(list(drv = purrr::pluck(drivers, .)), purrr::pluck(conn_args, .)))) |>
+    purrr::map(~ do.call(SCDB::get_connection, c(list(drv = purrr::pluck(drivers, .)), purrr::pluck(conn_args, .)))) |>
     stats::setNames(names(drivers)) |>
     purrr::discard(is.null)
 
@@ -107,12 +107,6 @@ get_test_conns <- function() {
   drivers |>
     purrr::keep(~ inherits(., "duckdb_driver")) |>
     purrr::walk(~ duckdb::duckdb_shutdown(.))
-
-  # SQLite back end gives an error in SCDB if there are no tables (it assumes a bad configuration)
-  # We create a table to suppress this warning
-  purrr::walk(test_conns, ~ if (checkmate::test_class(., "SQLiteConnection")) {
-    DBI::dbWriteTable(., "iris", iris, overwrite = TRUE)
-  })
 
   # Inform the user about the tested back ends:
   msg <- paste(sep = "\n",
