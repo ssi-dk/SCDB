@@ -8,20 +8,6 @@ More specifically, the package facilitates type-2 history for data warehouses an
 improvements for working with SQL databases within R.
 
 To better understand what a slowly changing dimension is and how and this packages provides it,
-see `vignette("basic-principles")`.
+see `vignette("slowly-changing-dimension")`.
 
-## Installation
-
-```{r, eval = FALSE}
-# Install SCDB from CRAN:
-install.packages("SCDB")
-
-# Alternatively, install the development version from github:
-# install.packages("devtools")
-devtools::install_github("ssi-dk/SCDB")
-```
-
-## Usage
-
-For basic usage examples, see `vignette("basic-principles")`.
 {% endblock %}

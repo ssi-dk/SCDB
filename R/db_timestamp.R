@@ -1,8 +1,8 @@
-#' Determine the type of timestamps the DB supports
+#' Determine the type of timestamps the database supports
 #'
 #' @name db_timestamp
 #' @param timestamp (`POSIXct(1)` or `character(1)`)\cr
-#'   The timestamp to be transformed to the DB type.
+#'   The timestamp to be transformed to the database type.
 #' @template conn
 #' @return
 #'   The given timestamp converted to a SQL-backend dependent timestamp.

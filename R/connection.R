@@ -223,7 +223,7 @@ get_connection.default <- function(drv, ...) {
 }
 
 
-#' Close connection to the DB
+#' Close connection to the database
 #'
 #' @template conn
 #' @inherit DBI::dbDisconnect return

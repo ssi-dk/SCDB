@@ -6,7 +6,7 @@ test_that("Logger: logging to console works", {
   # Create logger and test configuration
   expect_warning(
     logger <- Logger$new(),                                                                                             # nolint: implicit_assignment_linter
-    regexp = "NO file or DB logging will be done."
+    regexp = "NO file or database logging will be done."
   )
   expect_null(logger$log_path)
   expect_null(logger$log_tbl)
@@ -37,7 +37,7 @@ test_that("Logger: all (non-warning, non-error) logging to console can be disabl
   # Create logger
   expect_warning(
     logger <- Logger$new(output_to_console = FALSE),                                                                    # nolint: implicit_assignment_linter
-    regexp = "NO file or DB logging will be done."
+    regexp = "NO file or database logging will be done."
   )
 
   # Test INFO-logging to console is disabled
@@ -162,7 +162,7 @@ test_that("Logger: log_tbl is not set when conn = NULL", {
 })
 
 
-test_that("Logger: logging to db works", {
+test_that("Logger: logging to database works", {
   for (conn in get_test_conns()) {
 
     # Set options for the test
@@ -176,7 +176,7 @@ test_that("Logger: logging to db works", {
                          log_conn = conn,
                          warn = FALSE)
 
-    log_table_id <- dplyr::tbl(conn, id(db_table, conn), check_from = FALSE)
+    log_table_id <- dplyr::tbl(conn, id(db_table, conn))
     expect_equal(logger$log_tbl, log_table_id)
 
 
@@ -185,13 +185,13 @@ test_that("Logger: logging to db works", {
     expect_identical(as.character(dplyr::pull(log_table_id, "date")), timestamp)
     expect_identical(dplyr::pull(log_table_id, "schema"), purrr::pluck(db_table_id, "name", "schema"))
     expect_identical(dplyr::pull(log_table_id, "table"), purrr::pluck(db_table_id, "name", "table"))
-    expect_identical( # Transferring start_time to DB can have some loss of information that we need to match
+    expect_identical( # Transferring start_time to database can have some loss of information that we need to match
       format(as.POSIXct(dplyr::pull(log_table_id, "start_time")), "%F %R:%S"),
       format(logger$start_time, "%F %R:%S")
     )
 
 
-    # Test logging to db writes to the correct fields
+    # Test logging to database writes to the correct fields
     logger$log_to_db(n_insertions = 42)
     expect_equal(nrow(log_table_id), 1)
     expect_equal(dplyr::pull(log_table_id, "n_insertions"), 42)
@@ -222,7 +222,7 @@ test_that("Logger: all logging simultaneously works", {
     logger <- Logger$new(db_table = db_table, timestamp = timestamp, log_path = log_path,
                          log_table_id = db_table, log_conn = conn, warn = FALSE)
 
-    log_table_id <- dplyr::tbl(conn, id(db_table, conn), check_from = FALSE)
+    log_table_id <- dplyr::tbl(conn, id(db_table, conn))
     expect_equal(logger$log_path, log_path)
     expect_equal(logger$log_tbl, log_table_id)
     expect_equal(
@@ -260,7 +260,7 @@ test_that("Logger: all logging simultaneously works", {
     )
 
 
-    # Test logging to db writes to the correct fields
+    # Test logging to database writes to the correct fields
     logger$log_to_db(n_insertions = 13)
     expect_equal(nrow(log_table_id), 2)
     expect_equal(dplyr::pull(log_table_id, "n_insertions"), c(42, 13))
@@ -335,7 +335,7 @@ test_that("Logger: console output may be disabled", {
   # Here, only print when explicitly stated
   expect_warning(
     logger <- Logger$new(output_to_console = FALSE),                                                                    # nolint: implicit_assignment_linter
-    regexp = "NO file or DB logging will be done."
+    regexp = "NO file or database logging will be done."
   )
 
   expect_no_message(logger$log_info("Whoops! This should not have been printed!"))
@@ -352,7 +352,7 @@ test_that("Logger: console output may be disabled", {
   # ...and now, only suppress printing when explicitly stated
   expect_warning(
     logger <- Logger$new(output_to_console = TRUE),                                                                     # nolint: implicit_assignment_linter
-    regexp = "NO file or DB logging will be done."
+    regexp = "NO file or database logging will be done."
   )
 
   expect_message(
@@ -368,7 +368,7 @@ test_that("Logger: console output may be disabled", {
 })
 
 
-test_that("Logger: log_file is NULL in DB if not writing to file", {
+test_that("Logger: log_file is NULL in database if not writing to file", {
   for (conn in get_test_conns()) {
 
     # Set options for the test
@@ -434,7 +434,7 @@ test_that("Logger: custom timestamp_format works", {
   # Create logger and test configuration
   expect_warning(
     logger <- Logger$new(),                                                                                             # nolint: implicit_assignment_linter
-    regexp = "NO file or DB logging will be done."
+    regexp = "NO file or database logging will be done."
   )
 
   # Test logging to console has the right formatting and message type

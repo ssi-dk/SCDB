@@ -53,7 +53,7 @@ Logger <- R6::R6Class(                                                          
       timestamp = NULL,
       # Console
       output_to_console = TRUE,
-      # DB
+      # database
       log_table_id = getOption("SCDB.log_table_id"),
       log_conn = NULL,
       # File
@@ -84,7 +84,7 @@ Logger <- R6::R6Class(                                                          
       # Store console log information
       private$.output_to_console <- output_to_console
 
-      # Store db log information
+      # Store database log information
       if (!is.null(log_table_id)) {
         private$log_table_id <- id(log_table_id, log_conn)
         private$.log_tbl <- create_logs_if_missing(log_conn, private$log_table_id)
@@ -97,13 +97,13 @@ Logger <- R6::R6Class(                                                          
       # Store Logger information
       private$.start_time <- start_time
 
-      # Create a line in log DB for Logger
+      # Create a line in log database for Logger
       private$generate_db_entry()
 
       # Warn if no logging will be done
       if (warn && is.null(self$log_path) && is.null(self$log_tbl)) {
         warning(
-          "`log_path` and `log_tbl` are both `NULL` and therefore NO file or DB logging will be done.\n",
+          "`log_path` and `log_tbl` are both `NULL` and therefore NO file or database logging will be done.\n",
           "Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile"
         )
       }
@@ -277,11 +277,11 @@ Logger <- R6::R6Class(                                                          
     .log_path = NULL,
 
     # @field log_tbl (`tbl_dbi(1)`)\cr
-    #   The DB table used for logging. Class is connection-specific, but inherits from `tbl_dbi`.
+    #   The database table used for logging. Class is connection-specific, but inherits from `tbl_dbi`.
     .log_tbl = NULL,
 
     # @field log_table_id (`Id(1)`)\cr
-    #   The Id of the DB table used for logging.
+    #   The Id of the database table used for logging.
     log_table_id = NULL,
 
     # @field log_conn (`DBIConnection(1)`)\cr
@@ -379,7 +379,7 @@ Logger <- R6::R6Class(                                                          
     },
 
     #' @field log_tbl (`tbl_dbi(1)`)\cr
-    #'   The DB table used for logging. Class is connection-specific, but inherits from `tbl_dbi`. Read only.
+    #'   The database table used for logging. Class is connection-specific, but inherits from `tbl_dbi`. Read only.
     log_tbl = function(value) {
       if (missing(value)) {
         return(private$.log_tbl)
@@ -462,7 +462,7 @@ Logger <- R6::R6Class(                                                          
 #'   logger <- LoggerNull$new()
 #'
 #'   logger$log_info("This message will not print!")
-#'   logger$log_to_db(message = "This message will no be written in DB!")
+#'   logger$log_to_db(message = "This message will no be written in database!")
 #'   try(logger$log_warn("This is a warning!"))
 #'   try(logger$log_error("This is an error!"))
 #' @export

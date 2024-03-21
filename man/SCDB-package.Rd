@@ -20,7 +20,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Rasmus Skytte Randløv \email{rske@ssi.dk} (\href{https://orcid.org/0000-0002-5860-3838}{ORCID})
+\strong{Maintainer}: Rasmus Skytte Randløv \email{rske@ssi.dk} (\href{https://orcid.org/0000-0002-5860-3838}{ORCID}) [reviewer]
 
 Authors:
 \itemize{
@@ -29,7 +29,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Lasse Engbo Christiansen \email{lsec@ssi.dk} (\href{https://orcid.org/0000-0001-5019-1931}{ORCID}) [contributor]
+  \item Lasse Engbo Christiansen \email{lsec@ssi.dk} (\href{https://orcid.org/0000-0001-5019-1931}{ORCID}) [reviewer]
   \item Statens Serum Institut [copyright holder, funder]
 }
 

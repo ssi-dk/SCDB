@@ -1,13 +1,12 @@
-# SCDB (development version)
+# SCDB 0.4.0
 
 ## BREAKING CHANGES:
 
-* Table identification is now more specific (#93):
+* Table identification is now more specific (#93).
 
-  Most SCDB functions allow for tables to be specified by a character representation of "schema.table".
+  Most SCDB functions allow for tables to be specified by a character representation of "[catalog].schema.table".
 
-  Before, if no schema was implied in this context, SCDB would attempt to match the table among both
-  permanent and temporary tables.
+  Before, if no schema was implied in this context, SCDB would attempt to match the table among both permanent and temporary tables.
 
   Now, it will always assume that a lack of schema means the default schema should be used.
   This is also the case if `DBI::Id()` is used without a schema specification.
@@ -21,32 +20,25 @@
 
   If you wish to overwrite this, use `...` arguments which are passed to `DBI::dbCreateTable()`.
 
-* The order of arguments in `create_logs_if_missing()` has been swapped to match the rest of the package (#??).
-  The `conn` argument is now before the `log_table` argument.
-
-* The `%notin%` operator has been removed from the package
-
-* `get_schema()` now returns `NULL` instead of `NA` if schema is undefined (#99).
+* The `%notin%` operator has been removed from the package (#96).
 
 * The `db_table_id` argument in `create_table()`, `get_table()`, `table_exists()` and `id()` is renamed to `db_table`
   (#115).
   Any object coercible by `id()` can now be passed to these functions.
 
-* The order of arguments in `create_logs_if_missing()` has been swapped to match the rest of the package (#??).
+* The order of arguments in `create_logs_if_missing()` has been swapped to match the rest of the package (#96).
   The `conn` argument is now before the `log_table` argument.
 
-* The arguments of `Logger` has been updated (#98).
+* The arguments of `Logger` has been updated (#98):
   * `db_tablestring` is replaced with the `db_table` argument.
 
-    This argument takes any Id-like input instead of only allowing a character string.
+    This argument takes any input coercible by `id()` instead of only allowing a character string.
 
   * `ts` is replaced with the `timestamp` argument to align with `update_snapshot()`.
 
 * The order of input arguments to `Logger` is changed (#98).
 
-* The `%notin%` operator has been removed from the package (#??).
-
-* The `interlace_sql()` function is converted to the S3 generic `interlace()` (#113).
+* The `interlace_sql()` function is deprecated in favor of the S3 generic `interlace()` (#113).
 
 ## New features
 
@@ -67,9 +59,9 @@
 * A new function, `unique_table_name()`, to generate unique table names is added (#89).
   This function is heavily inspired by the unexported `dbplyr:::unique_table_name()`.
 
-* A logger is introduced `LoggerNull` (#98).
+* A logger is introduced `LoggerNull` (#98):
 
-  * `Logger` facilitates logging to file/console and logging to db.
+  * `Logger` facilitates logging to file/console and logging to database.
 
   * `LoggerNull` is "no-logging" logger that can be used to suppress all logging.
 
@@ -80,24 +72,27 @@
 ## Improvements and Fixes
 
 * Improvements for `create_table()` (#93):
+
   - now writes the table if a remote connection is given. Before, it would only create the
   table with corresponding columns.
+
   - can now create temporary tables for Microsoft SQL Server.
 
 * Improved checks on `get_connection()` (#83):
+
   - If given, `host` does not need to look like an IP address (e.g. "localhost" is not unrealistic).
+
   - A `character` input for `port` is allowed if it is a string of digits.
+
   - Now checks if `timezone` and `timezone_out` is an IANA time zone.
 
 * `digest_to_checksum()` has improved performance on Microsoft SQL Server by use of the built-in `HashBytes` function (#97).
-
-* `get_connection()` now checks the value of any `timezone` and `timezone_out` arguments (#83).
 
 * `table_exists()` now correctly gives ambiguity warning on Microsoft SQL Server and PostgreSQL backends (#80).
 
 * `get_tables()` now supports temporary tables for Microsoft SQL Server (#93).
 
-* `get_schema()` has been updated (#107).
+* `get_schema()` has been updated (#107):
 
   * It will now always return a schema (either directly from the object or inferred by `id()`).
 
@@ -135,9 +130,9 @@
 
 * Implementation of `*_join`s improved, now extending `dplyr::*_join`s rather than masking them (#77).
 
-* Added S3 method for `id.tbl_dbi`, returning a `DBI::Id()` instance matching the table (#72).
-  - Calling `id` on a `tbl_dbi` thus allows to retrieve a `schema` even when not
-    initially given.
+* Added S3 method for `id.tbl_dbi()`, returning a `DBI::Id()` instance matching the table (#72).
+
+  - Calling `id()` on a `tbl_dbi` thus allows to retrieve a `schema` even when not initially given.
 
 * Fixed `update_snapshot()` not working with a `DBI::Id()` instance as `db_table` argument (#72).
 
@@ -153,46 +148,50 @@
 
 ## Minor Improvements and Fixes
 
-* SQLite connections now support schemata similar to other backends (@marcusmunch, #67).
+* SQLite connections now support schemata similar to other backends (#67).
 
-* The package logo has been slightly altered to have a readable clock (@RasmusSkytte, #49).
+* The package logo has been slightly altered to have a readable clock (#49).
 
-* Added a vignette describing the concept of a slowly changing dimension using examples (@marcusmunch, #53).
+* Added a vignette describing the concept of a slowly changing dimension using examples (#53).
 
-* Added a `Logger$finalize` method, which removes the `log_file` in the DB when not writing to a file (@marcusmunch, #66).
+* Added a `Logger$finalize` method, which removes the `log_file` in the database when not writing to a file (#66).
 
 ## Other news
 
-* Maintainer changed to Marcus Munch Grünewald @marcusmunch (@RasmusSkytte, #59)
+* Maintainer changed to Marcus Munch Grünewald (#59).
 
 # SCDB 0.2
 
 ## Breaking changes
 
-* `update_snapshot` now take a `Logger` object through the `logger` argument instead of `log_path` and `log_table_id` arguments (@marcusmunch, #24)
+* `update_snapshot()` now take a `Logger` object through the `logger` argument instead of `log_path` and `log_table_id` arguments (#24).
 
-* `Logger\$log_filename` has been changed to `Logger\$log_basename` to reduce ambiguity
+* `Logger\$log_filename` has been changed to `Logger\$log_basename` to reduce ambiguity.
 
 ## New features
 
 * Package functions are now also tested with `RPostgres::Postgres()`, which is
-  therefore now *officially* supported (@marcusmunch, #31)
+  therefore now *officially* supported (#31).
 
-* `get_connection` shows a warning if an unsupported backend is used (@marcusmunch, #26)
+* `get_connection()` shows a warning if an unsupported backend is used (#26).
 
-* Increased flexibility for the `Logger` object (@marcusmunch, #21 #24)
-  - A `Logger` instance may now be created with no arguments
-  - Suppress console output with `output_to_console` (`TRUE` by default)
-  - If no `log_path` is set, `Logger` does not fail before trying to write to a file
-  - `Logger\$log_realpath` gives the full path to log file being written
+* Increased flexibility for the `Logger` object (#21 #24):
+
+  - A `Logger` instance may now be created with no arguments.
+
+  - Suppress console output with `output_to_console` (`TRUE` by default).
+
+  - If no `log_path` is set, `Logger` does not fail before trying to write to a file.
+
+  - `Logger\$log_realpath` gives the full path to log file being written.
 
 ## Minor improvements and fixes
 
-* `schema_exists` correctly detects a schema with no tables (@marcusmunch, #30)
+* `schema_exists` correctly detects a schema with no tables (#30).
 
-* `db_timestamps` now newer calls `translate_sql` with `con = NULL` (@marcusmunch, #37)
+* `db_timestamps` now newer calls `translate_sql` with `con = NULL` (#37).
 
-* Package description has been updated to not use a footnote on CRAN
+* Package description has been updated to not use a footnote on CRAN.
 
 ## Known issues
 
@@ -203,44 +202,56 @@
 
 ## Features
 
-* Functions to handle DB connections
-  - `get_connection`, `close_connection`, `id`
+* Functions to handle database connections:
 
-* Functions to interface with DB
-  - `get_tables`, `table_exists`, `get_schema`, `schema_exists`
+  - `get_connection()`, `close_connection()`, `id()`
 
-* Functions to create "historical" tables and logs
-  - `create_table`, `create_logs_if_missing`
+* Functions to interface with database:
 
-* Function to maintain "historical" tables
-  - `update_snapshot`
+  - `get_tables()`, `table_exists()`, `get_schema()`, `schema_exists()`
 
-* Functions to interface with "historical" tables
-  - `get_table`, `slice_time`, `is.historical`
+* Functions to create "historical" tables and logs:
 
-* Functions to facilitate faster joins with NAs on SQL backends
-  - `full_join`, `inner_join`, `left_join`, `right_join`
+  - `create_table()`, `create_logs_if_missing()`
 
-* Functions to manipulate tables on SQL backends
-  - `filter_keys`, `unite.tbl_dbi`, `interlace_sql`
+* Function to maintain "historical" tables:
 
-* A logging object to facilitate logging
-  - `Logger`
+  - `update_snapshot()`
 
-* Function to generate checksums
-  - `digest_to_checksum`
+* Functions to interface with "historical" tables:
 
-* Function to write timestamps to tables on SQL backends
-  - `db_timestamp`
+  - `get_table()`, `slice_time()`, `is.historical()`
 
-* Helper functions
-  - `nrow` - DB compliant `nrow`
+* Functions to facilitate faster joins with NAs on SQL backends:
+
+  - `full_join()`, `inner_join()`, `left_join()`, `right_join()`
+
+* Functions to manipulate tables on SQL backends:
+
+  - `filter_keys()`, `unite.tbl_dbi()`, `interlace_sql()`
+
+* A logging object to facilitate logging:
+
+  - `Logger()`
+
+* Function to generate checksums:
+
+  - `digest_to_checksum()`
+
+* Function to write timestamps to tables on SQL backends:
+
+  - `db_timestamp()`
+
+* Helper functions:
+
+  - `nrow()` - database compliant `nrow()`
+
   - `%notin%` - negated `%in%`
 
 ## Testing
 
-* Most package functions are tested here
+* Most package functions are tested here.
 
 ## Documentation
 
-* The functions are fully documented
+* The functions are fully documented.

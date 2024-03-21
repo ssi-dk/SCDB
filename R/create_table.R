@@ -86,5 +86,5 @@ create_table <- function(.data, conn = NULL, db_table, ...) {                   
     ...
   )
 
-  return(invisible(dplyr::tbl(conn, db_table_id, check_from = FALSE)))
+  return(invisible(dplyr::tbl(conn, db_table_id)))
 }

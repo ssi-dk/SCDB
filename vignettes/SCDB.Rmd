@@ -1,9 +1,9 @@
 ---
-title: "Basic principles"
+title: "SCDB: Basic principles"
 output: rmarkdown::html_vignette
 bibliography: "references.bib"
 vignette: >
-  %\VignetteIndexEntry{Basic principles}
+  %\VignetteIndexEntry{SCDB: Basic principles}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

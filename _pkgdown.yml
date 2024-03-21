@@ -36,7 +36,6 @@ reference:
     - joins
     - unite.tbl_dbi
     - interlace
-    - interlace_sql
 
   - title:  Query table information
     contents:

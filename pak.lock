@@ -7,18 +7,18 @@
     {
       "ref": "local::.",
       "package": "SCDB",
-      "version": "0.3.0.9000",
+      "version": "0.4.0",
       "type": "local",
       "direct": true,
       "binary": false,
-      "dependencies": ["checkmate", "DBI", "dbplyr", "dplyr", "glue", "lifecycle", "lintr", "openssl", "parallelly", "purrr", "rlang", "R6", "stringr", "tidyr", "tidyselect"],
+      "dependencies": ["checkmate", "DBI", "dbplyr", "dplyr", "glue", "lifecycle", "openssl", "parallelly", "purrr", "rlang", "R6", "stringr", "tidyr", "tidyselect"],
       "vignettes": false,
       "metadata": {
         "RemotePkgRef": "local::.",
         "RemoteType": "local"
       },
       "sources": ["file:///home/runner/work/SCDB/SCDB"],
-      "target": "src/contrib/SCDB_0.3.0.9000.tar.gz",
+      "target": "src/contrib/SCDB_0.4.0.tar.gz",
       "platform": "source",
       "rversion": "*",
       "directpkg": true,

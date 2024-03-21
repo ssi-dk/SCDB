@@ -4,7 +4,7 @@
 \alias{db_locks}
 \alias{lock_table}
 \alias{unlock_table}
-\title{Sets, queries and removes locks for db tables}
+\title{Sets, queries and removes locks for database tables}
 \usage{
 lock_table(conn, db_table, schema = NULL)
 
@@ -31,7 +31,7 @@ If a lock exists for a non-active process, an error is thrown.
 }
 }
 \description{
-This set of function adds a simple locking system to db tables.
+This set of function adds a simple locking system to database tables.
 \itemize{
 \item \code{lock_table()} adds a record in the schema.locks table with the current time and R-session process id.
 \item \code{unlock_table()} removes records in the schema.locks table with the target table and the R-session process id.

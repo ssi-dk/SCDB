@@ -2,13 +2,13 @@
 % Please edit documentation in R/db_timestamp.R
 \name{db_timestamp}
 \alias{db_timestamp}
-\title{Determine the type of timestamps the DB supports}
+\title{Determine the type of timestamps the database supports}
 \usage{
 db_timestamp(timestamp, conn = NULL)
 }
 \arguments{
 \item{timestamp}{(\code{POSIXct(1)} or \code{character(1)})\cr
-The timestamp to be transformed to the DB type.}
+The timestamp to be transformed to the database type.}
 
 \item{conn}{(\code{DBIConnection(1)})\cr
 Connection object.}
@@ -17,7 +17,7 @@ Connection object.}
 The given timestamp converted to a SQL-backend dependent timestamp.
 }
 \description{
-Determine the type of timestamps the DB supports
+Determine the type of timestamps the database supports
 }
 \examples{
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

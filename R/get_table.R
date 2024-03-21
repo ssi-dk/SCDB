@@ -34,7 +34,7 @@ get_table <- function(conn, db_table = NULL, slice_ts = NA, include_slice_info =
   assert_timestamp_like(slice_ts, null.ok = TRUE)
   checkmate::assert_logical(include_slice_info)
 
-  # Get tables in db schema
+  # Get tables in database schema
   if (is.null(db_table)) {
     message("Select one of the following tables:")
     return(get_tables(conn))
@@ -48,8 +48,8 @@ get_table <- function(conn, db_table = NULL, slice_ts = NA, include_slice_info =
     rlang::abort(glue::glue("Table {as.character(db_table_id)} could not be found!"))
   }
 
-  # Look-up table in DB
-  q <- dplyr::tbl(conn, db_table_id, check_from = FALSE)
+  # Look-up table in database
+  q <- dplyr::tbl(conn, db_table_id)
 
   # Check whether data is historical
   if (is.historical(q) && !is.null(slice_ts)) {

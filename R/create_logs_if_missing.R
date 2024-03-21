@@ -40,5 +40,5 @@ create_logs_if_missing <- function(conn, log_table) {
     DBI::dbCreateTable(conn, id(log_table, conn), log_signature)
   }
 
-  return(dplyr::tbl(conn, id(log_table, conn), check_from = FALSE))
+  return(dplyr::tbl(conn, id(log_table, conn)))
 }
