@@ -32,14 +32,10 @@ test_that("*_join() works", {
     y <- data.frame(letter = c("A", "B", "A", "B"),
                     number = c(NA, "2", "1", "1"))
 
-    # Copy x and y to conn (and suppress check_from message)
-    x <- suppressMessages(
-      dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
-    )
+    # Copy x and y to conn
+    x <- dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
 
-    y <- suppressMessages(
-      dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
-    )
+    y <- dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
 
 
     q  <- dplyr::left_join(x, y, na_by = "number") |>
@@ -73,14 +69,10 @@ test_that("*_join() works", {
                     region_id = "1",
                     n_add = 4)
 
-    # Copy x and y to conn (and suppress check_from message)
-    x <- suppressMessages(
-      dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
-    )
+    # Copy x and y to conn
+    x <- dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
 
-    y <- suppressMessages(
-      dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
-    )
+    y <- dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
 
 
     q  <- dplyr::full_join(x, y, by = "date", na_by = "region_id") |>

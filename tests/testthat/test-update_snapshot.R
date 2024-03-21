@@ -10,10 +10,8 @@ test_that("update_snapshot() works", {
       dplyr::mutate(from_ts  = !!db_timestamp("2022-10-01 09:00:00", conn),
                     until_ts = !!db_timestamp(NA, conn))
 
-    # Copy target to conn (and suppress check_from message)
-    target <- suppressMessages(
-      dplyr::copy_to(conn, target, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
-    )
+    # Copy target to conn
+    target <- dplyr::copy_to(conn, target, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
 
     .data <- mtcars |>
       dplyr::mutate(hp = dplyr::if_else(hp > 130, hp - 10, hp)) |>
@@ -159,16 +157,10 @@ test_that("update_snapshot() works", {
     t1 <- data.frame(col1 = c("A", "B", "C"), col2 = c(1,        NA_real_, NA_real_))
     t2 <- data.frame(col1 = c("A", "B", "C"), col2 = c(1,        2,        3))
 
-    # Copy t0, t1, and t2 to conn (and suppress check_from message)
-    t0 <- suppressMessages(
-      dplyr::copy_to(conn, t0, name = id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE)
-    )
-    t1 <- suppressMessages(
-      dplyr::copy_to(conn, t1, name = id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE)
-    )
-    t2 <- suppressMessages(
-      dplyr::copy_to(conn, t2, name = id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE)
-    )
+    # Copy t0, t1, and t2 to conn
+    t0 <- dplyr::copy_to(conn, t0, name = id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE)
+    t1 <- dplyr::copy_to(conn, t1, name = id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE)
+    t2 <- dplyr::copy_to(conn, t2, name = id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE)
 
 
     update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01", logger = logger)

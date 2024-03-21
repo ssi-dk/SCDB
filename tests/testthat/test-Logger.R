@@ -91,7 +91,7 @@ test_that("Logger: logging to file works", {
 
 
   # Test logging to file has the right formatting and message type
-  suppressMessages(logger$log_info("test filewriting", tic = logger$start_time))
+  logger$log_info("test filewriting", tic = logger$start_time)
   tryCatch(logger$log_warn("test filewriting", tic = logger$start_time), warning = \(w) NULL)
   tryCatch(logger$log_error("test filewriting", tic = logger$start_time), error = \(e) NULL)
 
@@ -126,7 +126,7 @@ test_that("Logger: logging to file works", {
 
 
   # Test logging to file still works
-  suppressMessages(logger$log_info("test filewriting", tic = logger$start_time))
+  logger$log_info("test filewriting", tic = logger$start_time)
 
   ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_true(logger$log_filename %in% dir(log_path))
