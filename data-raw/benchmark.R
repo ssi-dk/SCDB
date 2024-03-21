@@ -100,17 +100,15 @@ for (version in c("CRAN", "main", "branch")) {
     }
 
     # Construct the list of benchmarks
-    benchmark_exprs <- alist()
-    benchmark_on_conn <- local(bquote(scdb_updates(conn, data_on_conn)))
-    benchmark_exprs <- append(benchmark_exprs, benchmark_on_conn)
-    names(benchmark_exprs) <- names(conns)[[1]]
-
-    update_snapshot_benchmark <- microbenchmark::microbenchmark(list = benchmark_exprs, times = 25) |>
-      dplyr::mutate("version" = !!ifelse(version == "branch", branch, version))
-
+    update_snapshot_benchmark <- microbenchmark::microbenchmark(scdb_updates(conn, data_on_conn), times = 25) |>
+      dplyr::mutate(
+        "function" = "update_snapshot",
+        "database" = names(conns)[[1]],
+        "version" = !!ifelse(version == "branch", branch, version)
+      )
 
     dir.create("data", showWarnings = FALSE)
-    saveRDS(update_snapshot_benchmark, glue::glue("data/update_snapshot_benchmark_{names(conns)[[1]]}_{version}.rds"))
+    saveRDS(update_snapshot_benchmark, glue::glue("data/benchmark-update_snapshot_{names(conns)[[1]]}_{version}.rds"))
 
     # Clean up
     purrr::walk(conns, ~ DBI::dbDisconnect(., shutdown = TRUE))

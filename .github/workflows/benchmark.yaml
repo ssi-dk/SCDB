@@ -53,7 +53,7 @@ jobs:
           BACKEND: SQLite
           BACKEND_DRV: RSQLite::SQLite
           BACKEND_ARGS: 'list(dbname = file.path(tempdir(), "SQLite.SQLite"))'
-        run: source("./data-raw/benchmark_update_snapshot.R", echo=TRUE)
+        run: source("./data-raw/benchmark.R", echo=TRUE)
         shell: Rscript {0}
 
       - name: Run benchmark (DuckDB)
@@ -62,7 +62,7 @@ jobs:
           BACKEND: DuckDB
           BACKEND_DRV: duckdb::duckdb
           BACKEND_ARGS: 'list(dbdir = file.path(tempdir(), "DuckDB.duckdb"))'
-        run: source("./data-raw/benchmark_update_snapshot.R", echo=TRUE)
+        run: source("./data-raw/benchmark.R", echo=TRUE)
         shell: Rscript {0}
 
       - name: Run benchmark (PostgreSQL)
@@ -70,7 +70,7 @@ jobs:
         env:
           BACKEND: PostgreSQL
           BACKEND_DRV: RPostgres::Postgres
-        run: source("./data-raw/benchmark_update_snapshot.R", echo=TRUE)
+        run: source("./data-raw/benchmark.R", echo=TRUE)
         shell: Rscript {0}
 
       - name: Run benchmark (MSSQL)
@@ -88,7 +88,7 @@ jobs:
                 "PWD": "dbatools.I0"
               }
             }
-        run: source("./data-raw/benchmark_update_snapshot.R", echo=TRUE)
+        run: source("./data-raw/benchmark.R", echo=TRUE)
         shell: Rscript {0}
 
       - name: Display structure of benchmark files
@@ -100,7 +100,7 @@ jobs:
         run: |
           benchmark_files <- list.files(
             "data",
-            pattern = "update_snapshot_benchmark_",
+            pattern = "^benchmark-",
             full.names = TRUE,
             recursive = TRUE
           )
@@ -127,7 +127,7 @@ jobs:
             ggplot2::aes(x = version, y = time / 1e9)
           ) +
             ggplot2::geom_boxplot() +
-            ggplot2::facet_grid(~ expr) +
+            ggplot2::facet_grid(function ~ database) +
             ggplot2::labs(x = "Codebase version", y = "Time (s)") +
             ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5))
 
