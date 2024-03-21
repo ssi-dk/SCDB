@@ -2247,6 +2247,37 @@
       "sysreqs_packages": {}
     },
     {
+      "ref": "microbenchmark",
+      "package": "microbenchmark",
+      "version": "1.4.10",
+      "type": "standard",
+      "direct": false,
+      "binary": true,
+      "dependencies": [],
+      "vignettes": false,
+      "needscompilation": false,
+      "metadata": {
+        "RemoteType": "standard",
+        "RemotePkgRef": "microbenchmark",
+        "RemoteRef": "microbenchmark",
+        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
+        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
+        "RemoteSha": "1.4.10"
+      },
+      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/microbenchmark_1.4.10.tar.gz"],
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.3/microbenchmark_1.4.10.tar.gz",
+      "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
+      "rversion": "4.3",
+      "directpkg": false,
+      "license": "BSD_2_clause + file LICENSE",
+      "dep_types": ["Depends", "Imports", "LinkingTo"],
+      "params": [],
+      "install_args": "",
+      "repotype": "cranlike",
+      "sysreqs": "On a Unix-alike, one of the C functions mach_absolute_time (macOS), clock_gettime or gethrtime. If none of these is found, the obsolescent POSIX function gettimeofday will be tried.",
+      "sysreqs_packages": {}
+    },
+    {
       "ref": "mime",
       "package": "mime",
       "version": "0.12",

@@ -1,0 +1,143 @@
+on:
+  workflow_dispatch
+
+
+name: "⏲️ Benchmark"
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd "pg_isready -U postgres" --health-interval 10s --health-timeout 5s --health-retries 5
+
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGDATABASE: test
+      PGUSER: postgres
+      PGPASSWORD: postgres
+
+    steps:
+      - name: Install a SQL Server suite of tools
+        uses: potatoqualitee/mssqlsuite@v1.7
+        with:
+          install: sqlengine, sqlpackage, sqlclient
+          show-log: true
+
+      - name: Configure SQL server
+        run: |
+          set -o xtrace
+          sqlcmd -V 10 -S localhost -U SA -P dbatools.I0 -Q "ALTER LOGIN SA WITH DEFAULT_DATABASE = master;"
+
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::devtools
+
+      - name: Run benchmark (SQLite)
+        if: always()
+        env:
+          BACKEND: SQLite
+          BACKEND_DRV: RSQLite::SQLite
+          BACKEND_ARGS: 'list(dbname = file.path(tempdir(), "SQLite.SQLite"))'
+        run: source("./data-raw/benchmark.R", echo=TRUE)
+        shell: Rscript {0}
+
+      - name: Run benchmark (DuckDB)
+        if: always()
+        env:
+          BACKEND: DuckDB
+          BACKEND_DRV: duckdb::duckdb
+          BACKEND_ARGS: 'list(dbdir = file.path(tempdir(), "DuckDB.duckdb"))'
+        run: source("./data-raw/benchmark.R", echo=TRUE)
+        shell: Rscript {0}
+
+      - name: Run benchmark (PostgreSQL)
+        if: always()
+        env:
+          BACKEND: PostgreSQL
+          BACKEND_DRV: RPostgres::Postgres
+        run: source("./data-raw/benchmark.R", echo=TRUE)
+        shell: Rscript {0}
+
+      - name: Run benchmark (MSSQL)
+        if: always()
+        env:
+          BACKEND: MSSQL
+          BACKEND_DRV: odbc::odbc
+          CONN_ARGS_JSON: >
+            {
+              "MSSQL": {
+                "driver": "ODBC Driver 17 for SQL Server",
+                "server": "localhost",
+                "database": "master",
+                "UID": "SA",
+                "PWD": "dbatools.I0"
+              }
+            }
+        run: source("./data-raw/benchmark.R", echo=TRUE)
+        shell: Rscript {0}
+
+      - name: Display structure of benchmark files
+        if: always()
+        run: ls -R data
+
+      - name: Combine benchmark results
+        if: always()
+        run: |
+          benchmark_files <- list.files(
+            "data",
+            pattern = "^benchmark-",
+            full.names = TRUE,
+            recursive = TRUE
+          )
+
+          benchmarks <- benchmark_files |>
+            purrr::map(readRDS) |>
+            purrr::map(tibble::as_tibble) |>
+            purrr::reduce(rbind)
+
+          benchmarks <- benchmarks |>
+            dplyr::mutate(
+              "version" = factor(
+                .data$version,
+                levels = c("CRAN", "main", setdiff(unique(benchmarks$version), c("CRAN", "main")))
+              )
+            )
+
+          # Save the combined benchmark results and delete the individual files
+          saveRDS(benchmarks, "benchmarks.rds")
+          file.remove(benchmark_files)
+
+          ggplot2::ggplot(
+            benchmarks,
+            ggplot2::aes(x = version, y = time / 1e9)
+          ) +
+            ggplot2::geom_boxplot() +
+            ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
+            ggplot2::labs(x = "Codebase version", y = "Time (s)") +
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+          ggplot2::ggsave("benchmarks.pdf")
+
+        shell: Rscript {0}
+
+      - name: Upload benchmark summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-summary
+          path: benchmarks.pdf

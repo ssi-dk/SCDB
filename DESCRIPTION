@@ -45,6 +45,7 @@ Suggests:
     jsonlite,
     knitr,
     lintr,
+    microbenchmark,
     odbc,
     rmarkdown,
     roxygen2,
