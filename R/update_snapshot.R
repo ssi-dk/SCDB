@@ -68,6 +68,8 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   checkmate::assert_multi_class(logger, "Logger", null.ok = TRUE)
   checkmate::assert_logical(enforce_chronological_order)
 
+
+  ### Create target table if not exists
   # Retrieve Id from any valid db_table inputs to correctly create a missing table
   db_table_id <- id(db_table, conn)
 
@@ -82,7 +84,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     db_table <- create_table(dplyr::collect(utils::head(.data, 0)), conn, db_table_id, temporary = FALSE)
   }
 
-  # Initialize logger
+  ### Initialize logger
   if (is.null(logger)) {
     logger <- Logger$new(
       db_table = db_table_id,
@@ -101,7 +103,8 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   }
 
 
-  # Opening checks
+
+  ### Check incoming data
   if (!is.historical(db_table)) {
 
     # Release table lock
@@ -131,12 +134,15 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   logger$log_info("Parsing data for table", as.character(db_table_id), "started", tic = tic) # Use input time in log
   logger$log_info("Given timestamp for table is", timestamp, tic = tic) # Use input time in log
 
-  # Check for current update status
+
+
+
+  ### Check for current update status
   db_latest <- db_table |>
     dplyr::summarize(max(.data$from_ts, na.rm = TRUE)) |>
     dplyr::pull() |>
     as.character() |>
-    max("1900-01-01 00:00:00", na.rm = TRUE)
+    dplyr::coalesce("1900-01-01 00:00:00")
 
   # Convert timestamp to character to prevent inconsistent R behavior with date/timestamps
   timestamp <- strftime(timestamp)
@@ -152,7 +158,9 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
                      "timestamp in table:", db_latest, tic = tic) # Use input time in log
   }
 
-  # Compute .data immediately to reduce runtime and compute checksum
+
+
+  ### Filter and compute checksums for incoming data
   .data <- .data |>
     dplyr::ungroup() |>
     filter_keys(filters) |>
@@ -168,14 +176,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   .data <- dplyr::compute(digest_to_checksum(.data, col = "checksum"))
   defer_db_cleanup(.data)
 
-  # Apply filter to current records
-  if (!is.null(filters) && !identical(dbplyr::remote_con(filters), conn)) {
-    filters <- dplyr::copy_to(conn, filters, name = unique_table_name())
-    defer_db_cleanup(filters)
-  }
-  db_table <- filter_keys(db_table, filters)
-
-  # Determine the next timestamp in the data (can be NA if none is found)
+  ### Determine the next timestamp in the data (can be NA if none is found)
   next_timestamp <- min(db_table |>
                           dplyr::filter(.data$from_ts  > timestamp) |>
                           dplyr::summarize(next_timestamp = min(.data$from_ts, na.rm = TRUE)) |>
@@ -186,123 +187,115 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
                           dplyr::pull("next_timestamp")) |>
     strftime()
 
-  # Consider only records valid at timestamp (and apply the filter if present)
+
+
+  ### Consider only records valid at timestamp (and apply the filter if present)
   db_table <- slice_time(db_table, timestamp)
 
-  # Count open rows at timestamp
-  nrow_open <- nrow(db_table)
-
-
-  # Select only data with no until_ts and with different values in any fields
-  logger$log_info("Deactivating records")
-  if (nrow_open > 0) {
-    to_remove <- dplyr::setdiff(dplyr::select(db_table, "checksum"),
-                                dplyr::select(.data, "checksum")) |>
-      dplyr::compute() # Something has changed in dbplyr (2.2.1) that makes this compute needed.
-    # Code that takes 20 secs with can be more than 30 minutes to compute without...
-    defer_db_cleanup(to_remove)
-
-    nrow_to_remove <- nrow(to_remove)
-
-    # Determine from_ts and checksum for the records we need to deactivate
-    to_remove <- to_remove |>
-      dplyr::left_join(dplyr::select(db_table, "from_ts", "checksum"), by = "checksum") |>
-      dplyr::mutate(until_ts = !!db_timestamp(timestamp, conn))
-
-  } else {
-    nrow_to_remove <- 0
+  # Apply filter to current records
+  if (!is.null(filters) && !identical(dbplyr::remote_con(filters), conn)) {
+    filters <- dplyr::copy_to(conn, filters, name = unique_table_name())
+    defer_db_cleanup(filters)
   }
-  logger$log_info("After to_remove")
+  db_table <- filter_keys(db_table, filters)
 
 
+
+  # Determine records to remove and to add to the DB
+  # Records will be removed if their checksum no longer exists on the new date
+  # Records will be added if their checksum does not exists in the current data
+  to_remove <- db_table |>
+    slice_time(timestamp) |>
+    dplyr::select("checksum") |>
+    dplyr::setdiff(dplyr::select(.data, "checksum")) |>
+    dplyr::inner_join(db_table, by = "checksum") |>
+    dplyr::mutate(until_ts = !!db_timestamp(timestamp, conn))
 
   to_add <- dplyr::setdiff(.data, dplyr::select(db_table, colnames(.data))) |>
     dplyr::mutate(from_ts  = !!db_timestamp(timestamp, conn),
                   until_ts = !!db_timestamp(next_timestamp, conn))
 
-  nrow_to_add <- nrow(to_add)
-  logger$log_info("After to_add")
+  # Commit changes to DB
+  if (inherits(conn, "duckdb_connection")) {
 
+    dplyr::rows_update(
+      x = dplyr::tbl(conn, db_table_id),
+      y = to_remove,
+      by = c("checksum", "from_ts"),
+      unmatched = "ignore",
+      in_place = TRUE
+    )
 
+    dplyr::rows_insert(
+      x = dplyr::tbl(conn, db_table_id),
+      y = to_add,
+      by = c("checksum", "from_ts"),
+      conflict = "ignore",
+      in_place = TRUE
+    )
 
-  if (nrow_to_remove > 0) {
-    dplyr::rows_update(x = dplyr::tbl(conn, db_table_id),
-                       y = to_remove,
-                       by = c("checksum", "from_ts"),
-                       in_place = TRUE,
-                       unmatched = "ignore")
+  } else {
+
+    dplyr::rows_upsert(
+      x = dplyr::tbl(conn, db_table_id),
+      y = dplyr::union_all(to_remove, to_add),
+      by = c("checksum", "from_ts"),
+      in_place = TRUE
+    )
+
   }
 
-  logger$log_to_db(n_deactivations = nrow_to_remove) # Logs contains the aggregate number of added records on the day
-  logger$log_info("Deactivate records count:", nrow_to_remove)
-  logger$log_info("Adding new records")
-
-  if (nrow_to_add > 0) {
-    dplyr::rows_append(x = dplyr::tbl(conn, db_table_id), y = to_add, in_place = TRUE)
-  }
-
-  logger$log_to_db(n_insertions = nrow_to_add)
-  logger$log_info("Insert records count:", nrow_to_add)
-
-
-  # If several updates come in a single day, some records may have from_ts = until_ts.
-  # We remove these records here
-  redundant_rows <- dplyr::tbl(conn, db_table_id) |>
-    dplyr::filter(.data$from_ts == .data$until_ts) |>
-    dplyr::select("checksum", "from_ts")
-  nrow_redundant <- nrow(redundant_rows)
-
-  if (nrow_redundant > 0) {
-    dplyr::rows_delete(dplyr::tbl(conn, db_table_id),
-                       redundant_rows,
-                       by = c("checksum", "from_ts"),
-                       in_place = TRUE, unmatched = "ignore")
-    logger$log_info("Doubly updated records removed:", nrow_redundant)
-  }
 
   # If chronological order is not enforced, some records may be split across several records
   # checksum is the same, and from_ts / until_ts are continuous
   # We collapse these records here
   if (!enforce_chronological_order) {
-    redundant_rows <- dplyr::tbl(conn, db_table_id) |>
-      filter_keys(filters)
 
-    redundant_rows <- dplyr::inner_join(
-      redundant_rows,
-      redundant_rows |> dplyr::select("checksum", "from_ts", "until_ts"),
+    # First we identify the records with this stitching
+    consecutive_rows <- dplyr::inner_join(
+      dplyr::tbl(conn, db_table_id),
+      dplyr::tbl(conn, db_table_id) |> dplyr::select("checksum", "from_ts", "until_ts"),
       suffix = c("", ".p"),
-      sql_on = '"RHS"."checksum" = "LHS"."checksum" AND "LHS"."until_ts" = "RHS"."from_ts"'
-    ) |>
-      dplyr::select(!"checksum.p")
+      sql_on = paste(
+        '"RHS"."checksum" = "LHS"."checksum" AND ',
+        '("LHS"."until_ts" = "RHS"."from_ts" OR "LHS"."from_ts" = "RHS"."until_ts")'
+      )
+    )
 
-    redundant_rows_to_delete <- redundant_rows |>
-      dplyr::transmute(.data$checksum, from_ts = .data$from_ts.p) |>
-      dplyr::compute()
-    defer_db_cleanup(redundant_rows_to_delete)
 
-    redundant_rows_to_update <- redundant_rows |>
-      dplyr::transmute(.data$checksum, from_ts = .data$from_ts, until_ts = .data$until_ts.p) |>
-      dplyr::compute()
-    defer_db_cleanup(redundant_rows_to_update)
+    # If the record has the earlier from_ts, we use the until_ts of the other.
+    # If the record has the later from_ts, we set until_ts equal to from_ts to trigger
+    # clean up later in update_snapshot.
+    consecutive_rows_fix <- consecutive_rows |>
+      dplyr::mutate("until_ts" = ifelse(.data$from_ts < .data$from_ts.p, .data$until_ts.p, .data$from_ts)) |>
+      dplyr::select(!tidyselect::ends_with(".p"))
 
-    if (nrow(redundant_rows_to_delete) > 0) {
-      dplyr::rows_delete(x = dplyr::tbl(conn, db_table_id),
-                         y = redundant_rows_to_delete,
-                         by = c("checksum", "from_ts"),
-                         in_place = TRUE,
-                         unmatched = "ignore")
-    }
-
-    if (nrow(redundant_rows_to_update) > 0) {
-      dplyr::rows_update(x = dplyr::tbl(conn, db_table_id),
-                         y = redundant_rows_to_update,
-                         by = c("checksum", "from_ts"),
-                         in_place = TRUE,
-                         unmatched = "ignore")
-      logger$log_info("Continous records collapsed:", nrow(redundant_rows_to_update))
-    }
-
+    # Commit changes to DB
+    dplyr::rows_update(
+      x = dplyr::tbl(conn, db_table_id),
+      y = consecutive_rows_fix,
+      by = c("checksum", "from_ts"),
+      unmatched = "ignore",
+      in_place = TRUE
+    )
   }
+
+
+
+  # If several updates come in a single day, some records may have from_ts = until_ts.
+  # Alternatively, the above handling of consecutive records will make records have from_ts = until_ts
+  # We remove these records here
+  redundant_rows <- dplyr::tbl(conn, db_table_id) |>
+    dplyr::filter(.data$from_ts == .data$until_ts) |>
+    dplyr::select("checksum", "from_ts")
+
+  dplyr::rows_delete(
+    x = dplyr::tbl(conn, db_table_id),
+    y = redundant_rows,
+    by = c("checksum", "from_ts"),
+    in_place = TRUE,
+    unmatched = "ignore"
+  )
 
   toc <- Sys.time()
   logger$finalize_db_entry()
