@@ -75,15 +75,9 @@ for (version in c("CRAN", "main", "branch")) {
 
     # Copy data to the conns
     data_on_conn <- list(
-      suppressMessages(
-        dplyr::copy_to(conn, data_1, name = id("test.SCDB_data_1", conn), overwrite = TRUE, temporary = FALSE)
-      ),
-      suppressMessages(
-        dplyr::copy_to(conn, data_2, name = id("test.SCDB_data_2", conn), overwrite = TRUE, temporary = FALSE)
-      ),
-      suppressMessages(
-        dplyr::copy_to(conn, data_3, name = id("test.SCDB_data_3", conn), overwrite = TRUE, temporary = FALSE)
-      )
+      dplyr::copy_to(conn, data_1, name = id("test.SCDB_data_1", conn), overwrite = TRUE, temporary = FALSE),
+      dplyr::copy_to(conn, data_2, name = id("test.SCDB_data_2", conn), overwrite = TRUE, temporary = FALSE),
+      dplyr::copy_to(conn, data_3, name = id("test.SCDB_data_3", conn), overwrite = TRUE, temporary = FALSE)
     )
 
     # Define the data to loop over for benchmark

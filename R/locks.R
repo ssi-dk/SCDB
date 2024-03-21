@@ -48,19 +48,17 @@ lock_table <- function(conn, db_table, schema = NULL) {
 
   # Create lock table if missing
   if (!table_exists(conn, db_lock_table_id)) {
-    suppressMessages(
-      dplyr::copy_to(
-        conn,
-        data.frame(
-          "schema" = character(0),
-          "table" = character(0),
-          "user" = character(0),
-          "lock_start" = numeric(0),
-          "pid" = numeric(0)
-        ),
-        db_lock_table_id,
-        temporary = FALSE
-      )
+    dplyr::copy_to(
+      conn,
+      data.frame(
+        "schema" = character(0),
+        "table" = character(0),
+        "user" = character(0),
+        "lock_start" = numeric(0),
+        "pid" = numeric(0)
+      ),
+      db_lock_table_id,
+      temporary = FALSE
     )
 
     if (inherits(conn, "PqConnection")) { # PostgreSQL needs an index for rows_insert

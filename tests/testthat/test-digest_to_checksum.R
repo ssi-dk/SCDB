@@ -23,9 +23,7 @@ test_that("digest_to_checksum() works", {
     expect_false(checksums[1] == checksums[2])
 
     # .. and on the remote
-    x <- suppressMessages(
-      dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
-    )
+    x <- dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
 
     checksums <- x |> digest_to_checksum() |> dplyr::pull("checksum")
     expect_false(checksums[1] == checksums[2])

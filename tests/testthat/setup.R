@@ -38,12 +38,9 @@ for (conn in get_test_conns()) {
               ~ if (schema_exists(conn, .@name[["schema"]]) && DBI::dbExistsTable(conn, .)) DBI::dbRemoveTable(conn, .))
 
 
-  # Copy mtcars to conn (and suppress check_from message)
-  tryCatch(
-    dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
-                   name = id("test.mtcars", conn), temporary = FALSE, overwrite = TRUE),
-    message = \(m) if (!stringr::str_detect(m$message, stringr::fixed("check_from = FALSE"))) message(m)
-  )
+  # Copy mtcars to conn
+  dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
+                 name = id("test.mtcars", conn), temporary = FALSE, overwrite = TRUE)
 
   dplyr::copy_to(conn, mtcars |> dplyr::mutate(name = rownames(mtcars)),
                  name = id("__mtcars", conn), temporary = FALSE, overwrite = TRUE)

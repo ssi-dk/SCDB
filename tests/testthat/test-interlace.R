@@ -20,18 +20,10 @@ test_that("interlace.tbl_sql() works", {
                         valid_until = as.Date(c("2021-02-01", "2021-03-01", "2021-04-01", NA)))
 
 
-    # Copy t1, t2 and t_ref to conn (and suppress check_from message)
-    t1 <- suppressMessages(
-      dplyr::copy_to(conn, t1, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
-    )
-
-    t2 <- suppressMessages(
-      dplyr::copy_to(conn, t2, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
-    )
-
-    t_ref <- suppressMessages(
-      dplyr::copy_to(conn, t_ref, name = id("test.SCDB_tmp3", conn), overwrite = TRUE, temporary = FALSE)
-    )
+    # Copy t1, t2 and t_ref to conn
+    t1 <- dplyr::copy_to(conn, t1, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+    t2 <- dplyr::copy_to(conn, t2, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
+    t_ref <- dplyr::copy_to(conn, t_ref, name = id("test.SCDB_tmp3", conn), overwrite = TRUE, temporary = FALSE)
 
 
     # Order of records may be different, so we arrange then check if they are identical
