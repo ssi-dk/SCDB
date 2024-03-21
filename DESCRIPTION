@@ -49,6 +49,7 @@ Suggests:
     lintr,
     microbenchmark,
     odbc,
+    pak,
     rmarkdown,
     roxygen2,
     pkgdown,
