@@ -127,7 +127,7 @@ jobs:
             ggplot2::aes(x = version, y = time / 1e9)
           ) +
             ggplot2::geom_boxplot() +
-            ggplot2::facet_grid(function ~ database) +
+            ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
             ggplot2::labs(x = "Codebase version", y = "Time (s)") +
             ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5))
 
