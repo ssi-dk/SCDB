@@ -45,7 +45,11 @@ for (version in c("CRAN", "main", "branch")) {
         dplyr::rename_with(~ tolower(gsub(".", "_", .x, fixed = TRUE)))
     }
 
-    n <- 10
+    # Open connection to the database
+    conns <- get_test_conns()
+    conn <- conns[[1]]
+
+    n <- ifelse(names(conns)[1] == "SQLite", 5, 10)
     data_1 <- data_generator(n)
     data_2 <- data_generator(2 * n) |>
       dplyr::mutate(
@@ -69,10 +73,7 @@ for (version in c("CRAN", "main", "branch")) {
         )
       )
 
-    conns <- get_test_conns()
-    conn <- conns[[1]]
-
-    # copy data to the conns
+    # Copy data to the conns
     data_on_conn <- list(
       suppressMessages(
         dplyr::copy_to(conn, data_1, name = id("test.SCDB_data_1", conn), overwrite = TRUE, temporary = FALSE)
