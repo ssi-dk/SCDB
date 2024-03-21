@@ -216,7 +216,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
                   until_ts = !!db_timestamp(next_timestamp, conn))
 
   # Commit changes to DB
-  if (inherits(conn, "duckdb_connection")) {
+  if (checkmate::test_multi_class(conn, c("SQLiteConnection", "duckdb_connection"))) {
 
     dplyr::rows_update(
       x = dplyr::tbl(conn, db_table_id),
