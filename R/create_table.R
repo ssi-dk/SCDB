@@ -86,5 +86,60 @@ create_table <- function(.data, conn = NULL, db_table, ...) {                   
     ...
   )
 
+  create_scdb_index(conn, db_table_id)
+
   return(invisible(dplyr::tbl(conn, db_table_id)))
+}
+
+
+#' Create the indexes for historical tables
+#' @param conn (`DBIConnection`)\cr
+#'  A connection to a database.
+#' @param db_table_id (`Id`)\cr
+#'  The table to create the index for.
+#' @return
+#'   NULL (called for side effects)
+#' @noRd
+create_scdb_index <- function(conn, db_table_id) {
+  checkmate::assert_class(conn, "DBIConnection")
+  assert_id_like(db_table_id)
+
+  UseMethod("create_scdb_index")
+}
+
+#' @noRd
+create_scdb_index.PqConnection <- function(conn, db_table_id) {
+  DBI::dbExecute(
+    conn,
+    glue::glue(
+      "CREATE UNIQUE INDEX ON {as.character(db_table_id, explicit = TRUE)} (checksum, from_ts)"
+    )
+  )
+}
+
+#' @noRd
+create_scdb_index.SQLiteConnection <- function(conn, db_table_id) {
+  schema <- purrr::pluck(db_table_id, "name", "schema")
+  table  <- purrr::pluck(db_table_id, "name", "table")
+
+  if (schema %in% c("main", "temp")) schema <- NULL
+
+  index <- paste(c(shQuote(schema), shQuote(paste0(table, "_scdb_index"))), collapse = ".")
+  DBI::dbExecute(
+    conn,
+    glue::glue(
+      "CREATE UNIQUE INDEX {index} ON {shQuote(table)} (checksum, from_ts)"
+    )
+  )
+}
+
+#' @noRd
+create_scdb_index.DBIConnection <- function(conn, db_table_id) {
+
+  query <- glue::glue(
+    "CREATE UNIQUE INDEX {stringr::str_replace_all(paste0(db_table_id, '_scdb_index'), stringr::fixed('.'), '_')} ",
+    "ON {as.character(db_table_id, explicit = TRUE)} (checksum, from_ts)"
+  )
+
+  DBI::dbExecute(conn, query)
 }
