@@ -44,15 +44,19 @@ test_that("lock helpers works in default and test schema", {
         in_place = TRUE,
         copy = TRUE
       )
+      expect_identical(nrow(db_lock_table), 1)
 
       ## Check invalid lock owners are flagged
-      expect_error(
-        lock_table(conn, test_table_id, schema = schema),
-        glue::glue(
-          "Active lock \\(user = some_other_user, PID = 0.5\\) on table {test_table_id} is no longer a valid PID! ",
-          "Process likely crashed before completing."
+      not_on_cran <- interactive() || identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("CI"), "true")
+      if (not_on_cran) { # Detection of currently valid PID does not work on CRAN machines, therefore no error is thrown
+        expect_error(
+          lock_table(conn, test_table_id, schema = schema),
+          glue::glue(
+            "Active lock \\(user = some_other_user, PID = 0.5\\) on table {test_table_id} is no longer a valid PID! ",
+            "Process likely crashed before completing."
+          )
         )
-      )
+      }
 
       # Remove the lock
       unlock_table(conn, db_table = test_table_id, schema = schema, pid = 0.5)
