@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="index.html">SCDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,12 +49,14 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
+  <a class="nav-link" href="articles/SCDB.html">Get started</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/basic-principles.html">Basic principles</a>
     <a class="dropdown-item" href="articles/slowly-changing-dimension.html">Slowly Changing Dimension methodology</a>
   </div>
 </li>
@@ -93,7 +95,7 @@
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
 <p><code>SCDB</code> is a package for easily maintaining and updating data with a slowly changing dimension. More specifically, the package facilitates type-2 history for data warehouses and provide a number of quality-of-life improvements for working with SQL databases within R.</p>
-<p>To better understand what a slowly changing dimension is and how and this packages provides it, see <code><a href="articles/basic-principles.html">vignette("basic-principles")</a></code>.</p>
+<p>To better understand what a slowly changing dimension is and how and this packages provides it, see <code><a href="articles/slowly-changing-dimension.html">vignette("slowly-changing-dimension")</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -104,12 +106,12 @@
 <span></span>
 <span><span class="co"># Alternatively, install the development version from github:</span></span>
 <span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ssi-dk/SCDB"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ssi-dk/SCDB"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>For basic usage examples, see <code><a href="articles/basic-principles.html">vignette("basic-principles")</a></code>.</p>
+<p>For basic usage examples, see <code><a href="articles/SCDB.html">vignette("SCDB")</a></code>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -140,9 +142,10 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Rasmus Skytte Randløv <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-5860-3838" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Rasmus Skytte Randløv <br><small class="roles"> Author, maintainer, reviewer </small> <a href="https://orcid.org/0000-0002-5860-3838" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Marcus Munch Grünewald <br><small class="roles"> Author </small> <a href="https://orcid.org/0009-0006-8090-406X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Statens Serum Institut <br><small class="roles"> Copyright holder, funder </small>  </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
@@ -150,8 +153,8 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://CRAN.R-project.org/package=SCDB" class="external-link"><img src="https://www.r-pkg.org/badges/version/SCDB" alt="CRAN status"></a></li>
-<li><a href="https://github.com/ssi-dk/SCDB/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/ssi-dk/SCDB/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://app.codecov.io/gh/ssi-dk/SCDB?branch=main" class="external-link"><img src="https://codecov.io/gh/ssi-dk/SCDB/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://github.com/ssi-dk/SCDB/actions/workflows/all-workflows.yaml" class="external-link"><img src="https://github.com/ssi-dk/SCDB/actions/workflows/all-workflows.yaml/badge.svg" alt="CI tests"></a></li>
+<li><a href="https://app.codecov.io/gh/ssi-dk/SCDB" class="external-link"><img src="https://codecov.io/gh/ssi-dk/SCDB/branch/main/graph/badge.svg" alt="codecov"></a></li>
 </ul>
 </div>
 

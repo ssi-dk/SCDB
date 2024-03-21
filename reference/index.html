@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">SCDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,13 +18,15 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/SCDB.html">Get started</a>
+</li>
+<li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/basic-principles.html">Basic principles</a>
     <a class="dropdown-item" href="../articles/slowly-changing-dimension.html">Slowly Changing Dimension methodology</a>
   </div>
 </li>
@@ -51,7 +53,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="connect-and-retrieve-data">Connect and retrieve data<a class="anchor" aria-label="anchor" href="#connect-and-retrieve-data"></a></h2>
       
       
 
@@ -63,64 +65,14 @@
 
       <dl><dt>
           
-          <code><a href="Logger.html">Logger</a></code> 
-        </dt>
-        <dd>Logger</dd>
-      </dl><dl><dt>
-          
-          <code><a href="close_connection.html">close_connection()</a></code> 
-        </dt>
-        <dd>Close connection to the DB</dd>
-      </dl><dl><dt>
-          
-          <code><a href="create_logs_if_missing.html">create_logs_if_missing()</a></code> 
-        </dt>
-        <dd>Create a table with the SCDB log structure if it does not exists</dd>
-      </dl><dl><dt>
-          
-          <code><a href="create_table.html">create_table()</a></code> 
-        </dt>
-        <dd>Create a historical table from input data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="db_timestamp.html">db_timestamp()</a></code> 
-        </dt>
-        <dd>Determine the type of timestamps the DB supports</dd>
-      </dl><dl><dt>
-          
-          <code><a href="digest_to_checksum.html">digest_to_checksum()</a></code> 
-        </dt>
-        <dd>Computes an MD5 checksum from columns</dd>
-      </dl><dl><dt>
-          
-          <code><a href="filter_keys.html">filter_keys()</a></code> 
-        </dt>
-        <dd>Filters .data according to all records in the filter</dd>
-      </dl><dl><dt>
-          
           <code><a href="get_connection.html">get_connection()</a></code> 
         </dt>
         <dd>Opens connection to the database</dd>
       </dl><dl><dt>
           
-          <code><a href="get_schema.html">get_schema()</a></code> 
+          <code><a href="close_connection.html">close_connection()</a></code> 
         </dt>
-        <dd>Get the current schema of a database-related objects</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_table.html">get_table()</a></code> 
-        </dt>
-        <dd>Gets a named table from a given schema</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_tables.html">get_tables()</a></code> 
-        </dt>
-        <dd>Gets the available tables</dd>
-      </dl><dl><dt>
-          
-          <code><a href="grapes-notin-grapes.html">`%notin%`</a></code> 
-        </dt>
-        <dd>not-in operator</dd>
+        <dd>Close connection to the database</dd>
       </dl><dl><dt>
           
           <code><a href="id.html">id()</a></code> 
@@ -128,35 +80,19 @@
         <dd>Convenience function for DBI::Id</dd>
       </dl><dl><dt>
           
-          <code><a href="interlace_sql.html">interlace_sql()</a></code> 
+          <code><a href="get_tables.html">get_tables()</a></code> 
         </dt>
-        <dd>Combine any number of SQL queries, where each has their own time axis of
-validity (valid_from and valid_until)</dd>
+        <dd>List the available tables on the connection</dd>
       </dl><dl><dt>
           
-          <code><a href="is.historical.html">is.historical()</a></code> 
+          <code><a href="get_table.html">get_table()</a></code> 
         </dt>
-        <dd>Checks if table contains historical data</dd>
+        <dd>Retrieves a named table from a given schema on the connection</dd>
       </dl><dl><dt>
           
-          <code><a href="joins.html">inner_join.tbl_sql()</a></code> <code><a href="joins.html">left_join.tbl_sql()</a></code> <code><a href="joins.html">right_join.tbl_sql()</a></code> <code><a href="joins.html">full_join.tbl_sql()</a></code> <code><a href="joins.html">semi_join.tbl_sql()</a></code> <code><a href="joins.html">anti_join.tbl_sql()</a></code> 
+          <code><a href="get_schema.html">get_catalog()</a></code>  <code><a href="get_schema.html">get_schema()</a></code>   
         </dt>
-        <dd>SQL Joins</dd>
-      </dl><dl><dt>
-          
-          <code><a href="nrow.html">nrow()</a></code> 
-        </dt>
-        <dd>nrow() but also works on remote tables</dd>
-      </dl><dl><dt>
-          
-          <code><a href="schema_exists.html">schema_exists()</a></code> 
-        </dt>
-        <dd>Test if a schema exists in given connection</dd>
-      </dl><dl><dt>
-          
-          <code><a href="slice_time.html">slice_time()</a></code> 
-        </dt>
-        <dd>Slices a data object based on time / date</dd>
+        <dd>Get the current schema/catalog of a database-related objects</dd>
       </dl><dl><dt>
           
           <code><a href="table_exists.html">table_exists()</a></code> 
@@ -164,16 +100,141 @@ validity (valid_from and valid_until)</dd>
         <dd>Test if a table exists in database</dd>
       </dl><dl><dt>
           
-          <code><a href="unite.tbl_dbi.html">unite.tbl_dbi()</a></code> 
+          <code><a href="schema_exists.html">schema_exists()</a></code> 
         </dt>
-        <dd>tidyr::unite for tbl_dbi</dd>
+        <dd>Test if a schema exists in given connection</dd>
+      </dl></div><div class="section level2">
+      <h2 id="create-or-manage-tables">Create or manage tables<a class="anchor" aria-label="anchor" href="#create-or-manage-tables"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="create_table.html">create_table()</a></code> 
+        </dt>
+        <dd>Create a historical table from input data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="create_logs_if_missing.html">create_logs_if_missing()</a></code> 
+        </dt>
+        <dd>Create a table with the SCDB log structure if it does not exists</dd>
       </dl><dl><dt>
           
           <code><a href="update_snapshot.html">update_snapshot()</a></code> 
         </dt>
         <dd>Update a historical table</dd>
+      </dl><dl><dt>
+          
+          <code><a href="filter_keys.html">filter_keys()</a></code> 
+        </dt>
+        <dd>Filters .data according to all records in the filter</dd>
+      </dl><dl><dt>
+          
+          <code><a href="Logger.html">Logger()</a></code> 
+        </dt>
+        <dd>Logger: Complete logging to console, file and database</dd>
+      </dl><dl><dt>
+          
+          <code><a href="LoggerNull.html">LoggerNull()</a></code> 
+        </dt>
+        <dd>LoggerNull: The no-logging Logger</dd>
+      </dl></div><div class="section level2">
+      <h2 id="manipulate-tables">Manipulate tables<a class="anchor" aria-label="anchor" href="#manipulate-tables"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="slice_time.html">slice_time()</a></code> 
+        </dt>
+        <dd>Slices a data object based on time / date</dd>
+      </dl><dl><dt>
+          
+          <code><a href="joins.html">inner_join(<i>&lt;tbl_sql&gt;</i>)</a></code> <code><a href="joins.html">left_join(<i>&lt;tbl_sql&gt;</i>)</a></code> <code><a href="joins.html">right_join(<i>&lt;tbl_sql&gt;</i>)</a></code> <code><a href="joins.html">full_join(<i>&lt;tbl_sql&gt;</i>)</a></code> <code><a href="joins.html">semi_join(<i>&lt;tbl_sql&gt;</i>)</a></code> <code><a href="joins.html">anti_join(<i>&lt;tbl_sql&gt;</i>)</a></code> 
+        </dt>
+        <dd>SQL Joins</dd>
+      </dl><dl><dt>
+          
+          <code><a href="unite.tbl_dbi.html">unite.tbl_dbi()</a></code> 
+        </dt>
+        <dd>tidyr::unite for tbl_dbi</dd>
+      </dl><dl><dt>
+          
+          <code><a href="interlace.html">interlace()</a></code> <code><a href="interlace.html">interlace_sql()</a></code> 
+        </dt>
+        <dd>Combine any number of tables, where each has their own time axis of validity</dd>
+      </dl></div><div class="section level2">
+      <h2 id="query-table-information">Query table information<a class="anchor" aria-label="anchor" href="#query-table-information"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="is.historical.html">is.historical()</a></code> 
+        </dt>
+        <dd>Checks if table contains historical data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="nrow.html">nrow()</a></code> 
+        </dt>
+        <dd>nrow() but also works on remote tables</dd>
+      </dl></div><div class="section level2">
+      <h2 id="developer-functions">Developer functions<a class="anchor" aria-label="anchor" href="#developer-functions"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="db_locks.html">lock_table()</a></code> <code><a href="db_locks.html">unlock_table()</a></code> 
+        </dt>
+        <dd>Sets, queries and removes locks for database tables</dd>
+      </dl><dl><dt>
+          
+          <code><a href="db_timestamp.html">db_timestamp()</a></code> 
+        </dt>
+        <dd>Determine the type of timestamps the database supports</dd>
+      </dl><dl><dt>
+          
+          <code><a href="defer_db_cleanup.html">defer_db_cleanup()</a></code> 
+        </dt>
+        <dd>Delete table at function exit</dd>
+      </dl><dl><dt>
+          
+          <code><a href="digest_to_checksum.html">digest_to_checksum()</a></code> 
+        </dt>
+        <dd>Computes an checksum from columns</dd>
+      </dl><dl><dt>
+          
+          <code><a href="unique_table_name.html">unique_table_name()</a></code> 
+        </dt>
+        <dd>Create a name for a temporary table</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

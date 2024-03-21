@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">SCDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,12 +19,14 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/SCDB.html">Get started</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/basic-principles.html">Basic principles</a>
     <a class="dropdown-item" href="../articles/slowly-changing-dimension.html">Slowly Changing Dimension methodology</a>
   </div>
 </li>
@@ -52,18 +54,107 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.0" id="scdb-040">SCDB 0.4.0<a class="anchor" aria-label="anchor" href="#scdb-040"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-4-0">BREAKING CHANGES:<a class="anchor" aria-label="anchor" href="#breaking-changes-0-4-0"></a></h3>
+<ul><li>
+<p>Table identification is now more specific (<a href="https://github.com/ssi-dk/SCDB/issues/93" class="external-link">#93</a>).</p>
+<p>Most SCDB functions allow for tables to be specified by a character representation of “[catalog].schema.table”.</p>
+<p>Before, if no schema was implied in this context, SCDB would attempt to match the table among both permanent and temporary tables.</p>
+<p>Now, it will always assume that a lack of schema means the default schema should be used. This is also the case if <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">DBI::Id()</a></code> is used without a schema specification.</p>
+</li>
+<li>
+<p>The <code>show_temporary</code> argument of <code><a href="../reference/get_tables.html">get_tables()</a></code> is now a simple logical (<a href="https://github.com/ssi-dk/SCDB/issues/93" class="external-link">#93</a>).</p>
+<p>In addition, schema is always returned in the list of tables (no longer NA for default schema).</p>
+</li>
+<li>
+<p>Tables created with <code><a href="../reference/create_table.html">create_table()</a></code> will now be temporary or permanent dependent on the default value of <code><a href="https://dbi.r-dbi.org/reference/dbCreateTable.html" class="external-link">DBI::dbCreateTable()</a></code> (<a href="https://github.com/ssi-dk/SCDB/issues/93" class="external-link">#93</a>).</p>
+<p>If you wish to overwrite this, use <code>...</code> arguments which are passed to <code><a href="https://dbi.r-dbi.org/reference/dbCreateTable.html" class="external-link">DBI::dbCreateTable()</a></code>.</p>
+</li>
+<li><p>The <code>%notin%</code> operator has been removed from the package (<a href="https://github.com/ssi-dk/SCDB/issues/96" class="external-link">#96</a>).</p></li>
+<li><p>The <code>db_table_id</code> argument in <code><a href="../reference/create_table.html">create_table()</a></code>, <code><a href="../reference/get_table.html">get_table()</a></code>, <code><a href="../reference/table_exists.html">table_exists()</a></code> and <code><a href="../reference/id.html">id()</a></code> is renamed to <code>db_table</code> (<a href="https://github.com/ssi-dk/SCDB/issues/115" class="external-link">#115</a>). Any object coercible by <code><a href="../reference/id.html">id()</a></code> can now be passed to these functions.</p></li>
+<li><p>The order of arguments in <code><a href="../reference/create_logs_if_missing.html">create_logs_if_missing()</a></code> has been swapped to match the rest of the package (<a href="https://github.com/ssi-dk/SCDB/issues/96" class="external-link">#96</a>). The <code>conn</code> argument is now before the <code>log_table</code> argument.</p></li>
+<li>
+<p>The arguments of <code>Logger</code> has been updated (<a href="https://github.com/ssi-dk/SCDB/issues/98" class="external-link">#98</a>):</p>
+<ul><li>
+<p><code>db_tablestring</code> is replaced with the <code>db_table</code> argument.</p>
+<p>This argument takes any input coercible by <code><a href="../reference/id.html">id()</a></code> instead of only allowing a character string.</p>
+</li>
+<li><p><code>ts</code> is replaced with the <code>timestamp</code> argument to align with <code><a href="../reference/update_snapshot.html">update_snapshot()</a></code>.</p></li>
+</ul></li>
+<li><p>The order of input arguments to <code>Logger</code> is changed (<a href="https://github.com/ssi-dk/SCDB/issues/98" class="external-link">#98</a>).</p></li>
+<li><p>The <code><a href="../reference/interlace.html">interlace_sql()</a></code> function is deprecated in favor of the S3 generic <code><a href="../reference/interlace.html">interlace()</a></code> (<a href="https://github.com/ssi-dk/SCDB/issues/113" class="external-link">#113</a>).</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-0-4-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-4-0"></a></h3>
+<ul><li><p>Added support for DuckDB (<a href="https://github.com/ssi-dk/SCDB/issues/121" class="external-link">#121</a>).</p></li>
+<li><p>The S3 method <code>as.character.Id()</code> is added which converts <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">DBI::Id()</a></code> to <code>character</code> (<a href="https://github.com/ssi-dk/SCDB/issues/93" class="external-link">#93</a>).</p></li>
+<li><p>A new <code><a href="../reference/id.html">id.data.frame()</a></code> which converts <code>data.frame</code> to <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">DBI::Id()</a></code> (<a href="https://github.com/ssi-dk/SCDB/issues/108" class="external-link">#108</a>). Useful in combination with <code>get_tables(conn, pattern)</code>.</p></li>
+<li><p>A new <code><a href="../reference/get_schema.html">get_catalog()</a></code> function is added to give more specific table identification (<a href="https://github.com/ssi-dk/SCDB/issues/99" class="external-link">#99</a>).</p></li>
+<li>
+<p>A new clean up function, <code><a href="../reference/defer_db_cleanup.html">defer_db_cleanup()</a></code>, is added (<a href="https://github.com/ssi-dk/SCDB/issues/89" class="external-link">#89</a>).</p>
+<p>By passing a <code>tbl_sql</code> object to this function, the corresponding table will be deleted once the parent function exits.</p>
+</li>
+<li><p>A new function, <code><a href="../reference/unique_table_name.html">unique_table_name()</a></code>, to generate unique table names is added (<a href="https://github.com/ssi-dk/SCDB/issues/89" class="external-link">#89</a>). This function is heavily inspired by the unexported <code>dbplyr:::unique_table_name()</code>.</p></li>
+<li>
+<p>A logger is introduced <code>LoggerNull</code> (<a href="https://github.com/ssi-dk/SCDB/issues/98" class="external-link">#98</a>):</p>
+<ul><li><p><code>Logger</code> facilitates logging to file/console and logging to database.</p></li>
+<li><p><code>LoggerNull</code> is “no-logging” logger that can be used to suppress all logging.</p></li>
+</ul></li>
+<li>
+<p>Added a set of helper functions to prevent race conditions when writing to data bases (<a href="https://github.com/ssi-dk/SCDB/issues/104" class="external-link">#104</a>).</p>
+<p>See <code><a href="../reference/db_locks.html">lock_table()</a></code> and <code><a href="../reference/db_locks.html">unlock_table()</a></code>.</p>
+</li>
+</ul></div>
+<div class="section level3">
+<h3 id="improvements-and-fixes-0-4-0">Improvements and Fixes<a class="anchor" aria-label="anchor" href="#improvements-and-fixes-0-4-0"></a></h3>
+<ul><li>
+<p>Improvements for <code><a href="../reference/create_table.html">create_table()</a></code> (<a href="https://github.com/ssi-dk/SCDB/issues/93" class="external-link">#93</a>):</p>
+<ul><li><p>now writes the table if a remote connection is given. Before, it would only create the table with corresponding columns.</p></li>
+<li><p>can now create temporary tables for Microsoft SQL Server.</p></li>
+</ul></li>
+<li>
+<p>Improved checks on <code><a href="../reference/get_connection.html">get_connection()</a></code> (<a href="https://github.com/ssi-dk/SCDB/issues/83" class="external-link">#83</a>):</p>
+<ul><li><p>If given, <code>host</code> does not need to look like an IP address (e.g. “localhost” is not unrealistic).</p></li>
+<li><p>A <code>character</code> input for <code>port</code> is allowed if it is a string of digits.</p></li>
+<li><p>Now checks if <code>timezone</code> and <code>timezone_out</code> is an IANA time zone.</p></li>
+</ul></li>
+<li><p><code><a href="../reference/digest_to_checksum.html">digest_to_checksum()</a></code> has improved performance on Microsoft SQL Server by use of the built-in <code>HashBytes</code> function (<a href="https://github.com/ssi-dk/SCDB/issues/97" class="external-link">#97</a>).</p></li>
+<li><p><code><a href="../reference/table_exists.html">table_exists()</a></code> now correctly gives ambiguity warning on Microsoft SQL Server and PostgreSQL backends (<a href="https://github.com/ssi-dk/SCDB/issues/80" class="external-link">#80</a>).</p></li>
+<li><p><code><a href="../reference/get_tables.html">get_tables()</a></code> now supports temporary tables for Microsoft SQL Server (<a href="https://github.com/ssi-dk/SCDB/issues/93" class="external-link">#93</a>).</p></li>
+<li>
+<p><code><a href="../reference/get_schema.html">get_schema()</a></code> has been updated (<a href="https://github.com/ssi-dk/SCDB/issues/107" class="external-link">#107</a>):</p>
+<ul><li><p>It will now always return a schema (either directly from the object or inferred by <code><a href="../reference/id.html">id()</a></code>).</p></li>
+<li><p>A <code>temporary</code> argument is added to get the temporary schemas from <code>DBIConnections</code>.</p></li>
+</ul></li>
+<li><p><code><a href="../reference/id.html">id()</a></code> now includes information of catalog in more cases (<a href="https://github.com/ssi-dk/SCDB/issues/99" class="external-link">#99</a>, <a href="https://github.com/ssi-dk/SCDB/issues/107" class="external-link">#107</a>).</p></li>
+<li><p>Fixed dplyr joins failing if <code>testthat</code> is not installed (<a href="https://github.com/ssi-dk/SCDB/issues/90" class="external-link">#90</a>).</p></li>
+<li><p>The footprint of <code><a href="../reference/update_snapshot.html">update_snapshot()</a></code> is reduced by cleaning up intermediate tables with <code><a href="../reference/defer_db_cleanup.html">defer_db_cleanup()</a></code> (<a href="https://github.com/ssi-dk/SCDB/issues/89" class="external-link">#89</a>)</p></li>
+<li><p><code><a href="../reference/update_snapshot.html">update_snapshot()</a></code> now attempts to get a lock on the table being updated before updating (<a href="https://github.com/ssi-dk/SCDB/issues/104" class="external-link">#104</a>).</p></li>
+<li><p><code>Logger$log_info()</code> now uses <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code> instead of <code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code> to write to console (<a href="https://github.com/ssi-dk/SCDB/issues/98" class="external-link">#98</a>). The message written is now also returned invisibly.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-0-4-0">Testing<a class="anchor" aria-label="anchor" href="#testing-0-4-0"></a></h3>
+<ul><li><p>Added missing tests for <code><a href="../reference/create_logs_if_missing.html">create_logs_if_missing()</a></code> (<a href="https://github.com/ssi-dk/SCDB/issues/93" class="external-link">#93</a>).</p></li>
+<li><p>Added missing tests for <code><a href="../reference/get_schema.html">get_schema()</a></code> (<a href="https://github.com/ssi-dk/SCDB/issues/99" class="external-link">#99</a>).</p></li>
+<li><p>Added missing tests for <code><a href="../reference/get_schema.html">get_catalog()</a></code> (<a href="https://github.com/ssi-dk/SCDB/issues/107" class="external-link">#107</a>).</p></li>
+<li><p>Improved tests for <code><a href="../reference/get_tables.html">get_tables()</a></code>, <code><a href="../reference/table_exists.html">table_exists()</a></code>, and <code><a href="../reference/create_table.html">create_table()</a></code> (<a href="https://github.com/ssi-dk/SCDB/issues/93" class="external-link">#93</a>).</p></li>
+<li><p>Improved tests for <code>Logger</code> (<a href="https://github.com/ssi-dk/SCDB/issues/98" class="external-link">#98</a>).</p></li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3" id="scdb-03">SCDB 0.3<a class="anchor" aria-label="anchor" href="#scdb-03"></a></h2><p class="text-muted">CRAN release: 2024-01-13</p>
 <ul><li>Added support for Microsoft SQL Server using ODBC (<a href="https://github.com/ssi-dk/SCDB/issues/77" class="external-link">#77</a>).</li>
 </ul><div class="section level3">
 <h3 id="minor-improvements-and-fixes-0-3">Minor Improvements and Fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-fixes-0-3"></a></h3>
 <ul><li><p>Implementation of <code>*_join</code>s improved, now extending <code>dplyr::*_join</code>s rather than masking them (<a href="https://github.com/ssi-dk/SCDB/issues/77" class="external-link">#77</a>).</p></li>
 <li>
-<p>Added S3 method for <code>id.tbl_dbi</code>, returning a <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">DBI::Id()</a></code> instance matching the table (<a href="https://github.com/ssi-dk/SCDB/issues/72" class="external-link">#72</a>).</p>
-<ul><li>Calling <code>id</code> on a <code>tbl_dbi</code> thus allows to retrieve a <code>schema</code> even when not initially given.</li>
+<p>Added S3 method for <code>id.tbl_dbi()</code>, returning a <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">DBI::Id()</a></code> instance matching the table (<a href="https://github.com/ssi-dk/SCDB/issues/72" class="external-link">#72</a>).</p>
+<ul><li>Calling <code><a href="../reference/id.html">id()</a></code> on a <code>tbl_dbi</code> thus allows to retrieve a <code>schema</code> even when not initially given.</li>
 </ul></li>
 <li><p>Fixed <code><a href="../reference/update_snapshot.html">update_snapshot()</a></code> not working with a <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">DBI::Id()</a></code> instance as <code>db_table</code> argument (<a href="https://github.com/ssi-dk/SCDB/issues/72" class="external-link">#72</a>).</p></li>
-<li><p>Suppressed recurring messages from dbplyr &gt;= 2.4.0 about table names containing <code>.</code>.</p></li>
-<li><p>Added <code>show_temp</code> option to <code><a href="../reference/get_tables.html">get_tables()</a></code> to allow retrieving temporary tables.</p></li>
+<li><p>Suppressed recurring messages from dbplyr &gt;= 2.4.0 about table names containing <code>.</code> (<a href="https://github.com/ssi-dk/SCDB/issues/72" class="external-link">#72</a>).</p></li>
+<li><p>Added <code>show_temp</code> option to <code><a href="../reference/get_tables.html">get_tables()</a></code> to allow retrieving temporary tables (<a href="https://github.com/ssi-dk/SCDB/issues/72" class="external-link">#72</a>).</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="other-news-0-3">Other news<a class="anchor" aria-label="anchor" href="#other-news-0-3"></a></h3>
@@ -74,41 +165,40 @@
 <h2 class="pkg-version" data-toc-text="0.2.1" id="scdb-021">SCDB 0.2.1<a class="anchor" aria-label="anchor" href="#scdb-021"></a></h2><p class="text-muted">CRAN release: 2023-11-30</p>
 <div class="section level3">
 <h3 id="minor-improvements-and-fixes-0-2-1">Minor Improvements and Fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-fixes-0-2-1"></a></h3>
-<ul><li><p>SQLite connections now support schemata similar to other backends (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/67" class="external-link">#67</a>).</p></li>
-<li><p>The package logo has been slightly altered to have a readable clock (<a href="https://github.com/RasmusSkytte" class="external-link">@RasmusSkytte</a>, <a href="https://github.com/ssi-dk/SCDB/issues/49" class="external-link">#49</a>).</p></li>
-<li><p>Added a vignette describing the concept of a slowly changing dimension using examples (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/53" class="external-link">#53</a>).</p></li>
-<li><p>Added a <code>Logger$finalize</code> method, which removes the <code>log_file</code> in the DB when not writing to a file (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/66" class="external-link">#66</a>).</p></li>
+<ul><li><p>SQLite connections now support schemata similar to other backends (<a href="https://github.com/ssi-dk/SCDB/issues/67" class="external-link">#67</a>).</p></li>
+<li><p>The package logo has been slightly altered to have a readable clock (<a href="https://github.com/ssi-dk/SCDB/issues/49" class="external-link">#49</a>).</p></li>
+<li><p>Added a vignette describing the concept of a slowly changing dimension using examples (<a href="https://github.com/ssi-dk/SCDB/issues/53" class="external-link">#53</a>).</p></li>
+<li><p>Added a <code>Logger$finalize</code> method, which removes the <code>log_file</code> in the database when not writing to a file (<a href="https://github.com/ssi-dk/SCDB/issues/66" class="external-link">#66</a>).</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="other-news-0-2-1">Other news<a class="anchor" aria-label="anchor" href="#other-news-0-2-1"></a></h3>
-<ul><li>Maintainer changed to Marcus Munch Grünewald <a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a> (<a href="https://github.com/RasmusSkytte" class="external-link">@RasmusSkytte</a>, <a href="https://github.com/ssi-dk/SCDB/issues/59" class="external-link">#59</a>)</li>
+<ul><li>Maintainer changed to Marcus Munch Grünewald (<a href="https://github.com/ssi-dk/SCDB/issues/59" class="external-link">#59</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2" id="scdb-02">SCDB 0.2<a class="anchor" aria-label="anchor" href="#scdb-02"></a></h2><p class="text-muted">CRAN release: 2023-09-26</p>
 <div class="section level3">
 <h3 id="breaking-changes-0-2">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-2"></a></h3>
-<ul><li><p><code>update_snapshot</code> now take a <code>Logger</code> object through the <code>logger</code> argument instead of <code>log_path</code> and <code>log_table_id</code> arguments (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/24" class="external-link">#24</a>)</p></li>
-<li><p><code>Logger\$log_filename</code> has been changed to <code>Logger\$log_basename</code> to reduce ambiguity</p></li>
+<ul><li><p><code><a href="../reference/update_snapshot.html">update_snapshot()</a></code> now take a <code>Logger</code> object through the <code>logger</code> argument instead of <code>log_path</code> and <code>log_table_id</code> arguments (<a href="https://github.com/ssi-dk/SCDB/issues/24" class="external-link">#24</a>).</p></li>
+<li><p><code>Logger\$log_filename</code> has been changed to <code>Logger\$log_basename</code> to reduce ambiguity.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-0-2">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2"></a></h3>
-<ul><li><p>Package functions are now also tested with <code><a href="https://rpostgres.r-dbi.org/reference/Postgres.html" class="external-link">RPostgres::Postgres()</a></code>, which is therefore now <em>officially</em> supported (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/31" class="external-link">#31</a>)</p></li>
-<li><p><code>get_connection</code> shows a warning if an unsupported backend is used (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/26" class="external-link">#26</a>)</p></li>
+<ul><li><p>Package functions are now also tested with <code><a href="https://rpostgres.r-dbi.org/reference/Postgres.html" class="external-link">RPostgres::Postgres()</a></code>, which is therefore now <em>officially</em> supported (<a href="https://github.com/ssi-dk/SCDB/issues/31" class="external-link">#31</a>).</p></li>
+<li><p><code><a href="../reference/get_connection.html">get_connection()</a></code> shows a warning if an unsupported backend is used (<a href="https://github.com/ssi-dk/SCDB/issues/26" class="external-link">#26</a>).</p></li>
 <li>
-<p>Increased flexibility for the <code>Logger</code> object (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/21" class="external-link">#21</a> <a href="https://github.com/ssi-dk/SCDB/issues/24" class="external-link">#24</a>)</p>
-<ul><li>A <code>Logger</code> instance may now be created with no arguments</li>
-<li>Suppress console output with <code>output_to_console</code> (<code>TRUE</code> by default)</li>
-<li>If no <code>log_path</code> is set, <code>Logger</code> does not fail before trying to write to a file</li>
-<li>
-<code>Logger\$log_realpath</code> gives the full path to log file being written</li>
+<p>Increased flexibility for the <code>Logger</code> object (<a href="https://github.com/ssi-dk/SCDB/issues/21" class="external-link">#21</a> <a href="https://github.com/ssi-dk/SCDB/issues/24" class="external-link">#24</a>):</p>
+<ul><li><p>A <code>Logger</code> instance may now be created with no arguments.</p></li>
+<li><p>Suppress console output with <code>output_to_console</code> (<code>TRUE</code> by default).</p></li>
+<li><p>If no <code>log_path</code> is set, <code>Logger</code> does not fail before trying to write to a file.</p></li>
+<li><p><code>Logger\$log_realpath</code> gives the full path to log file being written.</p></li>
 </ul></li>
 </ul></div>
 <div class="section level3">
 <h3 id="minor-improvements-and-fixes-0-2">Minor improvements and fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-fixes-0-2"></a></h3>
-<ul><li><p><code>schema_exists</code> correctly detects a schema with no tables (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/30" class="external-link">#30</a>)</p></li>
-<li><p><code>db_timestamps</code> now newer calls <code>translate_sql</code> with <code>con = NULL</code> (<a href="https://github.com/marcusmunch" class="external-link">@marcusmunch</a>, <a href="https://github.com/ssi-dk/SCDB/issues/37" class="external-link">#37</a>)</p></li>
-<li><p>Package description has been updated to not use a footnote on CRAN</p></li>
+<ul><li><p><code>schema_exists</code> correctly detects a schema with no tables (<a href="https://github.com/ssi-dk/SCDB/issues/30" class="external-link">#30</a>).</p></li>
+<li><p><code>db_timestamps</code> now newer calls <code>translate_sql</code> with <code>con = NULL</code> (<a href="https://github.com/ssi-dk/SCDB/issues/37" class="external-link">#37</a>).</p></li>
+<li><p>Package description has been updated to not use a footnote on CRAN.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="known-issues-0-2">Known issues<a class="anchor" aria-label="anchor" href="#known-issues-0-2"></a></h3>
@@ -119,64 +209,71 @@
 <h2 class="pkg-version" data-toc-text="0.1" id="scdb-01">SCDB 0.1<a class="anchor" aria-label="anchor" href="#scdb-01"></a></h2><p class="text-muted">CRAN release: 2023-08-28</p>
 <div class="section level3">
 <h3 id="features-0-1">Features<a class="anchor" aria-label="anchor" href="#features-0-1"></a></h3>
-<ul><li>Functions to handle DB connections
 <ul><li>
-<code>get_connection</code>, <code>close_connection</code>, <code>id</code>
+<p>Functions to handle database connections:</p>
+<ul><li>
+<code><a href="../reference/get_connection.html">get_connection()</a></code>, <code><a href="../reference/close_connection.html">close_connection()</a></code>, <code><a href="../reference/id.html">id()</a></code>
 </li>
 </ul></li>
-<li>Functions to interface with DB
-<ul><li>
-<code>get_tables</code>, <code>table_exists</code>, <code>get_schema</code>, <code>schema_exists</code>
-</li>
-</ul></li>
-<li>Functions to create “historical” tables and logs
-<ul><li>
-<code>create_table</code>, <code>create_logs_if_missing</code>
-</li>
-</ul></li>
-<li>Function to maintain “historical” tables
-<ul><li><code>update_snapshot</code></li>
-</ul></li>
-<li>Functions to interface with “historical” tables
-<ul><li>
-<code>get_table</code>, <code>slice_time</code>, <code>is.historical</code>
-</li>
-</ul></li>
-<li>Functions to facilitate faster joins with NAs on SQL backends
-<ul><li>
-<code>full_join</code>, <code>inner_join</code>, <code>left_join</code>, <code>right_join</code>
-</li>
-</ul></li>
-<li>Functions to manipulate tables on SQL backends
-<ul><li>
-<code>filter_keys</code>, <code>unite.tbl_dbi</code>, <code>interlace_sql</code>
-</li>
-</ul></li>
-<li>A logging object to facilitate logging
-<ul><li><code>Logger</code></li>
-</ul></li>
-<li>Function to generate checksums
-<ul><li><code>digest_to_checksum</code></li>
-</ul></li>
-<li>Function to write timestamps to tables on SQL backends
-<ul><li><code>db_timestamp</code></li>
-</ul></li>
-<li>Helper functions
-<ul><li>
-<code>nrow</code> - DB compliant <code>nrow</code>
-</li>
 <li>
-<code>%notin%</code> - negated <code>%in%</code>
+<p>Functions to interface with database:</p>
+<ul><li>
+<code><a href="../reference/get_tables.html">get_tables()</a></code>, <code><a href="../reference/table_exists.html">table_exists()</a></code>, <code><a href="../reference/get_schema.html">get_schema()</a></code>, <code><a href="../reference/schema_exists.html">schema_exists()</a></code>
 </li>
+</ul></li>
+<li>
+<p>Functions to create “historical” tables and logs:</p>
+<ul><li>
+<code><a href="../reference/create_table.html">create_table()</a></code>, <code><a href="../reference/create_logs_if_missing.html">create_logs_if_missing()</a></code>
+</li>
+</ul></li>
+<li>
+<p>Function to maintain “historical” tables:</p>
+<ul><li><code><a href="../reference/update_snapshot.html">update_snapshot()</a></code></li>
+</ul></li>
+<li>
+<p>Functions to interface with “historical” tables:</p>
+<ul><li>
+<code><a href="../reference/get_table.html">get_table()</a></code>, <code><a href="../reference/slice_time.html">slice_time()</a></code>, <code><a href="../reference/is.historical.html">is.historical()</a></code>
+</li>
+</ul></li>
+<li>
+<p>Functions to facilitate faster joins with NAs on SQL backends:</p>
+<ul><li>
+<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">full_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">right_join()</a></code>
+</li>
+</ul></li>
+<li>
+<p>Functions to manipulate tables on SQL backends:</p>
+<ul><li>
+<code><a href="../reference/filter_keys.html">filter_keys()</a></code>, <code><a href="../reference/unite.tbl_dbi.html">unite.tbl_dbi()</a></code>, <code><a href="../reference/interlace.html">interlace_sql()</a></code>
+</li>
+</ul></li>
+<li>
+<p>A logging object to facilitate logging:</p>
+<ul><li><code><a href="../reference/Logger.html">Logger()</a></code></li>
+</ul></li>
+<li>
+<p>Function to generate checksums:</p>
+<ul><li><code><a href="../reference/digest_to_checksum.html">digest_to_checksum()</a></code></li>
+</ul></li>
+<li>
+<p>Function to write timestamps to tables on SQL backends:</p>
+<ul><li><code><a href="../reference/db_timestamp.html">db_timestamp()</a></code></li>
+</ul></li>
+<li>
+<p>Helper functions:</p>
+<ul><li><p><code><a href="../reference/nrow.html">nrow()</a></code> - database compliant <code><a href="../reference/nrow.html">nrow()</a></code></p></li>
+<li><p><code>%notin%</code> - negated <code>%in%</code></p></li>
 </ul></li>
 </ul></div>
 <div class="section level3">
 <h3 id="testing-0-1">Testing<a class="anchor" aria-label="anchor" href="#testing-0-1"></a></h3>
-<ul><li>Most package functions are tested here</li>
+<ul><li>Most package functions are tested here.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-0-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-1"></a></h3>
-<ul><li>The functions are fully documented</li>
+<ul><li>The functions are fully documented.</li>
 </ul></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

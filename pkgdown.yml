@@ -1,10 +1,10 @@
-pandoc: 2.19.2
+pandoc: 3.1.11
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
-  basic-principles: basic-principles.html
+  SCDB: SCDB.html
   slowly-changing-dimension: slowly-changing-dimension.html
-last_built: 2024-01-15T09:42Z
+last_built: 2024-03-21T09:45Z
 urls:
   reference: https://ssi-dk.github.io/SCDB/reference
   article: https://ssi-dk.github.io/SCDB/articles

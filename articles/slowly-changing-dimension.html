@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">SCDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,12 +43,14 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
+  <a class="nav-link" href="../articles/SCDB.html">Get started</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/basic-principles.html">Basic principles</a>
     <a class="dropdown-item" href="../articles/slowly-changing-dimension.html">Slowly Changing Dimension methodology</a>
   </div>
 </li>
@@ -88,6 +90,18 @@
 
     
     
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching core tidyverse packages</span> ──────────────────────── tidyverse 2.0.0 ──</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr    </span> 1.1.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">readr    </span> 2.1.5</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">forcats  </span> 1.0.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">stringr  </span> 1.5.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2  </span> 3.5.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble   </span> 3.2.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">lubridate</span> 1.9.3     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr    </span> 1.3.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr    </span> 1.0.2     </span></span>
+<span><span class="co">#&gt; ── <span style="font-weight: bold;">Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span> masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>    masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Use the conflicted package (<span style="color: #0000BB; font-style: italic;">&lt;http://conflicted.r-lib.org/&gt;</span>) to force all conflicts to become errors</span></span></code></pre></div>
 <p>A slowly changing dimension is a concept in data warehousing which
 refers to data which may change over time, but at an irregular
 schedule.</p>
@@ -96,7 +110,7 @@ schedule.</p>
 </h2>
 <p>For example, consider the following table of forecasts for a number
 of cities:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Current date: 2023-09-28</span></span>
 <span><span class="va">forecasts</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 2</span></span></span>
@@ -114,7 +128,7 @@ Putting it into other words, the table is a <em>snapshot</em><a class="footnote-
 database at a specific point in time&lt;/p&gt;"><sup>1</sup></a> of
 forecasts at the last time of update.</p>
 <p>The following day, the forecasts naturally change:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Current date: 2023-09-29</span></span>
 <span><span class="va">forecasts2</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 2</span></span></span>
@@ -134,7 +148,7 @@ to keep our data organized, we add a column with the date of the
 forecast, aptly named <code>ForecastDate</code>.</p>
 <p>The full table of forecasts for the two days now looks like below,
 and we are slowly building a full history of forecasts:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forecasts_full</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 3</span></span></span>
 <span><span class="co">#&gt;   City        Forecast ForecastDate</span></span>
@@ -151,9 +165,8 @@ and we are slowly building a full history of forecasts:</p>
 often referred to as Type 2 methodology or Type 2 history.</p>
 <p>Our table now provides much more information for the user through
 filtering:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
-<span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Current forecasts</span></span>
 <span><span class="va">forecasts_full</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span><span class="va">ForecastDate</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -191,7 +204,7 @@ the two days.</p>
 table again, now expanding <code>ForecastDate</code> into
 <code>ForecastFrom</code> and <code>ForecastUntil</code>.</p>
 <p>Our table of forecasts now looks like this:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forecasts_scd</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 7 × 4</span></span></span>
 <span><span class="co">#&gt;   City        Forecast ForecastFrom ForecastUntil</span></span>
@@ -228,7 +241,7 @@ up-to-date. This is where managing a slowly changing dimension becomes
 very powerful, compared to full incremental backups.</p>
 <p>One day, Alice Doe meets <a href="https://xkcd.com/327/" class="external-link">Robert
 “Bobby” Tables</a>, and they move in together:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">addresses</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 8</span></span></span>
 <span><span class="co">#&gt;      ID GivenName Surname Address    MovedIn    MovedOut   ValidFrom  ValidUntil</span></span>
@@ -243,13 +256,13 @@ address. This can be seen when comparing the values of
 <code>MovedIn</code> and <code>ValidFrom</code> for row 4.</p>
 <p>When using Type 2 history, this feature is correctly replicated when
 reconstructing historical data:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">slice_timestamp</span> <span class="op">&lt;-</span> <span class="st">"2021-03-02"</span></span>
 <span></span>
 <span><span class="va">addresses</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op">==</span> <span class="fl">1</span>,</span>
-<span>         <span class="va">ValidFrom</span> <span class="op">&lt;</span> <span class="op">!</span><span class="op">!</span><span class="va">slice_timestamp</span> <span class="op">&amp;</span></span>
-<span>           <span class="op">(</span><span class="va">ValidUntil</span> <span class="op">&gt;=</span> <span class="op">!</span><span class="op">!</span><span class="va">slice_timestamp</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ValidUntil</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>         <span class="va">ValidFrom</span> <span class="op">&lt;</span> <span class="op">!</span><span class="op">!</span><span class="va">slice_timestamp</span>,</span>
+<span>         <span class="va">ValidUntil</span> <span class="op">&gt;=</span> <span class="op">!</span><span class="op">!</span><span class="va">slice_timestamp</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ValidUntil</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ValidFrom"</span>, <span class="st">"ValidUntil"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 6</span></span></span>
 <span><span class="co">#&gt;      ID GivenName Surname Address        MovedIn    MovedOut</span></span>
@@ -263,7 +276,7 @@ timelines” is also called bitemporal modeling.</p>
 married, with Alice taking Robert’s surname. It is the same person that
 has lived with Robert, but as of the day of marriage, she has a
 different name:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">addresses2</span>,</span>
 <span>       <span class="va">ID</span> <span class="op">==</span> <span class="fl">1</span>,</span>
 <span>       <span class="va">Address</span> <span class="op">==</span> <span class="st">"Rainbow Road 8"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -276,14 +289,14 @@ different name:</p>
 <p>This is now also reflected in the data; the <code>MovedIn</code> date
 is persistent across the date of the name change, only the
 <code>Surname</code> changes:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">slice_timestamp</span> <span class="op">&lt;-</span> <span class="st">"2022-03-04"</span></span>
 <span></span>
 <span><span class="va">addresses2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Address</span> <span class="op">==</span> <span class="st">"Rainbow Road 8"</span>,</span>
 <span>         <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">MovedOut</span><span class="op">)</span>,</span>
-<span>         <span class="va">ValidFrom</span> <span class="op">&lt;</span> <span class="op">!</span><span class="op">!</span><span class="va">slice_timestamp</span> <span class="op">&amp;</span></span>
-<span>           <span class="op">(</span><span class="va">ValidUntil</span> <span class="op">&gt;=</span> <span class="op">!</span><span class="op">!</span><span class="va">slice_timestamp</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ValidUntil</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>         <span class="va">ValidFrom</span> <span class="op">&lt;</span> <span class="op">!</span><span class="op">!</span><span class="va">slice_timestamp</span>,</span>
+<span>         <span class="va">ValidUntil</span> <span class="op">&gt;=</span> <span class="op">!</span><span class="op">!</span><span class="va">slice_timestamp</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ValidUntil</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ID</span>, <span class="va">GivenName</span>, <span class="va">Surname</span>, <span class="va">MovedIn</span>, <span class="va">MovedOut</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 5</span></span></span>
 <span><span class="co">#&gt;      ID GivenName Surname MovedIn    MovedOut</span></span>
@@ -296,8 +309,8 @@ is persistent across the date of the name change, only the
 <span><span class="va">addresses2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Address</span> <span class="op">==</span> <span class="st">"Rainbow Road 8"</span>,</span>
 <span>         <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">MovedOut</span><span class="op">)</span>,</span>
-<span>         <span class="va">ValidFrom</span> <span class="op">&lt;</span> <span class="op">!</span><span class="op">!</span><span class="va">slice_timestamp</span> <span class="op">&amp;</span></span>
-<span>           <span class="op">(</span><span class="va">ValidUntil</span> <span class="op">&gt;=</span> <span class="op">!</span><span class="op">!</span><span class="va">slice_timestamp</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ValidUntil</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>         <span class="va">ValidFrom</span> <span class="op">&lt;</span> <span class="op">!</span><span class="op">!</span><span class="va">slice_timestamp</span>,</span>
+<span>         <span class="va">ValidUntil</span> <span class="op">&gt;=</span> <span class="op">!</span><span class="op">!</span><span class="va">slice_timestamp</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">ValidUntil</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ID</span>, <span class="va">GivenName</span>, <span class="va">Surname</span>, <span class="va">MovedIn</span>, <span class="va">MovedOut</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 5</span></span></span>
 <span><span class="co">#&gt;      ID GivenName Surname MovedIn    MovedOut</span></span>
@@ -316,7 +329,7 @@ package!</p>
 <div class="section level3 unnumbered">
 <h3 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h3>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-Kimball2013" class="csl-entry">
 Kimball, R., and M. Ross. 2013. <em>The Data Warehouse Toolkit: The
 Definitive Guide to Dimensional Modeling</em>. Wiley.
