@@ -6,21 +6,98 @@ test_that("update_snapshot() can handle first snapshot", {
     expect_false(table_exists(conn, "test.SCDB_tmp1"))
     expect_false(table_exists(conn, "test.SCDB_logs"))
 
-    # Use unmodified mtcars as the initial snapshot (without logging)
+    # Use unmodified mtcars as the initial snapshot
     .data <- mtcars |>
       dplyr::copy_to(conn, df = _, name = unique_table_name())
 
-    update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-01 09:00:00", logger = LoggerNull$new())
+    # Configure the logger for this update
+    db_table <- "test.SCDB_tmp1"
+    timestamp <- "2022-10-01 09:00:00"
+    log_path <- tempdir()
+
+    # Ensure all logs are removed
+    dir(log_path) |>
+      purrr::keep(~ endsWith(., ".log")) |>
+      purrr::walk(~ unlink(file.path(log_path, .)))
+
+    logger <- Logger$new(
+      db_table = db_table,
+      timestamp = timestamp,
+      log_path = log_path,
+      log_table_id = "test.SCDB_logs",
+      log_conn = conn,
+      output_to_console = FALSE
+    )
+
+    # Update
+    update_snapshot(.data, conn, db_table, timestamp, logger = logger)
 
     # Confirm snapshot is transferred correctly
     expect_identical(
-      get_table(conn, "test.SCDB_tmp1") |>
+      get_table(conn, db_table) |>
         dplyr::collect() |>
         dplyr::arrange(wt, qsec),
       .data |>
         dplyr::collect() |>
         dplyr::arrange(wt, qsec)
     )
+
+
+    ### For this test, we also check that the log output is correct ###
+    # Check file log outputs exists
+    log_pattern <- glue::glue("{stringr::str_replace_all(as.Date(timestamp), '-', '_')}.{id(db_table, conn)}.log")
+    log_file <- purrr::keep(dir(log_path), ~ stringr::str_detect(., log_pattern))
+    expect_length(log_file, 1)
+    expect_gt(file.info(file.path(log_path, log_file))$size, 0)
+    expect_identical(nrow(get_table(conn, "test.SCDB_logs")), 1)
+
+    db_logs_with_log_file <- get_table(conn, "test.SCDB_logs") |>
+      dplyr::filter(!is.na(.data$log_file))
+    expect_identical(nrow(db_logs_with_log_file), 1)
+
+    # Check database log output
+    logs <- get_table(conn, "test.SCDB_logs") |> dplyr::collect()
+
+    # The logs should have specified data types
+    types <- c(
+      "date" = "POSIXct",
+      "catalog" = "character",
+      "schema" = "character",
+      "table" = "character",
+      "n_insertions" = "numeric",
+      "n_deactivations" = "numeric",
+      "start_time" = "POSIXct",
+      "end_time" = "POSIXct",
+      "duration" = "character",
+      "success" = "logical",
+      "message" = "character"
+    )
+
+    if (inherits(conn, "SQLiteConnection")) {
+      types <- types |>
+        purrr::map_if(~ identical(., "POSIXct"), "character") |> # SQLite does not support POSIXct
+        purrr::map_if(~ identical(., "logical"), "numeric") |>  # SQLite does not support logical
+        as.character()
+    }
+
+    checkmate::expect_data_frame(logs, nrows = 1, types)
+
+    # Check the content of the log table
+    expect_identical(as.POSIXct(logs$date), as.POSIXct(timestamp))
+
+    db_table_id <- id(db_table, conn)
+    if ("catalog" %in% colnames(logs)) expect_identical(logs$catalog, purrr::pluck(db_table_id, "name", "catalog"))
+    expect_identical(logs$schema, purrr::pluck(db_table_id, "name", "schema"))
+    expect_identical(logs$table, purrr::pluck(db_table_id, "name", "table"))
+
+    expect_identical(logs$n_insertions, 32L)
+    expect_identical(logs$n_deactivations, 0L)
+    expect_identical(as.logical(logs$success), TRUE)
+    expect_identical(logs$message, NA_character_)
+
+
+    # Clean up the logs
+    unlink(logger$log_realpath)
 
     close_connection(conn)
   }
@@ -35,27 +112,22 @@ test_that("update_snapshot() can add a new snapshot", {
       dplyr::mutate(hp = dplyr::if_else(hp > 130, hp - 10, hp)) |>
       dplyr::copy_to(conn, df = _, name = unique_table_name())
 
-    # This is a simple update where 23 rows are replaced with 23 new ones on the given date
+    # Configure the logger for this update
     db_table <- "test.SCDB_tmp1"
     timestamp <- "2022-10-03 09:00:00"
-    log_path <- tempdir()
 
     logger <- Logger$new(
       db_table = db_table,
       timestamp = timestamp,
-      log_path = log_path,
+      log_path = NULL,
       log_table_id = "test.SCDB_logs",
       log_conn = conn,
       output_to_console = FALSE
     )
 
-    # Ensure all logs are removed before starting
-    dir(log_path) |>
-      purrr::keep(~ endsWith(., ".log")) |>
-      purrr::walk(~ unlink(file.path(log_path, .)))
-
 
     # Update
+    # This is a simple update where 15 rows are replaced with 15 new ones on the given date
     update_snapshot(.data, conn, db_table, timestamp, logger = logger)
 
     # Check the snapshot has updated correctly
@@ -88,43 +160,15 @@ test_that("update_snapshot() can add a new snapshot", {
       nrow(mtcars)
     )
 
-    # Check file log outputs exists
-    log_pattern <- glue::glue("{stringr::str_replace_all(as.Date(timestamp), '-', '_')}.{id(db_table, conn)}.log")
-    log_file <- purrr::keep(dir(log_path), ~stringr::str_detect(., log_pattern))
-    expect_length(log_file, 1)
-    expect_gt(file.info(file.path(log_path, log_file))$size, 0)
-    expect_identical(nrow(get_table(conn, "test.SCDB_logs")), 1)
-
-    db_logs_with_log_file <- get_table(conn, "test.SCDB_logs") |>
-      dplyr::filter(!is.na(.data$log_file))
-    expect_identical(nrow(db_logs_with_log_file), 1)
 
     # Check database log output
-    logs <- get_table(conn, "test.SCDB_logs") |> dplyr::collect()
+    logs <- get_table(conn, "test.SCDB_logs") |>
+      dplyr::collect() |>
+      utils::tail(1)
 
-    # The logs should have specified data types
-    types <- c(
-      "date" = "POSIXct",
-      "catalog" = "character",
-      "schema" = "character",
-      "table" = "character",
-      "n_insertions" = "numeric",
-      "n_deactivations" = "numeric",
-      "start_time" = "POSIXct",
-      "end_time" = "POSIXct",
-      "duration" = "character",
-      "success" = "logical",
-      "message" = "character"
-    )
-
-    if (inherits(conn, "SQLiteConnection")) {
-      types <- types |>
-        purrr::map_if(~ identical(., "POSIXct"), "character") |> # SQLite does not support POSIXct
-        purrr::map_if(~ identical(., "logical"), "numneric") |>  # SQLite does not support logical
-        as.character()
-    }
-
-    checkmate::expect_data_frame(logs, nrows = 1, types)
+    expect_identical(logs$n_insertions, 15L)
+    expect_identical(logs$n_deactivations, 15L)
+    expect_identical(as.logical(logs$success), TRUE)
 
     close_connection(conn)
   }
@@ -139,10 +183,25 @@ test_that("update_snapshot() can update a snapshot on an existing date", {
       dplyr::mutate(hp = dplyr::if_else(hp > 100, hp - 10, hp)) |>
       dplyr::copy_to(conn, df = _, name = unique_table_name())
 
-    update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-03 09:00:00", logger = LoggerNull$new())
+    # Configure the logger for this update
+    db_table <- "test.SCDB_tmp1"
+    timestamp <- "2022-10-03 09:00:00"
+
+    logger <- Logger$new(
+      db_table = db_table,
+      timestamp = timestamp,
+      log_path = NULL,
+      log_table_id = "test.SCDB_logs",
+      log_conn = conn,
+      output_to_console = FALSE
+    )
+
+
+    # This is a more complicated update where a further 8 rows are replaced with 8 new ones on the same date as before
+    update_snapshot(.data, conn, db_table, "2022-10-03 09:00:00", logger = logger)
 
     # Even though we insert twice on the same date, we expect the data to be minimal (compacted)
-    target <- dplyr::tbl(conn, id("test.SCDB_tmp1", conn))
+    target <- dplyr::tbl(conn, id(db_table, conn))
     expect_identical(
       slice_time(target, "2022-10-01 09:00:00") |>
         dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
@@ -171,6 +230,15 @@ test_that("update_snapshot() can update a snapshot on an existing date", {
       nrow(mtcars)
     )
 
+
+    # Check database log output
+    logs <- get_table(conn, "test.SCDB_logs") |>
+      dplyr::collect() |>
+      utils::tail(1)
+
+    expect_identical(logs$n_insertions, 8L)
+    expect_identical(logs$n_deactivations, 8L)
+    expect_identical(as.logical(logs$success), TRUE)
 
     close_connection(conn)
   }
