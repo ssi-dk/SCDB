@@ -204,53 +204,63 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   # Determine records to remove and to add to the DB
   # Records will be removed if their checksum no longer exists on the new date
   # Records will be added if their checksum does not exists in the current data
-  to_remove <- db_table |>
-    slice_time(timestamp) |>
-    dplyr::select("checksum") |>
-    dplyr::setdiff(dplyr::select(.data, "checksum")) |>
-    dplyr::inner_join(db_table, by = "checksum") |>
-    dplyr::mutate(until_ts = !!db_timestamp(timestamp, conn)) |>
-    dplyr::compute()
-  defer_db_cleanup(to_remove)
 
-  to_add <- dplyr::setdiff(.data, dplyr::select(db_table, colnames(.data))) |>
-    dplyr::mutate(from_ts  = !!db_timestamp(timestamp, conn),
-                  until_ts = !!db_timestamp(next_timestamp, conn)) |>
-    dplyr::compute()
-  defer_db_cleanup(to_add)
 
-  # Commit changes to DB
-  if (checkmate::test_multi_class(conn, c("SQLiteConnection", "duckdb_connection"))) {
+  # Generate SQL at lower level than tidyverse to get the affected rows without computing.
+  slice_ts <- db_timestamp(timestamp, conn)
 
-    dplyr::rows_update(
-      x = dplyr::tbl(conn, db_table_id),
-      y = to_remove,
-      by = c("checksum", "from_ts"),
-      unmatched = "ignore",
-      in_place = TRUE
-    )
+  currently_valid_checksums <- db_table |>
+    dplyr::select("checksum")
 
-    dplyr::rows_insert(
-      x = dplyr::tbl(conn, db_table_id),
-      y = to_add,
-      by = c("checksum", "from_ts"),
-      conflict = "ignore",
-      in_place = TRUE
-    )
 
-  } else {
+  ## Deactivation
+  checksums_to_deactivate <- dbplyr::sql_render(
+    dplyr::setdiff(currently_valid_checksums, dplyr::select(.data, "checksum"))
+  )
 
-    dplyr::rows_upsert(
-      x = dplyr::tbl(conn, db_table_id),
-      y = dplyr::union_all(to_remove, to_add),
-      by = c("checksum", "from_ts"),
-      in_place = TRUE
-    )
+  sql_deactivate <- dbplyr::sql_query_update_from(
+    con = conn,
+    table = dbplyr::as.sql(db_table_id, con = conn),
+    from = checksums_to_deactivate,
+    by = "checksum",
+    update_values = c("until_ts" = slice_ts)
+  )
 
-  }
+
+  ## Insertion
+  records_to_insert <- dbplyr::sql_render(
+    dplyr::filter(.data, !(.data$checksum %in% !!dplyr::pull(db_table, .data$checksum)))
+  )
+
+  records_to_insert <- dbplyr::build_sql(
+    con = conn,
+    "SELECT *, ", db_timestamp(timestamp, conn), " AS ", dbplyr::ident("from_ts"), ", ",
+    db_timestamp(next_timestamp, conn), " AS ", dbplyr::ident("until_ts"),
+    " FROM ", dbplyr::remote_table(.data),
+    " WHERE ", dbplyr::remote_table(.data), ".", dbplyr::ident("checksum"),
+    " NOT IN (", dbplyr::sql_render(currently_valid_checksums), ")"
+  )
+
+  sql_insert <- dbplyr::sql_query_insert(
+    con = conn,
+    table = dbplyr::as.sql(db_table_id, con = conn),
+    from = records_to_insert,
+    insert_cols = c(colnames(.data), "from_ts", "until_ts"),
+    by = c("checksum", "from_ts"),
+    conflict = "ignore"
+  )
+
+  rs_deactivate <- DBI::dbSendQuery(conn, sql_deactivate)
+  n_deactivations <-DBI::dbGetRowsAffected(rs_deactivate)
+  DBI::dbClearResult(rs_deactivate)
+
+  rs_insert <- DBI::dbSendQuery(conn, sql_insert)
+  n_insertions <-DBI::dbGetRowsAffected(rs_insert)
+  DBI::dbClearResult(rs_insert)
 
   # Write updates to log
-  logger$log_to_db(n_insertions = !!nrow(to_add), n_deactivations = !!nrow(to_remove))
+  logger$log_to_db(n_insertions = !!n_insertions, n_deactivations = !!n_deactivations)
+
 
 
   # If chronological order is not enforced, some records may be split across several records
