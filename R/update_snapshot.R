@@ -209,11 +209,15 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     dplyr::select("checksum") |>
     dplyr::setdiff(dplyr::select(.data, "checksum")) |>
     dplyr::inner_join(db_table, by = "checksum") |>
-    dplyr::mutate(until_ts = !!db_timestamp(timestamp, conn))
+    dplyr::mutate(until_ts = !!db_timestamp(timestamp, conn)) |>
+    dplyr::compute()
+  defer_db_cleanup(to_remove)
 
   to_add <- dplyr::setdiff(.data, dplyr::select(db_table, colnames(.data))) |>
     dplyr::mutate(from_ts  = !!db_timestamp(timestamp, conn),
-                  until_ts = !!db_timestamp(next_timestamp, conn))
+                  until_ts = !!db_timestamp(next_timestamp, conn)) |>
+    dplyr::compute()
+  defer_db_cleanup(to_add)
 
   # Commit changes to DB
   if (checkmate::test_multi_class(conn, c("SQLiteConnection", "duckdb_connection"))) {
@@ -244,6 +248,9 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     )
 
   }
+
+  # Write updates to log
+  logger$log_to_db(n_insertions = !!nrow(to_add), n_deactivations = !!nrow(to_remove))
 
 
   # If chronological order is not enforced, some records may be split across several records
