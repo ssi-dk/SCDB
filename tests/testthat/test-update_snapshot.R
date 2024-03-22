@@ -83,7 +83,7 @@ test_that("update_snapshot() can handle first snapshot", {
     checkmate::expect_data_frame(logs, nrows = 1, types)
 
     # Check the content of the log table
-    expect_identical(as.POSIXct(logs$date), as.POSIXct(timestamp))
+    expect_identical(as.character(logs$date), as.character(timestamp))
 
     db_table_id <- id(db_table, conn)
     if ("catalog" %in% colnames(logs)) expect_identical(logs$catalog, purrr::pluck(db_table_id, "name", "catalog"))
@@ -92,7 +92,7 @@ test_that("update_snapshot() can handle first snapshot", {
 
     expect_identical(logs$n_insertions, 32L)
     expect_identical(logs$n_deactivations, 0L)
-    expect_identical(as.logical(logs$success), TRUE)
+    expect_true(as.logical(logs$success))
     expect_identical(logs$message, NA_character_)
 
 
@@ -168,7 +168,7 @@ test_that("update_snapshot() can add a new snapshot", {
 
     expect_identical(logs$n_insertions, 15L)
     expect_identical(logs$n_deactivations, 15L)
-    expect_identical(as.logical(logs$success), TRUE)
+    expect_true(as.logical(logs$success))
 
     close_connection(conn)
   }
@@ -238,7 +238,7 @@ test_that("update_snapshot() can update a snapshot on an existing date", {
 
     expect_identical(logs$n_insertions, 8L)
     expect_identical(logs$n_deactivations, 8L)
-    expect_identical(as.logical(logs$success), TRUE)
+    expect_true(as.logical(logs$success))
 
     close_connection(conn)
   }
