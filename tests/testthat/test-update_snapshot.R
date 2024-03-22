@@ -6,14 +6,21 @@ test_that("update_snapshot() can handle first snapshot", {
     expect_false(table_exists(conn, "test.SCDB_tmp1"))
     expect_false(table_exists(conn, "test.SCDB_logs"))
 
-    target <- mtcars |>
-      dplyr::copy_to(conn, df = _, name = unique_table_name()) |>
-      digest_to_checksum(col = "checksum") |>
-      dplyr::mutate(from_ts  = !!db_timestamp("2022-10-01 09:00:00", conn),
-                    until_ts = !!db_timestamp(NA, conn))
+    # Use unmodified mtcars as the initial snapshot (without logging)
+    .data <- mtcars |>
+      dplyr::copy_to(conn, df = _, name = unique_table_name())
 
-    # Copy target to conn
-    target <- dplyr::copy_to(conn, target, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+    update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-01 09:00:00", logger = LoggerNull$new())
+
+    # Confirm snapshot is transferred correctly
+    expect_identical(
+      get_table(conn, "test.SCDB_tmp1") |>
+        dplyr::collect() |>
+        dplyr::arrange(wt, qsec),
+      .data |>
+        dplyr::collect() |>
+        dplyr::arrange(wt, qsec)
+    )
 
     close_connection(conn)
   }
