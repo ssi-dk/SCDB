@@ -56,6 +56,10 @@ jobs:
         with:
           extra-packages: any::devtools
 
+      - name: Delete previous benchmark files
+        if: always()
+        run: rm -rf data/benchmark-*.rds
+
       - name: Run benchmark (SQLite)
         if: always()
         env:
