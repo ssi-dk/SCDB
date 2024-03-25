@@ -122,14 +122,19 @@ jobs:
           saveRDS(benchmarks, "benchmarks.rds")
           file.remove(benchmark_files)
 
-          ggplot2::ggplot(
+          # Add note for SQLite backends
+          benchmarks <- benchmarks |>
+            dplyr::mutate("database" = paste0(database, ifelse(grepl("SQLite", database), "*", "")))
+
+          g <- ggplot2::ggplot(
             benchmarks,
             ggplot2::aes(x = version, y = time / 1e9)
           ) +
             ggplot2::geom_boxplot() +
             ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
             ggplot2::labs(x = "Codebase version", y = "Time (s)") +
-            ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5))
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+            ggplot2::labs(caption = "* IMPORTANT: Benchmark data halved for these backends")
 
           ggplot2::ggsave("benchmarks.pdf")
 
