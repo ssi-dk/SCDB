@@ -38,6 +38,15 @@ jobs:
           sqlcmd -V 10 -S localhost -U SA -P dbatools.I0 -Q "ALTER LOGIN SA WITH DEFAULT_DATABASE = master;"
 
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Configure git
+        run: |
+          git config --local user.name "$GITHUB_ACTOR"
+          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git switch ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
 
       - uses: r-lib/actions/setup-r@v2
         with:
@@ -119,7 +128,7 @@ jobs:
             )
 
           # Save the combined benchmark results and delete the individual files
-          saveRDS(benchmarks, "benchmarks.rds")
+          saveRDS(benchmarks, file.path("data", "benchmarks.rds"))
           file.remove(benchmark_files)
 
           # Add note for SQLite backends
@@ -146,3 +155,13 @@ jobs:
         with:
           name: benchmark-summary
           path: benchmarks.pdf
+
+      - name: Commit and push changes
+        run: |
+          git remote set-url origin https://$GITHUB_ACTOR:${{ secrets.GH_PAT }}@github.com/$GITHUB_REPOSITORY.git
+          git stash --include-untracked
+          git pull --rebase origin ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          git stash list | grep stash@{0} && git stash pop || echo "No stash to pop"
+          git add data/\*
+          git commit -m "chore: Update benchmark data" || echo "No changes to commit"
+          git push origin ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
