@@ -6,6 +6,7 @@ source("tests/testthat/helper-setup.R")
 # Install all needed package versions
 for (version in c("CRAN", "main", "branch")) {
   branch <- system("git symbolic-ref --short HEAD", intern = TRUE)
+  sha <- system("git rev-parse HEAD", intern = TRUE)
   if (version == "branch" && branch == "main") {
     next
   }
@@ -13,7 +14,7 @@ for (version in c("CRAN", "main", "branch")) {
   source <- dplyr::case_when(
     version == "CRAN" ~ "SCDB",
     version == "main" ~ "ssi-dk/SCDB",
-    version == "branch" ~ glue::glue("ssi-dk/SCDB@{branch}")
+    version == "branch" ~ glue::glue("ssi-dk/SCDB@{sha}")
   )
 
   pak::pkg_install(source, lib = glue::glue("SCDB_installation/{source}"))
@@ -22,6 +23,7 @@ for (version in c("CRAN", "main", "branch")) {
 # Then loop over each and benchmark the update_snapshot function
 for (version in c("CRAN", "main", "branch")) {
   branch <- system("git symbolic-ref --short HEAD", intern = TRUE)
+  sha <- system("git rev-parse HEAD", intern = TRUE)
   if (version == "branch" && branch == "main") {
     next
   }
@@ -29,7 +31,7 @@ for (version in c("CRAN", "main", "branch")) {
   source <- dplyr::case_when(
     version == "CRAN" ~ "SCDB",
     version == "main" ~ "ssi-dk/SCDB",
-    version == "branch" ~ glue::glue("ssi-dk/SCDB@{branch}")
+    version == "branch" ~ glue::glue("ssi-dk/SCDB@{sha}")
   )
 
   library("SCDB", lib.loc = glue::glue("SCDB_installation/{source}"))
@@ -101,7 +103,7 @@ for (version in c("CRAN", "main", "branch")) {
       dplyr::mutate(
         "benchmark_function" = "update_snapshot",
         "database" = names(conns)[[1]],
-        "version" = !!ifelse(version == "branch", branch, version)
+        "version" = !!ifelse(version == "branch", substr(sha, 1, 10), version)
       )
 
     dir.create("data", showWarnings = FALSE)
