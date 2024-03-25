@@ -1,0 +1,89 @@
+---
+title: "SCDB: Benchmarks"
+output: rmarkdown::html_vignette
+bibliography: "references.bib"
+vignette: >
+  %\VignetteIndexEntry{SCDB: Benchmarks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+To showcase the performance of SCDB on different database backends, we include this vignette that summarises a simple
+benchmark:
+A sample dataset is created based on the `datasets::iris` dataset. This data is repeated 10 times and given a unique ID
+(the row number of the data).
+
+This data forms the basis for three "snapshots" used in the benchmarks:
+
+1) The data as described above.
+
+2) As 1. but where any `Sepal.Length` below the median is halved.
+
+3) As 2. but where any `Sepal.width` below the median is halved.
+
+The benchmark function uses three consecutive calls to `update_snapshot()` to create the table with first snapshot and
+then update it to the second and third snapshot. Finally, the table is deleted.
+
+The performance of this benchmark function is timed with the `microbenchmark` package using 10 replicates.
+All benchmarks are run on the same machine.
+
+The results of the benchmark are shown graphically below, where we compare the current development version of SCDB
+with the current CRAN version.
+
+Note that the benchmark data for the SQLite backend is halved due to the performance of this backend.
+
+```{r, echo = FALSE, eval = requireNamespace("here")}
+benchmark_location <- c(
+  system.file("extdata", "benchmarks.rds", package = "SCDB"),
+  here::here("inst", "extdata", "benchmarks.rds")
+) |>
+  purrr::discard(~ identical(., "")) |>
+  purrr::pluck(1)
+
+benchmarks <- readRDS(benchmark_location)
+
+# Determine if the SHA is on main
+sha <- benchmarks |>
+  dplyr::distinct(version) |>
+  dplyr::filter(!(version %in% c("CRAN", "main"))) |>
+  dplyr::pull("version")
+
+# Check local git history
+on_main <- tryCatch({
+  system(glue::glue("git branch main --contains {sha}"), intern = TRUE) |>
+    stringr::str_detect(stringr::fixed("main")) |>
+    isTRUE()
+}, warning = function(w) {
+  # If on GitHub, git is not installed and we assume TRUE.
+  # This will render the vignette as it will look once merged onto main.
+  return(identical(Sys.getenv("CI"), "true"))
+})
+
+# If the SHA has been merged, use as the "main" version and remove the other, older, main version
+if (on_main) {
+  benchmarks <- benchmarks |>
+    dplyr::filter(version != "main") |>
+    dplyr::mutate(version = dplyr::if_else(.data$version == "CRAN", "CRAN", "development"))
+}
+
+# Add note for SQLite backends
+benchmarks <- benchmarks |>
+  dplyr::mutate("database" = paste0(database, ifelse(grepl("SQLite", database, fixed = TRUE), "*", "")))
+
+
+ggplot2::ggplot(
+  benchmarks,
+  ggplot2::aes(x = version, y = time / 1e9)
+) +
+  ggplot2::geom_boxplot() +
+  ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
+  ggplot2::labs(x = "Codebase version", y = "Time (s)") +
+  ggplot2::labs(caption = "* IMPORTANT: Benchmark data halved for this backend!")
+```

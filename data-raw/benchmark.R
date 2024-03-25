@@ -101,7 +101,7 @@ for (version in c("CRAN", "main", "branch")) {
     # Construct the list of benchmarks
     update_snapshot_benchmark <- microbenchmark::microbenchmark(scdb_updates(conn, data_on_conn), times = 25) |>
       dplyr::mutate(
-        "benchmark_function" = "update_snapshot",
+        "benchmark_function" = "update_snapshot()",
         "database" = names(conns)[[1]],
         "version" = !!ifelse(version == "branch", substr(sha, 1, 10), version)
       )
