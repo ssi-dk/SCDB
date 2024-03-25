@@ -103,7 +103,8 @@ for (version in c("CRAN", "main", "branch")) {
       dplyr::mutate(
         "benchmark_function" = "update_snapshot()",
         "database" = names(conns)[[1]],
-        "version" = !!ifelse(version == "branch", substr(sha, 1, 10), version)
+        "version" = !!ifelse(version == "branch", substr(sha, 1, 10), version),
+        "n" = n
       )
 
     dir.create("data", showWarnings = FALSE)

@@ -73,9 +73,14 @@ if (on_main) {
     dplyr::mutate(version = dplyr::if_else(.data$version == "CRAN", "CRAN", "development"))
 }
 
-# Add note for SQLite backends
+# Add note slow backends
+slow_backends <- benchmarks |>
+  dplyr::distinct(.data$database, .data$n) |>
+  dplyr::filter(.data$n < max(.data$n)) |>
+  dplyr::pull("database")
+
 benchmarks <- benchmarks |>
-  dplyr::mutate("database" = paste0(database, ifelse(grepl("SQLite", database, fixed = TRUE), "*", "")))
+  dplyr::mutate("database" = paste0(database, ifelse(database %in% slow_backends, "*", "")))
 
 
 ggplot2::ggplot(
