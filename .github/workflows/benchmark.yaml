@@ -162,7 +162,7 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git remote set-url origin https://$GITHUB_ACTOR:${{ secrets.GH_PAT }}@github.com/$GITHUB_REPOSITORY.git
+          git remote set-url origin https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git
           git stash --include-untracked
           git pull --rebase origin ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
           git stash list | grep stash@{0} && git stash pop || echo "No stash to pop"
