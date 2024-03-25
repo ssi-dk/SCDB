@@ -251,11 +251,11 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   )
 
   rs_deactivate <- DBI::dbSendQuery(conn, sql_deactivate)
-  n_deactivations <-DBI::dbGetRowsAffected(rs_deactivate)
+  n_deactivations <- DBI::dbGetRowsAffected(rs_deactivate)
   DBI::dbClearResult(rs_deactivate)
 
   rs_insert <- DBI::dbSendQuery(conn, sql_insert)
-  n_insertions <-DBI::dbGetRowsAffected(rs_insert)
+  n_insertions <- DBI::dbGetRowsAffected(rs_insert)
   DBI::dbClearResult(rs_insert)
 
   # Write updates to log
