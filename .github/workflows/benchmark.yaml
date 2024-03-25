@@ -58,7 +58,7 @@ jobs:
 
       - name: Delete previous benchmark files
         if: always()
-        run: rm -rf data/benchmark-*.rds
+        run: rm -rf inst/extdata/benchmark-*.rds
 
       - name: Run benchmark (SQLite)
         if: always()
@@ -132,7 +132,8 @@ jobs:
             )
 
           # Save the combined benchmark results and delete the individual files
-          saveRDS(benchmarks, file.path("data", "benchmarks.rds"))
+          dir.create(file.path("inst", "extdata"), recursive = TRUE, showWarnings = FALSE)
+          saveRDS(benchmarks, file.path("inst", "extdata", "benchmarks.rds"))
           file.remove(benchmark_files)
 
           # Add note for SQLite backends
@@ -166,6 +167,6 @@ jobs:
           git stash --include-untracked
           git pull --rebase origin ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
           git stash list | grep stash@{0} && git stash pop || echo "No stash to pop"
-          git add data/\*
+          git add inst/extdata/\*
           git commit -m "chore: Update benchmark data" || echo "No changes to commit"
           git push origin ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
