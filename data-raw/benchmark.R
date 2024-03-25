@@ -49,7 +49,9 @@ for (version in c("CRAN", "main", "branch")) {
     conns <- get_test_conns()
     conn <- conns[[1]]
 
-    n <- ifelse(names(conns)[1] == "SQLite", 5, 10)
+    n <- 10
+    n <- ifelse(names(conns)[1] == "SQLite", ceiling(n / 2), n)
+
     data_1 <- data_generator(n)
     data_2 <- data_generator(2 * n) |>
       dplyr::mutate(
