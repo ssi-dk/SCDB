@@ -17,7 +17,14 @@ for (version in c("CRAN", "main", "branch")) {
     version == "branch" ~ glue::glue("ssi-dk/SCDB@{sha}")
   )
 
-  pak::pkg_install(source, lib = glue::glue("SCDB_installation/{source}"))
+  lib_path <- dplyr::case_when(
+    version == "CRAN" ~ "SCDB",
+    version == "main" ~ "ssi-dk-SCDB",
+    version == "branch" ~ glue::glue("ssi-dk-SCDB-{sha}")
+  )
+
+  dir.create(lib_path, recursive = TRUE, showWarnings = FALSE)
+  pak::pkg_install(source, lib = lib_path)
 }
 
 # Then loop over each and benchmark the update_snapshot function
@@ -34,7 +41,13 @@ for (version in c("CRAN", "main", "branch")) {
     version == "branch" ~ glue::glue("ssi-dk/SCDB@{sha}")
   )
 
-  library("SCDB", lib.loc = glue::glue("SCDB_installation/{source}"))
+  lib_path <- dplyr::case_when(
+    version == "CRAN" ~ "SCDB",
+    version == "main" ~ "ssi-dk-SCDB",
+    version == "branch" ~ glue::glue("ssi-dk-SCDB-{sha}")
+  )
+
+  library("SCDB", lib.loc = lib_path)
 
   try({
     # Our benchmark data is the iris data set but repeated to increase the data size
