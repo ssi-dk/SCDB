@@ -34,8 +34,8 @@ then update it to the second and third snapshot. Finally, the table is deleted.
 The performance of this benchmark function is timed with the `microbenchmark` package using 10 replicates.
 All benchmarks are run on the same machine.
 
-The results of the benchmark are shown graphically below, where we compare the current development version of SCDB
-with the current CRAN version.
+The results of the benchmark are shown graphically below (mean and standard deviation), where we compare the current
+development version of SCDB with the current CRAN version.
 
 ```{r, echo = FALSE, eval = requireNamespace("here")}
 benchmark_location <- c(
@@ -81,11 +81,18 @@ benchmarks <- benchmarks |>
   dplyr::mutate("database" = paste0(database, ifelse(database %in% slow_backends, "*", "")))
 
 
+# Mean and standard deviation (see ggplot2::mean_se())
+mean_sd <- function(x) {
+  mu <- mean(x)
+  sd <- sd(x)
+  data.frame(y = mu, ymin = mu - sd, ymax = mu + sd)
+}
+
 g <- ggplot2::ggplot(
   benchmarks,
   ggplot2::aes(x = version, y = time / 1e9)
 ) +
-  ggplot2::geom_boxplot() +
+  ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
   ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
   ggplot2::labs(x = "Codebase version", y = "Time (s)")
 
