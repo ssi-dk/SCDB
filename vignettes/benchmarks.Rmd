@@ -37,8 +37,6 @@ All benchmarks are run on the same machine.
 The results of the benchmark are shown graphically below, where we compare the current development version of SCDB
 with the current CRAN version.
 
-Note that the benchmark data for the SQLite backend is halved due to the performance of this backend.
-
 ```{r, echo = FALSE, eval = requireNamespace("here")}
 benchmark_location <- c(
   system.file("extdata", "benchmarks.rds", package = "SCDB"),
@@ -83,12 +81,17 @@ benchmarks <- benchmarks |>
   dplyr::mutate("database" = paste0(database, ifelse(database %in% slow_backends, "*", "")))
 
 
-ggplot2::ggplot(
+g <- ggplot2::ggplot(
   benchmarks,
   ggplot2::aes(x = version, y = time / 1e9)
 ) +
   ggplot2::geom_boxplot() +
   ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
-  ggplot2::labs(x = "Codebase version", y = "Time (s)") +
-  ggplot2::labs(caption = "* IMPORTANT: Benchmark data halved for this backend!")
+  ggplot2::labs(x = "Codebase version", y = "Time (s)")
+
+if (length(slow_backends) > 1) {
+  g <- g + ggplot2::labs(caption = "* IMPORTANT: Benchmark data halved for this backend!")
+}
+
+g
 ```
