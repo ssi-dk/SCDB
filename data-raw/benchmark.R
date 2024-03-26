@@ -27,6 +27,12 @@ for (version in c("CRAN", "main", "branch")) {
   pak::pkg_install(source, lib = lib_path)
 }
 
+# Return early if no backend is defined
+if (identical(Sys.getenv("BACKEND"), "")) {
+  message("No backend defined, skipping benchmark!")
+  return(NULL)
+}
+
 # Then loop over each and benchmark the update_snapshot function
 for (version in c("CRAN", "main", "branch")) {
   branch <- system("git symbolic-ref --short HEAD", intern = TRUE)

@@ -88,6 +88,12 @@ jobs:
           echo "SQL_SERVER_VERSION=SQL Server v$version" >> $GITHUB_ENV
 
 
+      - name: Install libraries to benchmark
+        if: always()
+        run: source("./data-raw/benchmark.R", echo=TRUE)
+        shell: Rscript {0}
+
+
 
       - name: Run benchmark (${{ env.SQLITE_VERSION }})
         if: always()
