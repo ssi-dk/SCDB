@@ -1,5 +1,9 @@
 # SCDB (development version)
 
+## Documentation
+
+* A vignette including benchmarks of `update_snapshot()` across various backends is added (#138)
+
 # SCDB 0.4.0
 
 ## BREAKING CHANGES:
