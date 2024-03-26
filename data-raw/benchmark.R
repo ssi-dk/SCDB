@@ -52,7 +52,7 @@ for (version in c("CRAN", "main", "branch")) {
     conn <- conns[[1]]
 
     n <- 10
-    n <- ifelse(names(conns)[1] == "SQLite", ceiling(n / 2), n)
+    n <- ifelse(grepl("SQLite", names(conns)[1], fixed = TRUE), ceiling(n / 2), n)
 
     data_1 <- data_generator(n)
     data_2 <- data_generator(2 * n) |>
