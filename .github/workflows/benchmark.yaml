@@ -173,19 +173,35 @@ jobs:
           saveRDS(benchmarks, file.path("inst", "extdata", "benchmarks.rds"))
           file.remove(benchmark_files)
 
-          # Add note for SQLite backends
+
+          # Add note slow backends
+          slow_backends <- benchmarks |>
+            dplyr::distinct(.data$database, .data$n) |>
+            dplyr::filter(.data$n < max(.data$n)) |>
+            dplyr::pull("database")
+
           benchmarks <- benchmarks |>
-            dplyr::mutate("database" = paste0(database, ifelse(grepl("SQLite", database), "*", "")))
+            dplyr::mutate("database" = paste0(database, ifelse(database %in% slow_backends, "*", "")))
+
+
+          # Mean and standard deviation (see ggplot2::mean_se())
+          mean_sd <- function(x) {
+            mu <- mean(x)
+            sd <- sd(x)
+            data.frame(y = mu, ymin = mu - sd, ymax = mu + sd)
+          }
 
           g <- ggplot2::ggplot(
             benchmarks,
             ggplot2::aes(x = version, y = time / 1e9)
           ) +
-            ggplot2::geom_boxplot() +
+            ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
             ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
-            ggplot2::labs(x = "Codebase version", y = "Time (s)") +
-            ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5)) +
-            ggplot2::labs(caption = "* IMPORTANT: Benchmark data halved for these backends")
+            ggplot2::labs(x = "Codebase version", y = "Time (s)")
+
+          if (length(slow_backends) > 1) {
+            g <- g + ggplot2::labs(caption = "* IMPORTANT: Benchmark data halved for this backend!")
+          }
 
           ggplot2::ggsave("benchmarks.pdf")
 
