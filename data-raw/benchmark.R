@@ -6,6 +6,7 @@ source("tests/testthat/helper-setup.R")
 # Install all needed package versions
 for (version in c("CRAN", "main", "branch")) {
   branch <- system("git symbolic-ref --short HEAD", intern = TRUE)
+  sha <- system("git rev-parse HEAD", intern = TRUE)
   if (version == "branch" && branch == "main") {
     next
   }
@@ -13,15 +14,29 @@ for (version in c("CRAN", "main", "branch")) {
   source <- dplyr::case_when(
     version == "CRAN" ~ "SCDB",
     version == "main" ~ "ssi-dk/SCDB",
-    version == "branch" ~ glue::glue("ssi-dk/SCDB@{branch}")
+    version == "branch" ~ glue::glue("ssi-dk/SCDB@{sha}")
   )
 
-  pak::pkg_install(source, lib = glue::glue("SCDB_installation/{source}"))
+  lib_path <- dplyr::case_when(
+    version == "CRAN" ~ "SCDB",
+    version == "main" ~ "ssi-dk-SCDB",
+    version == "branch" ~ glue::glue("ssi-dk-SCDB-{sha}")
+  )
+
+  dir.create(lib_path, recursive = TRUE, showWarnings = FALSE)
+  pak::pkg_install(source, lib = lib_path)
+}
+
+# Return early if no backend is defined
+if (identical(Sys.getenv("BACKEND"), "")) {
+  message("No backend defined, skipping benchmark!")
+  return(NULL)
 }
 
 # Then loop over each and benchmark the update_snapshot function
 for (version in c("CRAN", "main", "branch")) {
   branch <- system("git symbolic-ref --short HEAD", intern = TRUE)
+  sha <- system("git rev-parse HEAD", intern = TRUE)
   if (version == "branch" && branch == "main") {
     next
   }
@@ -29,10 +44,16 @@ for (version in c("CRAN", "main", "branch")) {
   source <- dplyr::case_when(
     version == "CRAN" ~ "SCDB",
     version == "main" ~ "ssi-dk/SCDB",
-    version == "branch" ~ glue::glue("ssi-dk/SCDB@{branch}")
+    version == "branch" ~ glue::glue("ssi-dk/SCDB@{sha}")
   )
 
-  library("SCDB", lib.loc = glue::glue("SCDB_installation/{source}"))
+  lib_path <- dplyr::case_when(
+    version == "CRAN" ~ "SCDB",
+    version == "main" ~ "ssi-dk-SCDB",
+    version == "branch" ~ glue::glue("ssi-dk-SCDB-{sha}")
+  )
+
+  library("SCDB", lib.loc = lib_path)
 
   try({
     # Our benchmark data is the iris data set but repeated to increase the data size
@@ -49,7 +70,8 @@ for (version in c("CRAN", "main", "branch")) {
     conns <- get_test_conns()
     conn <- conns[[1]]
 
-    n <- ifelse(names(conns)[1] == "SQLite", 5, 10)
+    n <- 10
+
     data_1 <- data_generator(n)
     data_2 <- data_generator(2 * n) |>
       dplyr::mutate(
@@ -97,9 +119,10 @@ for (version in c("CRAN", "main", "branch")) {
     # Construct the list of benchmarks
     update_snapshot_benchmark <- microbenchmark::microbenchmark(scdb_updates(conn, data_on_conn), times = 25) |>
       dplyr::mutate(
-        "benchmark_function" = "update_snapshot",
+        "benchmark_function" = "update_snapshot()",
         "database" = names(conns)[[1]],
-        "version" = !!ifelse(version == "branch", branch, version)
+        "version" = !!ifelse(version == "branch", substr(sha, 1, 10), version),
+        "n" = n
       )
 
     dir.create("data", showWarnings = FALSE)
