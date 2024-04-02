@@ -119,6 +119,8 @@ create_index <- function(conn, db_table_id, columns) {
 
 #' @export
 create_index.PqConnection <- function(conn, db_table_id, columns) {
+  db_table_id <- id(db_table_id, conn)
+
   DBI::dbExecute(
     conn,
     glue::glue(
@@ -129,6 +131,8 @@ create_index.PqConnection <- function(conn, db_table_id, columns) {
 
 #' @export
 create_index.SQLiteConnection <- function(conn, db_table_id, columns) {
+  db_table_id <- id(db_table_id, conn)
+
   schema <- purrr::pluck(db_table_id, "name", "schema")
   table  <- purrr::pluck(db_table_id, "name", "table")
 
@@ -153,6 +157,7 @@ create_index.SQLiteConnection <- function(conn, db_table_id, columns) {
 
 #' @export
 create_index.DBIConnection <- function(conn, db_table_id, columns) {
+  db_table_id <- id(db_table_id, conn)
 
   index <- glue::glue("{db_table_id}_scdb_index_{paste(columns, collapse = '_')}") |>
     stringr::str_replace_all(stringr::fixed("."), "_")
