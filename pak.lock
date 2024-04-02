@@ -163,7 +163,7 @@
     {
       "ref": "RSQLite",
       "package": "RSQLite",
-      "version": "2.3.5",
+      "version": "2.3.6",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -176,10 +176,10 @@
         "RemoteRef": "RSQLite",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "2.3.5"
+        "RemoteSha": "2.3.6"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/RSQLite_2.3.5.tar.gz"],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.3/RSQLite_2.3.5.tar.gz",
+      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/RSQLite_2.3.6.tar.gz"],
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.3/RSQLite_2.3.6.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.3",
       "directpkg": false,
@@ -504,11 +504,11 @@
     {
       "ref": "bslib",
       "package": "bslib",
-      "version": "0.6.2",
+      "version": "0.7.0",
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["base64enc", "cachem", "htmltools", "jquerylib", "jsonlite", "lifecycle", "memoise", "mime", "rlang", "sass"],
+      "dependencies": ["base64enc", "cachem", "fastmap", "htmltools", "jquerylib", "jsonlite", "lifecycle", "memoise", "mime", "rlang", "sass"],
       "vignettes": false,
       "needscompilation": false,
       "metadata": {
@@ -517,10 +517,10 @@
         "RemoteRef": "bslib",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "0.6.2"
+        "RemoteSha": "0.7.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/bslib_0.6.2.tar.gz"],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.3/bslib_0.6.2.tar.gz",
+      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/bslib_0.7.0.tar.gz"],
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.3/bslib_0.7.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.3",
       "directpkg": false,
@@ -920,7 +920,7 @@
     {
       "ref": "data.table",
       "package": "data.table",
-      "version": "1.15.2",
+      "version": "1.15.4",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -933,10 +933,10 @@
         "RemoteRef": "data.table",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "1.15.2"
+        "RemoteSha": "1.15.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/data.table_1.15.2.tar.gz"],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.3/data.table_1.15.2.tar.gz",
+      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/data.table_1.15.4.tar.gz"],
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.3/data.table_1.15.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.3",
       "directpkg": false,
@@ -2373,7 +2373,7 @@
     {
       "ref": "munsell",
       "package": "munsell",
-      "version": "0.5.0",
+      "version": "0.5.1",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -2386,10 +2386,10 @@
         "RemoteRef": "munsell",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "0.5.0"
+        "RemoteSha": "0.5.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/munsell_0.5.0.tar.gz"],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.3/munsell_0.5.0.tar.gz",
+      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/munsell_0.5.1.tar.gz"],
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.3/munsell_0.5.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.3",
       "directpkg": false,
