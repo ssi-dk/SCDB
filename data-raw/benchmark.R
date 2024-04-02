@@ -55,6 +55,10 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
 
     library("SCDB", lib.loc = lib_path)
 
+    # Open connection to the database
+    conns <- get_test_conns()
+    conn <- conns[[1]]
+
     try({
       # Our benchmark data is the iris data set but repeated to increase the data size
       data_generator <- function(repeats) {
@@ -65,7 +69,6 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
           purrr::reduce(rbind) |>
           dplyr::rename_with(~ tolower(gsub(".", "_", .x, fixed = TRUE)))
       }
-
 
       n <- 10
 
@@ -127,8 +130,8 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
     })
 
     detach("package:SCDB", unload = TRUE)
-  }
 
-  # Clean up
-  purrr::walk(conns, ~ DBI::dbDisconnect(., shutdown = TRUE))
+    # Clean up
+    purrr::walk(conns, ~ DBI::dbDisconnect(., shutdown = TRUE))
+  }
 }
