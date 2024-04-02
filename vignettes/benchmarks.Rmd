@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-To showcase the performance of SCDB on different database backends, we include this vignette that summarises a simple
+To showcase the performance of `SCDB` on different database backends, we include this vignette that summarises a simple
 benchmark:
 A sample dataset is created based on the `datasets::iris` dataset. This data is repeated 10 times and given a unique ID
 (the row number of the data).
@@ -35,7 +35,7 @@ The performance of this benchmark function is timed with the `microbenchmark` pa
 All benchmarks are run on the same machine.
 
 The results of the benchmark are shown graphically below (mean and standard deviation), where we compare the current
-development version of SCDB with the current CRAN version.
+development version of `SCDB` with the current CRAN version.
 
 ```{r, echo = FALSE, eval = requireNamespace("here")}
 benchmark_location <- c(
