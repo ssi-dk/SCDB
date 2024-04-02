@@ -86,59 +86,72 @@ create_table <- function(.data, conn = NULL, db_table, ...) {                   
     ...
   )
 
-  create_scdb_index(conn, db_table_id)
+  create_index(conn, db_table_id, columns = c("checksum", "from_ts"))
 
   return(invisible(dplyr::tbl(conn, db_table_id)))
 }
 
 
-#' Create the indexes for historical tables
+#' Create the indexes on table
 #' @param conn (`DBIConnection`)\cr
-#'  A connection to a database.
+#'   A connection to a database.
 #' @param db_table_id (`Id`)\cr
-#'  The table to create the index for.
+#'   The table to create the index for.
+#' @param columns (`character()`)\cr
+#'   The columns that should be unique.
 #' @return
 #'   NULL (called for side effects)
-#' @noRd
-create_scdb_index <- function(conn, db_table_id) {
+#' @export
+create_index <- function(conn, db_table_id, columns) {
   checkmate::assert_class(conn, "DBIConnection")
   assert_id_like(db_table_id)
+  checkmate::assert_character(columns)
 
-  UseMethod("create_scdb_index")
+  UseMethod("create_index")
 }
 
-#' @noRd
-create_scdb_index.PqConnection <- function(conn, db_table_id) {
+#' @export
+create_index.PqConnection <- function(conn, db_table_id, columns) {
   DBI::dbExecute(
     conn,
     glue::glue(
-      "CREATE UNIQUE INDEX ON {as.character(db_table_id, explicit = TRUE)} (checksum, from_ts)"
+      "CREATE UNIQUE INDEX ON {as.character(db_table_id, explicit = TRUE)} ({toString(columns)})"
     )
   )
 }
 
-#' @noRd
-create_scdb_index.SQLiteConnection <- function(conn, db_table_id) {
+#' @export
+create_index.SQLiteConnection <- function(conn, db_table_id, columns) {
   schema <- purrr::pluck(db_table_id, "name", "schema")
   table  <- purrr::pluck(db_table_id, "name", "table")
 
   if (schema %in% c("main", "temp")) schema <- NULL
 
-  index <- paste(c(shQuote(schema), shQuote(paste0(table, "_scdb_index"))), collapse = ".")
+  # Generate index name
+  index <- paste(
+    c(
+      shQuote(schema),
+      shQuote(paste0(c(table, "scdb_index", columns), collapse = "_"))
+    ),
+    collapse = "."
+  )
+
   DBI::dbExecute(
     conn,
     glue::glue(
-      "CREATE UNIQUE INDEX {index} ON {shQuote(table)} (checksum, from_ts)"
+      "CREATE UNIQUE INDEX {index} ON {shQuote(table)} ({toString(columns)})"
     )
   )
 }
 
-#' @noRd
-create_scdb_index.DBIConnection <- function(conn, db_table_id) {
+#' @export
+create_index.DBIConnection <- function(conn, db_table_id, columns) {
+
+  index <- glue::glue("{db_table_id}_scdb_index_{paste(columns, collapse = '_')}") |>
+    stringr::str_replace_all(stringr::fixed("."), "_")
 
   query <- glue::glue(
-    "CREATE UNIQUE INDEX {stringr::str_replace_all(paste0(db_table_id, '_scdb_index'), stringr::fixed('.'), '_')} ",
-    "ON {as.character(db_table_id, explicit = TRUE)} (checksum, from_ts)"
+    "CREATE UNIQUE INDEX {index} ON {as.character(db_table_id, explicit = TRUE)} ({toString(columns)})"
   )
 
   DBI::dbExecute(conn, query)
