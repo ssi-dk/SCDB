@@ -113,6 +113,7 @@ create_index <- function(conn, db_table_id, columns) {
   checkmate::assert_class(conn, "DBIConnection")
   assert_id_like(db_table_id)
   checkmate::assert_character(columns)
+  checkmate::assert_true(table_exists(conn, db_table_id))
 
   UseMethod("create_index")
 }
