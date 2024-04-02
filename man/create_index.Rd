@@ -22,3 +22,13 @@ NULL (called for side effects)
 \description{
 Create the indexes on table
 }
+\examples{
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+  conn <- get_connection()
+
+  dplyr::copy_to(conn, dplyr::distinct(mtcars, .data$mpg, .data$cyl), name = "mtcars")
+  create_index(conn, "mtcars", c("mpg", "cyl"))
+
+  close_connection(conn)
+\dontshow{\}) # examplesIf}
+}

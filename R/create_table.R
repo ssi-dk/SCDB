@@ -101,6 +101,13 @@ create_table <- function(.data, conn = NULL, db_table, ...) {                   
 #'   The columns that should be unique.
 #' @return
 #'   NULL (called for side effects)
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
+#'   conn <- get_connection()
+#'
+#'   dplyr::copy_to(conn, dplyr::distinct(mtcars, .data$mpg, .data$cyl), name = "mtcars")
+#'   create_index(conn, "mtcars", c("mpg", "cyl"))
+#'
+#'   close_connection(conn)
 #' @export
 create_index <- function(conn, db_table_id, columns) {
   checkmate::assert_class(conn, "DBIConnection")
