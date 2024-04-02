@@ -2,7 +2,7 @@ on:
   workflow_dispatch
 
 
-name: "⏲️ Benchmark"
+name: "⏱️ Benchmark"
 jobs:
   benchmark:
     runs-on: ubuntu-latest
