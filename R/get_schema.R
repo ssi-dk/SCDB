@@ -59,7 +59,7 @@ get_schema.Id <- function(obj,  ...) {
 #' @export
 #' @rdname get_schema
 get_schema.PqConnection <- function(obj, temporary = FALSE,  ...) {
-  if (isTRUE(temporary))  {
+  if (temporary)  {
     temp_schema <- DBI::dbGetQuery(obj, "SELECT nspname FROM pg_namespace WHERE oid = pg_my_temp_schema();")$nspname
 
     # If no temporary tables have been created, the temp schema has not been determined yet
@@ -78,7 +78,7 @@ get_schema.PqConnection <- function(obj, temporary = FALSE,  ...) {
 #' @export
 #' @rdname get_schema
 get_schema.SQLiteConnection <- function(obj, temporary = FALSE,  ...) {
-  if (isTRUE(temporary))  {
+  if (temporary)  {
     return("temp")
   } else {
     return("main")
