@@ -1,5 +1,9 @@
 # SCDB (development version)
 
+## Improvements and Fixes
+
+* `get_schema()` now correctly returns the temporary schema on PostgreSQL backends (#139).
+
 # SCDB 0.4.0
 
 ## BREAKING CHANGES:
