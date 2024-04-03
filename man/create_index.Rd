@@ -4,14 +4,14 @@
 \alias{create_index}
 \title{Create the indexes on table}
 \usage{
-create_index(conn, db_table_id, columns)
+create_index(conn, db_table, columns)
 }
 \arguments{
 \item{conn}{(\code{DBIConnection})\cr
 A connection to a database.}
 
-\item{db_table_id}{(\code{Id})\cr
-The table to create the index for.}
+\item{db_table}{(\verb{id-like object(1)})\cr
+A table specification (coercible by \code{id()}).}
 
 \item{columns}{(\code{character()})\cr
 The columns that should be unique.}
