@@ -60,16 +60,7 @@ get_schema.Id <- function(obj,  ...) {
 #' @rdname get_schema
 get_schema.PqConnection <- function(obj, temporary = FALSE,  ...) {
   if (temporary)  {
-    temp_schema <- DBI::dbGetQuery(obj, "SELECT nspname FROM pg_namespace WHERE oid = pg_my_temp_schema();")$nspname
-
-    # If no temporary tables have been created, the temp schema has not been determined yet
-    if (identical(temp_schema, character(0))) {
-      temp_table <- dplyr::copy_to(dest = obj, df = mtcars, name = unique_table_name(), temporary = TRUE)
-      defer_db_cleanup(temp_table)
-      temp_schema <- DBI::dbGetQuery(obj, "SELECT nspname FROM pg_namespace WHERE oid = pg_my_temp_schema();")$nspname
-    }
-
-    return(temp_schema)
+    return("pg_temp")
   } else {
     return(DBI::dbGetQuery(obj, "SELECT CURRENT_SCHEMA()")$current_schema)
   }
