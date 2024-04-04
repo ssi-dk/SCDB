@@ -175,7 +175,7 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
       }
 
       # Clean up
-      purrr::walk(conns, ~ DBI::dbDisconnect(., shutdown = TRUE))
+      purrr::walk(conns, DBI::dbDisconnect)
     })
 
     detach("package:SCDB", unload = TRUE)
