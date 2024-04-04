@@ -66,11 +66,8 @@ get_schema.PqConnection <- function(obj, temporary = FALSE,  ...) {
     if (identical(temp_schema, character(0))) {
       temp_table_name <- unique_table_name()
       DBI::dbExecute(obj, glue::glue("CREATE TEMPORARY TABLE {temp_table_name}(a TEXT)"))
-      temp_table <- dplyr::tbl(obj, temp_table_name)
-      defer_db_cleanup(temp_table)
-      rm(temp_table_name)
-
       temp_schema <- DBI::dbGetQuery(obj, "SELECT nspname FROM pg_namespace WHERE oid = pg_my_temp_schema();")$nspname
+      DBI::dbExecute(obj, glue::glue("DROP TABLE {temp_table_name}"))
     }
 
     return(temp_schema)
