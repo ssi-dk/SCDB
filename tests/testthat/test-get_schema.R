@@ -81,7 +81,7 @@ for (conn in c(list(NULL), get_test_conns())) {
   if (inherits(conn, "PqConnection")) {
     test_that("get_schema() works for PqConnection", {
       expect_identical(get_schema(conn), "public")
-      expect_identical(get_schema(conn, temporary = TRUE), "pg_temp")
+      checkmate::expect_character(get_schema(conn, temporary = TRUE), pattern = "^pg_temp_.*",  min.len = 1)
     })
   }
 
