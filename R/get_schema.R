@@ -64,8 +64,12 @@ get_schema.PqConnection <- function(obj, temporary = FALSE,  ...) {
 
     # If no temporary tables have been created, the temp schema has not been determined yet
     if (identical(temp_schema, character(0))) {
-      temp_table <- dplyr::copy_to(dest = obj, df = mtcars, name = unique_table_name(), temporary = TRUE)
+      temp_table_name <- unique_table_name()
+      DBI::dbExecute(obj, glue::glue("CREATE TEMPORARY TABLE {temp_table_name}(a TEXT)"))
+      temp_table <- dplyr::tbl(obj, temp_table_name)
       defer_db_cleanup(temp_table)
+      rm(temp_table_name)
+
       temp_schema <- DBI::dbGetQuery(obj, "SELECT nspname FROM pg_namespace WHERE oid = pg_my_temp_schema();")$nspname
     }
 
