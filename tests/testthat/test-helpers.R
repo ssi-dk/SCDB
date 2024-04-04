@@ -37,12 +37,6 @@ test_that("defer_db_cleanup() works with withr::deferred_run", {
     mt_id <- id(mt)
     defer_db_cleanup(mt)
 
-    print("mt_id")
-    print(mt_id)
-
-    print("get_tables(conn)")
-    print(get_tables(conn))
-
     expect_true(DBI::dbExistsTable(conn, mt_id))
 
     expect_message(withr::deferred_run(), "Ran 1/1 deferred expressions")
