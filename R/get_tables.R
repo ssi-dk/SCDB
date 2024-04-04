@@ -70,7 +70,7 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE)
     "SELECT schemaname, viewname AS tablename, 0 AS is_temporary FROM pg_views",
     "WHERE NOT (schemaname LIKE 'pg_%' OR schemaname = 'information_schema')",
     "UNION ALL",
-    "SELECT 'pg_temp' AS schemaname, tablename, 1 AS is_temporary FROM pg_tables",
+    "SELECT schemaname, tablename, 1 AS is_temporary FROM pg_tables",
     "WHERE schemaname LIKE 'pg_temp_%'",
     ")"
   )
