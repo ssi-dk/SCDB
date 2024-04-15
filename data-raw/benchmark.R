@@ -59,19 +59,20 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
     conns <- get_test_conns()
     conn <- conns[[1]]
 
+
+    # Our benchmark data is the iris data set but repeated to increase the data size
+    data_generator <- function(repeats) {
+      purrr::map(
+        seq(repeats),
+        \(it) dplyr::mutate(iris, r = dplyr::row_number() + (it - 1) * nrow(iris))
+      ) |>
+        purrr::reduce(rbind) |>
+        dplyr::rename_with(~ tolower(gsub(".", "_", .x, fixed = TRUE)))
+    }
+
+    # Benchmark 1, update_snapshot() with consecutive updates
     try({
-      # Our benchmark data is the iris data set but repeated to increase the data size
-      data_generator <- function(repeats) {
-        purrr::map(
-          seq(repeats),
-          \(it) dplyr::mutate(iris, r = dplyr::row_number() + (it - 1) * nrow(iris))
-        ) |>
-          purrr::reduce(rbind) |>
-          dplyr::rename_with(~ tolower(gsub(".", "_", .x, fixed = TRUE)))
-      }
-
       n <- 10
-
       data_1 <- data_generator(n)
       data_2 <- data_generator(2 * n) |>
         dplyr::mutate(
@@ -107,13 +108,13 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
 
       # Define the SCDB update functions
       scdb_update_step <- function(conn, data, ts) {
-        update_snapshot(data, conn, "SCDB_benchmark", timestamp = ts,
+        update_snapshot(data, conn, "SCDB_benchmark_1", timestamp = ts,
                         logger = Logger$new(output_to_console = FALSE, warn = FALSE))
       }
 
       scdb_updates <- function(conn, data_on_conn) {
         purrr::walk2(data_on_conn, ts, \(data, ts) scdb_update_step(conn, data, ts))
-        DBI::dbRemoveTable(conn, name = "SCDB_benchmark")
+        DBI::dbRemoveTable(conn, name = "SCDB_benchmark_1")
       }
 
       # Construct the list of benchmarks
@@ -129,9 +130,40 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
       saveRDS(update_snapshot_benchmark, glue::glue("data/benchmark-update_snapshot_{names(conns)[[1]]}_{version}.rds"))
     })
 
-    detach("package:SCDB", unload = TRUE)
+    # Benchmark 2, update_snapshot() with increasing data size
+    try({
+      for (n in floor(10^(seq(1, 3, length.out = 5)))) {
 
-    # Clean up
-    purrr::walk(conns, ~ DBI::dbDisconnect(., shutdown = TRUE))
+        data <- data_generator(n) |>
+          dplyr::copy_to(conn, df = _, name = id("test.SCDB_data", conn), overwrite = TRUE, temporary = FALSE)
+
+        # Define the SCDB update function
+        scdb_updates <- function(conn, data) {
+          update_snapshot(data, conn, "SCDB_benchmark_2", timestamp = "2021-01-01",
+                          logger = Logger$new(output_to_console = FALSE, warn = FALSE))
+          DBI::dbRemoveTable(conn, name = "SCDB_benchmark_2")
+        }
+
+        # Construct the list of benchmarks
+        update_snapshot_benchmark <- microbenchmark::microbenchmark(scdb_updates(conn, data), times = 5) |>
+          dplyr::mutate(
+            "benchmark_function" = "update_snapshot() - complexity",
+            "database" = names(conns)[[1]],
+            "version" = !!ifelse(version == "branch", substr(sha, 1, 10), version),
+            "n" = n
+          )
+
+        dir.create("data", showWarnings = FALSE)
+        saveRDS(
+          update_snapshot_benchmark,
+          glue::glue("data/benchmark-update_snapshot_complexity_{n}_{names(conns)[[1]]}_{version}.rds")
+        )
+      }
+
+      # Clean up
+      purrr::walk(conns, ~ DBI::dbDisconnect(., shutdown = TRUE))
+    })
+
+    detach("package:SCDB", unload = TRUE)
   }
 }
