@@ -62,7 +62,7 @@ jobs:
 
       - name: Delete previous benchmark files
         if: always()
-        run: rm -rf inst/extdata/benchmark-*.rds
+        run: rm -rf inst/extdata/benchmark*.rds
 
 
 
@@ -156,8 +156,7 @@ jobs:
 
           benchmarks <- benchmark_files |>
             purrr::map(readRDS) |>
-            purrr::map(tibble::as_tibble) |>
-            purrr::reduce(rbind)
+            purrr::list_rbind()
 
           benchmarks <- benchmarks |>
             dplyr::mutate(
@@ -180,7 +179,8 @@ jobs:
             dplyr::pull("database")
 
           benchmarks <- benchmarks |>
-            dplyr::mutate("database" = paste0(database, ifelse(database %in% slow_backends, "*", "")))
+            dplyr::mutate("database" = paste0(database, ifelse(database %in% slow_backends, "*", ""))) |>
+            tidyr::unnest(c(time, gc))
 
 
           # Mean and standard deviation (see ggplot2::mean_se())
@@ -192,7 +192,7 @@ jobs:
 
           g <- ggplot2::ggplot(
             benchmarks,
-            ggplot2::aes(x = version, y = time / 1e9)
+            ggplot2::aes(x = version, y = time)
           ) +
             ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
             ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +

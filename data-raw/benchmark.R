@@ -118,7 +118,8 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
       }
 
       # Construct the list of benchmarks
-      update_snapshot_benchmark <- microbenchmark::microbenchmark(scdb_updates(conn, data_on_conn), times = 25) |>
+      update_snapshot_benchmark <- bench::mark(scdb_updates(conn, data_on_conn), iterations = 25, filter_gc = FALSE) |>
+        dplyr::select("time", "gc", "mem_alloc") |>
         dplyr::mutate(
           "benchmark_function" = "update_snapshot()",
           "database" = names(conns)[[1]],
@@ -145,7 +146,8 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
         }
 
         # Construct the list of benchmarks
-        update_snapshot_benchmark <- microbenchmark::microbenchmark(scdb_updates(conn, data), times = 5) |>
+        update_snapshot_benchmark <- bench::mark(scdb_updates(conn, data), iterations = 5, filter_gc = FALSE) |>
+          dplyr::select("time", "gc", "mem_alloc") |>
           dplyr::mutate(
             "benchmark_function" = "update_snapshot() - complexity",
             "database" = names(conns)[[1]],
