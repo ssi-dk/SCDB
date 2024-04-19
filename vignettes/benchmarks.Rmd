@@ -93,13 +93,21 @@ slow_backends <- benchmark_1 |>
 benchmark_1 <- benchmark_1 |>
   dplyr::mutate("database" = paste0(database, ifelse(database %in% slow_backends, "*", "")))
 
+# Insert newline into databse name to improve rendering of figures
+labeller <- ggplot2::as_labeller(\(l) stringr::str_replace_all(l, stringr::fixed(" v"), "\nv"))
+
+
 
 g <- ggplot2::ggplot(
   benchmark_1,
   ggplot2::aes(x = version, y = time / 1e9)
 ) +
   ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
-  ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
+  ggplot2::facet_grid(
+    rows = ggplot2::vars(benchmark_function),
+    cols = ggplot2::vars(database),
+    labeller = labeller
+  ) +
   ggplot2::labs(x = "Codebase version", y = "Time (s)")
 
 if (length(slow_backends) > 1) {
@@ -136,7 +144,11 @@ ggplot2::ggplot(
 ) +
   ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
   ggplot2::geom_smooth(method = "lm", formula = y ~ x, se = FALSE, linetype = 3) +
-  ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
+  ggplot2::facet_grid(
+    rows = ggplot2::vars(benchmark_function),
+    cols = ggplot2::vars(database),
+    labeller = labeller
+  ) +
   ggplot2::labs(x = "Data size (1,000 rows)", y = "Time (s)", color = "Codebase version") +
   ggplot2::theme(panel.spacing = grid::unit(1, "lines"), legend.position = "bottom")
 ```
