@@ -128,7 +128,7 @@ batching the updates via the `filters` argument.
 # Use data for benchmark 2
 benchmark_2 <- benchmarks |>
   dplyr::filter(stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity"))) |>
-  dplyr::mutate("benchmark_function" = stringr::str_replace(benchmark_function, "- complexity", ""))
+  dplyr::mutate("benchmark_function" = stringr::str_remove_all(benchmark_function, stringr::fixed("- complexity")))
 
 ggplot2::ggplot(
   benchmark_2,
