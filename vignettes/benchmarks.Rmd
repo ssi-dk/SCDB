@@ -118,7 +118,7 @@ measures both the time to create the table and to remove it again afterwards (to
 The performance of this benchmark function is timed with the `microbenchmark` package using 5 replicates.
 All benchmarks are run on the same machine.
 
-The results of the benchmark are shown graphically below (mean and standard deviation) and with linear scaling (dotted 
+The results of the benchmark are shown graphically below (mean and standard deviation) and with linear scaling (dotted
 line), where we compare the current development version of `SCDB` with the current CRAN version.
 
 NOTE: There are reports of a superlinear complexity for very large data sets. If you experience such problems, consider
@@ -127,7 +127,8 @@ batching the updates via the `filters` argument.
 ```{r benchmark_2, echo = FALSE, eval = requireNamespace("here")}
 # Use data for benchmark 2
 benchmark_2 <- benchmarks |>
-  dplyr::filter(stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity")))
+  dplyr::filter(stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity"))) |>
+  dplyr::mutate("benchmark_function" = stringr::str_replace(benchmark_function, "- complexity", ""))
 
 ggplot2::ggplot(
   benchmark_2,
@@ -136,6 +137,6 @@ ggplot2::ggplot(
   ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
   ggplot2::geom_smooth(method = "lm", formula = y ~ x, se = FALSE, linetype = 3) +
   ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
-  ggplot2::labs(x = "Data size (1,000 rows)", y = "Time (s)") +
-  ggplot2::theme(panel.spacing = grid::unit(1, "lines"))
+  ggplot2::labs(x = "Data size (1,000 rows)", y = "Time (s)", color = "Codebase version") +
+  ggplot2::theme(panel.spacing = grid::unit(1, "lines"), legend.position = "bottom")
 ```
