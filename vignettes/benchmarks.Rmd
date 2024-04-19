@@ -82,7 +82,7 @@ mean_sd <- function(x) {
 ```{r benchmark_1, echo = FALSE, eval = requireNamespace("here")}
 # Use data for benchmark 1
 benchmark_1 <- benchmarks |>
-  dplyr::filter(!stringr::str_ends(.data$benchmark_function, "complexity"))
+  dplyr::filter(!stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity")))
 
 # Add note slow backends
 slow_backends <- benchmark_1 |>
@@ -127,7 +127,7 @@ batching the updates via the `filters` argument.
 ```{r benchmark_2, echo = FALSE, eval = requireNamespace("here")}
 # Use data for benchmark 2
 benchmark_2 <- benchmarks |>
-  dplyr::filter(stringr::str_ends(.data$benchmark_function, "complexity"))
+  dplyr::filter(stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity")))
 
 ggplot2::ggplot(
   benchmark_2,
