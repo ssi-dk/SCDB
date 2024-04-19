@@ -118,8 +118,8 @@ measures both the time to create the table and to remove it again afterwards (to
 The performance of this benchmark function is timed with the `microbenchmark` package using 5 replicates.
 All benchmarks are run on the same machine.
 
-The results of the benchmark are shown graphically below (mean and standard deviation), where we compare the current
-development version of `SCDB` with the current CRAN version.
+The results of the benchmark are shown graphically below (mean and standard deviation) and with linear scaling (dotted 
+line), where we compare the current development version of `SCDB` with the current CRAN version.
 
 NOTE: There are reports of a superlinear complexity for very large data sets. If you experience such problems, consider
 batching the updates via the `filters` argument.
@@ -134,6 +134,7 @@ ggplot2::ggplot(
   ggplot2::aes(x = n * nrow(iris) / 1e3, y = time / 1e9, color = version)
 ) +
   ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
+  ggplot2::geom_smooth(method = "lm", formula = y ~ x, se = FALSE, linetype = 3) +
   ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
   ggplot2::labs(x = "Data size (1,000 rows)", y = "Time (s)") +
   ggplot2::theme(panel.spacing = grid::unit(1, "lines"))
