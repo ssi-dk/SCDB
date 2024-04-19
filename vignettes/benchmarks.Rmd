@@ -31,7 +31,7 @@ This data forms the basis for three "snapshots" used in the benchmarks:
 The benchmark function uses three consecutive calls to `update_snapshot()` to create the table with first snapshot and
 then update it to the second and third snapshot. Finally, the table is deleted.
 
-The performance of this benchmark function is timed with the `bench` package using 10 replicates.
+The performance of this benchmark function is timed with the `microbenchmark` package using 10 replicates.
 All benchmarks are run on the same machine.
 
 The results of the benchmark are shown graphically below (mean and standard deviation), where we compare the current
@@ -45,8 +45,7 @@ benchmark_location <- c(
   purrr::discard(~ identical(., "")) |>
   purrr::pluck(1)
 
-benchmarks <- readRDS(benchmark_location) |>
-  tidyr::unnest(c(time, gc))
+benchmarks <- readRDS(benchmark_location)
 
 # Determine if the SHA is on main
 sha <- benchmarks |>
@@ -83,7 +82,7 @@ mean_sd <- function(x) {
 ```{r benchmark_1, echo = FALSE, eval = requireNamespace("here")}
 # Use data for benchmark 1
 benchmark_1 <- benchmarks |>
-  dplyr::filter(!stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity")))
+  dplyr::filter(!stringr::str_ends(.data$benchmark_function, "complexity"))
 
 # Add note slow backends
 slow_backends <- benchmark_1 |>
@@ -97,7 +96,7 @@ benchmark_1 <- benchmark_1 |>
 
 g <- ggplot2::ggplot(
   benchmark_1,
-  ggplot2::aes(x = version, y = time)
+  ggplot2::aes(x = version, y = time / 1e9)
 ) +
   ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
   ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
@@ -112,42 +111,30 @@ g
 
 
 We include another benchmark to highlight the complexity scaling of the `update_snapshot() ` with the size of the input
-data. The data sets are similar to the first benchmark is used, but the number of repeats is varied to see the impact of
+data. The datasets are similar to the first benchmark is used, but the number of repeats is varied to see the impact of
 increasing data size. The benchmarks are run from a "clean" state, where the target_table does not exists. The benchmark
 measures both the time to create the table and to remove it again afterwards (to restore the clean state).
 
-The performance of this benchmark function is timed with the `bench` package using 5 replicates.
+The performance of this benchmark function is timed with the `microbenchmark` package using 5 replicates.
 All benchmarks are run on the same machine.
 
 The results of the benchmark are shown graphically below (mean and standard deviation), where we compare the current
 development version of `SCDB` with the current CRAN version.
 
-NOTE: There are reports of a super-linear complexity for very large data sets. If you experience such problems, consider
+NOTE: There are reports of a superlinear complexity for very large data sets. If you experience such problems, consider
 batching the updates via the `filters` argument.
 
-```{r benchmark_2_time, echo = FALSE, eval = requireNamespace("here")}
+```{r benchmark_2, echo = FALSE, eval = requireNamespace("here")}
 # Use data for benchmark 2
 benchmark_2 <- benchmarks |>
-  dplyr::filter(stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity")))
+  dplyr::filter(stringr::str_ends(.data$benchmark_function, "complexity"))
 
 ggplot2::ggplot(
   benchmark_2,
-  ggplot2::aes(x = n * nrow(iris) / 1e3, y = time, color = version)
+  ggplot2::aes(x = n * nrow(iris) / 1e3, y = time / 1e9, color = version)
 ) +
   ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
   ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
   ggplot2::labs(x = "Data size (1,000 rows)", y = "Time (s)") +
-  ggplot2::theme(panel.spacing = grid::unit(1, "lines"))
-```
-
-```{r benchmark_2_memory, echo = FALSE, eval = requireNamespace("here")}
-# Use data for benchmark 2
-ggplot2::ggplot(
-  benchmark_2,
-  ggplot2::aes(x = n * nrow(iris) / 1e3, y = mem_alloc / 2^20, color = version)
-) +
-  ggplot2::geom_point() + 
-  ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
-  ggplot2::labs(x = "Data size (1,000 rows)", y = "Memory allocation (MB)") +
   ggplot2::theme(panel.spacing = grid::unit(1, "lines"))
 ```

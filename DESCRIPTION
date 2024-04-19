@@ -39,7 +39,6 @@ Imports:
     tidyselect,
     utils
 Suggests:
-    bench,
     callr,
     conflicted,
     duckdb,
@@ -47,6 +46,7 @@ Suggests:
     jsonlite,
     knitr,
     lintr,
+    microbenchmark,
     odbc,
     rmarkdown,
     roxygen2,
