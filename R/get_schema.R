@@ -62,7 +62,8 @@ get_schema.PqConnection <- function(obj, temporary = FALSE,  ...) {
   if (temporary)  {
     temp_schema <- DBI::dbGetQuery(obj, "SELECT nspname FROM pg_namespace WHERE oid = pg_my_temp_schema();")$nspname
 
-    # If no temporary tables have been created, the temp schema has not been determined yet
+    # If no temporary tables have been created, the temp schema has not been determined yet and we create a temporary
+    # table to force the schema to be determined.
     if (identical(temp_schema, character(0))) {
       temp_table_name <- unique_table_name()
       DBI::dbExecute(obj, glue::glue("CREATE TEMPORARY TABLE {temp_table_name}(a TEXT)"))
