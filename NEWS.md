@@ -1,5 +1,9 @@
 # SCDB (development version)
 
+## Improvements and Fixes
+
+* `get_schema()` now correctly returns the temporary schema on PostgreSQL backends (#139).
+
 ## Documentation
 
 * A vignette including benchmarks of `update_snapshot()` across various backends is added (#138)
