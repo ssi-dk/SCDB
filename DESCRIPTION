@@ -42,6 +42,7 @@ Suggests:
     callr,
     conflicted,
     duckdb,
+    ggplot2,
     here,
     jsonlite,
     knitr,
