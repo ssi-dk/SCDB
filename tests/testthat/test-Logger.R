@@ -114,7 +114,13 @@ test_that("Logger: logging to file works", {
   # Create logger and test configuration
   # Test file logging - with POSIX timestamp
   timestamp <- as.POSIXct("2022-02-01 09:00:00")
-  logger <- Logger$new(db_table = db_table, timestamp = timestamp, log_path = log_path, warn = FALSE)
+  logger <- Logger$new(
+    db_table = db_table,
+    timestamp = timestamp,
+    log_path = log_path,
+    output_to_console = FALSE,
+    warn = FALSE
+  )
 
   expect_equal(logger$log_path, log_path)
   expect_equal(
