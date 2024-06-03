@@ -13,6 +13,9 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+# NOTE:
+# To re-run the benchmarks, run the "benchmark" workflow on GitHub
 ```
 
 To showcase the performance of `SCDB` on different database backends, we include this vignette that summarises a simple
