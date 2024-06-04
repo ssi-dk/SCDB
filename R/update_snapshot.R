@@ -214,23 +214,24 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
 
   ## Deactivation
-  checksums_to_deactivate <- dbplyr::sql_render(
-    dplyr::setdiff(currently_valid_checksums, dplyr::select(.data, "checksum"))
-  )
+  checksums_to_deactivate <- dplyr::setdiff(currently_valid_checksums, dplyr::select(.data, "checksum"))
 
   sql_deactivate <- dbplyr::sql_query_update_from(
     con = conn,
     table = dbplyr::as.sql(db_table_id, con = conn),
-    from = checksums_to_deactivate,
+    from = dbplyr::sql_render(checksums_to_deactivate),
     by = "checksum",
     update_values = c("until_ts" = slice_ts)
   )
 
+  # Commit changes to DB
+  rs_deactivate <- DBI::dbSendQuery(conn, sql_deactivate)
+  n_deactivations <- DBI::dbGetRowsAffected(rs_deactivate)
+  DBI::dbClearResult(rs_deactivate)
+  logger$log_to_db(n_deactivations = !!n_deactivations)
+
 
   ## Insertion
-  records_to_insert <- dbplyr::sql_render(
-    dplyr::filter(.data, !(.data$checksum %in% !!dplyr::pull(db_table, .data$checksum)))
-  )
 
   records_to_insert <- dbplyr::build_sql(
     con = conn,
@@ -250,17 +251,11 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     conflict = "ignore"
   )
 
-  rs_deactivate <- DBI::dbSendQuery(conn, sql_deactivate)
-  n_deactivations <- DBI::dbGetRowsAffected(rs_deactivate)
-  DBI::dbClearResult(rs_deactivate)
-
+  # Commit changes to DB
   rs_insert <- DBI::dbSendQuery(conn, sql_insert)
   n_insertions <- DBI::dbGetRowsAffected(rs_insert)
   DBI::dbClearResult(rs_insert)
-
-  # Write updates to log
-  logger$log_to_db(n_insertions = !!n_insertions, n_deactivations = !!n_deactivations)
-
+  logger$log_to_db(n_insertions = !!n_insertions)
 
 
   # If chronological order is not enforced, some records may be split across several records
@@ -279,7 +274,6 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
       )
     )
 
-
     # If the record has the earlier from_ts, we use the until_ts of the other.
     # If the record has the later from_ts, we set until_ts equal to from_ts to trigger
     # clean up later in update_snapshot.
@@ -287,14 +281,34 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
       dplyr::mutate("until_ts" = ifelse(.data$from_ts < .data$from_ts.p, .data$until_ts.p, .data$from_ts)) |>
       dplyr::select(!tidyselect::ends_with(".p"))
 
-    # Commit changes to DB
-    dplyr::rows_update(
-      x = dplyr::tbl(conn, db_table_id),
-      y = consecutive_rows_fix,
-      by = c("checksum", "from_ts"),
-      unmatched = "ignore",
-      in_place = TRUE
-    )
+    if (inherits(conn, "duckdb_connection")) {
+      # For duckdb the lower level translation fails
+      # dbplyr 2.5.0, duckdb 0.10.2
+      consecutive_rows_fix <- dplyr::compute(consecutive_rows_fix)
+      defer_db_cleanup(consecutive_rows_fix)
+
+
+      dplyr::rows_update(
+        x = dplyr::tbl(conn, db_table_id),
+        y = consecutive_rows_fix,
+        by = c("checksum", "from_ts"),
+        unmatched = "ignore",
+        in_place = TRUE
+      )
+
+    } else {
+      sql_fix_consecutive <- dbplyr::sql_query_upsert(
+        con = conn,
+        table = dbplyr::as.sql(db_table_id, con = conn),
+        from = dbplyr::sql_render(consecutive_rows_fix),
+        by =  c("checksum", "from_ts"),
+        update_cols = "until_ts"
+      )
+
+      # Commit changes to DB
+      rs_fix_consecutive <- DBI::dbSendQuery(conn, sql_fix_consecutive)
+      DBI::dbClearResult(rs_fix_consecutive)
+    }
   }
 
 
@@ -306,14 +320,19 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     dplyr::filter(.data$from_ts == .data$until_ts) |>
     dplyr::select("checksum", "from_ts")
 
-  dplyr::rows_delete(
-    x = dplyr::tbl(conn, db_table_id),
-    y = redundant_rows,
-    by = c("checksum", "from_ts"),
-    in_place = TRUE,
-    unmatched = "ignore"
+  sql_fix_redundant <- dbplyr::sql_query_delete(
+    con = conn,
+    table = dbplyr::as.sql(db_table_id, con = conn),
+    from = dbplyr::sql_render(redundant_rows),
+    by = c("checksum", "from_ts")
   )
 
+  # Commit changes to DB
+  rs_fix_redundant <- DBI::dbSendQuery(conn, sql_fix_redundant)
+  DBI::dbClearResult(rs_fix_redundant)
+
+
+  # Clean up
   toc <- Sys.time()
   logger$finalize_db_entry()
   logger$log_info("Finished processing for table", as.character(db_table_id), tic = toc)
