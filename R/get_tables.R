@@ -161,10 +161,7 @@ get_tables.duckdb_connection <- function(conn, pattern = NULL, show_temporary = 
 
   if (!is.null(pattern)) {
     tables <- tables |>
-      dplyr::mutate(db_table_str = ifelse(
-        is.na(.data$schema), .data$table,
-        paste(.data$schema, .data$table, sep = ".")
-      )) |>
+      tidyr::unite("db_table_str", "catalog", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
       dplyr::filter(grepl(pattern, .data$db_table_str)) |>
       dplyr::select(!"db_table_str")
   }
