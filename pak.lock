@@ -758,7 +758,7 @@
     {
       "ref": "DBI",
       "package": "DBI",
-      "version": "1.2.2",
+      "version": "1.2.3",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -771,10 +771,10 @@
         "RemoteRef": "DBI",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "1.2.2"
+        "RemoteSha": "1.2.3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/DBI_1.2.2.tar.gz"],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/DBI_1.2.2.tar.gz",
+      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/DBI_1.2.3.tar.gz"],
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/DBI_1.2.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -1832,7 +1832,7 @@
     {
       "ref": "knitr",
       "package": "knitr",
-      "version": "1.46",
+      "version": "1.47",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -1845,10 +1845,10 @@
         "RemoteRef": "knitr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "1.46"
+        "RemoteSha": "1.47"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/knitr_1.46.tar.gz"],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/knitr_1.46.tar.gz",
+      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/knitr_1.47.tar.gz"],
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/knitr_1.47.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -2211,11 +2211,11 @@
     {
       "ref": "odbc",
       "package": "odbc",
-      "version": "1.4.2",
+      "version": "1.5.0",
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["bit64", "blob", "DBI", "hms", "lifecycle", "Rcpp", "rlang"],
+      "dependencies": ["bit64", "blob", "cli", "DBI", "hms", "lifecycle", "Rcpp", "rlang"],
       "vignettes": false,
       "needscompilation": false,
       "metadata": {
@@ -2224,10 +2224,10 @@
         "RemoteRef": "odbc",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "1.4.2"
+        "RemoteSha": "1.5.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/odbc_1.4.2.tar.gz"],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/odbc_1.4.2.tar.gz",
+      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/odbc_1.5.0.tar.gz"],
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/odbc_1.5.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -3021,7 +3021,7 @@
     {
       "ref": "rlang",
       "package": "rlang",
-      "version": "1.1.3",
+      "version": "1.1.4",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -3034,10 +3034,10 @@
         "RemoteRef": "rlang",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "1.1.3"
+        "RemoteSha": "1.1.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rlang_1.1.3.tar.gz"],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/rlang_1.1.3.tar.gz",
+      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rlang_1.1.4.tar.gz"],
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/rlang_1.1.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
