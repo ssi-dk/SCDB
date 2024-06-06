@@ -4,6 +4,8 @@
 
 * `get_schema()` now correctly returns the temporary schema on PostgreSQL backends (#139).
 
+* `get_tables()` now returns catalog on DuckDB backends (#145).
+
 ## Documentation
 
 * A vignette including benchmarks of `update_snapshot()` across various backends is added (#138)
