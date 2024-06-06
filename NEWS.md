@@ -6,6 +6,8 @@
 
 ## Improvements and Fixes
 
+* `update_snapshot()` has been optimized and now runs faster on all the supported backends (#137).
+
 * `get_schema()` now correctly returns the temporary schema on PostgreSQL backends (#139).
 
 ## Documentation
