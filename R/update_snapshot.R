@@ -214,6 +214,9 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
 
   ## Deactivation
+  logger$log_info("Deactivating records")
+
+
   checksums_to_deactivate <- dplyr::setdiff(currently_valid_checksums, dplyr::select(.data, "checksum"))
 
   sql_deactivate <- dbplyr::sql_query_update_from(
@@ -223,15 +226,19 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     by = "checksum",
     update_values = c("until_ts" = slice_ts)
   )
+  logger$log_info("After to_remove")
 
   # Commit changes to DB
   rs_deactivate <- DBI::dbSendQuery(conn, sql_deactivate)
   n_deactivations <- DBI::dbGetRowsAffected(rs_deactivate)
   DBI::dbClearResult(rs_deactivate)
   logger$log_to_db(n_deactivations = !!n_deactivations)
+  logger$log_info("Deactivate records count:", n_deactivations)
+
 
 
   ## Insertion
+  logger$log_info("Adding new records")
 
   records_to_insert <- dbplyr::build_sql(
     con = conn,
@@ -250,12 +257,14 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     by = c("checksum", "from_ts"),
     conflict = "ignore"
   )
+  logger$log_info("After to_add")
 
   # Commit changes to DB
   rs_insert <- DBI::dbSendQuery(conn, sql_insert)
   n_insertions <- DBI::dbGetRowsAffected(rs_insert)
   DBI::dbClearResult(rs_insert)
   logger$log_to_db(n_insertions = !!n_insertions)
+  logger$log_info("Insert records count:", n_insertions)
 
 
   # If chronological order is not enforced, some records may be split across several records
@@ -286,7 +295,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
       # dbplyr 2.5.0, duckdb 0.10.2
       consecutive_rows_fix <- dplyr::compute(consecutive_rows_fix)
       defer_db_cleanup(consecutive_rows_fix)
-
+      n_consecutive <- nrow(consecutive_rows_fix) / 2
 
       dplyr::rows_update(
         x = dplyr::tbl(conn, db_table_id),
@@ -307,8 +316,10 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
       # Commit changes to DB
       rs_fix_consecutive <- DBI::dbSendQuery(conn, sql_fix_consecutive)
+      n_consecutive <- DBI::dbGetRowsAffected(rs_fix_consecutive) / 2
       DBI::dbClearResult(rs_fix_consecutive)
     }
+    logger$log_info("Doubly updated records removed:", n_consecutive)
   }
 
 
@@ -329,7 +340,9 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
   # Commit changes to DB
   rs_fix_redundant <- DBI::dbSendQuery(conn, sql_fix_redundant)
+  n_redundant <- DBI::dbGetRowsAffected(rs_fix_redundant) / 2
   DBI::dbClearResult(rs_fix_redundant)
+  logger$log_info("Continuous records collapsed:", n_redundant)
 
 
   # Clean up
