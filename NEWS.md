@@ -1,5 +1,9 @@
 # SCDB (development version)
 
+## New features
+
+* Added function `create_index` to allow easy creating of an index on a table (#137).
+
 ## Improvements and Fixes
 
 * `get_schema()` now correctly returns the temporary schema on PostgreSQL backends (#139).
