@@ -103,3 +103,24 @@ test_that("get_tables() works with temporary tables", {
     connection_clean_up(conn)
   }
 })
+
+test_that("get_tables() matches the pattern of SCDB::id", {
+  for (conn in get_test_conns()) {
+
+    # Test for both a permanent table and a temporary table
+    permanent_table <- id("test.mtcars", conn = conn)
+
+    tmp <- dplyr::copy_to(conn, mtcars, "__mtcars_2", temporary = TRUE)
+    defer_db_cleanup(tmp)
+    temporary_table <- id(tmp)
+
+    # Check tables can be found by get_tables with pattern
+    expect_identical(nrow(get_tables(conn, pattern = paste0("^", as.character(permanent_table)))), 1L)
+    expect_identical(id(get_tables(conn, pattern = paste0("^", as.character(permanent_table)))), permanent_table)
+
+    expect_identical(nrow(get_tables(conn, pattern = paste0("^", as.character(temporary_table)))), 1L)
+    expect_identical(id(get_tables(conn, pattern = paste0("^", as.character(temporary_table)))), temporary_table)
+
+    connection_clean_up(conn)
+  }
+})
