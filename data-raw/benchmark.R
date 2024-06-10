@@ -1,6 +1,7 @@
 withr::local_options("odbc.batch_rows" = 1000)
 
 # Install extra dependencies
+lib_paths_default <- .libPaths()
 pak::pkg_install("jsonlite")
 pak::pkg_install("microbenchmark")
 
@@ -21,25 +22,25 @@ for (version in c("CRAN", "main", "branch")) {
     version == "branch" ~ glue::glue("ssi-dk/SCDB@{sha}")
   )
 
-  lib_path <- dplyr::case_when(
+  lib_dir <- dplyr::case_when(
     version == "CRAN" ~ "SCDB",
     version == "main" ~ "ssi-dk-SCDB",
     version == "branch" ~ glue::glue("ssi-dk-SCDB-{sha}")
   )
 
-  dir.create(lib_path, recursive = TRUE, showWarnings = FALSE)
+  lib_path <- here::here("installations", lib_dir)
+  dir.create(lib_path, showWarnings = FALSE)
 
   # Install the missing packages
-  .libPaths(lib_path)
+  .libPaths(c(lib_path, lib_paths_default))
   pak::lockfile_create(source, "SCDB.lock")
-  jsonlite::fromJSON("SCDB.lock")$packages$ref
-    purrr::discard(rlang::is_installed) |>
-    pak::pkg_install(lib = lib_path)
-
+  missing <- jsonlite::fromJSON("SCDB.lock")$packages$ref |>
+    purrr::discard(rlang::is_installed)
+  if (length(missing) > 0) pak::pkg_install(missing, lib = lib_path)
 }
 
 
-# Return early if no backend is defined
+# Return early if no back-end is defined
 if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), "")) {
   message("No backend defined, skipping benchmark!")
 } else {
