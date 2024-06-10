@@ -4,6 +4,7 @@ withr::local_options("odbc.batch_rows" = 1000)
 lib_paths_default <- .libPaths()
 pak::pkg_install("jsonlite")
 pak::pkg_install("microbenchmark")
+pak::pkg_install("here")
 
 # Load the connection helper
 source("tests/testthat/helper-setup.R")
@@ -59,13 +60,14 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
       version == "branch" ~ glue::glue("ssi-dk/SCDB@{sha}")
     )
 
-    lib_path <- dplyr::case_when(
+    lib_dir <- dplyr::case_when(
       version == "CRAN" ~ "SCDB",
       version == "main" ~ "ssi-dk-SCDB",
       version == "branch" ~ glue::glue("ssi-dk-SCDB-{sha}")
     )
 
-    library("SCDB", lib.loc = lib_path)
+    .libPaths(c(here::here("installations", lib_dir), lib_paths_default))
+    library("SCDB")
 
     # Open connection to the database
     conns <- get_test_conns()
