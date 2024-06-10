@@ -1,5 +1,9 @@
 withr::local_options("odbc.batch_rows" = 1000)
 
+# Install extra dependencies
+pak::pkg_install("jsonlite")
+pak::pkg_install("microbenchmark")
+
 # Load the connection helper
 source("tests/testthat/helper-setup.R")
 
