@@ -24,7 +24,14 @@ for (version in c("CRAN", "main", "branch")) {
   )
 
   dir.create(lib_path, recursive = TRUE, showWarnings = FALSE)
-  pak::pkg_install(source, lib = lib_path)
+
+  # Install the missing packages
+  .libPaths(lib_path)
+  pak::lockfile_create(source, "SCDB.lock")
+  jsonlite::fromJSON("SCDB.lock")$packages$ref
+    purrr::discard(rlang::is_installed) |>
+    pak::pkg_install(lib = lib_path)
+
 }
 
 
