@@ -96,7 +96,7 @@ slow_backends <- benchmark_1 |>
 benchmark_1 <- benchmark_1 |>
   dplyr::mutate("database" = paste0(database, ifelse(database %in% slow_backends, "*", "")))
 
-# Insert newline into databse name to improve rendering of figures
+# Insert newline into database name to improve rendering of figures
 labeller <- ggplot2::as_labeller(\(l) stringr::str_replace_all(l, stringr::fixed(" v"), "\nv"))
 
 
@@ -122,7 +122,7 @@ g
 
 
 We include another benchmark to highlight the complexity scaling of the `update_snapshot() ` with the size of the input
-data. The datasets are similar to the first benchmark is used, but the number of repeats is varied to see the impact of
+data. The datasets are similar to the first benchmark, but the number of repeats is varied to see the impact of
 increasing data size. The benchmarks are run from a "clean" state, where the target_table does not exists. The benchmark
 measures both the time to create the table and to remove it again afterwards (to restore the clean state).
 
