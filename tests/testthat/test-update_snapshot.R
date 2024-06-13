@@ -401,6 +401,53 @@ test_that("update_snapshot() works (holistic test 2)", {
 })
 
 
+test_that("update_snapshot() handles 'NULL' updates", {
+  for (conn in get_test_conns()) {
+
+    if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
+    if (DBI::dbExistsTable(conn, id("test.SCDB_logs", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_logs", conn))
+
+    # Use mtcars as the test data set
+    .data <- mtcars |>
+      dplyr::copy_to(conn, df = _, name = unique_table_name())
+    defer_db_cleanup(.data)
+
+    # This is a simple update where 23 rows are replaced with 23 new ones on the given date
+    db_table <- "test.SCDB_tmp1"
+
+    create_logger <- \(timestamp) Logger$new(
+      db_table = db_table,
+      timestamp = timestamp,
+      log_path = NULL,
+      log_table_id = "test.SCDB_logs",
+      log_conn = conn,
+      output_to_console = FALSE
+    )
+
+    # Update the table with update_snapshot() and store the results
+    update_snapshot(.data, conn, db_table, "2022-10-03 09:00:00", logger = create_logger("2022-10-03 09:00:00"))
+    target_data_1 <- get_table(conn, db_table) |> dplyr::collect()
+
+    # Update the table with the same data again update_snapshot() and store the results
+    update_snapshot(.data, conn, db_table, "2022-10-04 09:00:00", logger = create_logger("2022-10-03 09:00:00"))
+    target_data_2 <- get_table(conn, db_table) |> dplyr::collect()
+
+    # Check that the two updates are identical
+    expect_identical(target_data_1, target_data_2)
+
+    # Confirm with logs that no updates have been made
+    logs <- get_table(conn, id("test.SCDB_logs", conn)) |>
+      dplyr::collect() |>
+      dplyr::arrange(date)
+
+    expect_identical(logs$n_insertions, c(nrow(mtcars), 0L))
+    expect_identical(logs$n_deactivations, c(0L, 0L))
+
+    connection_clean_up(conn)
+  }
+})
+
+
 test_that("update_snapshot() works with Id objects", {
   withr::local_options("SCDB.log_path" = NULL) # No file logging
 
