@@ -90,7 +90,7 @@ test_that("update_snapshot() can handle first snapshot", {
     expect_identical(logs$schema, purrr::pluck(db_table_id, "name", "schema"))
     expect_identical(logs$table, purrr::pluck(db_table_id, "name", "table"))
 
-    expect_identical(logs$n_insertions, 32L)
+    expect_identical(logs$n_insertions, nrow(mtcars))
     expect_identical(logs$n_deactivations, 0L)
     expect_true(as.logical(logs$success))
     expect_identical(logs$message, NA_character_)
@@ -102,7 +102,6 @@ test_that("update_snapshot() can handle first snapshot", {
     close_connection(conn)
   }
 })
-
 
 test_that("update_snapshot() can add a new snapshot", {
   for (conn in get_test_conns()) {
@@ -174,7 +173,6 @@ test_that("update_snapshot() can add a new snapshot", {
   }
 })
 
-
 test_that("update_snapshot() can update a snapshot on an existing date", {
   for (conn in get_test_conns()) {
 
@@ -244,7 +242,6 @@ test_that("update_snapshot() can update a snapshot on an existing date", {
   }
 })
 
-
 test_that("update_snapshot() can insert a snapshot between existing dates", {
   for (conn in get_test_conns()) {
 
@@ -298,6 +295,7 @@ test_that("update_snapshot() can insert a snapshot between existing dates", {
 })
 
 
+
 test_that("update_snapshot() works (holistic test 1)", {
   for (conn in get_test_conns()) {
 
@@ -346,8 +344,6 @@ test_that("update_snapshot() works (holistic test 1)", {
     close_connection(conn)
   }
 })
-
-
 
 test_that("update_snapshot() works (holistic test 2)", {
   for (conn in get_test_conns()) {
