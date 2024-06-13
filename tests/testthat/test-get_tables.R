@@ -103,3 +103,54 @@ test_that("get_tables() works with temporary tables", {
     connection_clean_up(conn)
   }
 })
+
+
+test_that("get_tables() works without temporary tables", {
+  for (conn in get_test_conns()) {
+
+    # Create temporary table
+    tmp <- dplyr::copy_to(conn, mtcars, "__mtcars_2", temporary = TRUE)
+    tmp_id <- id(tmp)
+    tmp_name <- paste(tmp_id@name["schema"], tmp_id@name["table"], sep = ".")
+
+    db_table_names <- get_tables(conn, show_temporary = FALSE) |>
+      tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
+      dplyr::pull(db_table_name)
+
+    # Check for the existence of "test.mtcars" and "__mtcars" (added during test setup)
+    # For SQLite connections, we don't always have the "test" schema, so we check for its existence
+    # and use default schema if it does not exist.
+    table_1 <- paste(c(switch(!schema_exists(conn, "test"), get_schema(conn)), "test.mtcars"), collapse = ".")
+    table_2 <- paste(c(get_schema(conn), "__mtcars"), collapse = ".")
+
+    # Our permanent test tables should be present
+    checkmate::expect_subset(c(table_1, table_2), db_table_names)
+
+    # But not our temporary tables
+    checkmate::expect_disjunct(tmp_name, db_table_names)
+
+    connection_clean_up(conn)
+  }
+})
+
+
+test_that("get_tables() matches the pattern of SCDB::id", {
+  for (conn in get_test_conns()) {
+
+    # Test for both a permanent table and a temporary table
+    permanent_table <- id("test.mtcars", conn = conn)
+
+    tmp <- dplyr::copy_to(conn, mtcars, "__mtcars_2", temporary = TRUE)
+    defer_db_cleanup(tmp)
+    temporary_table <- id(tmp)
+
+    # Check tables can be found by get_tables with pattern
+    expect_identical(nrow(get_tables(conn, pattern = paste0("^", as.character(permanent_table)))), 1L)
+    expect_identical(id(get_tables(conn, pattern = paste0("^", as.character(permanent_table)))), permanent_table)
+
+    expect_identical(nrow(get_tables(conn, pattern = paste0("^", as.character(temporary_table)))), 1L)
+    expect_identical(id(get_tables(conn, pattern = paste0("^", as.character(temporary_table)))), temporary_table)
+
+    connection_clean_up(conn)
+  }
+})
