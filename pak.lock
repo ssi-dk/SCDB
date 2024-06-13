@@ -913,7 +913,7 @@
     {
       "ref": "downlit",
       "package": "downlit",
-      "version": "0.4.3",
+      "version": "0.4.4",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -926,10 +926,10 @@
         "RemoteRef": "downlit",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "0.4.3"
+        "RemoteSha": "0.4.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/downlit_0.4.3.tar.gz"],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/downlit_0.4.3.tar.gz",
+      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/downlit_0.4.4.tar.gz"],
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/downlit_0.4.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -1037,7 +1037,7 @@
     {
       "ref": "evaluate",
       "package": "evaluate",
-      "version": "0.23",
+      "version": "0.24.0",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -1050,10 +1050,10 @@
         "RemoteRef": "evaluate",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "0.23"
+        "RemoteSha": "0.24.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/evaluate_0.23.tar.gz"],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/evaluate_0.23.tar.gz",
+      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/evaluate_0.24.0.tar.gz"],
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/evaluate_0.24.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
