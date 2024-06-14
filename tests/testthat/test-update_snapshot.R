@@ -426,11 +426,11 @@ test_that("update_snapshot() handles 'NULL' updates", {
 
     # Update the table with update_snapshot() and store the results
     update_snapshot(.data, conn, db_table, "2022-10-03 09:00:00", logger = create_logger("2022-10-03 09:00:00"))
-    target_data_1 <- get_table(conn, db_table) |> dplyr::collect()
+    target_data_1 <- get_table(conn, db_table, slice_ts = NULL) |> dplyr::collect()
 
     # Update the table with the same data again update_snapshot() and store the results
-    update_snapshot(.data, conn, db_table, "2022-10-04 09:00:00", logger = create_logger("2022-10-03 09:00:00"))
-    target_data_2 <- get_table(conn, db_table) |> dplyr::collect()
+    update_snapshot(.data, conn, db_table, "2022-10-04 09:00:00", logger = create_logger("2022-10-04 09:00:00"))
+    target_data_2 <- get_table(conn, db_table, slice_ts = NULL) |> dplyr::collect()
 
     # Check that the two updates are identical
     expect_identical(target_data_1, target_data_2)
