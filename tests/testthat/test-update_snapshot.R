@@ -415,14 +415,16 @@ test_that("update_snapshot() handles 'NULL' updates", {
     # This is a simple update where 23 rows are replaced with 23 new ones on the given date
     db_table <- "test.SCDB_tmp1"
 
-    create_logger <- \(timestamp) Logger$new(
-      db_table = db_table,
-      timestamp = timestamp,
-      log_path = NULL,
-      log_table_id = "test.SCDB_logs",
-      log_conn = conn,
-      output_to_console = FALSE
-    )
+    create_logger <- \(timestamp) {
+      Logger$new(
+        db_table = db_table,
+        timestamp = timestamp,
+        log_path = NULL,
+        log_table_id = "test.SCDB_logs",
+        log_conn = conn,
+        output_to_console = FALSE
+      )
+    }
 
     # Update the table with update_snapshot() and store the results
     update_snapshot(.data, conn, db_table, "2022-10-03 09:00:00", logger = create_logger("2022-10-03 09:00:00"))
