@@ -155,6 +155,14 @@ get_connection.OdbcDriver <- function(
   checkmate::assert_choice(timezone_out, OlsonNames(), null.ok = TRUE, add = coll)
   checkmate::reportAssertions(coll)
 
+  # Recommend batch processing for ODBC connections
+  if (is.null(getOption("odbc.batch_rows"))) {
+    message(
+      "Transfer of large data sets may be slow. ",
+      "Consider using options(\"odbc.batch_rows\" = 1000) to speed up transfer."
+    )
+  }
+
   # Check if connection can be established given these settings
   status <- do.call(DBI::dbCanConnect, args = args)
   if (!status) stop(attr(status, "reason"))
