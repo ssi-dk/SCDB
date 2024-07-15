@@ -59,11 +59,7 @@ nolint_position_linter <- function(length = 80L) {
       nolint_info <- source_expression$content |>
         stringr::str_locate_all(stringr::regex(r"{# *nolint}", ignore_case = TRUE))
 
-      nolint_info <- purrr::map2(
-        nolint_info,
-        seq_along(nolint_info),
-        ~ dplyr::mutate(as.data.frame(.x), line_number = .y)
-      ) |>
+      nolint_info <- purrr::imap(nolint_info, ~ dplyr::mutate(as.data.frame(.x), line_number = .y)) |>
         purrr::reduce(rbind) |>
         dplyr::filter(!is.na(.data$start)) |>
         dplyr::filter(.data$start <= length)
@@ -176,11 +172,7 @@ non_ascii_linter <- function() {
       detection_info <- source_expression$file_lines |>
         stringr::str_locate_all(stringr::regex(r"{[^\x00-\x7f]}", ignore_case = TRUE))
 
-      detection_info <- purrr::map2(
-        detection_info,
-        seq_along(detection_info),
-        ~ dplyr::mutate(as.data.frame(.x), line_number = .y)
-      )
+      detection_info <- purrr::imap(detection_info, ~ dplyr::mutate(as.data.frame(.x), line_number = .y))
 
       detection_info <- detection_info |>
         purrr::reduce(rbind) |>
