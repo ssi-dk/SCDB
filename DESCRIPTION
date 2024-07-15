@@ -19,7 +19,7 @@ Description: A collection of functions that enable easy access and updating of a
              For reference see Ralph Kimball and Margy Ross (2013, ISBN 9781118530801).
 License: GPL-3
 Encoding: UTF-8
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE, r6 = TRUE)
 Depends:
     R (>= 3.5.0)
