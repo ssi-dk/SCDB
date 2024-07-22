@@ -12,6 +12,8 @@
 
 * `get_tables()` now returns catalog on DuckDB backends (#145).
 
+* `unique_table_names()` now uses random alphanumerics to form the unique name instead of tracking via options (#158).
+
 ## Documentation
 
 * A vignette including benchmarks of `update_snapshot()` across various backends is added (#138).

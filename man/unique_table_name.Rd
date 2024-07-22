@@ -17,10 +17,10 @@ A character string for a table name based on the given scope parameter
 This function is heavily inspired by the unexported dbplyr function unique_table_name
 }
 \examples{
-  print(unique_table_name()) # SCDB_001
-  print(unique_table_name()) # SCDB_002
+  print(unique_table_name()) # SCDB_<10 alphanumerical letters>
+  print(unique_table_name()) # SCDB_<10 alphanumerical letters>
 
-  print(unique_table_name("test")) # test_001
-  print(unique_table_name("test")) # test_002
+  print(unique_table_name("test")) # test_<10 alphanumerical letters>
+  print(unique_table_name("test")) # test_<10 alphanumerical letters>
 
 }

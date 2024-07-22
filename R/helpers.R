@@ -88,19 +88,17 @@ defer_db_cleanup <- function(db_table) {
 #' @param scope (`character(1)`)\cr
 #'   A naming scope to generate the table name within.
 #' @examples
-#'   print(unique_table_name()) # SCDB_001
-#'   print(unique_table_name()) # SCDB_002
+#'   print(unique_table_name()) # SCDB_<10 alphanumerical letters>
+#'   print(unique_table_name()) # SCDB_<10 alphanumerical letters>
 #'
-#'   print(unique_table_name("test")) # test_001
-#'   print(unique_table_name("test")) # test_002
+#'   print(unique_table_name("test")) # test_<10 alphanumerical letters>
+#'   print(unique_table_name("test")) # test_<10 alphanumerical letters>
 #'
 #' @return A character string for a table name based on the given scope parameter
 #' @export
 unique_table_name <- function(scope = "SCDB") {
-  option <- paste(scope, "table_name", sep = "_")
-  index <- getOption(option, default = 0) + 1
-  options(tibble::lst(!!option := index))
-  return(glue::glue("{scope}_{Sys.getpid()}_{sprintf('%03i', index)}"))
+  name <- paste0(sample(c(letters, LETTERS, 0:9), 10, replace = TRUE), collapse = "")
+  return(glue::glue("{scope}_{name}"))
 }
 
 
