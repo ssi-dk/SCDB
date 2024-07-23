@@ -14,4 +14,3 @@ man-roxygen/*
 ^Meta$
 ^README.Rmd$
 ^revdep$
-^data-raw$
