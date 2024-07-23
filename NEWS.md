@@ -1,5 +1,18 @@
 # SCDB (development version)
 
+## New features
+
+* Added function `create_index` to allow easy creating of an index on a table (#137).
+
+## Improvements and Fixes
+
+* `update_snapshot()` has been optimized and now runs faster on all the supported backends (#137).
+
+## Documentation
+
+* A vignette including benchmarks of `update_snapshot()` across various backends is added (#138).
+
+
 # SCDB 0.4.1
 
 ## Improvements and Fixes
@@ -15,6 +28,7 @@
 ## Testing
 
 * Improved tests for `get_tables()` (#145).
+
 
 # SCDB 0.4.0
 
