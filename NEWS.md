@@ -6,6 +6,11 @@
 
 * `get_tables()` now returns catalog on DuckDB backends (#145).
 
+* Deprecated `check_from` argument no longer used in `dbplyr` calls (#136).
+
+## Testing
+
+* Improved tests for `get_tables()` (#145).
 
 # SCDB 0.4.0
 
