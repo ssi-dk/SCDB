@@ -21,6 +21,8 @@ License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE, r6 = TRUE)
+Depends:
+    R (>= 3.5.0)
 Imports:
     checkmate,
     DBI,
@@ -42,10 +44,14 @@ Suggests:
     callr,
     conflicted,
     duckdb,
+    ggplot2,
+    here,
     jsonlite,
     knitr,
     lintr,
+    microbenchmark,
     odbc,
+    pak,
     rmarkdown,
     roxygen2,
     pkgdown,

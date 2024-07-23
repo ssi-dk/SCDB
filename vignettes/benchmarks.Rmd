@@ -1,0 +1,157 @@
+---
+title: "SCDB: Benchmarks"
+output: rmarkdown::html_vignette
+bibliography: "references.bib"
+vignette: >
+  %\VignetteIndexEntry{SCDB: Benchmarks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+# NOTE:
+# To re-run the benchmarks, run the "benchmark" workflow on GitHub
+```
+
+To showcase the performance of `SCDB` on different database backends, we include this vignette that summarises a simple
+benchmark:
+A sample dataset is created based on the `datasets::iris` dataset. This data is repeated 10 times and given a unique ID
+(the row number of the data).
+
+This data forms the basis for three "snapshots" used in the benchmarks:
+
+1) The data as described above.
+
+2) As 1. but where any `Sepal.Length` below the median is halved.
+
+3) As 2. but where any `Sepal.width` below the median is halved.
+
+The benchmark function uses three consecutive calls to `update_snapshot()` to create the table with first snapshot and
+then update it to the second and third snapshot. Finally, the table is deleted.
+
+The performance of this benchmark function is timed with the `microbenchmark` package using 10 replicates.
+All benchmarks are run on the same machine.
+
+The results of the benchmark are shown graphically below (mean and standard deviation), where we compare the current
+development version of `SCDB` with the current CRAN version.
+
+```{r benchmark_preprocessing, echo = FALSE, eval = requireNamespace("here")}
+benchmark_location <- c(
+  system.file("extdata", "benchmarks.rds", package = "SCDB"),
+  here::here("inst", "extdata", "benchmarks.rds")
+) |>
+  purrr::discard(~ identical(., "")) |>
+  purrr::pluck(1)
+
+benchmarks <- readRDS(benchmark_location)
+
+# Determine if the SHA is on main
+sha <- benchmarks |>
+  dplyr::distinct(version) |>
+  dplyr::filter(!(version %in% c("CRAN", "main", "branch"))) |>
+  dplyr::pull("version")
+
+# Check local git history
+on_main <- tryCatch({
+  system(glue::glue("git branch main --contains {sha}"), intern = TRUE) |>
+    stringr::str_detect(stringr::fixed("main")) |>
+    isTRUE()
+}, warning = function(w) {
+  # If on GitHub, git is not installed and we assume TRUE.
+  # This will render the vignette as it will look once merged onto main.
+  return(identical(Sys.getenv("CI"), "true"))
+})
+
+# If the SHA has been merged, use as the "main" version and remove the other, older, main version
+if (on_main) {
+  benchmarks <- benchmarks |>
+    dplyr::filter(version != "main") |>
+    dplyr::mutate(version = dplyr::if_else(.data$version == "CRAN", "CRAN", "development"))
+}
+
+# Mean and standard deviation (see ggplot2::mean_se())
+mean_sd <- function(x) {
+  mu <- mean(x)
+  sd <- sd(x)
+  data.frame(y = mu, ymin = mu - sd, ymax = mu + sd)
+}
+```
+
+```{r benchmark_1, echo = FALSE, eval = requireNamespace("here")}
+# Use data for benchmark 1
+benchmark_1 <- benchmarks |>
+  dplyr::filter(!stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity")))
+
+# Add note slow backends
+slow_backends <- benchmark_1 |>
+  dplyr::distinct(.data$database, .data$n) |>
+  dplyr::filter(.data$n < max(.data$n)) |>
+  dplyr::pull("database")
+
+benchmark_1 <- benchmark_1 |>
+  dplyr::mutate("database" = paste0(database, ifelse(database %in% slow_backends, "*", "")))
+
+# Insert newline into database name to improve rendering of figures
+labeller <- ggplot2::as_labeller(\(l) stringr::str_replace_all(l, stringr::fixed(" v"), "\nv"))
+
+
+
+g <- ggplot2::ggplot(
+  benchmark_1,
+  ggplot2::aes(x = version, y = time / 1e9)
+) +
+  ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
+  ggplot2::facet_grid(
+    rows = ggplot2::vars(benchmark_function),
+    cols = ggplot2::vars(database),
+    labeller = labeller
+  ) +
+  ggplot2::labs(x = "Codebase version", y = "Time (s)")
+
+if (length(slow_backends) > 1) {
+  g <- g + ggplot2::labs(caption = "* IMPORTANT: Benchmark data halved for this backend!")
+}
+
+g
+```
+
+
+We include another benchmark to highlight the complexity scaling of the `update_snapshot() ` with the size of the input
+data. The datasets are similar to the first benchmark, but the number of repeats is varied to see the impact of
+increasing data size. The benchmarks are run from a "clean" state, where the target_table does not exists. The benchmark
+measures both the time to create the table and to remove it again afterwards (to restore the clean state).
+
+The performance of this benchmark function is timed with the `microbenchmark` package using 5 replicates.
+All benchmarks are run on the same machine.
+
+The results of the benchmark are shown graphically below (mean and standard deviation) and with linear scaling (dotted
+line), where we compare the current development version of `SCDB` with the current CRAN version.
+
+NOTE: There are reports of a superlinear complexity for very large data sets. If you experience such problems, consider
+batching the updates via the `filters` argument.
+
+```{r benchmark_2, echo = FALSE, eval = requireNamespace("here")}
+# Use data for benchmark 2
+benchmark_2 <- benchmarks |>
+  dplyr::filter(stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity"))) |>
+  dplyr::mutate("benchmark_function" = stringr::str_remove_all(benchmark_function, stringr::fixed("- complexity")))
+
+ggplot2::ggplot(
+  benchmark_2,
+  ggplot2::aes(x = n * nrow(iris) / 1e3, y = time / 1e9, color = version)
+) +
+  ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
+  ggplot2::geom_smooth(method = "lm", formula = y ~ x, se = FALSE, linetype = 3) +
+  ggplot2::facet_grid(
+    rows = ggplot2::vars(benchmark_function),
+    cols = ggplot2::vars(database),
+    labeller = labeller
+  ) +
+  ggplot2::labs(x = "Data size (1,000 rows)", y = "Time (s)", color = "Codebase version") +
+  ggplot2::theme(panel.spacing = grid::unit(1, "lines"), legend.position = "bottom")
+```
