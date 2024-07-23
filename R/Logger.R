@@ -330,10 +330,11 @@ Logger <- R6::R6Class(                                                          
       assert_timestamp_like(self$start_time, add = coll)
       checkmate::reportAssertions(coll)
 
-      patch <- purrr::pluck(private$db_table, "name") |>
-        tibble::enframe() |>
-        tidyr::pivot_wider() |>
-        dplyr::mutate(log_file = self$log_filename) |>
+      patch <- data.frame(
+        log_file = self$log_filename,
+        schema = purrr::pluck(private$db_table, "name", "schema"),
+        table = purrr::pluck(private$db_table, "name", "table")
+      ) |>
         dplyr::copy_to(
           dest = private$log_conn,
           df = _,
