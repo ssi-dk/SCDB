@@ -106,4 +106,6 @@ If no \code{na_by} argument is given is given, the function defaults to using \v
 \link[dplyr:mutate-joins]{dplyr::mutate-joins} which this function wraps.
 
 \link[dbplyr:join.tbl_sql]{dbplyr::join.tbl_sql} which this function wraps.
+
+\link[dplyr:explain]{dplyr::show_query}
 }

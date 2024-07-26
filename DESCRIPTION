@@ -1,7 +1,7 @@
 Package: SCDB
 Type: Package
 Title: Easily Access and Maintain Time-Based Versioned Data (Slowly-Changing-Dimension)
-Version: 0.4.0.9000
+Version: 0.4.1
 Authors@R:
 	  c(person("Rasmus Skytte", "Randl\U00F8v", , "rske@ssi.dk",
 	           role = c("aut", "cre", "rev"),
@@ -21,8 +21,6 @@ License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE, r6 = TRUE)
-Depends:
-    R (>= 3.5.0)
 Imports:
     checkmate,
     DBI,
@@ -44,14 +42,10 @@ Suggests:
     callr,
     conflicted,
     duckdb,
-    ggplot2,
-    here,
     jsonlite,
     knitr,
     lintr,
-    microbenchmark,
     odbc,
-    pak,
     rmarkdown,
     roxygen2,
     pkgdown,
