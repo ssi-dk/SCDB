@@ -166,6 +166,7 @@ join_warn_experimental <- function() {
 #'   left_join(db1, db2, sql_on = "LHS.x < RHS.x") |> show_query()
 #' @seealso [dplyr::mutate-joins] which this function wraps.
 #' @seealso [dbplyr::join.tbl_sql] which this function wraps.
+#' @seealso [dplyr::show_query]
 #' @exportS3Method dplyr::inner_join
 inner_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
