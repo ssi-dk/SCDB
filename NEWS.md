@@ -17,7 +17,7 @@
 
 ## Improvements and Fixes
 
-* `update_snapshot()` has been optimized and now runs faster on all the supported backends (#137).
+* `Logger` now correctly writes to the "catalog" field on backends that support it (#149).
 
 * `get_schema()` now correctly returns the temporary schema on PostgreSQL backends (#139).
 
