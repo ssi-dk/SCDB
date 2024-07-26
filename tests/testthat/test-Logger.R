@@ -189,6 +189,9 @@ test_that("Logger: logging to database works", {
     # Test Logger has pre-filled some information in the logs
     db_table_id <- id(db_table, conn)
     expect_identical(as.character(dplyr::pull(log_table_id, "date")), timestamp)
+    if ("catalog" %in% purrr::pluck(db_table_id, "name", names)) {
+      expect_identical(dplyr::pull(log_table_id, "catalog"), purrr::pluck(db_table_id, "name", "catalog"))
+    }
     expect_identical(dplyr::pull(log_table_id, "schema"), purrr::pluck(db_table_id, "name", "schema"))
     expect_identical(dplyr::pull(log_table_id, "table"), purrr::pluck(db_table_id, "name", "table"))
     expect_identical( # Transferring start_time to database can have some loss of information that we need to match
