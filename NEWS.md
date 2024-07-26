@@ -2,6 +2,8 @@
 
 ## Improvements and Fixes
 
+* `Logger` now correctly writes to the "catalog" field on backends that support it (#149).
+
 * `get_schema()` now correctly returns the temporary schema on PostgreSQL backends (#139).
 
 * `get_tables()` now returns catalog on DuckDB backends (#145).
