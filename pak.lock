@@ -17,7 +17,7 @@
         "RemotePkgRef": "local::.",
         "RemoteType": "local"
       },
-      "sources": ["file:///home/runner/work/SCDB/SCDB"],
+      "sources": "file:///home/runner/work/SCDB/SCDB",
       "target": "src/contrib/SCDB_0.4.1.tar.gz",
       "platform": "source",
       "rversion": "*",
@@ -36,18 +36,17 @@
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["sys"],
+      "dependencies": "sys",
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "askpass",
+        "RemoteType": "standard",
         "RemoteRef": "askpass",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.2.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/askpass_1.2.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/askpass_1.2.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/askpass_1.2.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -56,9 +55,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "backports",
@@ -69,16 +69,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "backports",
+        "RemoteType": "standard",
         "RemoteRef": "backports",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.5.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/backports_1.5.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/backports_1.5.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/backports_1.5.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -87,9 +86,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "base64enc",
@@ -100,16 +100,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "base64enc",
+        "RemoteType": "standard",
         "RemoteRef": "base64enc",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.1-3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/base64enc_0.1-3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/base64enc_0.1-3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/base64enc_0.1-3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -118,9 +117,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "bit",
@@ -131,16 +131,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "bit",
+        "RemoteType": "standard",
         "RemoteRef": "bit",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "4.0.5"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/bit_4.0.5.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/bit_4.0.5.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/bit_4.0.5.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -149,9 +148,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "bit64",
@@ -160,18 +160,17 @@
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["bit"],
+      "dependencies": "bit",
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "bit64",
+        "RemoteType": "standard",
         "RemoteRef": "bit64",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "4.0.5"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/bit64_4.0.5.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/bit64_4.0.5.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/bit64_4.0.5.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -180,9 +179,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "blob",
@@ -193,16 +193,15 @@
       "binary": true,
       "dependencies": ["rlang", "vctrs"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "blob",
+        "RemoteType": "standard",
         "RemoteRef": "blob",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.2.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/blob_1.2.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/blob_1.2.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/blob_1.2.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -211,9 +210,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "brew",
@@ -224,16 +224,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "brew",
+        "RemoteType": "standard",
         "RemoteRef": "brew",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.0-10"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/brew_1.0-10.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/brew_1.0-10.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/brew_1.0-10.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -242,9 +241,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "brio",
@@ -255,16 +255,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "brio",
+        "RemoteType": "standard",
         "RemoteRef": "brio",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.1.5"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/brio_1.1.5.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/brio_1.1.5.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/brio_1.1.5.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -273,9 +272,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "broom",
@@ -286,16 +286,15 @@
       "binary": true,
       "dependencies": ["backports", "dplyr", "generics", "glue", "lifecycle", "purrr", "rlang", "stringr", "tibble", "tidyr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "broom",
+        "RemoteType": "standard",
         "RemoteRef": "broom",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.0.6"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/broom_1.0.6.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/broom_1.0.6.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/broom_1.0.6.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -304,9 +303,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "bslib",
@@ -317,16 +317,15 @@
       "binary": true,
       "dependencies": ["base64enc", "cachem", "fastmap", "htmltools", "jquerylib", "jsonlite", "lifecycle", "memoise", "mime", "rlang", "sass"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "bslib",
+        "RemoteType": "standard",
         "RemoteRef": "bslib",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.7.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/bslib_0.7.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/bslib_0.7.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/bslib_0.7.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -335,9 +334,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "cachem",
@@ -348,16 +348,15 @@
       "binary": true,
       "dependencies": ["rlang", "fastmap"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "cachem",
+        "RemoteType": "standard",
         "RemoteRef": "cachem",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.1.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/cachem_1.1.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/cachem_1.1.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/cachem_1.1.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -366,9 +365,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "callr",
@@ -379,16 +379,15 @@
       "binary": true,
       "dependencies": ["processx", "R6"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "callr",
+        "RemoteType": "standard",
         "RemoteRef": "callr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "3.7.6"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/callr_3.7.6.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/callr_3.7.6.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/callr_3.7.6.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -397,9 +396,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "cellranger",
@@ -410,16 +410,15 @@
       "binary": true,
       "dependencies": ["rematch", "tibble"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "cellranger",
+        "RemoteType": "standard",
         "RemoteRef": "cellranger",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.1.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/cellranger_1.1.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/cellranger_1.1.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/cellranger_1.1.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -428,9 +427,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "checkmate",
@@ -439,18 +439,17 @@
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["backports"],
+      "dependencies": "backports",
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "checkmate",
+        "RemoteType": "standard",
         "RemoteRef": "checkmate",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.3.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/checkmate_2.3.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/checkmate_2.3.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/checkmate_2.3.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -459,9 +458,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "cli",
@@ -472,16 +472,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "cli",
+        "RemoteType": "standard",
         "RemoteRef": "cli",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "3.6.3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/cli_3.6.3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/cli_3.6.3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/cli_3.6.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -490,9 +489,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "clipr",
@@ -503,16 +503,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "clipr",
+        "RemoteType": "standard",
         "RemoteRef": "clipr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.8.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/clipr_0.8.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/clipr_0.8.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/clipr_0.8.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -521,9 +520,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "xclip (https://github.com/astrand/xclip) or xsel\n        (http://www.vergenet.net/~conrad/software/xsel/) for accessing\n        the X11 clipboard, or wl-clipboard\n        (https://github.com/bugaevc/wl-clipboard) for systems using\n        Wayland.",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "colorspace",
@@ -534,16 +534,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "colorspace",
+        "RemoteType": "standard",
         "RemoteRef": "colorspace",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.1-0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/colorspace_2.1-0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/colorspace_2.1-0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/colorspace_2.1-0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -552,9 +551,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "commonmark",
@@ -565,16 +565,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "commonmark",
+        "RemoteType": "standard",
         "RemoteRef": "commonmark",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.9.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/commonmark_1.9.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/commonmark_1.9.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/commonmark_1.9.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -583,9 +582,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "conflicted",
@@ -596,16 +596,15 @@
       "binary": true,
       "dependencies": ["cli", "memoise", "rlang"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "conflicted",
+        "RemoteType": "standard",
         "RemoteRef": "conflicted",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.2.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/conflicted_1.2.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/conflicted_1.2.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/conflicted_1.2.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -614,9 +613,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "crayon",
@@ -627,16 +627,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "crayon",
+        "RemoteType": "standard",
         "RemoteRef": "crayon",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.5.3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/crayon_1.5.3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/crayon_1.5.3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/crayon_1.5.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -645,9 +644,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "curl",
@@ -658,16 +658,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "curl",
+        "RemoteType": "standard",
         "RemoteRef": "curl",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "5.2.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/curl_5.2.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/curl_5.2.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/curl_5.2.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -676,22 +675,23 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "libcurl: libcurl-devel (rpm) or\n        libcurl4-openssl-dev (deb).",
       "sysreqs_packages": [
         {
           "sysreq": "libcurl",
-          "packages": ["libcurl4-openssl-dev"],
+          "packages": "libcurl4-openssl-dev",
           "pre_install": {},
           "post_install": {}
         },
         {
           "sysreq": "openssl",
-          "packages": ["libssl-dev"],
+          "packages": "libssl-dev",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "cyclocomp",
@@ -702,16 +702,15 @@
       "binary": true,
       "dependencies": ["callr", "crayon", "desc", "remotes", "withr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "cyclocomp",
+        "RemoteType": "standard",
         "RemoteRef": "cyclocomp",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.1.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/cyclocomp_1.1.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/cyclocomp_1.1.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/cyclocomp_1.1.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -720,9 +719,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "data.table",
@@ -733,16 +733,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "data.table",
+        "RemoteType": "standard",
         "RemoteRef": "data.table",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.15.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/data.table_1.15.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/data.table_1.15.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/data.table_1.15.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -751,9 +750,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "DBI",
@@ -764,16 +764,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "DBI",
+        "RemoteType": "standard",
         "RemoteRef": "DBI",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.2.3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/DBI_1.2.3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/DBI_1.2.3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/DBI_1.2.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -782,9 +781,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "dbplyr",
@@ -795,16 +795,15 @@
       "binary": true,
       "dependencies": ["blob", "cli", "DBI", "dplyr", "glue", "lifecycle", "magrittr", "pillar", "purrr", "R6", "rlang", "tibble", "tidyr", "tidyselect", "vctrs", "withr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "dbplyr",
+        "RemoteType": "standard",
         "RemoteRef": "dbplyr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.5.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/dbplyr_2.5.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/dbplyr_2.5.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/dbplyr_2.5.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -813,9 +812,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "desc",
@@ -826,16 +826,15 @@
       "binary": true,
       "dependencies": ["cli", "R6"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "desc",
+        "RemoteType": "standard",
         "RemoteRef": "desc",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.4.3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/desc_1.4.3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/desc_1.4.3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/desc_1.4.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -844,9 +843,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "diffobj",
@@ -855,18 +855,17 @@
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["crayon"],
+      "dependencies": "crayon",
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "diffobj",
+        "RemoteType": "standard",
         "RemoteRef": "diffobj",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.3.5"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/diffobj_0.3.5.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/diffobj_0.3.5.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/diffobj_0.3.5.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -875,9 +874,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "digest",
@@ -888,16 +888,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "digest",
+        "RemoteType": "standard",
         "RemoteRef": "digest",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.6.36"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/digest_0.6.36.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/digest_0.6.36.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/digest_0.6.36.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -906,9 +905,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "downlit",
@@ -919,16 +919,15 @@
       "binary": true,
       "dependencies": ["brio", "desc", "digest", "evaluate", "fansi", "memoise", "rlang", "vctrs", "withr", "yaml"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "downlit",
+        "RemoteType": "standard",
         "RemoteRef": "downlit",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.4.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/downlit_0.4.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/downlit_0.4.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/downlit_0.4.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -937,9 +936,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "dplyr",
@@ -950,16 +950,15 @@
       "binary": true,
       "dependencies": ["cli", "generics", "glue", "lifecycle", "magrittr", "pillar", "R6", "rlang", "tibble", "tidyselect", "vctrs"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "dplyr",
+        "RemoteType": "standard",
         "RemoteRef": "dplyr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.1.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/dplyr_1.1.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/dplyr_1.1.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/dplyr_1.1.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -968,9 +967,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "dtplyr",
@@ -981,16 +981,15 @@
       "binary": true,
       "dependencies": ["cli", "data.table", "dplyr", "glue", "lifecycle", "rlang", "tibble", "tidyselect", "vctrs"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "dtplyr",
+        "RemoteType": "standard",
         "RemoteRef": "dtplyr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.3.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/dtplyr_1.3.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/dtplyr_1.3.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/dtplyr_1.3.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -999,9 +998,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "duckdb",
@@ -1010,30 +1010,30 @@
       "type": "standard",
       "direct": false,
       "binary": false,
-      "dependencies": ["DBI"],
+      "dependencies": "DBI",
       "vignettes": false,
-      "needscompilation": true,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "duckdb",
+        "RemoteType": "standard",
         "RemoteRef": "duckdb",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "source",
         "RemoteSha": "1.0.0-2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/duckdb_1.0.0-2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/duckdb_1.0.0-2.tar.gz",
       "target": "src/contrib/duckdb_1.0.0-2.tar.gz",
       "platform": "source",
       "rversion": "*",
       "directpkg": false,
       "license": "MIT + file LICENSE",
-      "filesize": 4147117,
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": true,
+      "repotype": "cranlike",
+      "filesize": 4147117
     },
     {
       "ref": "evaluate",
@@ -1044,16 +1044,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "evaluate",
+        "RemoteType": "standard",
         "RemoteRef": "evaluate",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.24.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/evaluate_0.24.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/evaluate_0.24.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/evaluate_0.24.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1062,9 +1061,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "fansi",
@@ -1075,16 +1075,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "fansi",
+        "RemoteType": "standard",
         "RemoteRef": "fansi",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.0.6"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/fansi_1.0.6.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/fansi_1.0.6.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/fansi_1.0.6.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1093,9 +1092,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "farver",
@@ -1106,16 +1106,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "farver",
+        "RemoteType": "standard",
         "RemoteRef": "farver",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.1.2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/farver_2.1.2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/farver_2.1.2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/farver_2.1.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1124,9 +1123,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "C++11",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "fastmap",
@@ -1137,16 +1137,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "fastmap",
+        "RemoteType": "standard",
         "RemoteRef": "fastmap",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.2.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/fastmap_1.2.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/fastmap_1.2.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/fastmap_1.2.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1155,9 +1154,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "fontawesome",
@@ -1168,16 +1168,15 @@
       "binary": true,
       "dependencies": ["rlang", "htmltools"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "fontawesome",
+        "RemoteType": "standard",
         "RemoteRef": "fontawesome",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.5.2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/fontawesome_0.5.2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/fontawesome_0.5.2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/fontawesome_0.5.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1186,9 +1185,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "forcats",
@@ -1199,16 +1199,15 @@
       "binary": true,
       "dependencies": ["cli", "glue", "lifecycle", "magrittr", "rlang", "tibble"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "forcats",
+        "RemoteType": "standard",
         "RemoteRef": "forcats",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.0.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/forcats_1.0.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/forcats_1.0.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/forcats_1.0.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1217,9 +1216,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "fs",
@@ -1230,16 +1230,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "fs",
+        "RemoteType": "standard",
         "RemoteRef": "fs",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.6.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/fs_1.6.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/fs_1.6.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/fs_1.6.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1248,16 +1247,17 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "GNU make",
       "sysreqs_packages": [
         {
           "sysreq": "gnumake",
-          "packages": ["make"],
+          "packages": "make",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "gargle",
@@ -1268,16 +1268,15 @@
       "binary": true,
       "dependencies": ["cli", "fs", "glue", "httr", "jsonlite", "lifecycle", "openssl", "rappdirs", "rlang", "withr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "gargle",
+        "RemoteType": "standard",
         "RemoteRef": "gargle",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.5.2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/gargle_1.5.2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/gargle_1.5.2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/gargle_1.5.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1286,9 +1285,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "generics",
@@ -1299,16 +1299,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "generics",
+        "RemoteType": "standard",
         "RemoteRef": "generics",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.1.3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/generics_0.1.3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/generics_0.1.3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/generics_0.1.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1317,9 +1316,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "ggplot2",
@@ -1330,16 +1330,15 @@
       "binary": true,
       "dependencies": ["cli", "glue", "gtable", "isoband", "lifecycle", "MASS", "mgcv", "rlang", "scales", "tibble", "vctrs", "withr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "ggplot2",
+        "RemoteType": "standard",
         "RemoteRef": "ggplot2",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "3.5.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/ggplot2_3.5.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/ggplot2_3.5.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/ggplot2_3.5.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1348,9 +1347,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "glue",
@@ -1361,16 +1361,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "glue",
+        "RemoteType": "standard",
         "RemoteRef": "glue",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.7.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/glue_1.7.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/glue_1.7.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/glue_1.7.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1379,9 +1378,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "googledrive",
@@ -1392,16 +1392,15 @@
       "binary": true,
       "dependencies": ["cli", "gargle", "glue", "httr", "jsonlite", "lifecycle", "magrittr", "pillar", "purrr", "rlang", "tibble", "uuid", "vctrs", "withr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "googledrive",
+        "RemoteType": "standard",
         "RemoteRef": "googledrive",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.1.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/googledrive_2.1.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/googledrive_2.1.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/googledrive_2.1.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1410,9 +1409,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "googlesheets4",
@@ -1423,16 +1423,15 @@
       "binary": true,
       "dependencies": ["cellranger", "cli", "curl", "gargle", "glue", "googledrive", "httr", "ids", "lifecycle", "magrittr", "purrr", "rematch2", "rlang", "tibble", "vctrs", "withr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "googlesheets4",
+        "RemoteType": "standard",
         "RemoteRef": "googlesheets4",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.1.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/googlesheets4_1.1.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/googlesheets4_1.1.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/googlesheets4_1.1.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1441,9 +1440,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "gtable",
@@ -1454,16 +1454,15 @@
       "binary": true,
       "dependencies": ["cli", "glue", "lifecycle", "rlang"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "gtable",
+        "RemoteType": "standard",
         "RemoteRef": "gtable",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.3.5"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/gtable_0.3.5.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/gtable_0.3.5.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/gtable_0.3.5.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1472,9 +1471,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "haven",
@@ -1485,16 +1485,15 @@
       "binary": true,
       "dependencies": ["cli", "forcats", "hms", "lifecycle", "readr", "rlang", "tibble", "tidyselect", "vctrs"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "haven",
+        "RemoteType": "standard",
         "RemoteRef": "haven",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.5.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/haven_2.5.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/haven_2.5.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/haven_2.5.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1503,22 +1502,23 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "GNU make, zlib: zlib1g-dev (deb), zlib-devel (rpm)",
       "sysreqs_packages": [
         {
           "sysreq": "gnumake",
-          "packages": ["make"],
+          "packages": "make",
           "pre_install": {},
           "post_install": {}
         },
         {
           "sysreq": "zlib",
-          "packages": ["zlib1g-dev"],
+          "packages": "zlib1g-dev",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "highr",
@@ -1527,18 +1527,17 @@
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["xfun"],
+      "dependencies": "xfun",
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "highr",
+        "RemoteType": "standard",
         "RemoteRef": "highr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.11"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/highr_0.11.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/highr_0.11.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/highr_0.11.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1547,9 +1546,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "hms",
@@ -1560,16 +1560,15 @@
       "binary": true,
       "dependencies": ["lifecycle", "pkgconfig", "rlang", "vctrs"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "hms",
+        "RemoteType": "standard",
         "RemoteRef": "hms",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.1.3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/hms_1.1.3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/hms_1.1.3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/hms_1.1.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1578,9 +1577,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "htmltools",
@@ -1591,16 +1591,15 @@
       "binary": true,
       "dependencies": ["base64enc", "digest", "fastmap", "rlang"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "htmltools",
+        "RemoteType": "standard",
         "RemoteRef": "htmltools",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.5.8.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/htmltools_0.5.8.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/htmltools_0.5.8.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/htmltools_0.5.8.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1609,9 +1608,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "httr",
@@ -1622,16 +1622,15 @@
       "binary": true,
       "dependencies": ["curl", "jsonlite", "mime", "openssl", "R6"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "httr",
+        "RemoteType": "standard",
         "RemoteRef": "httr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.4.7"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/httr_1.4.7.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/httr_1.4.7.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/httr_1.4.7.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1640,9 +1639,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "httr2",
@@ -1653,16 +1653,15 @@
       "binary": true,
       "dependencies": ["cli", "curl", "glue", "lifecycle", "magrittr", "openssl", "R6", "rappdirs", "rlang", "vctrs", "withr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "httr2",
+        "RemoteType": "standard",
         "RemoteRef": "httr2",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.0.2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/httr2_1.0.2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/httr2_1.0.2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/httr2_1.0.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1671,9 +1670,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "hunspell",
@@ -1684,16 +1684,15 @@
       "binary": true,
       "dependencies": ["Rcpp", "digest"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "hunspell",
+        "RemoteType": "standard",
         "RemoteRef": "hunspell",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "3.0.3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/hunspell_3.0.3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/hunspell_3.0.3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/hunspell_3.0.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1702,9 +1701,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "ids",
@@ -1715,16 +1715,15 @@
       "binary": true,
       "dependencies": ["openssl", "uuid"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "ids",
+        "RemoteType": "standard",
         "RemoteRef": "ids",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.0.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/ids_1.0.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/ids_1.0.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/ids_1.0.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1733,9 +1732,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "isoband",
@@ -1746,16 +1746,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "isoband",
+        "RemoteType": "standard",
         "RemoteRef": "isoband",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.2.7"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/isoband_0.2.7.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/isoband_0.2.7.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/isoband_0.2.7.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1764,9 +1763,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "C++11",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "jquerylib",
@@ -1775,18 +1775,17 @@
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["htmltools"],
+      "dependencies": "htmltools",
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "jquerylib",
+        "RemoteType": "standard",
         "RemoteRef": "jquerylib",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.1.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/jquerylib_0.1.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/jquerylib_0.1.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/jquerylib_0.1.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1795,9 +1794,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "jsonlite",
@@ -1808,16 +1808,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "jsonlite",
+        "RemoteType": "standard",
         "RemoteRef": "jsonlite",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.8.8"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/jsonlite_1.8.8.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/jsonlite_1.8.8.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/jsonlite_1.8.8.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1826,9 +1825,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "knitr",
@@ -1839,16 +1839,15 @@
       "binary": true,
       "dependencies": ["evaluate", "highr", "xfun", "yaml"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "knitr",
+        "RemoteType": "standard",
         "RemoteRef": "knitr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.48"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/knitr_1.48.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/knitr_1.48.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/knitr_1.48.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1857,16 +1856,17 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "Package vignettes based on R Markdown v2 or\n        reStructuredText require Pandoc (http://pandoc.org). The\n        function rst2pdf() requires rst2pdf\n        (https://github.com/rst2pdf/rst2pdf).",
       "sysreqs_packages": [
         {
           "sysreq": "pandoc",
-          "packages": ["pandoc"],
+          "packages": "pandoc",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "labeling",
@@ -1877,16 +1877,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "labeling",
+        "RemoteType": "standard",
         "RemoteRef": "labeling",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.4.3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/labeling_0.4.3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/labeling_0.4.3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/labeling_0.4.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1895,9 +1894,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "lazyeval",
@@ -1908,16 +1908,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "lazyeval",
+        "RemoteType": "standard",
         "RemoteRef": "lazyeval",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.2.2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/lazyeval_0.2.2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/lazyeval_0.2.2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/lazyeval_0.2.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1926,9 +1925,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "lifecycle",
@@ -1939,16 +1939,15 @@
       "binary": true,
       "dependencies": ["cli", "glue", "rlang"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "lifecycle",
+        "RemoteType": "standard",
         "RemoteRef": "lifecycle",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.0.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/lifecycle_1.0.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/lifecycle_1.0.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/lifecycle_1.0.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1957,9 +1956,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "lintr",
@@ -1970,16 +1970,15 @@
       "binary": true,
       "dependencies": ["backports", "codetools", "cyclocomp", "digest", "glue", "knitr", "rex", "xml2", "xmlparsedata"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "lintr",
+        "RemoteType": "standard",
         "RemoteRef": "lintr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "3.1.2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/lintr_3.1.2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/lintr_3.1.2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/lintr_3.1.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -1988,9 +1987,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "lubridate",
@@ -2001,16 +2001,15 @@
       "binary": true,
       "dependencies": ["generics", "timechange"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "lubridate",
+        "RemoteType": "standard",
         "RemoteRef": "lubridate",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.9.3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/lubridate_1.9.3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/lubridate_1.9.3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/lubridate_1.9.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2019,9 +2018,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "C++11, A system with zoneinfo data (e.g.\n        /usr/share/zoneinfo). On Windows the zoneinfo included with R\n        is used.",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "magrittr",
@@ -2032,16 +2032,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "magrittr",
+        "RemoteType": "standard",
         "RemoteRef": "magrittr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.0.3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/magrittr_2.0.3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/magrittr_2.0.3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/magrittr_2.0.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2050,9 +2049,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "memoise",
@@ -2063,16 +2063,15 @@
       "binary": true,
       "dependencies": ["rlang", "cachem"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "memoise",
+        "RemoteType": "standard",
         "RemoteRef": "memoise",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.0.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/memoise_2.0.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/memoise_2.0.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/memoise_2.0.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2081,9 +2080,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "mime",
@@ -2094,16 +2094,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "mime",
+        "RemoteType": "standard",
         "RemoteRef": "mime",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.12"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/mime_0.12.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/mime_0.12.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/mime_0.12.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2112,9 +2111,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "modelr",
@@ -2125,16 +2125,15 @@
       "binary": true,
       "dependencies": ["broom", "magrittr", "purrr", "rlang", "tibble", "tidyr", "tidyselect", "vctrs"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "modelr",
+        "RemoteType": "standard",
         "RemoteRef": "modelr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.1.11"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/modelr_0.1.11.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/modelr_0.1.11.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/modelr_0.1.11.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2143,9 +2142,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "munsell",
@@ -2154,18 +2154,17 @@
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["colorspace"],
+      "dependencies": "colorspace",
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "munsell",
+        "RemoteType": "standard",
         "RemoteRef": "munsell",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.5.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/munsell_0.5.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/munsell_0.5.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/munsell_0.5.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2174,9 +2173,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "odbc",
@@ -2187,16 +2187,15 @@
       "binary": true,
       "dependencies": ["bit64", "blob", "cli", "DBI", "hms", "lifecycle", "Rcpp", "rlang"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "odbc",
+        "RemoteType": "standard",
         "RemoteRef": "odbc",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.5.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/odbc_1.5.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/odbc_1.5.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/odbc_1.5.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2205,22 +2204,23 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "GNU make, An ODBC3 driver manager and drivers.",
       "sysreqs_packages": [
         {
           "sysreq": "gnumake",
-          "packages": ["make"],
+          "packages": "make",
           "pre_install": {},
           "post_install": {}
         },
         {
           "sysreq": "odbc",
-          "packages": ["unixodbc-dev"],
+          "packages": "unixodbc-dev",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "openssl",
@@ -2229,18 +2229,17 @@
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["askpass"],
+      "dependencies": "askpass",
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "openssl",
+        "RemoteType": "standard",
         "RemoteRef": "openssl",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.2.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/openssl_2.2.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/openssl_2.2.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/openssl_2.2.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2249,16 +2248,17 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "OpenSSL >= 1.0.2",
       "sysreqs_packages": [
         {
           "sysreq": "openssl",
-          "packages": ["libssl-dev"],
+          "packages": "libssl-dev",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "parallelly",
@@ -2269,16 +2269,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "parallelly",
+        "RemoteType": "standard",
         "RemoteRef": "parallelly",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.37.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/parallelly_1.37.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/parallelly_1.37.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/parallelly_1.37.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2287,9 +2286,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "pillar",
@@ -2300,16 +2300,15 @@
       "binary": true,
       "dependencies": ["cli", "fansi", "glue", "lifecycle", "rlang", "utf8", "vctrs"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "pillar",
+        "RemoteType": "standard",
         "RemoteRef": "pillar",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.9.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/pillar_1.9.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/pillar_1.9.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/pillar_1.9.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2318,9 +2317,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "pkgbuild",
@@ -2331,16 +2331,15 @@
       "binary": true,
       "dependencies": ["callr", "cli", "desc", "processx", "R6"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "pkgbuild",
+        "RemoteType": "standard",
         "RemoteRef": "pkgbuild",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.4.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/pkgbuild_1.4.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/pkgbuild_1.4.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/pkgbuild_1.4.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2349,9 +2348,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "pkgconfig",
@@ -2362,16 +2362,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "pkgconfig",
+        "RemoteType": "standard",
         "RemoteRef": "pkgconfig",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.0.3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/pkgconfig_2.0.3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/pkgconfig_2.0.3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/pkgconfig_2.0.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2380,9 +2379,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "pkgdown",
@@ -2393,16 +2393,15 @@
       "binary": true,
       "dependencies": ["bslib", "callr", "cli", "desc", "digest", "downlit", "fontawesome", "fs", "httr2", "jsonlite", "openssl", "purrr", "ragg", "rlang", "rmarkdown", "tibble", "whisker", "withr", "xml2", "yaml"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "pkgdown",
+        "RemoteType": "standard",
         "RemoteRef": "pkgdown",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.1.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/pkgdown_2.1.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/pkgdown_2.1.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/pkgdown_2.1.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2411,16 +2410,17 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "pandoc",
       "sysreqs_packages": [
         {
           "sysreq": "pandoc",
-          "packages": ["pandoc"],
+          "packages": "pandoc",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "pkgload",
@@ -2431,16 +2431,15 @@
       "binary": true,
       "dependencies": ["cli", "desc", "fs", "glue", "lifecycle", "pkgbuild", "processx", "rlang", "rprojroot", "withr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "pkgload",
+        "RemoteType": "standard",
         "RemoteRef": "pkgload",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.4.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/pkgload_1.4.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/pkgload_1.4.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/pkgload_1.4.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2449,9 +2448,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "praise",
@@ -2462,16 +2462,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "praise",
+        "RemoteType": "standard",
         "RemoteRef": "praise",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.0.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/praise_1.0.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/praise_1.0.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/praise_1.0.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2480,9 +2479,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "processx",
@@ -2493,16 +2493,15 @@
       "binary": true,
       "dependencies": ["ps", "R6"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "processx",
+        "RemoteType": "standard",
         "RemoteRef": "processx",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "3.8.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/processx_3.8.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/processx_3.8.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/processx_3.8.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2511,9 +2510,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "ps",
@@ -2524,16 +2524,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "ps",
+        "RemoteType": "standard",
         "RemoteRef": "ps",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.7.7"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/ps_1.7.7.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/ps_1.7.7.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/ps_1.7.7.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2542,9 +2541,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "purrr",
@@ -2555,16 +2555,15 @@
       "binary": true,
       "dependencies": ["cli", "lifecycle", "magrittr", "rlang", "vctrs"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "purrr",
+        "RemoteType": "standard",
         "RemoteRef": "purrr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.0.2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/purrr_1.0.2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/purrr_1.0.2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/purrr_1.0.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2573,9 +2572,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "R6",
@@ -2586,16 +2586,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "R6",
+        "RemoteType": "standard",
         "RemoteRef": "R6",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.5.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/R6_2.5.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/R6_2.5.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/R6_2.5.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2604,9 +2603,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "ragg",
@@ -2617,16 +2617,15 @@
       "binary": true,
       "dependencies": ["systemfonts", "textshaping"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "ragg",
+        "RemoteType": "standard",
         "RemoteRef": "ragg",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.3.2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/ragg_1.3.2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/ragg_1.3.2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/ragg_1.3.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2635,34 +2634,35 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "freetype2, libpng, libtiff, libjpeg",
       "sysreqs_packages": [
         {
           "sysreq": "freetype",
-          "packages": ["libfreetype6-dev"],
+          "packages": "libfreetype6-dev",
           "pre_install": {},
           "post_install": {}
         },
         {
           "sysreq": "libjpeg",
-          "packages": ["libjpeg-dev"],
+          "packages": "libjpeg-dev",
           "pre_install": {},
           "post_install": {}
         },
         {
           "sysreq": "libpng",
-          "packages": ["libpng-dev"],
+          "packages": "libpng-dev",
           "pre_install": {},
           "post_install": {}
         },
         {
           "sysreq": "libtiff",
-          "packages": ["libtiff-dev"],
+          "packages": "libtiff-dev",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "rappdirs",
@@ -2673,16 +2673,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "rappdirs",
+        "RemoteType": "standard",
         "RemoteRef": "rappdirs",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.3.3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rappdirs_0.3.3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rappdirs_0.3.3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/rappdirs_0.3.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2691,9 +2690,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "RColorBrewer",
@@ -2704,16 +2704,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "RColorBrewer",
+        "RemoteType": "standard",
         "RemoteRef": "RColorBrewer",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.1-3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/RColorBrewer_1.1-3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/RColorBrewer_1.1-3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/RColorBrewer_1.1-3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2722,9 +2721,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "Rcpp",
@@ -2735,16 +2735,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "Rcpp",
+        "RemoteType": "standard",
         "RemoteRef": "Rcpp",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.0.13"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/Rcpp_1.0.13.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/Rcpp_1.0.13.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/Rcpp_1.0.13.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2753,9 +2752,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "readr",
@@ -2766,16 +2766,15 @@
       "binary": true,
       "dependencies": ["cli", "clipr", "crayon", "hms", "lifecycle", "R6", "rlang", "tibble", "vroom"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "readr",
+        "RemoteType": "standard",
         "RemoteRef": "readr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.1.5"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/readr_2.1.5.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/readr_2.1.5.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/readr_2.1.5.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2784,9 +2783,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "readxl",
@@ -2797,16 +2797,15 @@
       "binary": true,
       "dependencies": ["cellranger", "tibble"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "readxl",
+        "RemoteType": "standard",
         "RemoteRef": "readxl",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.4.3"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/readxl_1.4.3.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/readxl_1.4.3.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/readxl_1.4.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2815,9 +2814,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "rematch",
@@ -2828,16 +2828,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "rematch",
+        "RemoteType": "standard",
         "RemoteRef": "rematch",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.0.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rematch_2.0.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rematch_2.0.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/rematch_2.0.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2846,9 +2845,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "rematch2",
@@ -2857,18 +2857,17 @@
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["tibble"],
+      "dependencies": "tibble",
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "rematch2",
+        "RemoteType": "standard",
         "RemoteRef": "rematch2",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.1.2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rematch2_2.1.2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rematch2_2.1.2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/rematch2_2.1.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2877,9 +2876,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "remotes",
@@ -2890,16 +2890,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "remotes",
+        "RemoteType": "standard",
         "RemoteRef": "remotes",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.5.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/remotes_2.5.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/remotes_2.5.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/remotes_2.5.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2908,16 +2907,17 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "Subversion for install_svn, git for install_git",
       "sysreqs_packages": [
         {
           "sysreq": "git",
-          "packages": ["git"],
+          "packages": "git",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "reprex",
@@ -2928,16 +2928,15 @@
       "binary": true,
       "dependencies": ["callr", "cli", "clipr", "fs", "glue", "knitr", "lifecycle", "rlang", "rmarkdown", "rstudioapi", "withr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "reprex",
+        "RemoteType": "standard",
         "RemoteRef": "reprex",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.1.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/reprex_2.1.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/reprex_2.1.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/reprex_2.1.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2946,16 +2945,17 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "pandoc (>= 2.0) - https://pandoc.org/",
       "sysreqs_packages": [
         {
           "sysreq": "pandoc",
-          "packages": ["pandoc"],
+          "packages": "pandoc",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "rex",
@@ -2964,18 +2964,17 @@
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["lazyeval"],
+      "dependencies": "lazyeval",
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "rex",
+        "RemoteType": "standard",
         "RemoteRef": "rex",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.2.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rex_1.2.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rex_1.2.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/rex_1.2.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -2984,9 +2983,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "rlang",
@@ -2997,16 +2997,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "rlang",
+        "RemoteType": "standard",
         "RemoteRef": "rlang",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.1.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rlang_1.1.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rlang_1.1.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/rlang_1.1.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3015,9 +3014,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "rmarkdown",
@@ -3028,16 +3028,15 @@
       "binary": true,
       "dependencies": ["bslib", "evaluate", "fontawesome", "htmltools", "jquerylib", "jsonlite", "knitr", "tinytex", "xfun", "yaml"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "rmarkdown",
+        "RemoteType": "standard",
         "RemoteRef": "rmarkdown",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.27"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rmarkdown_2.27.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rmarkdown_2.27.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/rmarkdown_2.27.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3046,16 +3045,17 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "pandoc (>= 1.14) - http://pandoc.org",
       "sysreqs_packages": [
         {
           "sysreq": "pandoc",
-          "packages": ["pandoc"],
+          "packages": "pandoc",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "roxygen2",
@@ -3066,16 +3066,15 @@
       "binary": true,
       "dependencies": ["brew", "cli", "commonmark", "desc", "knitr", "pkgload", "purrr", "R6", "rlang", "stringi", "stringr", "withr", "xml2"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "roxygen2",
+        "RemoteType": "standard",
         "RemoteRef": "roxygen2",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "7.3.2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/roxygen2_7.3.2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/roxygen2_7.3.2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/roxygen2_7.3.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3084,9 +3083,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "RPostgres",
@@ -3097,16 +3097,15 @@
       "binary": true,
       "dependencies": ["bit64", "blob", "DBI", "hms", "lubridate", "withr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "RPostgres",
+        "RemoteType": "standard",
         "RemoteRef": "RPostgres",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.4.7"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/RPostgres_1.4.7.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/RPostgres_1.4.7.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/RPostgres_1.4.7.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3115,16 +3114,17 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "libpq >= 9.0: libpq-dev (deb) or postgresql-devel\n        (rpm)",
       "sysreqs_packages": [
         {
           "sysreq": "postgresql",
-          "packages": ["libpq-dev"],
+          "packages": "libpq-dev",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "rprojroot",
@@ -3135,16 +3135,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "rprojroot",
+        "RemoteType": "standard",
         "RemoteRef": "rprojroot",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.0.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rprojroot_2.0.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rprojroot_2.0.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/rprojroot_2.0.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3153,9 +3152,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "RSQLite",
@@ -3166,16 +3166,15 @@
       "binary": true,
       "dependencies": ["bit64", "blob", "DBI", "memoise", "pkgconfig", "rlang"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "RSQLite",
+        "RemoteType": "standard",
         "RemoteRef": "RSQLite",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.3.7"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/RSQLite_2.3.7.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/RSQLite_2.3.7.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/RSQLite_2.3.7.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3184,9 +3183,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "rstudioapi",
@@ -3197,16 +3197,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "rstudioapi",
+        "RemoteType": "standard",
         "RemoteRef": "rstudioapi",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.16.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rstudioapi_0.16.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rstudioapi_0.16.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/rstudioapi_0.16.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3215,9 +3214,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "rvest",
@@ -3228,16 +3228,15 @@
       "binary": true,
       "dependencies": ["cli", "glue", "httr", "lifecycle", "magrittr", "rlang", "selectr", "tibble", "xml2"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "rvest",
+        "RemoteType": "standard",
         "RemoteRef": "rvest",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.0.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rvest_1.0.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rvest_1.0.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/rvest_1.0.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3246,9 +3245,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "sass",
@@ -3259,16 +3259,15 @@
       "binary": true,
       "dependencies": ["fs", "rlang", "htmltools", "R6", "rappdirs"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "sass",
+        "RemoteType": "standard",
         "RemoteRef": "sass",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.4.9"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/sass_0.4.9.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/sass_0.4.9.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/sass_0.4.9.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3277,16 +3276,17 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "GNU make",
       "sysreqs_packages": [
         {
           "sysreq": "gnumake",
-          "packages": ["make"],
+          "packages": "make",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "scales",
@@ -3297,16 +3297,15 @@
       "binary": true,
       "dependencies": ["cli", "farver", "glue", "labeling", "lifecycle", "munsell", "R6", "RColorBrewer", "rlang", "viridisLite"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "scales",
+        "RemoteType": "standard",
         "RemoteRef": "scales",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.3.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/scales_1.3.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/scales_1.3.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/scales_1.3.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3315,9 +3314,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "selectr",
@@ -3328,16 +3328,15 @@
       "binary": true,
       "dependencies": ["stringr", "R6"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "selectr",
+        "RemoteType": "standard",
         "RemoteRef": "selectr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.4-2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/selectr_0.4-2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/selectr_0.4-2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/selectr_0.4-2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3346,9 +3345,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "spelling",
@@ -3359,16 +3359,15 @@
       "binary": true,
       "dependencies": ["commonmark", "xml2", "hunspell", "knitr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "spelling",
+        "RemoteType": "standard",
         "RemoteRef": "spelling",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.3.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/spelling_2.3.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/spelling_2.3.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/spelling_2.3.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3377,9 +3376,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "stringi",
@@ -3390,16 +3390,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "stringi",
+        "RemoteType": "standard",
         "RemoteRef": "stringi",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.8.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/stringi_1.8.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/stringi_1.8.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/stringi_1.8.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3408,16 +3407,17 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "ICU4C (>= 61, optional)",
       "sysreqs_packages": [
         {
           "sysreq": "libicu",
-          "packages": ["libicu-dev"],
+          "packages": "libicu-dev",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "stringr",
@@ -3428,16 +3428,15 @@
       "binary": true,
       "dependencies": ["cli", "glue", "lifecycle", "magrittr", "rlang", "stringi", "vctrs"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "stringr",
+        "RemoteType": "standard",
         "RemoteRef": "stringr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.5.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/stringr_1.5.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/stringr_1.5.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/stringr_1.5.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3446,9 +3445,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "sys",
@@ -3459,16 +3459,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "sys",
+        "RemoteType": "standard",
         "RemoteRef": "sys",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "3.4.2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/sys_3.4.2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/sys_3.4.2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/sys_3.4.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3477,9 +3476,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "systemfonts",
@@ -3488,18 +3488,17 @@
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["lifecycle"],
+      "dependencies": "lifecycle",
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "systemfonts",
+        "RemoteType": "standard",
         "RemoteRef": "systemfonts",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.1.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/systemfonts_1.1.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/systemfonts_1.1.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/systemfonts_1.1.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3508,22 +3507,23 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "fontconfig, freetype2",
       "sysreqs_packages": [
         {
           "sysreq": "fontconfig",
-          "packages": ["libfontconfig1-dev"],
+          "packages": "libfontconfig1-dev",
           "pre_install": {},
           "post_install": {}
         },
         {
           "sysreq": "freetype",
-          "packages": ["libfreetype6-dev"],
+          "packages": "libfreetype6-dev",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "testthat",
@@ -3534,16 +3534,15 @@
       "binary": true,
       "dependencies": ["brio", "callr", "cli", "desc", "digest", "evaluate", "jsonlite", "lifecycle", "magrittr", "pkgload", "praise", "processx", "ps", "R6", "rlang", "waldo", "withr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "testthat",
+        "RemoteType": "standard",
         "RemoteRef": "testthat",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "3.2.1.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/testthat_3.2.1.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/testthat_3.2.1.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/testthat_3.2.1.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3552,9 +3551,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "textshaping",
@@ -3565,16 +3565,15 @@
       "binary": true,
       "dependencies": ["lifecycle", "systemfonts"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "textshaping",
+        "RemoteType": "standard",
         "RemoteRef": "textshaping",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.4.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/textshaping_0.4.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/textshaping_0.4.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/textshaping_0.4.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3583,28 +3582,29 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "freetype2, harfbuzz, fribidi",
       "sysreqs_packages": [
         {
           "sysreq": "freetype",
-          "packages": ["libfreetype6-dev"],
+          "packages": "libfreetype6-dev",
           "pre_install": {},
           "post_install": {}
         },
         {
           "sysreq": "fribidi",
-          "packages": ["libfribidi-dev"],
+          "packages": "libfribidi-dev",
           "pre_install": {},
           "post_install": {}
         },
         {
           "sysreq": "harfbuzz",
-          "packages": ["libharfbuzz-dev"],
+          "packages": "libharfbuzz-dev",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "tibble",
@@ -3615,16 +3615,15 @@
       "binary": true,
       "dependencies": ["fansi", "lifecycle", "magrittr", "pillar", "pkgconfig", "rlang", "vctrs"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "tibble",
+        "RemoteType": "standard",
         "RemoteRef": "tibble",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "3.2.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/tibble_3.2.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/tibble_3.2.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/tibble_3.2.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3633,9 +3632,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "tidyr",
@@ -3646,16 +3646,15 @@
       "binary": true,
       "dependencies": ["cli", "dplyr", "glue", "lifecycle", "magrittr", "purrr", "rlang", "stringr", "tibble", "tidyselect", "vctrs"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "tidyr",
+        "RemoteType": "standard",
         "RemoteRef": "tidyr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.3.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/tidyr_1.3.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/tidyr_1.3.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/tidyr_1.3.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3664,9 +3663,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "tidyselect",
@@ -3677,16 +3677,15 @@
       "binary": true,
       "dependencies": ["cli", "glue", "lifecycle", "rlang", "vctrs", "withr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "tidyselect",
+        "RemoteType": "standard",
         "RemoteRef": "tidyselect",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.2.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/tidyselect_1.2.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/tidyselect_1.2.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/tidyselect_1.2.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3695,9 +3694,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "tidyverse",
@@ -3708,16 +3708,15 @@
       "binary": true,
       "dependencies": ["broom", "conflicted", "cli", "dbplyr", "dplyr", "dtplyr", "forcats", "ggplot2", "googledrive", "googlesheets4", "haven", "hms", "httr", "jsonlite", "lubridate", "magrittr", "modelr", "pillar", "purrr", "ragg", "readr", "readxl", "reprex", "rlang", "rstudioapi", "rvest", "stringr", "tibble", "tidyr", "xml2"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "tidyverse",
+        "RemoteType": "standard",
         "RemoteRef": "tidyverse",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.0.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/tidyverse_2.0.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/tidyverse_2.0.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/tidyverse_2.0.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3726,9 +3725,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "timechange",
@@ -3739,16 +3739,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "timechange",
+        "RemoteType": "standard",
         "RemoteRef": "timechange",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.3.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/timechange_0.3.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/timechange_0.3.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/timechange_0.3.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3757,9 +3756,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "A system with zoneinfo data (e.g.\n        /usr/share/zoneinfo) as well as a recent-enough C++11 compiler\n        (such as g++-4.8 or later). On Windows the zoneinfo included\n        with R is used.",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "tinytex",
@@ -3768,18 +3768,17 @@
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["xfun"],
+      "dependencies": "xfun",
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "tinytex",
+        "RemoteType": "standard",
         "RemoteRef": "tinytex",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.52"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/tinytex_0.52.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/tinytex_0.52.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/tinytex_0.52.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3788,9 +3787,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "tzdb",
@@ -3801,16 +3801,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "tzdb",
+        "RemoteType": "standard",
         "RemoteRef": "tzdb",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.4.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/tzdb_0.4.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/tzdb_0.4.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/tzdb_0.4.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3819,9 +3818,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "utf8",
@@ -3832,16 +3832,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "utf8",
+        "RemoteType": "standard",
         "RemoteRef": "utf8",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.2.4"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/utf8_1.2.4.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/utf8_1.2.4.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/utf8_1.2.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3850,9 +3849,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "uuid",
@@ -3863,16 +3863,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "uuid",
+        "RemoteType": "standard",
         "RemoteRef": "uuid",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.2-0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/uuid_1.2-0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/uuid_1.2-0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/uuid_1.2-0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3881,9 +3880,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "vctrs",
@@ -3894,16 +3894,15 @@
       "binary": true,
       "dependencies": ["cli", "glue", "lifecycle", "rlang"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "vctrs",
+        "RemoteType": "standard",
         "RemoteRef": "vctrs",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.6.5"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/vctrs_0.6.5.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/vctrs_0.6.5.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/vctrs_0.6.5.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3912,9 +3911,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "viridisLite",
@@ -3925,16 +3925,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "viridisLite",
+        "RemoteType": "standard",
         "RemoteRef": "viridisLite",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.4.2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/viridisLite_0.4.2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/viridisLite_0.4.2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/viridisLite_0.4.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3943,9 +3942,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "vroom",
@@ -3956,16 +3956,15 @@
       "binary": true,
       "dependencies": ["bit64", "cli", "crayon", "glue", "hms", "lifecycle", "rlang", "tibble", "tidyselect", "tzdb", "vctrs", "withr"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "vroom",
+        "RemoteType": "standard",
         "RemoteRef": "vroom",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.6.5"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/vroom_1.6.5.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/vroom_1.6.5.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/vroom_1.6.5.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -3974,9 +3973,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "waldo",
@@ -3987,16 +3987,15 @@
       "binary": true,
       "dependencies": ["cli", "diffobj", "fansi", "glue", "rematch2", "rlang", "tibble"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "waldo",
+        "RemoteType": "standard",
         "RemoteRef": "waldo",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.5.2"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/waldo_0.5.2.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/waldo_0.5.2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/waldo_0.5.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -4005,9 +4004,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "whisker",
@@ -4018,16 +4018,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "whisker",
+        "RemoteType": "standard",
         "RemoteRef": "whisker",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.4.1"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/whisker_0.4.1.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/whisker_0.4.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/whisker_0.4.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -4036,9 +4035,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "withr",
@@ -4049,16 +4049,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "withr",
+        "RemoteType": "standard",
         "RemoteRef": "withr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "3.0.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/withr_3.0.0.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/withr_3.0.0.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/withr_3.0.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -4067,9 +4066,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "xfun",
@@ -4080,16 +4080,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "xfun",
+        "RemoteType": "standard",
         "RemoteRef": "xfun",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "0.46"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/xfun_0.46.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/xfun_0.46.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/xfun_0.46.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -4098,9 +4097,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "xml2",
@@ -4111,16 +4111,15 @@
       "binary": true,
       "dependencies": ["cli", "rlang"],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "xml2",
+        "RemoteType": "standard",
         "RemoteRef": "xml2",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.3.6"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/xml2_1.3.6.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/xml2_1.3.6.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/xml2_1.3.6.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -4129,16 +4128,17 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "libxml2: libxml2-dev (deb), libxml2-devel (rpm)",
       "sysreqs_packages": [
         {
           "sysreq": "libxml2",
-          "packages": ["libxml2-dev"],
+          "packages": "libxml2-dev",
           "pre_install": {},
           "post_install": {}
         }
-      ]
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "xmlparsedata",
@@ -4149,16 +4149,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "xmlparsedata",
+        "RemoteType": "standard",
         "RemoteRef": "xmlparsedata",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "1.0.5"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/xmlparsedata_1.0.5.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/xmlparsedata_1.0.5.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/xmlparsedata_1.0.5.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -4167,9 +4166,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "yaml",
@@ -4180,16 +4180,15 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "yaml",
+        "RemoteType": "standard",
         "RemoteRef": "yaml",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
         "RemoteSha": "2.3.9"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/yaml_2.3.9.tar.gz"],
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/yaml_2.3.9.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/yaml_2.3.9.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
@@ -4198,9 +4197,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "installed::/opt/R/4.4.1/lib/R/library/codetools",
@@ -4211,10 +4211,9 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "installed",
         "RemotePkgRef": "installed::/opt/R/4.4.1/lib/R/library/codetools",
+        "RemoteType": "installed",
         "RemotePkgPlatform": "*",
         "RemoteSha": "0.2-20"
       },
@@ -4222,14 +4221,15 @@
       "target": "src/contrib/codetools_0.2-20.tar.gz",
       "platform": "*",
       "rversion": "R 4.4.1",
-      "built": "R 4.4.1; ; 2024-06-14 09:07:22 UTC; unix",
       "directpkg": false,
       "license": "GPL",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
+      "sysreqs_packages": {},
+      "needscompilation": false,
       "repotype": "cran",
-      "sysreqs_packages": {}
+      "built": "R 4.4.1; ; 2024-06-14 09:07:22 UTC; unix"
     },
     {
       "ref": "installed::/opt/R/4.4.1/lib/R/library/lattice",
@@ -4240,10 +4240,9 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": true,
       "metadata": {
-        "RemoteType": "installed",
         "RemotePkgRef": "installed::/opt/R/4.4.1/lib/R/library/lattice",
+        "RemoteType": "installed",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu",
         "RemoteSha": "0.22-6"
       },
@@ -4251,14 +4250,15 @@
       "target": "src/contrib/lattice_0.22-6.tar.gz",
       "platform": "x86_64-pc-linux-gnu",
       "rversion": "R 4.4.1",
-      "built": "R 4.4.1; x86_64-pc-linux-gnu; 2024-06-14 09:03:55 UTC; unix",
       "directpkg": false,
       "license": "GPL (>= 2)",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
+      "sysreqs_packages": {},
+      "needscompilation": true,
       "repotype": "cran",
-      "sysreqs_packages": {}
+      "built": "R 4.4.1; x86_64-pc-linux-gnu; 2024-06-14 09:03:55 UTC; unix"
     },
     {
       "ref": "installed::/opt/R/4.4.1/lib/R/library/MASS",
@@ -4269,10 +4269,9 @@
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": true,
       "metadata": {
-        "RemoteType": "installed",
         "RemotePkgRef": "installed::/opt/R/4.4.1/lib/R/library/MASS",
+        "RemoteType": "installed",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu",
         "RemoteSha": "7.3-60.2"
       },
@@ -4280,14 +4279,15 @@
       "target": "src/contrib/MASS_7.3-60.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu",
       "rversion": "R 4.4.1",
-      "built": "R 4.4.1; x86_64-pc-linux-gnu; 2024-06-14 09:03:49 UTC; unix",
       "directpkg": false,
       "license": "GPL-2 | GPL-3",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
+      "sysreqs_packages": {},
+      "needscompilation": true,
       "repotype": "cran",
-      "sysreqs_packages": {}
+      "built": "R 4.4.1; x86_64-pc-linux-gnu; 2024-06-14 09:03:49 UTC; unix"
     },
     {
       "ref": "installed::/opt/R/4.4.1/lib/R/library/Matrix",
@@ -4296,12 +4296,11 @@
       "type": "installed",
       "direct": false,
       "binary": true,
-      "dependencies": ["lattice"],
+      "dependencies": "lattice",
       "vignettes": false,
-      "needscompilation": true,
       "metadata": {
-        "RemoteType": "installed",
         "RemotePkgRef": "installed::/opt/R/4.4.1/lib/R/library/Matrix",
+        "RemoteType": "installed",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu",
         "RemoteSha": "1.7-0"
       },
@@ -4309,14 +4308,15 @@
       "target": "src/contrib/Matrix_1.7-0.tar.gz",
       "platform": "x86_64-pc-linux-gnu",
       "rversion": "R 4.4.1",
-      "built": "R 4.4.1; x86_64-pc-linux-gnu; 2024-06-14 09:04:04 UTC; unix",
       "directpkg": false,
       "license": "GPL (>= 2) | file LICENCE",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
+      "sysreqs_packages": {},
+      "needscompilation": true,
       "repotype": "cran",
-      "sysreqs_packages": {}
+      "built": "R 4.4.1; x86_64-pc-linux-gnu; 2024-06-14 09:04:04 UTC; unix"
     },
     {
       "ref": "installed::/opt/R/4.4.1/lib/R/library/mgcv",
@@ -4327,10 +4327,9 @@
       "binary": true,
       "dependencies": ["nlme", "Matrix"],
       "vignettes": false,
-      "needscompilation": true,
       "metadata": {
-        "RemoteType": "installed",
         "RemotePkgRef": "installed::/opt/R/4.4.1/lib/R/library/mgcv",
+        "RemoteType": "installed",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu",
         "RemoteSha": "1.9-1"
       },
@@ -4338,14 +4337,15 @@
       "target": "src/contrib/mgcv_1.9-1.tar.gz",
       "platform": "x86_64-pc-linux-gnu",
       "rversion": "R 4.4.1",
-      "built": "R 4.4.1; x86_64-pc-linux-gnu; 2024-06-14 09:07:41 UTC; unix",
       "directpkg": false,
       "license": "GPL (>= 2)",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
+      "sysreqs_packages": {},
+      "needscompilation": true,
       "repotype": "cran",
-      "sysreqs_packages": {}
+      "built": "R 4.4.1; x86_64-pc-linux-gnu; 2024-06-14 09:07:41 UTC; unix"
     },
     {
       "ref": "installed::/opt/R/4.4.1/lib/R/library/nlme",
@@ -4354,12 +4354,11 @@
       "type": "installed",
       "direct": false,
       "binary": true,
-      "dependencies": ["lattice"],
+      "dependencies": "lattice",
       "vignettes": false,
-      "needscompilation": true,
       "metadata": {
-        "RemoteType": "installed",
         "RemotePkgRef": "installed::/opt/R/4.4.1/lib/R/library/nlme",
+        "RemoteType": "installed",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu",
         "RemoteSha": "3.1-164"
       },
@@ -4367,23 +4366,24 @@
       "target": "src/contrib/nlme_3.1-164.tar.gz",
       "platform": "x86_64-pc-linux-gnu",
       "rversion": "R 4.4.1",
-      "built": "R 4.4.1; x86_64-pc-linux-gnu; 2024-06-14 09:06:31 UTC; unix",
       "directpkg": false,
       "license": "GPL (>= 2)",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
+      "sysreqs_packages": {},
+      "needscompilation": true,
       "repotype": "cran",
-      "sysreqs_packages": {}
+      "built": "R 4.4.1; x86_64-pc-linux-gnu; 2024-06-14 09:06:31 UTC; unix"
     }
   ],
   "sysreqs": {
     "os": "linux",
     "distribution": "ubuntu",
     "version": "22.04",
-    "url": null,
-    "pre_install": ["apt-get -y update"],
-    "install_scripts": ["apt-get -y install libcurl4-openssl-dev libssl-dev make zlib1g-dev pandoc unixodbc-dev libfreetype6-dev libjpeg-dev libpng-dev libtiff-dev git libpq-dev libicu-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev libxml2-dev"],
+    "url": {},
+    "pre_install": "apt-get -y update",
+    "install_scripts": "apt-get -y install libcurl4-openssl-dev libssl-dev make zlib1g-dev pandoc unixodbc-dev libfreetype6-dev libjpeg-dev libpng-dev libtiff-dev git libpq-dev libicu-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev libxml2-dev",
     "post_install": {},
     "packages": ["libcurl4-openssl-dev", "libssl-dev", "make", "zlib1g-dev", "pandoc", "unixodbc-dev", "libfreetype6-dev", "libjpeg-dev", "libpng-dev", "libtiff-dev", "git", "libpq-dev", "libicu-dev", "libfontconfig1-dev", "libfribidi-dev", "libharfbuzz-dev", "libxml2-dev"]
   }
