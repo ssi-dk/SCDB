@@ -334,7 +334,14 @@ Logger <- R6::R6Class(                                                          
         log_file = self$log_filename,
         schema = purrr::pluck(private$db_table, "name", "schema"),
         table = purrr::pluck(private$db_table, "name", "table")
-      ) |>
+      )
+
+      # Add catalog if it exists in the Id
+      if ("catalog" %in% purrr::pluck(private$db_table, "name", names)) {
+        patch <- dplyr::mutate(patch, catalog = purrr::pluck(private$db_table, "name", "catalog"), .before = "schema")
+      }
+
+      patch <- patch |>
         dplyr::copy_to(
           dest = private$log_conn,
           df = _,
