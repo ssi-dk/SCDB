@@ -43,13 +43,12 @@ get_table <- function(conn, db_table = NULL, slice_ts = NA, include_slice_info =
   # Ensure id is fully qualified
   db_table_id <- id(db_table, conn = conn)
 
-  # Ensure existence of table
-  if (!table_exists(conn, db_table_id)) {
-    rlang::abort(glue::glue("Table {as.character(db_table_id)} could not be found!"))
-  }
-
   # Look-up table in database
-  q <- dplyr::tbl(conn, db_table_id)
+  tryCatch({
+    q <- dplyr::tbl(conn, db_table_id)
+  }, error = function(e) {
+    stop(glue::glue("Table {as.character(db_table_id)} could not be found!"))
+  })
 
   # Check whether data is historical
   if (is.historical(q) && !is.null(slice_ts)) {
