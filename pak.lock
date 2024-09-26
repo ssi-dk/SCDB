@@ -1,6 +1,6 @@
 {
   "lockfile_version": 1,
-  "os": "Ubuntu 22.04.4 LTS",
+  "os": "Ubuntu 22.04.5 LTS",
   "r_version": "R version 4.4.1 (2024-06-14)",
   "platform": "x86_64-pc-linux-gnu",
   "packages": [
@@ -100,7 +100,7 @@
     {
       "ref": "bit",
       "package": "bit",
-      "version": "4.0.5",
+      "version": "4.5.0",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -112,10 +112,10 @@
         "RemoteRef": "bit",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "4.0.5"
+        "RemoteSha": "4.5.0"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/bit_4.0.5.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/bit_4.0.5.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/bit_4.5.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/bit_4.5.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -131,7 +131,7 @@
     {
       "ref": "bit64",
       "package": "bit64",
-      "version": "4.0.5",
+      "version": "4.5.2",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -143,10 +143,10 @@
         "RemoteRef": "bit64",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "4.0.5"
+        "RemoteSha": "4.5.2"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/bit64_4.0.5.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/bit64_4.0.5.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/bit64_4.5.2.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/bit64_4.5.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -627,7 +627,11 @@
     {
       "ref": "curl",
       "package": "curl",
+<<<<<<< Updated upstream
       "version": "5.2.2",
+=======
+      "version": "5.2.3",
+>>>>>>> Stashed changes
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -639,10 +643,17 @@
         "RemoteRef": "curl",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
+<<<<<<< Updated upstream
         "RemoteSha": "5.2.2"
       },
       "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/curl_5.2.2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/curl_5.2.2.tar.gz",
+=======
+        "RemoteSha": "5.2.3"
+      },
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/curl_5.2.3.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/curl_5.2.3.tar.gz",
+>>>>>>> Stashed changes
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -981,7 +992,7 @@
     {
       "ref": "duckdb",
       "package": "duckdb",
-      "version": "1.0.0-2",
+      "version": "1.1.0",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -993,10 +1004,17 @@
         "RemoteRef": "duckdb",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
+<<<<<<< Updated upstream
         "RemoteSha": "1.0.0-2"
       },
       "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/duckdb_1.0.0-2.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/duckdb_1.0.0-2.tar.gz",
+=======
+        "RemoteSha": "1.1.0"
+      },
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/duckdb_1.1.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/duckdb_1.1.0.tar.gz",
+>>>>>>> Stashed changes
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -1012,7 +1030,7 @@
     {
       "ref": "evaluate",
       "package": "evaluate",
-      "version": "0.24.0",
+      "version": "1.0.0",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -1024,10 +1042,10 @@
         "RemoteRef": "evaluate",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "0.24.0"
+        "RemoteSha": "1.0.0"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/evaluate_0.24.0.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/evaluate_0.24.0.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/evaluate_1.0.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/evaluate_1.0.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -1097,7 +1115,7 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "sysreqs": "C++11",
+      "sysreqs": "",
       "sysreqs_packages": {},
       "needscompilation": false,
       "repotype": "cranlike"
@@ -1950,7 +1968,7 @@
     {
       "ref": "jsonlite",
       "package": "jsonlite",
-      "version": "1.8.8",
+      "version": "1.8.9",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -1962,10 +1980,10 @@
         "RemoteRef": "jsonlite",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "1.8.8"
+        "RemoteSha": "1.8.9"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/jsonlite_1.8.8.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/jsonlite_1.8.8.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/jsonlite_1.8.9.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/jsonlite_1.8.9.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -2398,7 +2416,11 @@
     {
       "ref": "openssl",
       "package": "openssl",
+<<<<<<< Updated upstream
       "version": "2.2.1",
+=======
+      "version": "2.2.2",
+>>>>>>> Stashed changes
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -2410,10 +2432,17 @@
         "RemoteRef": "openssl",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
+<<<<<<< Updated upstream
         "RemoteSha": "2.2.1"
       },
       "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/openssl_2.2.1.tar.gz",
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/openssl_2.2.1.tar.gz",
+=======
+        "RemoteSha": "2.2.2"
+      },
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/openssl_2.2.2.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/openssl_2.2.2.tar.gz",
+>>>>>>> Stashed changes
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -2560,7 +2589,7 @@
     {
       "ref": "pkgdown",
       "package": "pkgdown",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -2572,10 +2601,10 @@
         "RemoteRef": "pkgdown",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "2.1.0"
+        "RemoteSha": "2.1.1"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/pkgdown_2.1.0.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/pkgdown_2.1.0.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/pkgdown_2.1.1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/pkgdown_2.1.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
