@@ -135,7 +135,9 @@ join_warn_experimental <- function() {
 #'   If no `na_by` argument is given is given, the function defaults to using `dplyr::*_join`.
 #'
 #' @inheritParams dbplyr::join.tbl_sql
-#' @inherit dbplyr::join.tbl_sql return
+#' @return Another \code{tbl_lazy}. Use \code{\link[dplyr:show_query]{show_query()}} to see the generated
+#' query, and use \code{\link[dbplyr:collect.tbl_sql]{collect()}} to execute the query
+#' and return data to R.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   library(dplyr, warn.conflicts = FALSE)
 #'   library(dbplyr, warn.conflicts = FALSE)
