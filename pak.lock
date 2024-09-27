@@ -255,7 +255,7 @@
     {
       "ref": "broom",
       "package": "broom",
-      "version": "1.0.6",
+      "version": "1.0.7",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -267,10 +267,10 @@
         "RemoteRef": "broom",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "1.0.6"
+        "RemoteSha": "1.0.7"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/broom_1.0.6.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/broom_1.0.6.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/broom_1.0.7.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/broom_1.0.7.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -1621,7 +1621,7 @@
     {
       "ref": "httr2",
       "package": "httr2",
-      "version": "1.0.4",
+      "version": "1.0.5",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -1633,10 +1633,10 @@
         "RemoteRef": "httr2",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "1.0.4"
+        "RemoteSha": "1.0.5"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/httr2_1.0.4.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/httr2_1.0.4.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/httr2_1.0.5.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/httr2_1.0.5.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
