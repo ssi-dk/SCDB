@@ -1,0 +1,225 @@
+on:
+  workflow_dispatch
+
+
+name: "⏱️ Benchmark"
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd "pg_isready -U postgres" --health-interval 10s --health-timeout 5s --health-retries 5
+
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGDATABASE: test
+      PGUSER: postgres
+      PGPASSWORD: postgres
+
+    steps:
+      - name: Install a SQL Server suite of tools
+        uses: potatoqualitee/mssqlsuite@v1.7
+        with:
+          install: sqlengine, sqlpackage, sqlclient
+          show-log: true
+
+      - name: Configure SQL server
+        run: |
+          set -o xtrace
+          sqlcmd -V 10 -S localhost -U SA -P dbatools.I0 -Q "ALTER LOGIN SA WITH DEFAULT_DATABASE = master;"
+
+
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Configure git
+        run: |
+          git config --local user.name "$GITHUB_ACTOR"
+          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git switch ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+
+
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::devtools
+
+
+      - name: Delete previous benchmark files
+        if: always()
+        run: rm -rf inst/extdata/benchmark-*.rds
+
+
+
+      - name: Get SQLite version
+        run: |
+          version=$(Rscript -e "cat(DBI::dbGetQuery(DBI::dbConnect(RSQLite::SQLite()), 'SELECT sqlite_version();')[[1]])")
+          echo "SQLITE_VERSION=SQLite v$version" >> $GITHUB_ENV
+
+      - name: Get DuckDB version
+        run: |
+          version=$(Rscript -e "cat(DBI::dbGetQuery(DBI::dbConnect(duckdb::duckdb()), 'SELECT version();')[[1]])")
+          echo "DUCKDB_VERSION=DuckDB $version" >> $GITHUB_ENV
+
+      - name: Get PostgreSQL version
+        run: |
+          version=$(psql --version | awk '{print $3}')
+          echo "POSTGRES_VERSION=PostgreSQL v$version" >> $GITHUB_ENV
+
+      - name: Get SQL Server version
+        run: |
+          version=$(sqlcmd -S localhost -U SA -P dbatools.I0 -Q "SET NOCOUNT ON; SELECT SERVERPROPERTY('productversion') AS version" -h -1 -W -b)
+          echo "SQL_SERVER_VERSION=SQL Server v$version" >> $GITHUB_ENV
+
+
+      - name: Install libraries to benchmark
+        if: always()
+        run: source("./data-raw/benchmark.R", echo=TRUE)
+        shell: Rscript {0}
+
+
+
+      - name: Run benchmark (${{ env.SQLITE_VERSION }})
+        if: always()
+        env:
+          BACKEND: ${{ env.SQLITE_VERSION }}
+          BACKEND_DRV: RSQLite::SQLite
+          BACKEND_ARGS: 'list(dbname = file.path(tempdir(), "SQLite.SQLite"))'
+        run: source("./data-raw/benchmark.R", echo=TRUE)
+        shell: Rscript {0}
+
+      - name: Run benchmark (${{ env.DUCKDB_VERSION }})
+        if: always()
+        env:
+          BACKEND: ${{ env.DUCKDB_VERSION }}
+          BACKEND_DRV: duckdb::duckdb
+          BACKEND_ARGS: 'list(dbdir = file.path(tempdir(), "DuckDB.duckdb"))'
+        run: source("./data-raw/benchmark.R", echo=TRUE)
+        shell: Rscript {0}
+
+      - name: Run benchmark (${{ env.POSTGRES_VERSION }})
+        if: always()
+        env:
+          BACKEND: ${{ env.POSTGRES_VERSION }}
+          BACKEND_DRV: RPostgres::Postgres
+        run: source("./data-raw/benchmark.R", echo=TRUE)
+        shell: Rscript {0}
+
+      - name: Run benchmark (${{ env.SQL_SERVER_VERSION }})
+        if: always()
+        env:
+          BACKEND: ${{ env.SQL_SERVER_VERSION }}
+          BACKEND_DRV: odbc::odbc
+          CONN_ARGS_JSON: >
+            {
+              "${{ env.SQL_SERVER_VERSION }}": {
+                "driver": "ODBC Driver 17 for SQL Server",
+                "server": "localhost",
+                "database": "master",
+                "UID": "SA",
+                "PWD": "dbatools.I0"
+              }
+            }
+        run: source("./data-raw/benchmark.R", echo=TRUE)
+        shell: Rscript {0}
+
+
+
+      - name: Display structure of benchmark files
+        if: always()
+        run: ls -R data
+
+      - name: Combine benchmark results
+        if: always()
+        run: |
+          benchmark_files <- list.files(
+            "data",
+            pattern = "^benchmark-",
+            full.names = TRUE,
+            recursive = TRUE
+          )
+
+          benchmarks <- benchmark_files |>
+            purrr::map(readRDS) |>
+            purrr::map(tibble::as_tibble) |>
+            purrr::reduce(rbind)
+
+          benchmarks <- benchmarks |>
+            dplyr::mutate(
+              "version" = factor(
+                .data$version,
+                levels = c("CRAN", "main", setdiff(unique(benchmarks$version), c("CRAN", "main")))
+              )
+            )
+
+          # Save the combined benchmark results and delete the individual files
+          dir.create(file.path("inst", "extdata"), recursive = TRUE, showWarnings = FALSE)
+          saveRDS(benchmarks, file.path("inst", "extdata", "benchmarks.rds"))
+          file.remove(benchmark_files)
+
+
+          # Add note slow backends
+          slow_backends <- benchmarks |>
+            dplyr::distinct(.data$database, .data$n) |>
+            dplyr::filter(.data$n < max(.data$n)) |>
+            dplyr::pull("database")
+
+          benchmarks <- benchmarks |>
+            dplyr::mutate("database" = paste0(database, ifelse(database %in% slow_backends, "*", "")))
+
+
+          # Mean and standard deviation (see ggplot2::mean_se())
+          mean_sd <- function(x) {
+            mu <- mean(x)
+            sd <- sd(x)
+            data.frame(y = mu, ymin = mu - sd, ymax = mu + sd)
+          }
+
+          g <- ggplot2::ggplot(
+            benchmarks,
+            ggplot2::aes(x = version, y = time / 1e9)
+          ) +
+            ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
+            ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
+            ggplot2::labs(x = "Codebase version", y = "Time (s)")
+
+          if (length(slow_backends) > 1) {
+            g <- g + ggplot2::labs(caption = "* IMPORTANT: Benchmark data halved for this backend!")
+          }
+
+          ggplot2::ggsave("benchmarks.pdf")
+
+        shell: Rscript {0}
+
+      - name: Upload benchmark summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-summary
+          path: benchmarks.pdf
+
+      - name: Commit and push changes
+        run: |
+          git remote set-url origin https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git
+          git stash --include-untracked
+          git pull --rebase origin ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          git stash list | grep stash@{0} && git stash pop || echo "No stash to pop"
+          git add inst/extdata/\*
+          git commit -m "chore: Update benchmark data" || echo "No changes to commit"
+          git push origin ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
