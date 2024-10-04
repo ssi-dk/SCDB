@@ -62,9 +62,10 @@ See also the [PostgreSQL documentation](https://www.postgresql.org/docs/current/
 ]
 
 Our example data is `datasets::mtcars` reduced to only two columns: row names converted to a column `car`, and `hp`
-```{r example_data, eval = requireNamespace("RSQLite", quietly = TRUE)}
+```{r example_data, eval = FALSE}
 conn <- get_connection()
-
+```
+```{r example_data_hidden, eval = requireNamespace("RSQLite", quietly = TRUE)}
 example_data <- dplyr::tbl(conn, DBI::Id(table = "example_data"))
 example_data
 ```
