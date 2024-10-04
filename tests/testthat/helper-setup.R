@@ -103,11 +103,6 @@ get_test_conns <- function() {
   purrr::walk2(test_conns, names(test_conns),
                \(conn, conn_name) purrr::walk(purrr::pluck(conn_post_connect, conn_name), ~ DBI::dbExecute(conn, .)))
 
-  # Shutdown drivers that needs it
-  drivers |>
-    purrr::keep(~ inherits(., "duckdb_driver")) |>
-    purrr::walk(~ duckdb::duckdb_shutdown(.))
-
   # Inform the user about the tested back ends:
   msg <- paste(sep = "\n",
     "#####",
