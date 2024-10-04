@@ -24,7 +24,6 @@ reference:
   - title: Create or manage tables
     contents:
     - create_table
-    - create_index
     - create_logs_if_missing
     - update_snapshot
     - filter_keys

@@ -135,7 +135,9 @@ join_warn_experimental <- function() {
 #'   If no `na_by` argument is given is given, the function defaults to using `dplyr::*_join`.
 #'
 #' @inheritParams dbplyr::join.tbl_sql
-#' @inherit dbplyr::join.tbl_sql return
+#' @return Another \code{tbl_lazy}. Use \code{\link[dplyr:show_query]{show_query()}} to see the generated
+#' query, and use \code{\link[dbplyr:collect.tbl_sql]{collect()}} to execute the query
+#' and return data to R.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   library(dplyr, warn.conflicts = FALSE)
 #'   library(dbplyr, warn.conflicts = FALSE)
@@ -166,6 +168,7 @@ join_warn_experimental <- function() {
 #'   left_join(db1, db2, sql_on = "LHS.x < RHS.x") |> show_query()
 #' @seealso [dplyr::mutate-joins] which this function wraps.
 #' @seealso [dbplyr::join.tbl_sql] which this function wraps.
+#' @seealso [dplyr::show_query]
 #' @exportS3Method dplyr::inner_join
 inner_join.tbl_sql <- function(x, y, by = NULL, ...) {
 

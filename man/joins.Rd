@@ -57,7 +57,7 @@ To perform a cross-join, generating all combinations of \code{x} and \code{y}, s
 \item{...}{Other parameters passed onto methods.}
 }
 \value{
-Another \code{tbl_lazy}. Use \code{\link[=show_query]{show_query()}} to see the generated
+Another \code{tbl_lazy}. Use \code{\link[dplyr:show_query]{show_query()}} to see the generated
 query, and use \code{\link[dbplyr:collect.tbl_sql]{collect()}} to execute the query
 and return data to R.
 }
@@ -106,4 +106,6 @@ If no \code{na_by} argument is given is given, the function defaults to using \v
 \link[dplyr:mutate-joins]{dplyr::mutate-joins} which this function wraps.
 
 \link[dbplyr:join.tbl_sql]{dbplyr::join.tbl_sql} which this function wraps.
+
+\link[dplyr:explain]{dplyr::show_query}
 }

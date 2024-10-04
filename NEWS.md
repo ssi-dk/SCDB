@@ -1,12 +1,8 @@
-# SCDB (development version)
-
-## New features
-
-* Added function `create_index` to allow easy creating of an index on a table (#137).
+# SCDB 0.4.1
 
 ## Improvements and Fixes
 
-* `update_snapshot()` has been optimized and now runs faster on all the supported backends (#137).
+* `Logger` now correctly writes to the "catalog" field on backends that support it (#149).
 
 * `get_schema()` now correctly returns the temporary schema on PostgreSQL backends (#139).
 
@@ -15,8 +11,12 @@
 * `unique_table_names()` now uses random alphanumerics to form the unique name instead of tracking via options (#158).
 
 ## Documentation
+* Deprecated `check_from` argument no longer used in `dbplyr` calls (#136).
 
-* A vignette including benchmarks of `update_snapshot()` across various backends is added (#138).
+## Testing
+
+* Improved tests for `get_tables()` (#145).
+
 
 # SCDB 0.4.0
 
@@ -180,6 +180,7 @@
 
 * Maintainer changed to Marcus Munch Grünewald (#59).
 
+
 # SCDB 0.2
 
 ## Breaking changes
@@ -217,6 +218,7 @@
 
 * As `schema_exists` on an empty schema tests by creating a new table, this may
   cause issues if the user does not have sufficient privileges.
+
 
 # SCDB 0.1
 

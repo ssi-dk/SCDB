@@ -86,7 +86,5 @@ create_table <- function(.data, conn = NULL, db_table, ...) {                   
     ...
   )
 
-  create_index(conn, db_table_id, columns = c("checksum", "from_ts"))
-
   return(invisible(dplyr::tbl(conn, db_table_id)))
 }
