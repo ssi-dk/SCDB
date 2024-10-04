@@ -23,6 +23,9 @@
 
 * `get_tables()` now returns catalog on DuckDB backends (#145).
 
+* `unique_table_names()` now uses random alphanumerics to form the unique name instead of tracking via options (#158).
+
+## Documentation
 * Deprecated `check_from` argument no longer used in `dbplyr` calls (#136).
 
 ## Testing
@@ -192,6 +195,7 @@
 
 * Maintainer changed to Marcus Munch Grünewald (#59).
 
+
 # SCDB 0.2
 
 ## Breaking changes
@@ -229,6 +233,7 @@
 
 * As `schema_exists` on an empty schema tests by creating a new table, this may
   cause issues if the user does not have sufficient privileges.
+
 
 # SCDB 0.1
 
