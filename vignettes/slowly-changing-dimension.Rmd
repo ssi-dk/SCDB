@@ -54,7 +54,8 @@ forecasts2 <- filter(forecasts_full, ForecastDate == "2023-09-29") %>%
 forecasts2a <- filter(forecasts_full, ForecastDate == "2023-09-29")
 ```
 
-A slowly changing dimension is a concept in data warehousing which refers to data which may change over time, but at an irregular schedule.
+A slowly changing dimension is a concept in data warehousing which refers to data which may change over time, but at an
+ irregular schedule.
 
 ## Type 1 and Type 2 history
 
@@ -64,10 +65,12 @@ For example, consider the following table of forecasts for a number of cities:
 forecasts
 ```
 
-The following day, the forecasts will have changed, and — barring the occasional data hoarder — the existing data is no longer relevant.
+The following day, the forecasts will have changed, and — barring the occasional data hoarder — the existing data is no
+ longer relevant.
 
 In this example, most (if not all) of the values of the `Forecast` column will change with each regular update.
-Putting it into other words, the table is a *snapshot*^[A *snapshot* is a static view of (part of) a database at a specific point in time] of forecasts at the last time of update.
+Putting it into other words, the table is a *snapshot*^[A *snapshot* is a static view of (part of) a database at a
+specific point in time] of forecasts at the last time of update.
 
 The following day, the forecasts naturally change:
 ```{r forecasts2a, eval = requireNamespace("tidyverse")}
@@ -77,14 +80,17 @@ forecasts2
 We could choose to update the forecasts table so that it would always contain the current data.
 This is what is referred to as Type 1 methodology [@Kimball2013].
 
-Databases are thankfully a rather efficient way of storing and accessing data, so instead of discarding the values from the previous day, we append the new data to those of the previous day.
+Databases are thankfully a rather efficient way of storing and accessing data, so instead of discarding the values from
+ the previous day, we append the new data to those of the previous day.
 Also, in order to keep our data organized, we add a column with the date of the forecast, aptly named `ForecastDate`.
 
-The full table of forecasts for the two days now looks like below, and we are slowly building a full history of forecasts:
+The full table of forecasts for the two days now looks like below, and we are slowly building a full history of
+forecasts:
 ```{r forecasts_full, eval = requireNamespace("tidyverse")}
 forecasts_full
 ```
-Managing historical data by inserting new data in this manner is often referred to as Type 2 methodology or Type 2 history.
+Managing historical data by inserting new data in this manner is often referred to as Type 2 methodology or Type 2
+history.
 
 Our table now provides much more information for the user through filtering:
 ```{r forecasts_full_examples, eval = requireNamespace("tidyverse")}
@@ -105,7 +111,8 @@ forecasts_full %>%
 
 Now, we note that the forecast for Houston has not changed between the two days.
 
-In order to keep our data as minimized as possible, we modify the table again, now expanding `ForecastDate` into `ForecastFrom` and `ForecastUntil`.
+In order to keep our data as minimized as possible, we modify the table again, now expanding `ForecastDate` into
+`ForecastFrom` and `ForecastUntil`.
 
 Our table of forecasts now looks like this:
 ```{r forecasts_scd, eval = requireNamespace("tidyverse")}
@@ -114,10 +121,12 @@ forecasts_scd
 For now, the `ForecastUntil` value is set to `NA`, as it is not known when these rows will "expire" (if ever).
 This also makes it easy to identify currently valid data.
 
-Adding a new column to save a single row of data naturally seems a bit overkill, but as the number of rows in the data set increases indefinitely, this solutions scales much better.
+Adding a new column to save a single row of data naturally seems a bit overkill, but as the number of rows in the data
+ set increases indefinitely, this solutions scales much better.
 
 ## A "timeline of timelines"
-Let's now introduce additional information and see how managing slowly changing dimensions enables us to easily navigate large amounts of data over large periods of time.
+Let's now introduce additional information and see how managing slowly changing dimensions enables us to easily navigate
+large amounts of data over large periods of time.
 
 ```{r adresses_setup, include = FALSE, eval = requireNamespace("tidyverse")}
 addresses <- tibble::tibble(
@@ -176,9 +185,13 @@ addresses2 <- addresses %>%
   distinct()
 ```
 
-Imagine a town of several thousand citizens, with a town hall maintaining a civil registry of names and addresses of every citizen, updated daily with any changes submitted by the citizens, each of whom having an individual identification number.^[If this concept seems very familiar, you may have heard of [the Danish central civil registry](https://en.wikipedia.org/wiki/Personal_identification_number_(Denmark))]
+Imagine a town of several thousand citizens, with a town hall maintaining a civil registry of names and addresses of
+every citizen, updated daily with any changes submitted by the citizens, each of whom having an individual
+identification number.^[If this concept seems very familiar, you may have heard of
+[the Danish central civil registry](https://en.wikipedia.org/wiki/Personal_identification_number_(Denmark))]
 
-The data is largely static, as a very small fraction of citizens move on any given day, but it is of interest to keep data relatively up-to-date.
+The data is largely static, as a very small fraction of citizens move on any given day, but it is of interest to keep
+data relatively up-to-date.
 This is where managing a slowly changing dimension becomes very powerful, compared to full incremental backups.
 
 One day, Alice Doe meets [Robert "Bobby" Tables](https://xkcd.com/327/), and they move in together:
@@ -187,7 +200,8 @@ One day, Alice Doe meets [Robert "Bobby" Tables](https://xkcd.com/327/), and the
 addresses
 ```
 
-First thing to notice is that the registry is not updated in real-time, as citizens may have been late in registering a change of address.
+First thing to notice is that the registry is not updated in real-time, as citizens may have been late in registering
+a change of address.
 This can be seen when comparing the values of `MovedIn` and `ValidFrom` for row 4.
 
 When using Type 2 history, this feature is correctly replicated when reconstructing historical data:
@@ -200,7 +214,8 @@ addresses %>%
          ValidUntil >= !!slice_timestamp | is.na(ValidUntil)) %>%
   select(!c("ValidFrom", "ValidUntil"))
 ```
-In other words, even though Alice's address was subsequently updated in the registry, we can still see that she *was* registered as living in Donut Plains at this time.
+In other words, even though Alice's address was subsequently updated in the registry, we can still see that she *was*
+registered as living in Donut Plains at this time.
 This modeling of "timelines of timelines" is also called bitemporal modeling.
 
 By now, things are going well between Alice and Robert; they get married, with Alice taking Robert's surname.
@@ -212,7 +227,8 @@ filter(addresses2,
   select(ID, GivenName, Surname, MovedIn, MovedOut, ValidFrom, ValidUntil)
 ```
 
-This is now also reflected in the data; the `MovedIn` date is persistent across the date of the name change, only the `Surname` changes:
+This is now also reflected in the data; the `MovedIn` date is persistent across the date of the name change, only the
+`Surname` changes:
 ```{r addresses3, eval = requireNamespace("tidyverse")}
 slice_timestamp <- "2022-03-04"
 
@@ -235,7 +251,8 @@ addresses2 %>%
 
 ## Summary
 
-By now, it is hopefully clear how managing a slowly changing dimension allows you to access data at any point in (tracked) time while potentially avoiding a lot of data redundancy.
+By now, it is hopefully clear how managing a slowly changing dimension allows you to access data at any point in
+(tracked) time while potentially avoiding a lot of data redundancy.
 
 You are now ready to get started with the `SCDB` package!
 
