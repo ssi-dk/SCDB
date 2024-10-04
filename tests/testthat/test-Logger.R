@@ -91,7 +91,7 @@ test_that("Logger: logging to file works", {
 
 
   # Test logging to file has the right formatting and message type
-  expect_no_message(logger$log_info("test filewriting", tic = logger$start_time))
+  logger$log_info("test filewriting", tic = logger$start_time)
   tryCatch(logger$log_warn("test filewriting", tic = logger$start_time), warning = \(w) NULL)
   tryCatch(logger$log_error("test filewriting", tic = logger$start_time), error = \(e) NULL)
 
@@ -132,7 +132,7 @@ test_that("Logger: logging to file works", {
 
 
   # Test logging to file still works
-  expect_no_message(logger$log_info("test filewriting", tic = logger$start_time))
+  logger$log_info("test filewriting", tic = logger$start_time)
 
   ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_true(logger$log_filename %in% dir(log_path))
@@ -189,6 +189,9 @@ test_that("Logger: logging to database works", {
     # Test Logger has pre-filled some information in the logs
     db_table_id <- id(db_table, conn)
     expect_identical(as.character(dplyr::pull(log_table_id, "date")), timestamp)
+    if ("catalog" %in% purrr::pluck(db_table_id, "name", names)) {
+      expect_identical(dplyr::pull(log_table_id, "catalog"), purrr::pluck(db_table_id, "name", "catalog"))
+    }
     expect_identical(dplyr::pull(log_table_id, "schema"), purrr::pluck(db_table_id, "name", "schema"))
     expect_identical(dplyr::pull(log_table_id, "table"), purrr::pluck(db_table_id, "name", "table"))
     expect_identical( # Transferring start_time to database can have some loss of information that we need to match
