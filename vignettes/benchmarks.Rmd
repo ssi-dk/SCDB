@@ -34,7 +34,7 @@ This data forms the basis for three "snapshots" used in the benchmarks:
 The benchmark function uses three consecutive calls to `update_snapshot()` to create the table with first snapshot and
 then update it to the second and third snapshot. Finally, the table is deleted.
 
-The performance of this benchmark function is timed with the `microbenchmark` package using 10 replicates.
+The performance of this benchmark function is timed with the `{{microbenchmark}}` package using 10 replicates.
 All benchmarks are run on the same machine.
 
 The results of the benchmark are shown graphically below (mean and standard deviation), where we compare the current
@@ -126,7 +126,7 @@ data. The datasets are similar to the first benchmark, but the number of repeats
 increasing data size. The benchmarks are run from a "clean" state, where the target_table does not exists. The benchmark
 measures both the time to create the table and to remove it again afterwards (to restore the clean state).
 
-The performance of this benchmark function is timed with the `microbenchmark` package using 5 replicates.
+The performance of this benchmark function is timed with the `{{microbenchmark}}` package using 5 replicates.
 All benchmarks are run on the same machine.
 
 The results of the benchmark are shown graphically below (mean and standard deviation) and with linear scaling (dotted
