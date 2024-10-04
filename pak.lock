@@ -1495,6 +1495,37 @@
       "repotype": "cranlike"
     },
     {
+      "ref": "here",
+      "package": "here",
+      "version": "1.0.1",
+      "type": "standard",
+      "direct": false,
+      "binary": true,
+      "dependencies": "rprojroot",
+      "vignettes": false,
+      "metadata": {
+        "RemotePkgRef": "here",
+        "RemoteType": "standard",
+        "RemoteRef": "here",
+        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
+        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
+        "RemoteSha": "1.0.1"
+      },
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/here_1.0.1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/here_1.0.1.tar.gz",
+      "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
+      "rversion": "4.4",
+      "directpkg": false,
+      "license": "MIT + file LICENSE",
+      "dep_types": ["Depends", "Imports", "LinkingTo"],
+      "params": [],
+      "install_args": "",
+      "sysreqs": "",
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
+    },
+    {
       "ref": "highr",
       "package": "highr",
       "version": "0.11",
@@ -2143,7 +2174,7 @@
     {
       "ref": "local::.",
       "package": "SCDB",
-      "version": "0.4.1",
+      "version": "0.4.1.9000",
       "type": "local",
       "direct": true,
       "binary": false,
@@ -2154,7 +2185,7 @@
         "RemoteType": "local"
       },
       "sources": "file:///home/runner/work/SCDB/SCDB",
-      "target": "src/contrib/SCDB_0.4.1.tar.gz",
+      "target": "src/contrib/SCDB_0.4.1.9000.tar.gz",
       "platform": "source",
       "rversion": "*",
       "directpkg": true,
@@ -2261,23 +2292,22 @@
     {
       "ref": "microbenchmark",
       "package": "microbenchmark",
-      "version": "1.4.10",
+      "version": "1.5.0",
       "type": "standard",
       "direct": false,
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "microbenchmark",
+        "RemoteType": "standard",
         "RemoteRef": "microbenchmark",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "1.4.10"
+        "RemoteSha": "1.5.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/microbenchmark_1.4.10.tar.gz"],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/microbenchmark_1.4.10.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/microbenchmark_1.5.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/microbenchmark_1.5.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -2285,9 +2315,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "On a Unix-alike, one of the C functions\n        mach_absolute_time (macOS), clock_gettime or gethrtime. If none\n        of these is found, the obsolescent POSIX function gettimeofday\n        will be tried.",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "mime",
@@ -2467,23 +2498,22 @@
     {
       "ref": "pak",
       "package": "pak",
-      "version": "0.7.2",
+      "version": "0.8.0",
       "type": "standard",
       "direct": false,
       "binary": true,
       "dependencies": [],
       "vignettes": false,
-      "needscompilation": false,
       "metadata": {
-        "RemoteType": "standard",
         "RemotePkgRef": "pak",
+        "RemoteType": "standard",
         "RemoteRef": "pak",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "0.7.2"
+        "RemoteSha": "0.8.0"
       },
-      "sources": ["https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/pak_0.7.2.tar.gz"],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/pak_0.7.2.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/pak_0.8.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/pak_0.8.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -2491,9 +2521,10 @@
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": "",
-      "repotype": "cranlike",
       "sysreqs": "",
-      "sysreqs_packages": {}
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
     },
     {
       "ref": "parallelly",
