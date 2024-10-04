@@ -245,5 +245,5 @@ close_connection <- function(conn) {
   # Check arguments
   checkmate::assert_class(conn, "DBIConnection")
 
-  DBI::dbDisconnect(conn, shutdown = TRUE)
+  DBI::dbDisconnect(conn)
 }

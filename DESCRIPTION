@@ -43,7 +43,7 @@ Imports:
 Suggests:
     callr,
     conflicted,
-    duckdb,
+    duckdb (>= 0.10.1),
     ggplot2,
     here,
     jsonlite,
