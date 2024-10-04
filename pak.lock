@@ -1329,7 +1329,7 @@
     {
       "ref": "glue",
       "package": "glue",
-      "version": "1.7.0",
+      "version": "1.8.0",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -1341,10 +1341,10 @@
         "RemoteRef": "glue",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "1.7.0"
+        "RemoteSha": "1.8.0"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/glue_1.7.0.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/glue_1.7.0.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/glue_1.8.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/glue_1.8.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
