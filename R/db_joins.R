@@ -175,8 +175,10 @@ inner_join.tbl_sql <- function(x, y, by = NULL, ...) {
   # Check arguments
   assert_data_like(x)
   assert_data_like(y)
-  checkmate::assert_character(by, null.ok = TRUE)
-
+  checkmate::assert(
+    checkmate::check_character(by, null.ok = TRUE),
+    checkmate::check_class(by, "dplyr_join_by", null.ok = TRUE)
+  )
   .dots <- list(...)
 
   if (!"na_by" %in% names(.dots)) {
@@ -209,7 +211,10 @@ left_join.tbl_sql <- function(x, y, by = NULL, ...) {
   # Check arguments
   assert_data_like(x)
   assert_data_like(y)
-  checkmate::assert_character(by, null.ok = TRUE)
+  checkmate::assert(
+    checkmate::check_character(by, null.ok = TRUE),
+    checkmate::check_class(by, "dplyr_join_by", null.ok = TRUE)
+  )
 
   .dots <- list(...)
 
@@ -244,7 +249,10 @@ right_join.tbl_sql <- function(x, y, by = NULL, ...) {
   # Check arguments
   assert_data_like(x)
   assert_data_like(y)
-  checkmate::assert_character(by, null.ok = TRUE)
+  checkmate::assert(
+    checkmate::check_character(by, null.ok = TRUE),
+    checkmate::check_class(by, "dplyr_join_by", null.ok = TRUE)
+  )
 
   .dots <- list(...)
 
@@ -280,7 +288,10 @@ full_join.tbl_sql <- function(x, y, by = NULL, ...) {
   # Check arguments
   assert_data_like(x)
   assert_data_like(y)
-  checkmate::assert_character(by, null.ok = TRUE)
+  checkmate::assert(
+    checkmate::check_character(by, null.ok = TRUE),
+    checkmate::check_class(by, "dplyr_join_by", null.ok = TRUE)
+  )
 
   .dots <- list(...)
 
@@ -304,7 +315,10 @@ semi_join.tbl_sql <- function(x, y, by = NULL, ...) {
   # Check arguments
   assert_data_like(x)
   assert_data_like(y)
-  checkmate::assert_character(by, null.ok = TRUE)
+  checkmate::assert(
+    checkmate::check_character(by, null.ok = TRUE),
+    checkmate::check_class(by, "dplyr_join_by", null.ok = TRUE)
+  )
 
   .dots <- list(...)
 
@@ -324,7 +338,10 @@ anti_join.tbl_sql <- function(x, y, by = NULL, ...) {
   # Check arguments
   assert_data_like(x)
   assert_data_like(y)
-  checkmate::assert_character(by, null.ok = TRUE)
+  checkmate::assert(
+    checkmate::check_character(by, null.ok = TRUE),
+    checkmate::check_class(by, "dplyr_join_by", null.ok = TRUE)
+  )
 
   .dots <- list(...)
 
