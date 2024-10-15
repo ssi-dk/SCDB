@@ -188,10 +188,14 @@ join_warn_experimental <- function() {
 
 
 #' Construct the arguments to `*_join` that accounts for the na matching
-#' @param x (`tbl_sql`) The left table to join.
-#' @param y (`tbl_sql`) The right table to join.
-#' @param by (`dbplyr_join_by` or `character`) The columns to match on without NA values.
-#' @param .dots (`list`) Arguments passed to the `*_join` function.
+#' @param x (`tbl_sql`) \cr
+#'   The left table to join.
+#' @param y (`tbl_sql`) \cr
+#'   The right table to join.
+#' @param by (`dbplyr_join_by` or `character`) \cr
+#'   The columns to match on without NA values.
+#' @param .dots (`list`) \cr
+#'   Arguments passed to the `*_join` function.
 #' @noRd
 join_args <- function(.dots) {
   # Grab the environment of the caller and add the dot args
@@ -207,8 +211,10 @@ join_args <- function(.dots) {
 
 
 #' Merge two `dplyr_join_by` objects
-#' @param by (`dplyr_join_by` or `character`) The columns to match on without NA values.
-#' @param na_by (`dplyr_join_by` or `character`) The columns to match on NA.
+#' @param by (`dplyr_join_by` or `character`) \cr
+#'   The columns to match on without NA values.
+#' @param na_by (`dplyr_join_by` or `character`) \cr
+#'   The columns to match on NA.
 #' @noRd
 join_merger <- function(by, na_by) {
 
@@ -279,7 +285,7 @@ join_na_sql <- function(x, y, by = NULL, na_by = NULL) {
     stringr::str_remove_all(stringr::fixed("\n")) |> # Remove newlines from the formatted query
     stringr::str_replace_all(r"{\s{2,}}", " ") |> # Remove multiple spaces from the formatted query
     stringr::str_extract(r"{(?<=ON \().*(?=\))}") |> # Extract the contents of the ON statement
-    stringr::str_extract(pattern = r"{(?:["'`´]\s)([\w\s]+)(?:\s["'`´])}", group = 1) # First non quoted word(s)
+    stringr::str_extract(pattern = r"{(?:["'`]\s)([\w\s]+)(?:\s["'`])}", group = 1) # First non quoted word(s)
 
   # Replace NA equals with NA matching statement
   na_by$condition[na_by$condition == "=="] <- na_matching
@@ -297,9 +303,12 @@ join_na_sql <- function(x, y, by = NULL, na_by = NULL) {
 #'   as `<col>`.
 #'   This function fixes the `vars` component of the `lazy_query` to remove the doubly selected columns and rename
 #'   to the expected name.
-#' @param vars (`tibble`) The `vars` component of the `lazy_query`.
-#' @param na_by (`dplyr_join_by`) The `na_by` statement used in the join.
-#' @param right (`logical`) If the join is a right join.
+#' @param vars (`tibble`)\cr
+#'   The `vars` component of the `lazy_query`.
+#' @param na_by (`dplyr_join_by`)\cr
+#'   The `na_by` statement used in the join.
+#' @param right (`logical`)\cr
+#'   If the join is a right join.
 #' @return
 #'   A `tibble` with the `vars` component of the `lazy_query` fixed to remove doubly selected columns.
 #' @noRd
