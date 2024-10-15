@@ -330,6 +330,11 @@ join_na_select_fix <- function(vars, na_by, right = FALSE) {
       ) |>
         dplyr::symdiff(vars)
 
+      # Reorder our updated columns to match the original order
+      updated_vars <- updated_vars[
+        order(match(updated_vars$name, unique(purrr::pmap_chr(vars, ~ dplyr::coalesce(..2, ..3))))),
+      ]
+
     } else if (checkmate::test_names(names(vars), identical.to = c("name", "table", "var"))) {
       updated_vars <- rbind(
         tibble::tibble(
@@ -340,6 +345,10 @@ join_na_select_fix <- function(vars, na_by, right = FALSE) {
         dplyr::filter(vars, .data$var %in% !!doubly_selected_columns)
       ) |>
         dplyr::symdiff(vars)
+
+      # Reorder our updated columns to match the original order
+      updated_vars <- updated_vars[order(match(updated_vars$name, unique(vars$var))), ]
+
     }
   }
 

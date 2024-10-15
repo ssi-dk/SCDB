@@ -21,7 +21,7 @@ test_that("*_join() works with character `by` and `na_by`", {
       dplyr::arrange(number, t, letter)
     qr <- dplyr::left_join(dplyr::collect(x), dplyr::collect(y),  by = "number", multiple = "all") |>
       dplyr::arrange(number, t, letter)
-    expect_mapequal(q, qr)
+    expect_equal(q, qr)
 
     q  <- dplyr::right_join(x, y, na_by = "number") |>
       dplyr::collect() |>
