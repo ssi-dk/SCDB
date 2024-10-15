@@ -1,138 +1,22 @@
-#' Generate sql_on statement for na joins
-#'
-#' @description
-#'   This function generates a much faster SQL statement for NA join compared to dbplyr's _join with na_matches = "na".
-#' @inheritParams left_join
-#' @return
-#'   A sql_on statement to join by such that "NA" are matched with "NA" given the columns listed in "by" and "na_by".
-#' @noRd
-join_na_sql <- function(x, by, na_by) {
-  UseMethod("join_na_sql")
-}
-
-join_na_not_distinct <- function(by, na_by = NULL) {
-  sql_on <- ""
-  if (!missing(by)) {
-    for (i in seq_along(by)) {
-      sql_on <- paste0(sql_on, '"LHS"."', by[i], '" = "RHS"."', by[i], '"')
-      if (i < length(by) || !is.null(na_by)) {
-        sql_on <- paste(sql_on, "\nAND ")
-      }
-    }
-  }
-
-  if (!missing(na_by)) {
-    for (i in seq_along(na_by)) {
-      sql_on <- paste0(sql_on, '"LHS"."', na_by[i], '" IS NOT DISTINCT FROM "RHS"."', na_by[i], '"')
-      if (i < length(na_by)) {
-        sql_on <- paste(sql_on, "\nAND ")
-      }
-    }
-  }
-
-  return(sql_on)
-}
-
-join_na_not_null <- function(by, na_by = NULL) {
-  sql_on <- ""
-  if (!missing(by)) {
-    for (i in seq_along(by)) {
-      sql_on <- paste0(sql_on, '"LHS"."', by[i], '" = "RHS"."', by[i], '"')
-      if (i < length(by) || !is.null(na_by)) {
-        sql_on <- paste(sql_on, "\nAND ")
-      }
-    }
-  }
-
-  if (!missing(na_by)) {
-    for (i in seq_along(na_by)) {
-      sql_on <- paste0(sql_on,
-                       '("LHS"."', na_by[i], '" IS NULL AND "RHS"."', na_by[i], '" IS NULL ',
-                       'OR "LHS"."', na_by[i], '" = "RHS"."', na_by[i], '")')
-      if (i < length(na_by)) {
-        sql_on <- paste(sql_on, "\nAND ")
-      }
-    }
-  }
-
-  return(sql_on)
-}
-
-#' @noRd
-join_na_sql.tbl_dbi <- function(x, by, na_by) {
-  return(join_na_not_distinct(by = by, na_by = na_by))
-}
-
-#' @noRd
-`join_na_sql.tbl_Microsoft SQL Server` <- function(x, by, na_by) {
-  return(join_na_not_null(by = by, na_by = na_by))
-}
-
-#' Get colnames to select
-#'
-#' @inheritParams left_join
-#' @param left (`logical(1)`)\cr
-#'   Is the join a left (alternatively right) join?
-#' @return
-#'   A named character vector indicating which columns to select from x and y.
-#' @noRd
-select_na_sql <- function(x, y, by, na_by, left = TRUE) {
-
-  all_by <- c(by, na_by) # Variables to be common after join
-  cx  <- dplyr::setdiff(colnames(x), colnames(y)) # Variables only in x
-  cy  <- dplyr::setdiff(colnames(y), colnames(x)) # Variables only in y
-
-  sql_select <-
-    c(paste0(colnames(x), ifelse(colnames(x) %in% cx, "", ".x")),
-      paste0(colnames(y), ifelse(colnames(y) %in% cy, "", ".y"))[!colnames(y) %in% all_by]) |>
-    stats::setNames(c(colnames(x),
-                      paste0(colnames(y), ifelse(colnames(y) %in% colnames(x), ".y", ""))[!colnames(y) %in% all_by]))
-
-  return(sql_select)
-}
-
-
-#' Warn users that SQL does not match on NA by default
-#'
-#' @return
-#'   A warning that *_joins on SQL backends does not match NA by default.
-#' @noRd
-join_warn <- function() {
-  if (interactive() && identical(parent.frame(n = 2), globalenv())) {
-    rlang::warn(paste("*_joins in database-backend does not match NA by default.\n",
-                      "If your data contains NA, the columns with NA values must be supplied to \"na_by\",",
-                      "or you must specifiy na_matches = \"na\""),
-                .frequency = "once", .frequency_id = "*_join NA warning")
-  }
-}
-
-
-#' Warn users that SQL joins by NA is experimental
-#'
-#' @return
-#'   A warning that *_joins are still experimental.
-#' @noRd
-join_warn_experimental <- function() {
-  if (interactive() && identical(parent.frame(n = 2), globalenv())) {
-    rlang::warn("*_joins with na_by is still experimental. Please report issues.",
-                .frequency = "once", .frequency_id = "*_join NA warning")
-  }
-}
-
-
 #' SQL Joins
 #'
 #' @name joins
 #'
 #' @description
+#'  `r lifecycle::badge("experimental")`
+#'
 #'   Overloads the dplyr `*_join` to accept an `na_by` argument.
 #'   By default, joining using SQL does not match on `NA` / `NULL`.
-#'   dbplyr `*_join`s has the option "na_matches = na" to match on `NA` / `NULL` but this is very inefficient in some
-#'   cases.
-#'   This function does the matching more efficiently:
+#'   dbplyr `*_join`s has the option "na_matches = na" to match on `NA` / `NULL` but this operation is substantially
+#'   slower since it turns all equality comparisons to identical comparisons.
+#'
+#'   This function does the matching more efficiently by allowing the user to specify which column contains
+#'   `NA` / `NULL` values and which does not:
 #'   If a column contains `NA` / `NULL`, the names of these columns can be passed via the `na_by` argument and
-#'   efficiently match as if "na_matches = na".
-#'   If no `na_by` argument is given is given, the function defaults to using `dplyr::*_join`.
+#'   efficiently match as if `na_matches = "na"`.
+#'   Columns without `NA` / `NULL` values is passed via the `by` argument and will be matched `na_matches = "never"`.
+#'
+#'   If no `na_by` argument is given, the function defaults to using `dplyr::*_join` without modification.
 #'
 #' @inheritParams dbplyr::join.tbl_sql
 #' @return Another \code{tbl_lazy}. Use \code{\link[dplyr:show_query]{show_query()}} to see the generated
@@ -178,28 +62,11 @@ inner_join.tbl_sql <- function(x, y, by = NULL, ...) {
     return(NextMethod("inner_join"))
   }
 
-  # Check arguments
-  checkmate::assert(
-    checkmate::check_character(by, null.ok = TRUE),
-    checkmate::check_class(by, "dplyr_join_by", null.ok = TRUE)
-  )
+  # Prepare the combined join
+  out <- do.call(dplyr::inner_join, args = join_args(.dots))
+  out$lazy_query$vars <- join_na_select_fix(out$lazy_query$vars, .dots$na_by)
 
-  join_warn_experimental()
-
-  args <- as.list(rlang::current_env()) |>
-    append(.dots)
-
-  .renamer <- select_na_sql(x, y, by, .dots$na_by)
-
-  # Remove na_by from args to avoid infinite loops
-  args$na_by <- NULL
-  args$sql_on <- join_na_sql(x, by, .dots$na_by)
-
-  join_result <- do.call(dplyr::inner_join, args = args) |>
-    dplyr::rename(!!.renamer) |>
-    dplyr::select(tidyselect::all_of(names(.renamer)))
-
-  return(join_result)
+  return(out)
 }
 
 #' @rdname joins
@@ -212,28 +79,10 @@ left_join.tbl_sql <- function(x, y, by = NULL, ...) {
     return(NextMethod("left_join"))
   }
 
-  # Check arguments
-  checkmate::assert(
-    checkmate::check_character(by, null.ok = TRUE),
-    checkmate::check_class(by, "dplyr_join_by", null.ok = TRUE)
-  )
+  out <- do.call(dplyr::left_join, args = join_args(.dots))
+  out$lazy_query$vars <- join_na_select_fix(out$lazy_query$vars, .dots$na_by)
 
-  join_warn_experimental()
-
-  args <- as.list(rlang::current_env()) |>
-    append(.dots)
-
-  .renamer <- select_na_sql(x, y, by, .dots$na_by)
-
-  # Remove na_by from args to avoid infinite loops
-  args$na_by <- NULL
-  args$sql_on <- join_na_sql(x, by, .dots$na_by)
-
-  join_result <- do.call(dplyr::left_join, args = args) |>
-    dplyr::rename(!!.renamer) |>
-    dplyr::select(tidyselect::all_of(names(.renamer)))
-
-  return(join_result)
+  return(out)
 }
 
 #' @rdname joins
@@ -246,28 +95,10 @@ right_join.tbl_sql <- function(x, y, by = NULL, ...) {
     return(NextMethod("right_join"))
   }
 
-  # Check arguments
-  checkmate::assert(
-    checkmate::check_character(by, null.ok = TRUE),
-    checkmate::check_class(by, "dplyr_join_by", null.ok = TRUE)
-  )
+  out <- do.call(dplyr::right_join, args = join_args(.dots))
+  out$lazy_query$vars <- join_na_select_fix(out$lazy_query$vars, .dots$na_by, right = TRUE)
 
-  join_warn_experimental()
-
-  args <- as.list(rlang::current_env()) |>
-    append(.dots)
-
-  .renamer <- select_na_sql(x, y, by, .dots$na_by)
-
-  # Remove na_by from args to avoid infinite loops
-  args$na_by <- NULL
-  args$sql_on <- join_na_sql(x, by, .dots$na_by)
-
-  join_result <- do.call(dplyr::right_join, args = args) |>
-    dplyr::rename(!!.renamer) |>
-    dplyr::select(tidyselect::all_of(names(.renamer)))
-
-  return(join_result)
+  return(out)
 }
 
 
@@ -281,19 +112,8 @@ full_join.tbl_sql <- function(x, y, by = NULL, ...) {
     return(NextMethod("full_join"))
   }
 
-  # Check arguments
-  checkmate::assert(
-    checkmate::check_character(by, null.ok = TRUE),
-    checkmate::check_class(by, "dplyr_join_by", null.ok = TRUE)
-  )
-
-  join_warn_experimental()
-
-  # Full joins are hard...
-  out <- dplyr::union(
-    dplyr::left_join(x, y, by = by, na_by = .dots$na_by),
-    dplyr::right_join(x, y, by = by, na_by = .dots$na_by)
-  )
+  out <- do.call(dplyr::full_join, args = join_args(.dots))
+  out$lazy_query$vars <- join_na_select_fix(out$lazy_query$vars, .dots$na_by)
 
   return(out)
 }
@@ -309,7 +129,9 @@ semi_join.tbl_sql <- function(x, y, by = NULL, ...) {
     return(NextMethod("semi_join"))
   }
 
-  stop("Not implemented")
+  out <- do.call(dplyr::semi_join, args = join_args(.dots))
+
+  return(out)
 }
 
 
@@ -323,5 +145,203 @@ anti_join.tbl_sql <- function(x, y, by = NULL, ...) {
     return(NextMethod("anti_join"))
   }
 
-  stop("Not implemented")
+  out <- do.call(dplyr::anti_join, args = join_args(.dots))
+
+  return(out)
+}
+
+
+#' Warn users that SQL does not match on NA by default
+#'
+#' @return
+#'   A warning that *_joins on SQL backends does not match NA by default.
+#' @noRd
+join_warn <- function() {
+  if (interactive() && identical(parent.frame(n = 2), globalenv())) {
+    rlang::warn(
+      paste(
+        "*_joins in database-backend does not match NA by default.\n",
+        "If your data contains NA, the columns with NA values must be supplied to \"na_by\",",
+        "or you must specify na_matches = \"na\""
+      ),
+      .frequency = "once",
+      .frequency_id = "*_join NA warning"
+    )
+  }
+}
+
+
+#' Warn users that SQL joins by NA is experimental
+#'
+#' @return
+#'   A warning that *_joins are still experimental.
+#' @noRd
+join_warn_experimental <- function() {
+  if (interactive() && identical(parent.frame(n = 2), globalenv())) {
+    rlang::warn(
+      "*_joins with na_by is still experimental. Please report issues.",
+      .frequency = "once",
+      .frequency_id = "*_join NA warning"
+    )
+  }
+}
+
+
+#' Construct the arguments to `*_join` that accounts for the na matching
+#' @param x (`tbl_sql`) The left table to join.
+#' @param y (`tbl_sql`) The right table to join.
+#' @param by (`dbplyr_join_by` or `character`) The columns to match on without NA values.
+#' @param .dots (`list`) Arguments passed to the `*_join` function.
+#' @noRd
+join_args <- function(.dots) {
+  # Grab the environment of the caller and add the dot args
+  args <- append(as.list(rlang::caller_env()), .dots)
+
+  # Remove the na matching args, and let join_na_sql combine the `by` and `na_by` statements
+  args$na_by <- NULL
+  args$na_matches <- NULL
+  args$by <- join_na_sql(args$x, args$y, by = args$by, na_by = .dots$na_by)
+
+  return(args)
+}
+
+
+#' Merge two `dplyr_join_by` objects
+#' @param by (`dplyr_join_by` or `character`) The columns to match on without NA values.
+#' @param na_by (`dplyr_join_by` or `character`) The columns to match on NA.
+#' @noRd
+join_merger <- function(by, na_by) {
+
+  # Early return if only one by statement is given
+  if (is.null(by) && is.null(na_by)) {
+    stop("Both by and na_by cannot be NULL")
+  } else if (is.null(by)) {
+    return(na_by)
+  } else if (is.null(na_by)) {
+    return(by)
+  }
+
+  # Combine the by and na_by statements by unclassing, merging and reclassing
+  combined_join <- list(
+    "exprs" = c(purrr::pluck(by, "exprs"), purrr::pluck(na_by, "exprs"))
+  ) |>
+    modifyList(
+      purrr::map2(purrr::discard_at(by, "exprs"), purrr::discard_at(na_by, "exprs"), ~ c(.x, .y))
+    )
+  class(combined_join) <- "dplyr_join_by"
+
+  return(combined_join)
+}
+
+
+#' Generate `dplyr_join_by` statement for na joins
+#'
+#' @description
+#'   This function creates a `dplyr_join_by` object to join by where the statements supplied in `by` are treated as not
+#'   having NA values while the columns listed in `na_by` are treated as having NA values.
+#'   This latter translation corresponds to using `dplyr::*_join` with `na_matches = "na"`.
+#' @inheritParams left_join
+#' @param na_by (`character`)\cr
+#'   The columns to match on NA. If a column contains NA, the names of these columns can be passed via the `na_by`
+#'   argument. These will then be matched as if with the `na_matches = "na"` argument.
+#' @return
+#'   A `dplyr_join_by` object to join by such that "NA" are matched with "NA" given the columns listed in `by` and
+#'   `na_by`.
+#' @noRd
+join_na_sql <- function(x, y, by = NULL, na_by = NULL) {
+
+  # Check arguments
+  checkmate::assert(
+    checkmate::check_character(by, null.ok = TRUE),
+    checkmate::check_class(by, "dplyr_join_by", null.ok = TRUE)
+  )
+
+  join_warn_experimental()
+
+  # Convert to dplyr_join_by if not already
+  if (!is.null(by) && !inherits(by, "dplyr_join_by")) {
+    by <- dplyr::join_by(!!by)
+  }
+
+  if (!is.null(na_by) && !inherits(na_by, "dplyr_join_by")) {
+    na_by <- dplyr::join_by(!!na_by)
+  }
+
+  combined_join <- join_merger(by, na_by)
+
+  # Get the translation for matching the na_by component of the join
+  na_subquery <- dbplyr::remote_query(dplyr::inner_join(x, y, by = combined_join, na_matches = "na"))
+
+  # Determine the NA matching statement by extracting from the translated query.
+  # E.g. on RSQlite, the keyword "IS" checks if arguments are identical
+  # and on PostgreSQL, the keyword "IS NOT DISTINCT FROM" checks if arguments are identical.
+  na_matching <- na_subquery |>
+    stringr::str_remove_all(stringr::fixed("\n")) |> # Remove newlines from the formatted query
+    stringr::str_replace_all(r"{\s{2,}}", " ") |> # Remove multiple spaces from the formatted query
+    stringr::str_extract(r"{(?<=ON \().*(?=\))}") |> # Extract the contents of the ON statement
+    stringr::str_extract(pattern = r"{(?:["'`´]\s)([\w\s]+)(?:\s["'`´])}", group = 1) # First non quoted word(s)
+
+  # Replace NA equals with NA matching statement
+  na_by$condition[na_by$condition == "=="] <- na_matching
+
+  return(join_merger(by, na_by))
+}
+
+
+#' Manually fixes the select component of the `lazy_query` after overwriting the `by` statement.
+#'
+#' @description
+#'   After overwriting the `by` statement in the `lazy_query`, the `vars` component of the `lazy_query` is not
+#'   consistent with the new non-overwritten `by` statement.
+#'   As a result, columns which are matched in the join are included as both `<col>.x` and `<col.y>`, instead of just
+#'   as `<col>`.
+#'   This function fixes the `vars` component of the `lazy_query` to remove the doubly selected columns and rename
+#'   to the expected name.
+#' @param vars (`tibble`) The `vars` component of the `lazy_query`.
+#' @param na_by (`dplyr_join_by`) The `na_by` statement used in the join.
+#' @param right (`logical`) If the join is a right join.
+#' @return
+#'   A `tibble` with the `vars` component of the `lazy_query` fixed to remove doubly selected columns.
+#' @noRd
+join_na_select_fix <- function(vars, na_by, right = FALSE) {
+  if (!inherits(na_by, "dplyr_join_by")) na_by <- dplyr::join_by(!!na_by)
+
+  # All equality joins in `na_by` are incorrectly translated
+  doubly_selected_columns <- na_by |>
+    purrr::discard_at("exprs") |>
+    tibble::as_tibble() |>
+    dplyr::filter(.data$condition == "==", .data$x == .data$y) |>
+    dplyr::pull("x")
+
+  if (length(doubly_selected_columns) == 0) {
+    updated_vars <- vars # no doubly selected columns
+  } else {
+
+    # The vars table structure is not consistent between dplyr join types
+    # There are two formats which we needs to manage independently.
+    if (checkmate::test_names(names(vars), identical.to = c("name", "x", "y"))) {
+      updated_vars <- rbind(
+        tibble::tibble(
+          "name" = doubly_selected_columns,
+          "x" = ifelse(right, NA, doubly_selected_columns),
+          "y" = doubly_selected_columns
+        ),
+        dplyr::filter(vars, .data$x %in% !!doubly_selected_columns | .data$y %in% !!doubly_selected_columns)
+      ) |>
+        dplyr::symdiff(vars)
+
+    } else if (checkmate::test_names(names(vars), identical.to = c("name", "table", "var"))) {
+      updated_vars <- rbind(
+        tibble::tibble(
+          "name" = doubly_selected_columns,
+          "table" = 1,
+          "var" = doubly_selected_columns
+        ),
+        dplyr::filter(vars, .data$var %in% !!doubly_selected_columns)
+      ) |>
+        dplyr::symdiff(vars)
+    }
+  }
+
+  return(updated_vars)
 }

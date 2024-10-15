@@ -62,14 +62,20 @@ query, and use \code{\link[dbplyr:collect.tbl_sql]{collect()}} to execute the qu
 and return data to R.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Overloads the dplyr \verb{*_join} to accept an \code{na_by} argument.
 By default, joining using SQL does not match on \code{NA} / \code{NULL}.
-dbplyr \verb{*_join}s has the option "na_matches = na" to match on \code{NA} / \code{NULL} but this is very inefficient in some
-cases.
-This function does the matching more efficiently:
+dbplyr \verb{*_join}s has the option "na_matches = na" to match on \code{NA} / \code{NULL} but this operation is substantially
+slower since it turns all equality comparisons to identical comparisons.
+
+This function does the matching more efficiently by allowing the user to specify which column contains
+\code{NA} / \code{NULL} values and which does not:
 If a column contains \code{NA} / \code{NULL}, the names of these columns can be passed via the \code{na_by} argument and
-efficiently match as if "na_matches = na".
-If no \code{na_by} argument is given is given, the function defaults to using \verb{dplyr::*_join}.
+efficiently match as if \code{na_matches = "na"}.
+Columns without \code{NA} / \code{NULL} values is passed via the \code{by} argument and will be matched \code{na_matches = "never"}.
+
+If no \code{na_by} argument is given, the function defaults to using \verb{dplyr::*_join} without modification.
 }
 \examples{
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
