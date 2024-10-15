@@ -186,3 +186,67 @@ test_that("*_join() does not break any dplyr joins", {
     connection_clean_up(conn)
   }
 })
+
+
+test_that("*_join() with only na_by works as dplyr joins", {
+  for (conn in get_test_conns()) {
+
+    # Define two test datasets
+    x <- get_table(conn, "__mtcars") |>
+      dplyr::select(name, mpg, cyl, hp, vs, am, gear, carb)
+
+    y <- get_table(conn, "__mtcars") |>
+      dplyr::select(name, drat, wt, qsec)
+
+    # Test the standard joins
+    # left_join
+    qr <- dplyr::left_join(dplyr::collect(x), dplyr::collect(y), by = "name")
+    q  <- dplyr::left_join(x, y, na_by = "name") |> dplyr::collect()
+    expect_equal(q, qr)
+
+    q <- dplyr::left_join(x, y, na_by = dplyr::join_by(x$name == y$name)) |> dplyr::collect()
+    expect_equal(q, qr)
+
+    # right_join
+    qr <- dplyr::right_join(dplyr::collect(x), dplyr::collect(y), by = "name")
+    q  <- dplyr::right_join(x, y, na_by = "name") |> dplyr::collect()
+    expect_equal(q, qr)
+
+    q <- dplyr::right_join(x, y, na_by = dplyr::join_by(x$name == y$name)) |> dplyr::collect()
+    expect_equal(q, qr)
+
+    # inner_join
+    qr <- dplyr::inner_join(dplyr::collect(x), dplyr::collect(y), by = "name")
+    q  <- dplyr::inner_join(x, y, na_by = "name") |> dplyr::collect()
+    expect_equal(q, qr)
+
+    q <- dplyr::inner_join(x, y, na_by = dplyr::join_by(x$name == y$name)) |> dplyr::collect()
+    expect_equal(q, qr)
+
+    # full_join
+    qr <- dplyr::full_join(dplyr::collect(x), dplyr::collect(y), by = "name")
+    q  <- dplyr::full_join(x, y, na_by = "name") |> dplyr::collect()
+    expect_equal(q, qr)
+
+    q <- dplyr::full_join(x, y, na_by = dplyr::join_by(x$name == y$name)) |> dplyr::collect()
+    expect_equal(q, qr)
+
+    # semi_join
+    qr <- dplyr::semi_join(dplyr::collect(x), dplyr::collect(y), by = "name")
+    q <- dplyr::semi_join(x, y, na_by = "name") |> dplyr::collect()
+    expect_equal(q, qr)
+
+    q <- dplyr::semi_join(x, y, na_by = dplyr::join_by(x$name == y$name)) |> dplyr::collect()
+    expect_equal(q, qr)
+
+    # anti_join
+    qr <- dplyr::anti_join(dplyr::collect(x), dplyr::collect(y), by = "name")
+    q <- dplyr::anti_join(x, y, na_by = "name") |> dplyr::collect()
+    expect_equal(q, qr)
+
+    q <- dplyr::anti_join(x, y, na_by = dplyr::join_by(x$name == y$name)) |> dplyr::collect()
+    expect_equal(q, qr)
+
+    connection_clean_up(conn)
+  }
+})
