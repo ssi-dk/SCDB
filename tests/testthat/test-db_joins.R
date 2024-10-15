@@ -95,36 +95,7 @@ test_that("*_join() works with character `by` and `na_by`", {
 })
 
 
-test_that("*_join() works with `dplyr::join_by()`", {
-  for (conn in get_test_conns()) {
-
-    # Define two test datasets
-    x <- get_table(conn, "__mtcars") |>
-      dplyr::select(name, mpg, cyl, hp, vs, am, gear, carb)
-
-    y <- get_table(conn, "__mtcars") |>
-      dplyr::select(name, drat, wt, qsec)
-
-
-    # Test the implemented joins
-    q  <- dplyr::left_join(x, y, by = dplyr::join_by(x$name == y$name)) |> dplyr::collect()
-    qr <- dplyr::left_join(dplyr::collect(x), dplyr::collect(y), by = dplyr::join_by(x$name == y$name))
-    expect_equal(q, qr)
-
-    q  <- dplyr::right_join(x, y, by = dplyr::join_by(x$name == y$name)) |> dplyr::collect()
-    qr <- dplyr::right_join(dplyr::collect(x), dplyr::collect(y), by = dplyr::join_by(x$name == y$name))
-    expect_equal(q, qr)
-
-    q  <- dplyr::inner_join(x, y, by = dplyr::join_by(x$name == y$name)) |> dplyr::collect()
-    qr <- dplyr::inner_join(dplyr::collect(x), dplyr::collect(y), by = dplyr::join_by(x$name == y$name))
-    expect_equal(q, qr)
-
-    connection_clean_up(conn)
-  }
-})
-
-
-test_that("*_join() does not break any dplyr joins", {
+test_that("*_join() does not break any dplyr joins when no `na_by` argument is given", {
   for (conn in get_test_conns()) {
 
     # Define two test datasets
@@ -188,7 +159,7 @@ test_that("*_join() does not break any dplyr joins", {
 })
 
 
-test_that("*_join() with only na_by works as dplyr joins", {
+test_that("*_join() with only `na_by` works identically as if `by` was given instead when no data is NA", {
   for (conn in get_test_conns()) {
 
     # Define two test datasets
