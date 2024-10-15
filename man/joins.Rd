@@ -99,13 +99,13 @@ If no \code{na_by} argument is given, the function defaults to using \verb{dplyr
   # But you can activate R's usual behaviour with the na_matches argument
   left_join(db, label, by = "x", na_matches = "na")
 
-  # By default, joins are equijoins, but you can use `sql_on` to
+  # By default, joins are equijoins, but you can use `dplyr::join_by()` to
   # express richer relationships
-  db1 <- memdb_frame(x = 1:5)
-  db2 <- memdb_frame(x = 1:3, y = letters[1:3])
+  db1 <- memdb_frame(id = 1:5)
+  db2 <- memdb_frame(id = 1:3, y = letters[1:3])
 
   left_join(db1, db2) |> show_query()
-  left_join(db1, db2, sql_on = "LHS.x < RHS.x") |> show_query()
+  left_join(db1, db2, by = join_by(x$id < y$id)) |> show_query()
 \dontshow{\}) # examplesIf}
 }
 \seealso{
