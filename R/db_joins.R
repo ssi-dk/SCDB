@@ -299,7 +299,12 @@ join_na_sql <- function(x, y, by = NULL, .dots = NULL) {
   na_matching <- na_subquery |>
     stringr::str_remove_all(stringr::fixed("\n")) |> # Remove newlines from the formatted query
     stringr::str_replace_all(r"{\s{2,}}", " ") |> # Remove multiple spaces from the formatted query
-    stringr::str_extract(r"{(?<=ON \().*(?=\))}") |> # Extract the contents of the ON statement
+    stringr::str_extract(r"{(?<=ON \().*(?=\))}") # Extract the contents of the ON statement
+
+  print("ON subquery")
+  print(na_matching)
+
+  na_matching <- na_matching |>
     stringr::str_extract(pattern = r"{(?:["'`]\s)([\w\s]+)(?:\s["'`])}", group = 1) # First non quoted word(s)
 
   # Replace NA equals with NA matching statement
