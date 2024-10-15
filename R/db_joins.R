@@ -261,6 +261,10 @@ join_na_sql <- function(x, y, by = NULL, na_by = NULL) {
     checkmate::check_character(by, null.ok = TRUE),
     checkmate::check_class(by, "dplyr_join_by", null.ok = TRUE)
   )
+  checkmate::assert(
+    checkmate::check_character(na_by, null.ok = TRUE),
+    checkmate::check_class(na_by, "dplyr_join_by", null.ok = TRUE)
+  )
 
   join_warn_experimental()
 
