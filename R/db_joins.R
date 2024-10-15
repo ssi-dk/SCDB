@@ -228,7 +228,7 @@ join_merger <- function(by, na_by) {
   combined_join <- list(
     "exprs" = c(purrr::pluck(by, "exprs"), purrr::pluck(na_by, "exprs"))
   ) |>
-    modifyList(
+    utils::modifyList(
       purrr::map2(purrr::discard_at(by, "exprs"), purrr::discard_at(na_by, "exprs"), ~ c(.x, .y))
     )
   class(combined_join) <- "dplyr_join_by"
@@ -283,7 +283,7 @@ join_na_sql <- function(x, y, by = NULL, .dots = NULL) {
 
   # Get the translation for matching the na_by component of the join
   subquery_args <- purrr::discard_at(.dots, "na_by") |>
-    modifyList(
+    utils::modifyList(
       list(
         x = x,
         y = y,
