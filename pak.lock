@@ -7,7 +7,7 @@
     {
       "ref": "askpass",
       "package": "askpass",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -19,10 +19,10 @@
         "RemoteRef": "askpass",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "1.2.0"
+        "RemoteSha": "1.2.1"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/askpass_1.2.0.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/askpass_1.2.0.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/askpass_1.2.1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/askpass_1.2.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -534,7 +534,7 @@
     {
       "ref": "commonmark",
       "package": "commonmark",
-      "version": "1.9.1",
+      "version": "1.9.2",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -546,10 +546,10 @@
         "RemoteRef": "commonmark",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "1.9.1"
+        "RemoteSha": "1.9.2"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/commonmark_1.9.1.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/commonmark_1.9.1.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/commonmark_1.9.2.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/commonmark_1.9.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -702,7 +702,7 @@
     {
       "ref": "data.table",
       "package": "data.table",
-      "version": "1.16.0",
+      "version": "1.16.2",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -714,10 +714,10 @@
         "RemoteRef": "data.table",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "1.16.0"
+        "RemoteSha": "1.16.2"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/data.table_1.16.0.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/data.table_1.16.0.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/data.table_1.16.2.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/data.table_1.16.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -1012,7 +1012,7 @@
     {
       "ref": "evaluate",
       "package": "evaluate",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -1024,10 +1024,10 @@
         "RemoteRef": "evaluate",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "1.0.0"
+        "RemoteSha": "1.0.1"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/evaluate_1.0.0.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/evaluate_1.0.0.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/evaluate_1.0.1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/evaluate_1.0.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -1683,7 +1683,7 @@
     {
       "ref": "hunspell",
       "package": "hunspell",
-      "version": "3.0.4",
+      "version": "3.0.5",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -1695,10 +1695,10 @@
         "RemoteRef": "hunspell",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "3.0.4"
+        "RemoteSha": "3.0.5"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/hunspell_3.0.4.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/hunspell_3.0.4.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/hunspell_3.0.5.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/hunspell_3.0.5.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -3619,7 +3619,7 @@
     {
       "ref": "spelling",
       "package": "spelling",
-      "version": "2.3.0",
+      "version": "2.3.1",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -3631,10 +3631,10 @@
         "RemoteRef": "spelling",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "2.3.0"
+        "RemoteSha": "2.3.1"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/spelling_2.3.0.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/spelling_2.3.0.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/spelling_2.3.1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/spelling_2.3.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -3719,7 +3719,7 @@
     {
       "ref": "sys",
       "package": "sys",
-      "version": "3.4.2",
+      "version": "3.4.3",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -3731,10 +3731,10 @@
         "RemoteRef": "sys",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "3.4.2"
+        "RemoteSha": "3.4.3"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/sys_3.4.2.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/sys_3.4.2.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/sys_3.4.3.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/sys_3.4.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -4340,7 +4340,7 @@
     {
       "ref": "xfun",
       "package": "xfun",
-      "version": "0.47",
+      "version": "0.48",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -4352,10 +4352,10 @@
         "RemoteRef": "xfun",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "0.47"
+        "RemoteSha": "0.48"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/xfun_0.47.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/xfun_0.47.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/xfun_0.48.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/xfun_0.48.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
