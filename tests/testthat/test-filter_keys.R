@@ -55,7 +55,7 @@ test_that("filter_keys() works with copy = TRUE", {
                    dplyr::collect())
 
     # The above filter_keys with `copy = TRUE` generates a dbplyr_### table.
-    # We manually remove this since we expect it. If more arrise, we will get an error.
+    # We manually remove this since we expect it. If more arise, we will get an error.
     DBI::dbRemoveTable(conn, id(utils::head(get_tables(conn, "dbplyr_"), 1)))
 
     connection_clean_up(conn)

@@ -8,7 +8,9 @@
 
 * `update_snapshot()` has been optimized and now runs faster on all the supported backends (#137).
 
-* `*_joins()` can now take `dplyr::join_by()` as `by` argument when no `na_by` argument is given (#156).
+* `*_joins()` have been more robust:
+  * `dbplyr` is now used internally which improves `full_join` and adds `anti_join` and `semi_join` (#157).
+  * When not supplying a `na_by` argument no input validation is made and unmodified `dplyr::*_join()` is called (#156).
 
 ## Documentation
 
