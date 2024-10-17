@@ -2,6 +2,10 @@ ssi-dk/AEF-DDF:
   - source: tests/testthat/test-0_rd_files.R
     dest: testthat/test-0_rd_files.R
 
+  - source: tests/spelling.R
+    dest: testthat/spelling.R
+
+
   # Lintr related files
   - source: .lintr
     dest: linting/.lintr
