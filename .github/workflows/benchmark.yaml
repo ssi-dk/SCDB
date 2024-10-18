@@ -7,6 +7,10 @@ jobs:
   benchmark:
     runs-on: ubuntu-latest
 
+    concurrency:
+      group: benchmark-${{ github.ref }}
+      cancel-in-progress: true
+
     services:
       postgres:
         image: postgres:latest
@@ -74,7 +78,7 @@ jobs:
 
       - name: Get DuckDB version
         run: |
-          version=$(Rscript -e "cat(DBI::dbGetQuery(DBI::dbConnect(duckdb::duckdb()), 'SELECT version();')[[1]])")
+          version=$(Rscript -e "conn <- DBI::dbConnect(duckdb::duckdb()); cat(DBI::dbGetQuery(conn, 'SELECT version();')[[1]]); DBI::dbDisconnect(conn, shutdown = TRUE)")
           echo "DUCKDB_VERSION=DuckDB $version" >> $GITHUB_ENV
 
       - name: Get PostgreSQL version
@@ -143,13 +147,13 @@ jobs:
 
       - name: Display structure of benchmark files
         if: always()
-        run: ls -R data
+        run: ls -R inst/extdata
 
       - name: Combine benchmark results
         if: always()
         run: |
           benchmark_files <- list.files(
-            "data",
+            "inst/extdata",
             pattern = "^benchmark-",
             full.names = TRUE,
             recursive = TRUE
@@ -191,11 +195,21 @@ jobs:
             data.frame(y = mu, ymin = mu - sd, ymax = mu + sd)
           }
 
+          # Determine subgroups
+          groups <- setdiff(colnames(benchmarks), c("expr", "time", "benchmark_function", "database", "version", "n"))
+
+          # Allow subgroups
+          dodge <- ggplot2::position_dodge(width = 0.6)
+
           g <- ggplot2::ggplot(
             benchmarks,
-            ggplot2::aes(x = version, y = time / 1e9)
+            ggplot2::aes(
+              x = version,
+              y = time / 1e9,
+              group = !!switch(length(groups) > 0, as.symbol(groups)),
+              color = !!switch(length(groups) > 0, as.symbol(groups)))
           ) +
-            ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
+            ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1, position = dodge) +
             ggplot2::facet_grid(rows = ggplot2::vars(benchmark_function), cols = ggplot2::vars(database)) +
             ggplot2::labs(x = "Codebase version", y = "Time (s)")
 
