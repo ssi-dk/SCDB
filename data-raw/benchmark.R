@@ -167,10 +167,10 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
             "n" = n
           )
 
-        dir.create("data", showWarnings = FALSE)
+        dir.create("inst/extdata", showWarnings = FALSE)
         saveRDS(
           update_snapshot_benchmark,
-          glue::glue("data/benchmark-update_snapshot_complexity_{n}_{names(conns)[[1]]}_{version}.rds")
+          glue::glue("inst/extdata/benchmark-update_snapshot_complexity_{n}_{names(conns)[[1]]}_{version}.rds")
         )
       }
 
