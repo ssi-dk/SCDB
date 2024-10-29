@@ -1429,7 +1429,7 @@
     {
       "ref": "gtable",
       "package": "gtable",
-      "version": "0.3.5",
+      "version": "0.3.6",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -1441,10 +1441,10 @@
         "RemoteRef": "gtable",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "0.3.5"
+        "RemoteSha": "0.3.6"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/gtable_0.3.5.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/gtable_0.3.5.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/gtable_0.3.6.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/gtable_0.3.6.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -3464,7 +3464,7 @@
     {
       "ref": "rstudioapi",
       "package": "rstudioapi",
-      "version": "0.17.0",
+      "version": "0.17.1",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -3476,10 +3476,10 @@
         "RemoteRef": "rstudioapi",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/jammy/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-22.04",
-        "RemoteSha": "0.17.0"
+        "RemoteSha": "0.17.1"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rstudioapi_0.17.0.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/rstudioapi_0.17.0.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/jammy/latest/src/contrib/rstudioapi_0.17.1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-22.04/4.4/rstudioapi_0.17.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-22.04",
       "rversion": "4.4",
       "directpkg": false,
