@@ -14,8 +14,15 @@ linters: c(
     )
   )
 exclude_linter: r"{^ *: *([\w, ]*)(.|$)}"
-exclusions: list(
-    "R/0_linters.R" = list(
-      "nolint_position_linter" = Inf
-    )
+exclusions: c(
+    list(
+      "R/0_linters.R" = list(
+        "nolint_position_linter" = Inf
+      )
+    ),
+    if (file.exists(".lintr_exclusions.R")) {
+      source(".lintr_exclusions.R")$value
+    } else {
+      list()
+    }
   )
