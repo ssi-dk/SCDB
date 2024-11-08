@@ -38,6 +38,9 @@ for (version in c("CRAN", "main", "branch")) {
   missing <- jsonlite::fromJSON("SCDB.lock")$packages$ref %>%
     purrr::discard(rlang::is_installed)
   if (length(missing) > 0) pak::pkg_install(missing, lib = lib_path)
+
+  # Explicitly install the packages
+  pak::pkg_install(source, lib = lib_path, dependencies = FALSE)
 }
 
 
@@ -66,8 +69,12 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
       version == "branch" ~ glue::glue("ssi-dk-SCDB-{sha}")
     )
 
-    .libPaths(c(here::here("installations", lib_dir), lib_paths_default))
-    library("SCDB")
+    library("SCDB", lib.loc = here::here("installations", lib_dir))
+
+    # Add proper version labels to the benchmarks
+    if (version == "CRAN") {
+      version <- paste0("SCDB v",  packageVersion("SCDB"))
+    }
 
     # Open connection to the database
     conns <- get_test_conns()
