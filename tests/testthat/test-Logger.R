@@ -202,12 +202,12 @@ test_that("Logger: logging to database works", {
 
     # Test logging to database writes to the correct fields
     logger$log_to_db(n_insertions = 42)
-    expect_identical(nrow(log_table_id), 1)
-    expect_identical(dplyr::pull(log_table_id, "n_insertions"), 42)
+    expect_identical(nrow(log_table_id), 1L)
+    expect_identical(dplyr::pull(log_table_id, "n_insertions"), 42L)
 
     logger$log_to_db(n_deactivations = 60)
-    expect_identical(nrow(log_table_id), 1)
-    expect_identical(dplyr::pull(log_table_id, "n_deactivations"), 60)
+    expect_identical(nrow(log_table_id), 1L)
+    expect_identical(dplyr::pull(log_table_id, "n_deactivations"), 60L)
 
 
     # Clean up
@@ -271,12 +271,12 @@ test_that("Logger: all logging simultaneously works", {
 
     # Test logging to database writes to the correct fields
     logger$log_to_db(n_insertions = 13)
-    expect_identical(nrow(log_table_id), 2)
-    expect_identical(dplyr::pull(log_table_id, "n_insertions"), c(42, 13))
+    expect_identical(nrow(log_table_id), 2L)
+    expect_identical(dplyr::pull(log_table_id, "n_insertions"), c(42L, 13L))
 
     logger$log_to_db(n_deactivations = 37)
-    expect_identical(nrow(log_table_id), 2)
-    expect_identical(dplyr::pull(log_table_id, "n_deactivations"), c(60, 37))
+    expect_identical(nrow(log_table_id), 2L)
+    expect_identical(dplyr::pull(log_table_id, "n_deactivations"), c(60L, 37L))
 
 
     # Clean up

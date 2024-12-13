@@ -53,7 +53,7 @@ test_that("update_snapshot() can handle first snapshot", {
 
     db_logs_with_log_file <- get_table(conn, "test.SCDB_logs") |>
       dplyr::filter(!is.na(.data$log_file))
-    expect_identical(nrow(db_logs_with_log_file), 1)
+    expect_identical(nrow(db_logs_with_log_file), 1L)
 
     # Check database log output
     logs <- get_table(conn, "test.SCDB_logs") |> dplyr::collect()
