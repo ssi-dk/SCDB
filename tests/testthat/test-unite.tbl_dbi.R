@@ -13,11 +13,11 @@ test_that("unite.tbl_dbi() works", {
     expect_s3_class(qu,        "tbl_dbi")
     expect_s3_class(qu_alt,    "tbl_dbi")
 
-    expect_equal(colnames(qu_remove), "new_column")
-    expect_equal(colnames(qu),     c("new_column", "mpg", "hp"))
-    expect_equal(colnames(qu_alt), c("new_column", "mpg", "hp"))
+    expect_identical(colnames(qu_remove), "new_column")
+    expect_identical(colnames(qu),     c("new_column", "mpg", "hp"))
+    expect_identical(colnames(qu_alt), c("new_column", "mpg", "hp"))
 
-    expect_equal(dplyr::collect(qu), dplyr::collect(qu_alt))
+    expect_identical(dplyr::collect(qu), dplyr::collect(qu_alt))
 
     # tidyr::unite has some quirky (and FUN!!! behavior) that we are forced to match here
     # specifically, the input "col" is converted to a symbol, so we have to do escape-bullshit

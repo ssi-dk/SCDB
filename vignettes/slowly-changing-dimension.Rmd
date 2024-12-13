@@ -178,7 +178,12 @@ addresses2 <- addresses %>%
              ValidFrom = !!name_change_date) %>%
       bind_rows(.data)
   } %>%
-  mutate(ValidUntil = as.Date(c(NA, !!name_change_date, NA, !!name_change_date), origin = "1970-01-01")) %>%
+  mutate(
+    ValidUntil = as.Date(
+      c(NA, !!name_change_date, NA, !!name_change_date),
+      origin = "1970-01-01"
+    )
+  ) %>%
   bind_rows(filter(addresses,
                    ID == 2)) %>%
   arrange(ValidFrom) %>%

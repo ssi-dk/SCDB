@@ -63,7 +63,7 @@ test_that("Logger: logging to file works", {
     list("SCDB.log_path" = "local/path"),
     {
       logger <- Logger$new(db_table = db_table, warn = FALSE)
-      expect_equal(logger$log_path, "local/path")
+      expect_identical(logger$log_path, "local/path")
 
       rm(logger)
       invisible(gc())
@@ -81,8 +81,8 @@ test_that("Logger: logging to file works", {
     warn = FALSE
   )
 
-  expect_equal(logger$log_path, log_path)
-  expect_equal(
+  expect_identical(logger$log_path, log_path)
+  expect_identical(
     logger$log_filename,
     glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
                "{format(as.POSIXct(timestamp), '%Y_%m_%d')}.",
@@ -97,7 +97,7 @@ test_that("Logger: logging to file works", {
 
   ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_true(logger$log_filename %in% dir(log_path))
-  expect_equal(
+  expect_identical(
     readLines(logger$log_realpath),
     c(
       glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test filewriting"),
@@ -122,8 +122,8 @@ test_that("Logger: logging to file works", {
     warn = FALSE
   )
 
-  expect_equal(logger$log_path, log_path)
-  expect_equal(
+  expect_identical(logger$log_path, log_path)
+  expect_identical(
     logger$log_filename,
     glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
                "{format(as.POSIXct(timestamp), '%Y_%m_%d')}.",
@@ -136,7 +136,7 @@ test_that("Logger: logging to file works", {
 
   ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_true(logger$log_filename %in% dir(log_path))
-  expect_equal(
+  expect_identical(
     readLines(logger$log_realpath),
     glue::glue(
       "{ts_str} - {Sys.info()[['user']]} - INFO - test filewriting"
@@ -183,7 +183,7 @@ test_that("Logger: logging to database works", {
                          warn = FALSE)
 
     log_table_id <- dplyr::tbl(conn, id(db_table, conn))
-    expect_equal(logger$log_tbl, log_table_id)
+    expect_identical(logger$log_tbl, log_table_id)
 
 
     # Test Logger has pre-filled some information in the logs
@@ -202,12 +202,12 @@ test_that("Logger: logging to database works", {
 
     # Test logging to database writes to the correct fields
     logger$log_to_db(n_insertions = 42)
-    expect_equal(nrow(log_table_id), 1)
-    expect_equal(dplyr::pull(log_table_id, "n_insertions"), 42)
+    expect_identical(nrow(log_table_id), 1)
+    expect_identical(dplyr::pull(log_table_id, "n_insertions"), 42)
 
     logger$log_to_db(n_deactivations = 60)
-    expect_equal(nrow(log_table_id), 1)
-    expect_equal(dplyr::pull(log_table_id, "n_deactivations"), 60)
+    expect_identical(nrow(log_table_id), 1)
+    expect_identical(dplyr::pull(log_table_id, "n_deactivations"), 60)
 
 
     # Clean up
@@ -232,9 +232,9 @@ test_that("Logger: all logging simultaneously works", {
                          log_table_id = db_table, log_conn = conn, warn = FALSE)
 
     log_table_id <- dplyr::tbl(conn, id(db_table, conn))
-    expect_equal(logger$log_path, log_path)
-    expect_equal(logger$log_tbl, log_table_id)
-    expect_equal(
+    expect_identical(logger$log_path, log_path)
+    expect_identical(logger$log_tbl, log_table_id)
+    expect_identical(
       logger$log_filename,
       glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
                  "{format(as.POSIXct(timestamp), '%Y_%m_%d')}.",
@@ -259,7 +259,7 @@ test_that("Logger: all logging simultaneously works", {
 
     # Test logging to file has the right formatting and message type
     expect_true(logger$log_filename %in% dir(log_path))
-    expect_equal(
+    expect_identical(
       readLines(logger$log_realpath),
       c(
         glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test console and filewriting"),
@@ -271,12 +271,12 @@ test_that("Logger: all logging simultaneously works", {
 
     # Test logging to database writes to the correct fields
     logger$log_to_db(n_insertions = 13)
-    expect_equal(nrow(log_table_id), 2)
-    expect_equal(dplyr::pull(log_table_id, "n_insertions"), c(42, 13))
+    expect_identical(nrow(log_table_id), 2)
+    expect_identical(dplyr::pull(log_table_id, "n_insertions"), c(42, 13))
 
     logger$log_to_db(n_deactivations = 37)
-    expect_equal(nrow(log_table_id), 2)
-    expect_equal(dplyr::pull(log_table_id, "n_deactivations"), c(60, 37))
+    expect_identical(nrow(log_table_id), 2)
+    expect_identical(dplyr::pull(log_table_id, "n_deactivations"), c(60, 37))
 
 
     # Clean up

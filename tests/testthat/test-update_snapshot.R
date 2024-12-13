@@ -140,7 +140,7 @@ test_that("update_snapshot() can add a new snapshot", {
         dplyr::arrange(wt, qsec) |>
         tibble::as_tibble()
     )
-    expect_equal(
+    expect_identical(
       nrow(slice_time(target, "2022-10-01 09:00:00")),
       nrow(mtcars)
     )
@@ -154,7 +154,7 @@ test_that("update_snapshot() can add a new snapshot", {
         dplyr::collect() |>
         dplyr::arrange(wt, qsec)
     )
-    expect_equal(
+    expect_identical(
       nrow(slice_time(target, "2022-10-03 09:00:00")),
       nrow(mtcars)
     )
@@ -209,7 +209,7 @@ test_that("update_snapshot() can update a snapshot on an existing date", {
         dplyr::arrange(wt, qsec) |>
         tibble::tibble()
     )
-    expect_equal(
+    expect_identical(
       nrow(slice_time(target, "2022-10-01 09:00:00")),
       nrow(mtcars)
     )
@@ -223,7 +223,7 @@ test_that("update_snapshot() can update a snapshot on an existing date", {
         dplyr::collect() |>
         dplyr::arrange(wt, qsec)
     )
-    expect_equal(
+    expect_identical(
       nrow(slice_time(target, "2022-10-03 09:00:00")),
       nrow(mtcars)
     )
@@ -271,7 +271,7 @@ test_that("update_snapshot() can insert a snapshot between existing dates", {
         dplyr::arrange(wt, qsec) |>
         tibble::tibble()
     )
-    expect_equal(
+    expect_identical(
       nrow(slice_time(target, "2022-10-01 09:00:00")),
       nrow(mtcars)
     )
@@ -285,7 +285,7 @@ test_that("update_snapshot() can insert a snapshot between existing dates", {
         dplyr::collect() |>
         dplyr::arrange(wt, qsec)
     )
-    expect_equal(
+    expect_identical(
       nrow(slice_time(target, "2022-10-02 09:00:00")),
       nrow(mtcars)
     )
