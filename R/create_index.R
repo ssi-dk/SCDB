@@ -68,7 +68,7 @@ create_index.SQLiteConnection <- function(conn, db_table, columns) {
 create_index.DBIConnection <- function(conn, db_table, columns) {
   db_table <- id(db_table, conn)
 
-  index <- glue::glue("{db_table}_scdb_index_{paste(columns, collapse = '_')}") |>
+  index <- glue::glue("{db_table}_scdb_index_{paste(columns, collapse = '_')}") %>%
     stringr::str_replace_all(stringr::fixed("."), "_")
 
   query <- glue::glue(

@@ -59,64 +59,64 @@ interlace <- function(tables, by = NULL, colnames = NULL) {
 interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
 
   # Parse inputs for colnames .from / .to columns
-  from_cols <- seq_along(tables) |>
-    purrr::map_chr(\(t) paste0("t", t, ".from")) |>
+  from_cols <- seq_along(tables) %>%
+    purrr::map_chr(\(t) paste0("t", t, ".from")) %>%
     purrr::map_chr(\(col) ifelse(col %in% names(colnames), colnames[col], "valid_from"))
 
-  until_cols <- seq_along(tables) |>
-    purrr::map_chr(\(t) paste0("t", t, ".until")) |>
+  until_cols <- seq_along(tables) %>%
+    purrr::map_chr(\(t) paste0("t", t, ".until")) %>%
     purrr::map_chr(\(col) ifelse(col %in% names(colnames), colnames[col], "valid_until"))
 
 
   # Rename valid_from / valid_until columns
   tables <- purrr::map2(tables, from_cols,
-                        \(table, from_col)  table |> dplyr::rename(valid_from  = !!from_col))
+                        \(table, from_col)  table %>% dplyr::rename(valid_from  = !!from_col))
   tables <- purrr::map2(tables, until_cols,
-                        \(table, until_col) table |> dplyr::rename(valid_until = !!until_col))
+                        \(table, until_col) table %>% dplyr::rename(valid_until = !!until_col))
 
 
   # Get all changes to valid_from / valid_until
-  q1 <- tables |> purrr::map(\(table) {
-    table |>
+  q1 <- tables %>% purrr::map(\(table) {
+    table %>%
       dplyr::select(tidyselect::all_of(by), "valid_from")
   })
-  q2 <- tables |>
+  q2 <- tables %>%
     purrr::map(\(table) {
-      table |>
-        dplyr::select(tidyselect::all_of(by), "valid_until") |>
+      table %>%
+        dplyr::select(tidyselect::all_of(by), "valid_until") %>%
         dplyr::rename(valid_from = "valid_until")
     })
-  t <- dplyr::union(q1, q2) |> purrr::reduce(dplyr::union)
+  t <- dplyr::union(q1, q2) %>% purrr::reduce(dplyr::union)
 
   # Sort and find valid_until in the combined validities
-  t <- t |>
-    dplyr::group_by(dplyr::across(tidyselect::all_of(by))) |>
-    dbplyr::window_order(.data$valid_from) |>
+  t <- t %>%
+    dplyr::group_by(dplyr::across(tidyselect::all_of(by))) %>%
+    dbplyr::window_order(.data$valid_from) %>%
     dplyr::mutate(.row = dplyr::if_else(is.na(.data$valid_from),  # Some database backends considers NULL to be the
                                         dplyr::n(),               # smallest, so we need to adjust for that
                                         dplyr::row_number() - ifelse(is.na(dplyr::first(.data$valid_from)), 1, 0)))     # nolint: redundant_ifelse_linter
 
-  t <- dplyr::left_join(t |>
+  t <- dplyr::left_join(t %>%
                           dplyr::filter(.data$.row < dplyr::n()),
-                        t |>
-                          dplyr::filter(.data$.row > 1) |>
-                          dplyr::mutate(.row = .data$.row - 1) |>
+                        t %>%
+                          dplyr::filter(.data$.row > 1) %>%
+                          dplyr::mutate(.row = .data$.row - 1) %>%
                           dplyr::rename("valid_until" = "valid_from"),
-                        by = c(by, ".row")) |>
-    dplyr::select(!".row") |>
-    dplyr::ungroup() |>
+                        by = c(by, ".row")) %>%
+    dplyr::select(!".row") %>%
+    dplyr::ungroup() %>%
     dplyr::compute(name = unique_table_name())
 
 
   # Merge data onto the new validities using non-equi joins
   joiner <- \(.data, table) {
-    .data |>
+    .data %>%
       dplyr::left_join(table,
                        suffix = c("", ".tmp"),
                        sql_on = paste0('"LHS"."', by, '" = "RHS"."', by, '" AND
                                       "LHS"."valid_from"  >= "RHS"."valid_from" AND
-                                     ("LHS"."valid_until" <= "RHS"."valid_until" OR "RHS"."valid_until" IS NULL)')) |>
-      dplyr::select(!tidyselect::ends_with(".tmp")) |>
+                                     ("LHS"."valid_until" <= "RHS"."valid_until" OR "RHS"."valid_until" IS NULL)')) %>%
+      dplyr::select(!tidyselect::ends_with(".tmp")) %>%
       dplyr::relocate(tidyselect::starts_with("valid_"), .after = tidyselect::everything())
   }
 

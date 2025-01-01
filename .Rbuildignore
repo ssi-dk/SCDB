@@ -15,3 +15,5 @@ man-roxygen/*
 ^README.Rmd$
 ^revdep$
 ^data-raw$
+^R/0_linters\.R$
+^tests/testthat/test-0_linters\.R$

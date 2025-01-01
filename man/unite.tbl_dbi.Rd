@@ -44,7 +44,7 @@ Convenience function to paste together multiple columns into one.
   unite(df, "z", x:y, na.rm = TRUE, remove = FALSE)
 
   # Separate is almost the complement of unite
-  unite(df, "xy", x:y) |>
+  unite(df, "xy", x:y) \%>\%
     separate(xy, c("x", "y"))
   # (but note `x` and `y` contain now "NA" not NA)
 }

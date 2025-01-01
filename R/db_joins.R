@@ -84,7 +84,7 @@ select_na_sql <- function(x, y, by, na_by, left = TRUE) {
 
   sql_select <-
     c(paste0(colnames(x), ifelse(colnames(x) %in% cx, "", ".x")),
-      paste0(colnames(y), ifelse(colnames(y) %in% cy, "", ".y"))[!colnames(y) %in% all_by]) |>
+      paste0(colnames(y), ifelse(colnames(y) %in% cy, "", ".y"))[!colnames(y) %in% all_by]) %>%
     stats::setNames(c(colnames(x),
                       paste0(colnames(y), ifelse(colnames(y) %in% colnames(x), ".y", ""))[!colnames(y) %in% all_by]))
 
@@ -145,7 +145,7 @@ join_warn_experimental <- function() {
 #'   band_db <- tbl_memdb(dplyr::band_members)
 #'   instrument_db <- tbl_memdb(dplyr::band_instruments)
 #'
-#'   left_join(band_db, instrument_db) |>
+#'   left_join(band_db, instrument_db) %>%
 #'     show_query()
 #'
 #'   # Can join with local data frames by setting copy = TRUE
@@ -164,8 +164,8 @@ join_warn_experimental <- function() {
 #'   db1 <- memdb_frame(x = 1:5)
 #'   db2 <- memdb_frame(x = 1:3, y = letters[1:3])
 #'
-#'   left_join(db1, db2) |> show_query()
-#'   left_join(db1, db2, sql_on = "LHS.x < RHS.x") |> show_query()
+#'   left_join(db1, db2) %>% show_query()
+#'   left_join(db1, db2, sql_on = "LHS.x < RHS.x") %>% show_query()
 #' @seealso [dplyr::mutate-joins] which this function wraps.
 #' @seealso [dbplyr::join.tbl_sql] which this function wraps.
 #' @seealso [dplyr::show_query]
@@ -186,7 +186,7 @@ inner_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   join_warn_experimental()
 
-  args <- as.list(rlang::current_env()) |>
+  args <- as.list(rlang::current_env()) %>%
     append(.dots)
 
   .renamer <- select_na_sql(x, y, by, .dots$na_by)
@@ -195,8 +195,8 @@ inner_join.tbl_sql <- function(x, y, by = NULL, ...) {
   args$na_by <- NULL
   args$sql_on <- join_na_sql(x, by, .dots$na_by)
 
-  join_result <- do.call(dplyr::inner_join, args = args) |>
-    dplyr::rename(!!.renamer) |>
+  join_result <- do.call(dplyr::inner_join, args = args) %>%
+    dplyr::rename(!!.renamer) %>%
     dplyr::select(tidyselect::all_of(names(.renamer)))
 
   return(join_result)
@@ -220,7 +220,7 @@ left_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   join_warn_experimental()
 
-  args <- as.list(rlang::current_env()) |>
+  args <- as.list(rlang::current_env()) %>%
     append(.dots)
 
   .renamer <- select_na_sql(x, y, by, .dots$na_by)
@@ -229,8 +229,8 @@ left_join.tbl_sql <- function(x, y, by = NULL, ...) {
   args$na_by <- NULL
   args$sql_on <- join_na_sql(x, by, .dots$na_by)
 
-  join_result <- do.call(dplyr::left_join, args = args) |>
-    dplyr::rename(!!.renamer) |>
+  join_result <- do.call(dplyr::left_join, args = args) %>%
+    dplyr::rename(!!.renamer) %>%
     dplyr::select(tidyselect::all_of(names(.renamer)))
 
   return(join_result)
@@ -254,7 +254,7 @@ right_join.tbl_sql <- function(x, y, by = NULL, ...) {
 
   join_warn_experimental()
 
-  args <- as.list(rlang::current_env()) |>
+  args <- as.list(rlang::current_env()) %>%
     append(.dots)
 
   .renamer <- select_na_sql(x, y, by, .dots$na_by)
@@ -263,8 +263,8 @@ right_join.tbl_sql <- function(x, y, by = NULL, ...) {
   args$na_by <- NULL
   args$sql_on <- join_na_sql(x, by, .dots$na_by)
 
-  join_result <- do.call(dplyr::right_join, args = args) |>
-    dplyr::rename(!!.renamer) |>
+  join_result <- do.call(dplyr::right_join, args = args) %>%
+    dplyr::rename(!!.renamer) %>%
     dplyr::select(tidyselect::all_of(names(.renamer)))
 
   return(join_result)

@@ -79,7 +79,7 @@ If no \code{na_by} argument is given is given, the function defaults to using \v
   band_db <- tbl_memdb(dplyr::band_members)
   instrument_db <- tbl_memdb(dplyr::band_instruments)
 
-  left_join(band_db, instrument_db) |>
+  left_join(band_db, instrument_db) \%>\%
     show_query()
 
   # Can join with local data frames by setting copy = TRUE
@@ -98,8 +98,8 @@ If no \code{na_by} argument is given is given, the function defaults to using \v
   db1 <- memdb_frame(x = 1:5)
   db2 <- memdb_frame(x = 1:3, y = letters[1:3])
 
-  left_join(db1, db2) |> show_query()
-  left_join(db1, db2, sql_on = "LHS.x < RHS.x") |> show_query()
+  left_join(db1, db2) \%>\% show_query()
+  left_join(db1, db2, sql_on = "LHS.x < RHS.x") \%>\% show_query()
 \dontshow{\}) # examplesIf}
 }
 \seealso{

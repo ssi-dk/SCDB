@@ -235,9 +235,9 @@ Logger <- R6::R6Class(                                                          
       if (is.null(self$log_path) && !is.null(private$log_conn) && DBI::dbIsValid(private$log_conn) &&
             !is.null(self$log_tbl) && table_exists(private$log_conn, private$log_table_id)) {
 
-        expected_rows <- self$log_tbl |>
-          dplyr::filter(log_file == !!self$log_filename) |>
-          dplyr::count() |>
+        expected_rows <- self$log_tbl %>%
+          dplyr::filter(log_file == !!self$log_filename) %>%
+          dplyr::count() %>%
           dplyr::pull()
 
         query <- dbplyr::build_sql(

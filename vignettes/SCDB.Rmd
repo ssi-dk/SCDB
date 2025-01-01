@@ -124,7 +124,7 @@ get_table(conn, "mtcars", slice_ts = "2020-01-01 11:00:00")
 On day 3, we imagine that we have the same 5 records, but one of them is altered
 
 ```{r example_3, eval = requireNamespace("RSQLite", quietly = TRUE)}
-data <- head(example_data, 5) |>
+data <- head(example_data, 5) %>%
   dplyr::mutate(hp = ifelse(car == "Mazda RX4", hp / 2, hp))
 
 update_snapshot(

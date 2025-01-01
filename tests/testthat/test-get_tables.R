@@ -27,8 +27,8 @@ test_that("get_tables() works without pattern", {
     tables <- get_tables(conn)
     expect_s3_class(tables, "data.frame")
 
-    db_table_names <- tables |>
-      tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
+    db_table_names <- tables %>%
+      tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) %>%
       dplyr::pull(db_table_name)
 
     # We should not get tables twice
@@ -52,8 +52,8 @@ test_that("get_tables() works with pattern", {
   for (conn in get_test_conns()) {
 
     # Call with pattern
-    db_table_names <- get_tables(conn, pattern = "__mt") |>
-      tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
+    db_table_names <- get_tables(conn, pattern = "__mt") %>%
+      tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) %>%
       dplyr::pull(db_table_name)
 
 
@@ -83,8 +83,8 @@ test_that("get_tables() works with temporary tables", {
     tmp_id <- id(tmp)
     tmp_name <- paste(tmp_id@name["schema"], tmp_id@name["table"], sep = ".")
 
-    db_table_names <- get_tables(conn, show_temporary = TRUE) |>
-      tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
+    db_table_names <- get_tables(conn, show_temporary = TRUE) %>%
+      tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) %>%
       dplyr::pull(db_table_name)
 
 
@@ -113,8 +113,8 @@ test_that("get_tables() works without temporary tables", {
     tmp_id <- id(tmp)
     tmp_name <- paste(tmp_id@name["schema"], tmp_id@name["table"], sep = ".")
 
-    db_table_names <- get_tables(conn, show_temporary = FALSE) |>
-      tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) |>
+    db_table_names <- get_tables(conn, show_temporary = FALSE) %>%
+      tidyr::unite("db_table_name", "schema", "table", sep = ".", na.rm = TRUE) %>%
       dplyr::pull(db_table_name)
 
     # Check for the existence of "test.mtcars" and "__mtcars" (added during test setup)

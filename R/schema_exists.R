@@ -42,7 +42,7 @@ schema_exists.default <- function(conn, schema) {
   checkmate::assert_character(schema)
 
   objs <- DBI::dbListObjects(conn)
-  matches <- sapply(objs$table, \(.x) methods::slot(.x, "name")) |>
+  matches <- sapply(objs$table, \(.x) methods::slot(.x, "name")) %>%
     (\(.x) names(.x) == "schema" & .x == schema)()
 
   if (any(matches)) return(TRUE)

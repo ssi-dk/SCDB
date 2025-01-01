@@ -116,7 +116,7 @@ nolint_line_length_linter <- function(length = 80L) {
         return(list())
       }
 
-      nolint_regex <- r"{# ?no(lint|cov) ?(start|end)?:?.*}"
+      nolint_regex <- r"{\s*# ?no(lint|cov) ?(start|end)?:?.*}"
 
       file_lines_nolint_excluded <- source_expression$file_lines |>
         purrr::map_chr(\(s) stringr::str_remove(s, nolint_regex))

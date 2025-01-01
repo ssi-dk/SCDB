@@ -2192,7 +2192,7 @@
       "type": "local",
       "direct": true,
       "binary": false,
-      "dependencies": ["checkmate", "DBI", "dbplyr", "dplyr", "glue", "lifecycle", "openssl", "parallelly", "purrr", "rlang", "R6", "stringr", "tidyr", "tidyselect"],
+      "dependencies": ["checkmate", "DBI", "dbplyr", "dplyr", "glue", "lifecycle", "openssl", "parallelly", "purrr", "rlang", "R6", "stringr", "tidyr", "tidyselect", "magrittr"],
       "vignettes": false,
       "metadata": {
         "RemotePkgRef": "local::.",

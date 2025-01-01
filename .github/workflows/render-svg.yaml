@@ -33,10 +33,10 @@ jobs:
 
           stopifnot(length(svg_path) == 1)
 
-          image_read_svg(svg_path) |>
-            image_crop("100%x50%") |>
-            image_trim() |>
-            image_resize("240x278") |>
+          image_read_svg(svg_path) %>%
+            image_crop("100%x50%") %>%
+            image_trim() %>%
+            image_resize("240x278") %>%
             image_write("man/figures/logo.png")
 
         shell: Rscript {0}

@@ -18,6 +18,10 @@ knitr::opts_chunk$set(
 # To re-run the benchmarks, run the "benchmark" workflow on GitHub
 ```
 
+```{r}
+library(magrittr)
+```
+
 To showcase the performance of `SCDB` on different database backends, we include this vignette that summarises a simple
 benchmark:
 A sample dataset is created based on the `datasets::iris` dataset. This data is repeated 10 times and given a unique ID
@@ -44,22 +48,22 @@ development version of `SCDB` with the current CRAN version.
 benchmark_location <- c(
   system.file("extdata", "benchmarks.rds", package = "SCDB"),
   here::here("inst", "extdata", "benchmarks.rds")
-) |>
-  purrr::discard(~ identical(., "")) |>
+) %>%
+  purrr::discard(~ identical(., "")) %>%
   purrr::pluck(1)
 
 benchmarks <- readRDS(benchmark_location)
 
 # Determine if the SHA is on main
-sha <- benchmarks |>
-  dplyr::distinct(version) |>
-  dplyr::filter(!(version %in% c("CRAN", "main", "branch"))) |>
+sha <- benchmarks %>%
+  dplyr::distinct(version) %>%
+  dplyr::filter(!(version %in% c("CRAN", "main", "branch"))) %>%
   dplyr::pull("version")
 
 # Check local git history
 on_main <- tryCatch({
-  system(glue::glue("git branch main --contains {sha}"), intern = TRUE) |>
-    stringr::str_detect(stringr::fixed("main")) |>
+  system(glue::glue("git branch main --contains {sha}"), intern = TRUE) %>%
+    stringr::str_detect(stringr::fixed("main")) %>%
     isTRUE()
 }, warning = function(w) {
   # If on GitHub, git is not installed and we assume TRUE.
@@ -69,8 +73,8 @@ on_main <- tryCatch({
 
 # If the SHA has been merged, use as the "main" version and remove the other, older, main version
 if (on_main) {
-  benchmarks <- benchmarks |>
-    dplyr::filter(version != "main") |>
+  benchmarks <- benchmarks %>%
+    dplyr::filter(version != "main") %>%
     dplyr::mutate(version = dplyr::if_else(.data$version == "CRAN", "CRAN", "development"))
 }
 
@@ -84,16 +88,16 @@ mean_sd <- function(x) {
 
 ```{r benchmark_1, echo = FALSE, eval = requireNamespace("here")}
 # Use data for benchmark 1
-benchmark_1 <- benchmarks |>
+benchmark_1 <- benchmarks %>%
   dplyr::filter(!stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity")))
 
 # Add note slow backends
-slow_backends <- benchmark_1 |>
-  dplyr::distinct(.data$database, .data$n) |>
-  dplyr::filter(.data$n < max(.data$n)) |>
+slow_backends <- benchmark_1 %>%
+  dplyr::distinct(.data$database, .data$n) %>%
+  dplyr::filter(.data$n < max(.data$n)) %>%
   dplyr::pull("database")
 
-benchmark_1 <- benchmark_1 |>
+benchmark_1 <- benchmark_1 %>%
   dplyr::mutate("database" = paste0(database, ifelse(database %in% slow_backends, "*", "")))
 
 # Insert newline into database name to improve rendering of figures
@@ -137,8 +141,8 @@ batching the updates via the `filters` argument.
 
 ```{r benchmark_2, echo = FALSE, eval = requireNamespace("here")}
 # Use data for benchmark 2
-benchmark_2 <- benchmarks |>
-  dplyr::filter(stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity"))) |>
+benchmark_2 <- benchmarks %>%
+  dplyr::filter(stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity"))) %>%
   dplyr::mutate("benchmark_function" = stringr::str_remove_all(benchmark_function, stringr::fixed("- complexity")))
 
 ggplot2::ggplot(
