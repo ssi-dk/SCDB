@@ -8,7 +8,7 @@ test_that("update_snapshot() can handle first snapshot", {
 
     # Use unmodified mtcars as the initial snapshot
     .data <- mtcars |>
-      dplyr::copy_to(conn, df = _, name = unique_table_name())
+      (\(.) dplyr::copy_to(conn, df = ., name = unique_table_name()))()
 
     # Configure the logger for this update
     db_table <- "test.SCDB_tmp1"
@@ -109,7 +109,7 @@ test_that("update_snapshot() can add a new snapshot", {
     # Modify snapshot and run update step
     .data <- mtcars |>
       dplyr::mutate(hp = dplyr::if_else(hp > 130, hp - 10, hp)) |>
-      dplyr::copy_to(conn, df = _, name = unique_table_name())
+      (\(.) dplyr::copy_to(conn, df = ., name = unique_table_name()))()
 
     # Configure the logger for this update
     db_table <- "test.SCDB_tmp1"
@@ -179,7 +179,7 @@ test_that("update_snapshot() can update a snapshot on an existing date", {
     # We now attempt to do another update on the same date
     .data <- mtcars |>
       dplyr::mutate(hp = dplyr::if_else(hp > 100, hp - 10, hp)) |>
-      dplyr::copy_to(conn, df = _, name = unique_table_name())
+      (\(.) dplyr::copy_to(conn, df = ., name = unique_table_name()))()
 
     # Configure the logger for this update
     db_table <- "test.SCDB_tmp1"
@@ -248,7 +248,7 @@ test_that("update_snapshot() can insert a snapshot between existing dates", {
     # We now attempt to an update between these two updates
     .data <- mtcars |>
       dplyr::mutate(hp = dplyr::if_else(hp > 150, hp - 10, hp)) |>
-      dplyr::copy_to(conn, df = _, name = unique_table_name())
+      (\(.) dplyr::copy_to(conn, df = ., name = unique_table_name()))()
 
     # This should fail if we do not specify "enforce_chronological_order = FALSE"
     expect_error(
@@ -409,7 +409,7 @@ test_that("update_snapshot() handles 'NULL' updates", {
 
     # Use mtcars as the test data set
     .data <- mtcars |>
-      dplyr::copy_to(conn, df = _, name = unique_table_name())
+      (\(.) dplyr::copy_to(conn, df = ., name = unique_table_name()))()
     defer_db_cleanup(.data)
 
     # This is a simple update where 23 rows are replaced with 23 new ones on the given date
@@ -467,9 +467,13 @@ test_that("update_snapshot() works with Id objects", {
     expect_no_error(
       mtcars |>
         dplyr::mutate(disp = sample(mtcars$disp, nrow(mtcars))) |>
-        dplyr::copy_to(dest = conn,
-                       df = _,
-                       name = unique_table_name()) |>
+        (\(.) {
+          dplyr::copy_to(
+            dest = conn,
+            df = .,
+            name = unique_table_name()
+          )
+        })() |>
         update_snapshot(
           conn = conn,
           db_table = target_table,

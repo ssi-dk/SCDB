@@ -43,7 +43,7 @@ test_that("create_logs_if_missing() can create logs in default and test schema",
         }
 
         log_signature <- log_signature |>
-          dplyr::copy_to(conn, df = _, unique_table_name()) |>
+          (\(.) dplyr::copy_to(conn, df = ., unique_table_name()))() |>
           dplyr::collect()
 
         expect_identical(

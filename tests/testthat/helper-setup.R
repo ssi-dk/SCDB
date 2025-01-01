@@ -142,7 +142,7 @@ checkmate_err_msg <- function(expr) {
       e$message |>
         stringr::str_remove_all(stringr::fixed("\n *")) |>
         stringr::str_remove_all(stringr::fixed("* ")) |>
-        simpleError(message = _) |>
+        (\(.) simpleError(message = .))() |>
         stop()
     }
   )
