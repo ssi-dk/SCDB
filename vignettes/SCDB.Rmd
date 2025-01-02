@@ -19,8 +19,7 @@ knitr::opts_chunk$set(
 library(SCDB)
 ```
 
-```{r setup, echo = FALSE, results = "hide", eval = requireNamespace("RSQLite", quietly = TRUE)}
-suppressPackageStartupMessages(library(SCDB))
+```{r setup, echo = FALSE, results = "hide", eval = rlang::is_installed("RSQLite")}
 
 # Setup conn to be used for examples
 conn <- get_connection()
