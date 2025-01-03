@@ -60,29 +60,25 @@ interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
 
   # Parse inputs for colnames .from / .to columns
   from_cols <- seq_along(tables) %>%
-    purrr::map_chr(\(t) paste0("t", t, ".from")) %>%
-    purrr::map_chr(\(col) ifelse(col %in% names(colnames), colnames[col], "valid_from"))
+    purrr::map_chr(~ paste0("t", .x, ".from")) %>%
+    purrr::map_chr(~ ifelse(.x %in% names(colnames), colnames[.x], "valid_from"))
 
   until_cols <- seq_along(tables) %>%
-    purrr::map_chr(\(t) paste0("t", t, ".until")) %>%
-    purrr::map_chr(\(col) ifelse(col %in% names(colnames), colnames[col], "valid_until"))
+    purrr::map_chr(~ paste0("t", .x, ".until")) %>%
+    purrr::map_chr(~ ifelse(.x %in% names(colnames), colnames[.x], "valid_until"))
 
 
   # Rename valid_from / valid_until columns
-  tables <- purrr::map2(tables, from_cols,
-                        \(table, from_col)  table %>% dplyr::rename(valid_from  = !!from_col))
-  tables <- purrr::map2(tables, until_cols,
-                        \(table, until_col) table %>% dplyr::rename(valid_until = !!until_col))
+  tables <- purrr::map2(tables, from_cols, ~ .x %>% dplyr::rename("valid_from"  = !!.y))
+  tables <- purrr::map2(tables, until_cols, ~ .x %>% dplyr::rename("valid_until" = !!.y))
 
 
   # Get all changes to valid_from / valid_until
-  q1 <- tables %>% purrr::map(\(table) {
-    table %>%
-      dplyr::select(tidyselect::all_of(by), "valid_from")
-  })
+  q1 <- tables %>% purrr::map(~ dplyr::select(.x, tidyselect::all_of(by), "valid_from"))
+
   q2 <- tables %>%
-    purrr::map(\(table) {
-      table %>%
+    purrr::map(~ {
+      .x %>%
         dplyr::select(tidyselect::all_of(by), "valid_until") %>%
         dplyr::rename(valid_from = "valid_until")
     })
@@ -109,7 +105,7 @@ interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
 
 
   # Merge data onto the new validities using non-equi joins
-  joiner <- \(.data, table) {
+  joiner <- function(.data, table) {
     .data %>%
       dplyr::left_join(table,
                        suffix = c("", ".tmp"),

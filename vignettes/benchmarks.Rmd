@@ -101,7 +101,7 @@ benchmark_1 <- benchmark_1 %>%
   dplyr::mutate("database" = paste0(database, ifelse(database %in% slow_backends, "*", "")))
 
 # Insert newline into database name to improve rendering of figures
-labeller <- ggplot2::as_labeller(\(l) stringr::str_replace_all(l, stringr::fixed(" v"), "\nv"))
+labeller <- ggplot2::as_labeller(function(l) stringr::str_replace_all(l, stringr::fixed(" v"), "\nv"))
 
 
 

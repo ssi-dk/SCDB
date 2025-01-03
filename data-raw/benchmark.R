@@ -76,10 +76,7 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
 
     # Our benchmark data is the iris data set but repeated to increase the data size
     data_generator <- function(repeats) {
-      purrr::map(
-        seq(repeats),
-        \(it) dplyr::mutate(iris, r = dplyr::row_number() + (it - 1) * nrow(iris))
-      ) %>%
+      purrr::map(seq(repeats), ~ dplyr::mutate(iris, r = dplyr::row_number() + (.x - 1) * nrow(iris))) %>%
         purrr::reduce(rbind) %>%
         dplyr::rename_with(~ tolower(gsub(".", "_", .x, fixed = TRUE)))
     }
@@ -127,7 +124,7 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
       }
 
       scdb_updates <- function(conn, data_on_conn) {
-        purrr::walk2(data_on_conn, ts, \(data, ts) scdb_update_step(conn, data, ts))
+        purrr::walk2(data_on_conn, ts, ~ scdb_update_step(conn, .x, .y))
         DBI::dbRemoveTable(conn, name = "SCDB_benchmark_1")
       }
 

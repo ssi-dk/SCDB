@@ -417,7 +417,7 @@ test_that("update_snapshot() handles 'NULL' updates", {
     # This is a simple update where 23 rows are replaced with 23 new ones on the given date
     db_table <- "test.SCDB_tmp1"
 
-    create_logger <- \(timestamp) {
+    create_logger <- function(timestamp) {
       Logger$new(
         db_table = db_table,
         timestamp = timestamp,

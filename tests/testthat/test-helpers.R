@@ -14,7 +14,7 @@ test_that("defer_db_cleanup() works in function call", {
   for (conn in get_test_conns()) {
     name <- unique_table_name()
 
-    test <- \() {
+    test <- function() {
       mt <- dplyr::copy_to(conn, mtcars, name, temporary = FALSE)
       expect_true(DBI::dbExistsTable(conn, id(name, conn)))
 

@@ -107,7 +107,9 @@ get_test_conns <- function() {
   # Run post_connect commands on the connections
   purrr::iwalk(
     test_conns,
-    \(conn, conn_name) purrr::walk(purrr::pluck(conn_post_connect, conn_name), ~ DBI::dbExecute(conn, .))
+    function(conn, conn_name) {
+      purrr::walk(purrr::pluck(conn_post_connect, conn_name), ~ DBI::dbExecute(conn, .))
+    }
   )
 
   # Inform the user about the tested back ends:
@@ -145,7 +147,7 @@ get_test_conns <- function() {
 checkmate_err_msg <- function(expr) {
   tryCatch(
     expr,
-    error = \(e) {
+    error = function(e) {
       msg <- e$message
       msg <- stringr::str_remove_all(msg, stringr::fixed("\n *"))
       msg <- stringr::str_remove_all(msg, stringr::fixed("* "))

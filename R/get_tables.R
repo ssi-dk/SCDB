@@ -205,7 +205,7 @@ get_tables.DBIConnection <- function(conn, pattern = NULL, show_temporary = TRUE
   }
 
   tables <- objs$table %>% # For each top-level object (except tables)...
-    purrr::map(\(.x) {
+    purrr::map(~ {
       if (names(.x@name) == "table") {
         return(data.frame(schema = NA_character_, table = .x@name["table"]))
       }
@@ -213,7 +213,11 @@ get_tables.DBIConnection <- function(conn, pattern = NULL, show_temporary = TRUE
       # ...retrieve all tables
       DBI::dbListObjects(conn, .x) %>%
         dplyr::pull(table) %>%
-        purrr::map(\(.y) data.frame(schema = .x@name, table = .y@name["table"])) %>%
+        purrr::map(
+          function(.y) {
+            data.frame(schema = .x@name, table = .y@name["table"])
+          }
+        ) %>%
         purrr::reduce(rbind.data.frame)
     }) %>%
     purrr::reduce(rbind.data.frame)
