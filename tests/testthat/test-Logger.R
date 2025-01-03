@@ -401,7 +401,7 @@ test_that("Logger: log_file is NULL in database if not writing to file", {
     # Test that an error is thrown if the database record has been finalized
     expect_error(
       logger$log_to_db(message = "This should produce an error"),
-      r"{Logger has already been finalized\. Cannot write to database log table\.}"
+      "Logger has already been finalized\\. Cannot write to database log table\\."
     )
 
 

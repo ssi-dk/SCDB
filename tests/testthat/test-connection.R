@@ -15,8 +15,10 @@ test_that("get_connection() notifies if connection fails", {
 
     if (dir.exists(random_string)) next
 
-    expect_error(get_connection(drv = RSQLite::SQLite(), dbname = file.path(random_string, "/invalid_path")),
-                 regexp = r"{checkmate::check_path_for_output\(dbname\)}")
+    expect_error(
+      get_connection(drv = RSQLite::SQLite(), dbname = file.path(random_string, "/invalid_path")),
+      regexp = "checkmate::check_path_for_output\\(dbname\\)"
+    )
   }
 })
 

@@ -75,7 +75,7 @@ test_that("id() works for character input with implied schema when schema does n
     connection_clean_up(conn)
 
     # When connection is closed, the existence of the schema cannot be validated and an error should be given
-    expect_error(id(table_name, conn = conn), r"{DBI::dbIsValid\(conn\): FALSE}")
+    expect_error(id(table_name, conn = conn), "DBI::dbIsValid\\(conn\\): FALSE")
   }
 })
 

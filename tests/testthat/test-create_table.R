@@ -3,7 +3,7 @@ test_that("create_table() refuses a historical table", {
     cars %>%
       dplyr::mutate(from_ts = NA) %>%
       create_table(db_table = "fail.cars"),
-    r"{checksum/from_ts/until_ts column\(s\) already exist\(s\) in .data!}"
+    "checksum/from_ts/until_ts column\\(s\\) already exist\\(s\\) in \\.data!"
   )
 })
 

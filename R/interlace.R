@@ -43,7 +43,7 @@ interlace <- function(tables, by = NULL, colnames = NULL) {
   checkmate::assert_list(tables, types = c("tbl_dbi", "data.frame"), add = coll)
   checkmate::assert_character(by, null.ok = TRUE, add = coll)
   checkmate::assert_character(colnames, null.ok = TRUE, add = coll)
-  checkmate::assert_character(names(colnames), pattern = r"{t\d+\.(from|until)}", null.ok = TRUE, add = coll)
+  checkmate::assert_character(names(colnames), pattern = "t\\d+\\.(from|until)", null.ok = TRUE, add = coll)
   checkmate::reportAssertions(coll)
 
 
