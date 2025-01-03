@@ -15,5 +15,6 @@ man-roxygen/*
 ^README.Rmd$
 ^revdep$
 ^data-raw$
+^pkg-build$
 ^R/0_linters\.R$
 ^tests/testthat/test-0_linters\.R$
