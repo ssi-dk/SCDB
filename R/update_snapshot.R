@@ -177,14 +177,17 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   defer_db_cleanup(.data)
 
   ### Determine the next timestamp in the data (can be NA if none is found)
-  next_timestamp <- min(db_table %>%
-                          dplyr::filter(.data$from_ts  > timestamp) %>%
-                          dplyr::summarize(next_timestamp = min(.data$from_ts, na.rm = TRUE)) %>%
-                          dplyr::pull("next_timestamp"),
-                        db_table %>%
-                          dplyr::filter(.data$until_ts > timestamp) %>%
-                          dplyr::summarize(next_timestamp = min(.data$until_ts, na.rm = TRUE)) %>%
-                          dplyr::pull("next_timestamp")) %>%
+  next_timestamp <- min(
+    db_table %>%
+      dplyr::filter(.data$from_ts  > timestamp) %>%
+      dplyr::summarize(next_timestamp = min(.data$from_ts, na.rm = TRUE)) %>%
+      dplyr::pull("next_timestamp"),
+    db_table %>%
+      dplyr::filter(.data$until_ts > timestamp) %>%
+      dplyr::summarize(next_timestamp = min(.data$until_ts, na.rm = TRUE)) %>%
+      dplyr::pull("next_timestamp")
+  ) %>%
+    as.POSIXct(origin = "1970-01-01") %>%
     strftime()
 
 
