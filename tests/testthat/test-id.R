@@ -28,7 +28,7 @@ test_that("id() works for character input with implied schema", {
 
     # ... when conn is given, we check if implied schema exists.
     # NOTE: All testing connections should have the schema "test" (except SQLite without attached schemas)
-    # therefore, in almost all cases, we shold resolve the schema correctly (except the SQLite case above)
+    # therefore, in almost all cases, we should resolve the schema correctly (except the SQLite case above)
     if (inherits(conn, "SQLiteConnection") && !schema_exists(conn, "test")) {
       expect_identical(id("test.mtcars", conn), DBI::Id(schema = "main", table = "test.mtcars"))
     } else {
