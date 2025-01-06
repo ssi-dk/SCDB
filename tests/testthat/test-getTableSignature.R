@@ -1,3 +1,5 @@
+withr::local_options("stringsAsFactors" = FALSE) # Compatibility with R < 4.0.0
+
 # Generate test datasets with different data types
 
 # One that follows the structure in update_snapshot()
