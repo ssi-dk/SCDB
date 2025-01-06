@@ -3,77 +3,66 @@ Type: Package
 Title: Easily Access and Maintain Time-Based Versioned Data (Slowly-Changing-Dimension)
 Version: 0.4.1.9000
 Authors@R:
-  c(
-    person(
-      "Rasmus Skytte", "Randl\U00F8v", , "rske@ssi.dk",
-      role = c("aut", "cre", "rev"),
-      comment = c(ORCID = "0000-0002-5860-3838")
-    ),
-    person(
-      "Marcus Munch", "Gr\U00FCnewald", , ,
-      role = c("aut"),
-      comment = c(ORCID = "0009-0006-8090-406X")
-    ),
-    person(
-      "Lasse Engbo", "Christiansen", , "lsec@ssi.dk", role = c("rev"),
-      comment = c(ORCID = "0000-0001-5019-1931")
-    ),
-    person(
-      "Statens Serum Institut",
-      role = c("cph", "fnd")
-    )
-  )
-Description:
-  A collection of functions that enable easy access and updating of a database of data over time.
-  More specifically, the package facilitates type-2 history for data-warehouses and provides a number
-  of Quality of life improvements for working on SQL databases with R.
-  For reference see Ralph Kimball and Margy Ross (2013, ISBN 9781118530801).
+	  c(person("Rasmus Skytte", "Randl\U00F8v", , "rske@ssi.dk",
+	           role = c("aut", "cre", "rev"),
+	           comment = c(ORCID = "0000-0002-5860-3838")),
+	    person("Marcus Munch", "Gr\U00FCnewald", , ,
+	           role = c("aut"),
+	           comment = c(ORCID = "0009-0006-8090-406X")),
+        person("Lasse Engbo", "Christiansen", , "lsec@ssi.dk", role = c("rev"),
+             comment = c(ORCID = "0000-0001-5019-1931")),
+	    person("Statens Serum Institut",
+	           role = c("cph", "fnd")))
+Description: A collection of functions that enable easy access and updating of a database of data over time.
+             More specifically, the package facilitates type-2 history for data-warehouses and provides a number
+             of Quality of life improvements for working on SQL databases with R.
+             For reference see Ralph Kimball and Margy Ross (2013, ISBN 9781118530801).
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE, r6 = TRUE)
 Depends:
-  R (>= 3.6.0)
+    R (>= 3.6.0)
 Imports:
-  checkmate,
-  DBI,
-  dbplyr (>= 2.4.0),
-  dplyr,
-  glue,
-  lifecycle,
-  methods,
-  openssl,
-  parallelly,
-  purrr,
-  rlang,
-  R6,
-  stringr,
-  tidyr,
-  tidyselect,
-  utils,
-  magrittr
+    checkmate,
+    DBI,
+    dbplyr (>= 2.4.0),
+    dplyr,
+    glue,
+    lifecycle,
+    methods,
+    openssl,
+    parallelly,
+    purrr,
+    rlang,
+    R6,
+    stringr,
+    tidyr,
+    tidyselect,
+    utils,
+    magrittr
 Suggests:
-  callr,
-  conflicted,
-  duckdb (>= 0.10.1),
-  ggplot2,
-  here,
-  jsonlite,
-  knitr,
-  lintr,
-  microbenchmark,
-  odbc,
-  pak,
-  rmarkdown,
-  roxygen2,
-  pkgdown,
-  RPostgres,
-  RSQLite,
-  spelling,
-  testthat (>= 3.0.0),
-  tibble,
-  tidyverse,
-  withr
+    callr,
+    conflicted,
+    duckdb (>= 0.10.1),
+    ggplot2,
+    here,
+    jsonlite,
+    knitr,
+    lintr,
+    microbenchmark,
+    odbc,
+    pak,
+    rmarkdown,
+    roxygen2,
+    pkgdown,
+    RPostgres,
+    RSQLite,
+    spelling,
+    testthat (>= 3.0.0),
+    tibble,
+    tidyverse,
+    withr
 Language: en-US
 URL: https://github.com/ssi-dk/SCDB, https://ssi-dk.github.io/SCDB/
 Config/testthat/edition: 3
