@@ -20,8 +20,8 @@ test_field_in_documentation <- function(field) {
     rd_envir <- new.env()
     lazyLoad(stringr::str_remove(rdx_file, ".rdx$"), envir = rd_envir)
     rd_names <- ls(rd_envir)
-    rd_files <- rd_names %>%
-      purrr::map(~ as.character(eval(purrr::pluck(rd_envir, .)))) %>%
+    rd_files <- rd_names |>
+      purrr::map(~ as.character(eval(purrr::pluck(rd_envir, .)))) |>
       purrr::map_chr(~ paste(., collapse = ""))
     names(rd_files) <- paste0(rd_names, ".Rd")
 
