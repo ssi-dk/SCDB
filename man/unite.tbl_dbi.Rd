@@ -34,6 +34,7 @@ A tbl_dbi with the specified columns united into a new column named according to
 Convenience function to paste together multiple columns into one.
 }
 \examples{
+\dontshow{if (Sys.info()["sysname"] != "Darwin") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
   library(tidyr, warn.conflicts = FALSE)
 
   df <- expand_grid(x = c("a", NA), y = c("b", NA))
@@ -47,6 +48,7 @@ Convenience function to paste together multiple columns into one.
   unite(df, "xy", x:y) \%>\%
     separate(xy, c("x", "y"))
   # (but note `x` and `y` contain now "NA" not NA)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[tidyr:separate]{separate()}}, the complement.
