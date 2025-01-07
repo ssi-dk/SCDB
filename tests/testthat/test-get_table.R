@@ -44,7 +44,7 @@ test_that("get_table() works when tables/view exist", {
 
       view_1 <- paste(c(get_schema(conn), "__mtcars_view"), collapse = ".")
 
-      expect_identical(nrow(get_table(conn, view_1)), 10)
+      expect_identical(nrow(get_table(conn, view_1)), 10L)
       expect_identical(
         dplyr::collect(get_table(conn, view_1)),
         dplyr::collect(utils::head(get_table(conn, "__mtcars"), 10))
