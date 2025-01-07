@@ -49,7 +49,7 @@ test_that("update_snapshot() can handle first snapshot", {
     log_file <- purrr::keep(dir(log_path), ~ stringr::str_detect(., log_pattern))
     expect_length(log_file, 1)
     expect_gt(file.info(file.path(log_path, log_file))$size, 0)
-    expect_identical(nrow(get_table(conn, "test.SCDB_logs")), 1)
+    expect_identical(nrow(get_table(conn, "test.SCDB_logs")), 1L)
 
     db_logs_with_log_file <- get_table(conn, "test.SCDB_logs") |>
       dplyr::filter(!is.na(.data$log_file))
