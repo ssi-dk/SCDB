@@ -12,6 +12,8 @@
 
 * `SCDB` has been made backwards compatibility to R >= 3.6 (#164).
 
+* `nrow()` now always returns integers (#163).
+
 ## Documentation
 
 * A vignette including benchmarks of `update_snapshot()` across various backends is added (#138).
