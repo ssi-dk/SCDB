@@ -107,13 +107,18 @@ get_test_conns <- function(skip_backends = NULL) {
   test_conns <- purrr::discard(test_conns, is.null)
 
   # Skip backends if given
-  test_conns <- test_conns |>
-    purrr::walk(\(conn) {
-      if (checkmate::test_multi_class(conn, purrr::pluck(skip_backends, .default = ""))) {
-        DBI::dbDisconnect(conn)
+  test_conns <- purrr::walk(
+    test_conns,
+    ~ {
+      if (checkmate::test_multi_class(., purrr::pluck(skip_backends, .default = ""))) {
+        DBI::dbDisconnect(.)
       }
-    }) |>
-    purrr::discard(\(conn) checkmate::test_multi_class(conn, purrr::pluck(skip_backends, .default = "")))
+    }
+  )
+  test_conns <- purrr::discard(
+    test_conns,
+    ~ checkmate::test_multi_class(., purrr::pluck(skip_backends, .default = ""))
+  )
 
   # Run post_connect commands on the connections
   purrr::iwalk(
