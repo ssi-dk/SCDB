@@ -26,7 +26,9 @@ conn <- get_connection()
 
 # Use a wrapper for update_snapshot which uses LoggerNull to suppress all logging
 if (!"update_snapshot" %in% ls(envir = globalenv())) {
-  update_snapshot <- function(...) return(SCDB::update_snapshot(logger = LoggerNull$new(), ...))
+  update_snapshot <- function(...) {
+    return(SCDB::update_snapshot(logger = LoggerNull$new(), ...))
+  }
 }
 
 # Setup example_data table in conn

@@ -28,14 +28,14 @@ test_that("*_join() works with character `by` and `na_by`", {
       dplyr::arrange(number, t, letter)
     qr <- dplyr::right_join(dplyr::collect(x), dplyr::collect(y), by = "number", multiple = "all") %>%
       dplyr::arrange(number, t, letter)
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     q  <- dplyr::inner_join(x, y, na_by = "number") %>%
       dplyr::collect() %>%
       dplyr::arrange(number, t, letter)
     qr <- dplyr::full_join(dplyr::collect(x), dplyr::collect(y),  by = "number", multiple = "all") %>%
       dplyr::arrange(number, t, letter)
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
 
     # Second test case
@@ -58,7 +58,7 @@ test_that("*_join() works with character `by` and `na_by`", {
       dplyr::arrange(date, region_id)
     qr <- dplyr::full_join(dplyr::collect(x), dplyr::collect(y), by = c("date", "region_id")) %>%
       dplyr::arrange(date, region_id)
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
 
 
@@ -75,13 +75,13 @@ test_that("*_join() works with character `by` and `na_by`", {
 
     # Using by should give 1 mismatch
     # Using na_by should give no mismatch
-    expect_equal(
+    expect_identical(
       dplyr::left_join(xx, xx, by = "name") %>%
         dplyr::summarize(n = sum(dplyr::if_else(is.na(cyl.y), 1, 0), na.rm = TRUE)) %>%                                 # nolint: redundant_ifelse_linter
         dplyr::pull(n),
       1
     )
-    expect_equal(
+    expect_identical(
       dplyr::left_join(xx, xx, na_by = "name") %>%
         dplyr::summarize(n = sum(dplyr::if_else(is.na(cyl.y), 1, 0), na.rm = TRUE)) %>%                                 # nolint: redundant_ifelse_linter
         dplyr::pull(n),
@@ -89,12 +89,14 @@ test_that("*_join() works with character `by` and `na_by`", {
     )
 
     # And they should be identical with the simple case
-    expect_equal(dplyr::left_join(xx, xx, na_by = "name") %>%
-                   dplyr::select(!"name") %>%
-                   dplyr::collect(),
-                 dplyr::left_join(x,  x,  na_by = "name") %>%
-                   dplyr::select(!"name") %>%
-                   dplyr::collect())
+    expect_identical(
+      dplyr::left_join(xx, xx, na_by = "name") %>%
+        dplyr::select(!"name") %>%
+        dplyr::collect(),
+      dplyr::left_join(x,  x,  na_by = "name") %>%
+        dplyr::select(!"name") %>%
+        dplyr::collect()
+    )
 
     connection_clean_up(conn)
   }
@@ -115,15 +117,15 @@ test_that("*_join() works with `dplyr::join_by()`", {
     # Test the implemented joins
     q  <- dplyr::left_join(x, y, by = dplyr::join_by(x$name == y$name)) %>% dplyr::collect()
     qr <- dplyr::left_join(dplyr::collect(x), dplyr::collect(y), by = dplyr::join_by(x$name == y$name))
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     q  <- dplyr::right_join(x, y, by = dplyr::join_by(x$name == y$name)) %>% dplyr::collect()
     qr <- dplyr::right_join(dplyr::collect(x), dplyr::collect(y), by = dplyr::join_by(x$name == y$name))
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     q  <- dplyr::inner_join(x, y, by = dplyr::join_by(x$name == y$name)) %>% dplyr::collect()
     qr <- dplyr::inner_join(dplyr::collect(x), dplyr::collect(y), by = dplyr::join_by(x$name == y$name))
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     connection_clean_up(conn)
   }
@@ -144,50 +146,50 @@ test_that("*_join() does not break any dplyr joins", {
     # left_join
     qr <- dplyr::left_join(dplyr::collect(x), dplyr::collect(y), by = "name")
     q  <- dplyr::left_join(x, y, by = "name") %>% dplyr::collect()
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     q <- dplyr::left_join(x, y, by = dplyr::join_by(x$name == y$name)) %>% dplyr::collect()
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     # right_join
     qr <- dplyr::right_join(dplyr::collect(x), dplyr::collect(y), by = "name")
     q  <- dplyr::right_join(x, y, by = "name") %>% dplyr::collect()
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     q <- dplyr::right_join(x, y, by = dplyr::join_by(x$name == y$name)) %>% dplyr::collect()
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     # inner_join
     qr <- dplyr::inner_join(dplyr::collect(x), dplyr::collect(y), by = "name")
     q  <- dplyr::inner_join(x, y, by = "name") %>% dplyr::collect()
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     q <- dplyr::inner_join(x, y, by = dplyr::join_by(x$name == y$name)) %>% dplyr::collect()
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     # full_join
     qr <- dplyr::full_join(dplyr::collect(x), dplyr::collect(y), by = "name")
     q  <- dplyr::full_join(x, y, by = "name") %>% dplyr::collect()
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     q <- dplyr::full_join(x, y, by = dplyr::join_by(x$name == y$name)) %>% dplyr::collect()
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     # semi_join
     qr <- dplyr::semi_join(dplyr::collect(x), dplyr::collect(y), by = "name")
     q <- dplyr::semi_join(x, y, by = "name") %>% dplyr::collect()
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     q <- dplyr::semi_join(x, y, by = dplyr::join_by(x$name == y$name)) %>% dplyr::collect()
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     # anti_join
     qr <- dplyr::anti_join(dplyr::collect(x), dplyr::collect(y), by = "name")
     q <- dplyr::anti_join(x, y, by = "name") %>% dplyr::collect()
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     q <- dplyr::anti_join(x, y, by = dplyr::join_by(x$name == y$name)) %>% dplyr::collect()
-    expect_equal(q, qr)
+    expect_identical(q, qr)
 
     connection_clean_up(conn)
   }

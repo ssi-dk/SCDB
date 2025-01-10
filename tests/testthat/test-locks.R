@@ -27,7 +27,7 @@ test_that("lock helpers works in default and test schema", {
 
       ## Check we can remove locks
       expect_null(unlock_table(conn, db_table = test_table_id, schema = schema))
-      expect_identical(nrow(db_lock_table), 0)
+      expect_identical(nrow(db_lock_table), 0L)
 
 
 
@@ -44,7 +44,7 @@ test_that("lock helpers works in default and test schema", {
         in_place = TRUE,
         copy = TRUE
       )
-      expect_identical(nrow(db_lock_table), 1)
+      expect_identical(nrow(db_lock_table), 1L)
 
       ## Check invalid lock owners are flagged
       not_on_cran <- interactive() || identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("CI"), "true")
@@ -60,7 +60,7 @@ test_that("lock helpers works in default and test schema", {
 
       # Remove the lock
       unlock_table(conn, db_table = test_table_id, schema = schema, pid = 0.5)
-      expect_identical(nrow(db_lock_table), 0)
+      expect_identical(nrow(db_lock_table), 0L)
 
 
 
@@ -88,7 +88,7 @@ test_that("lock helpers works in default and test schema", {
 
       # Remove the lock
       unlock_table(conn, db_table = test_table_id, schema = schema, pid = bg_process$get_pid())
-      expect_identical(nrow(db_lock_table), 0)
+      expect_identical(nrow(db_lock_table), 0L)
 
       # Clean up
       DBI::dbRemoveTable(conn, lock_table_id)

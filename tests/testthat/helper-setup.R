@@ -1,11 +1,13 @@
 #' Get a list of data base connections to test on
+#' @param skip_backends (`character()`)\cr
+#'   List of connection types to not return connections for.
 #' @return
 #'   If you run your tests locally, it returns a list of connections corresponding to conn_list and conn_args
 #'   If you run your tests on GitHub, it return a list of connection corresponding to the environment variables.
 #'   i.e. the GitHub workflows will configure the testing back ends
 #' @importFrom rlang `:=`
 #' @noRd
-get_test_conns <- function() {
+get_test_conns <- function(skip_backends = NULL) {
 
   # Locally use rlang's (without this, it may not be bound)
   `:=` <- rlang::`:=`
@@ -103,6 +105,15 @@ get_test_conns <- function() {
   )
   names(test_conns) <- names(drivers)
   test_conns <- purrr::discard(test_conns, is.null)
+
+  # Skip backends if given
+  test_conns <- test_conns |>
+    purrr::walk(\(conn) {
+      if (checkmate::test_multi_class(conn, purrr::pluck(skip_backends, .default = ""))) {
+        DBI::dbDisconnect(conn)
+      }
+    }) |>
+    purrr::discard(\(conn) checkmate::test_multi_class(conn, purrr::pluck(skip_backends, .default = "")))
 
   # Run post_connect commands on the connections
   purrr::iwalk(

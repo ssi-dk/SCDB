@@ -13,7 +13,7 @@
 #' @export
 nrow <- function(.data) {
   if (inherits(.data, "tbl_dbi")) {
-    return(as.numeric(dplyr::pull(dplyr::count(dplyr::ungroup(.data)))))
+    return(as.integer(dplyr::pull(dplyr::count(dplyr::ungroup(.data)))))
   } else {
     return(base::nrow(.data))
   }
