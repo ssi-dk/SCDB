@@ -7,9 +7,9 @@ test_that("slice_time() works", {
                     from_ts = dplyr::if_else(checksum <= 20, "2022-06-01", "2022-06-15"),
                     until_ts = NA_character_)
 
-    expect_equal(nrow(slice_time(xx, "2022-05-01")), 0)
-    expect_equal(nrow(slice_time(xx, "2022-06-01")), 20)
-    expect_equal(nrow(slice_time(xx, "2022-06-15")), nrow(mtcars))
+    expect_identical(nrow(slice_time(xx, "2022-05-01")), 0L)
+    expect_identical(nrow(slice_time(xx, "2022-06-01")), 20L)
+    expect_identical(nrow(slice_time(xx, "2022-06-15")), nrow(mtcars))
 
     connection_clean_up(conn)
   }
@@ -25,9 +25,9 @@ test_that("slice_time() works with non-standard columns", {
                     valid_from = dplyr::if_else(checksum <= 20, "2022-06-01", "2022-06-15"),
                     valid_until = NA_character_)
 
-    expect_equal(nrow(slice_time(xx, "2022-05-01", from_ts = "valid_from", until_ts = "valid_until")), 0)
-    expect_equal(nrow(slice_time(xx, "2022-06-01", from_ts = "valid_from", until_ts = "valid_until")), 20)
-    expect_equal(nrow(slice_time(xx, "2022-06-15", from_ts = "valid_from", until_ts = "valid_until")), nrow(mtcars))
+    expect_identical(nrow(slice_time(xx, "2022-05-01", from_ts = "valid_from", until_ts = "valid_until")), 0L)
+    expect_identical(nrow(slice_time(xx, "2022-06-01", from_ts = "valid_from", until_ts = "valid_until")), 20L)
+    expect_identical(nrow(slice_time(xx, "2022-06-15", from_ts = "valid_from", until_ts = "valid_until")), nrow(mtcars))
 
     connection_clean_up(conn)
   }

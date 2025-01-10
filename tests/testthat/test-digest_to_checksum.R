@@ -6,12 +6,16 @@ test_that("digest_to_checksum() works", {
     expect_s3_class(get_table(conn, "__mtcars") |> digest_to_checksum(), "tbl_dbi")
 
     # Check that col argument works
-    expect_equal(mtcars |> digest_to_checksum(col = "checky") |> dplyr::pull("checky"),
-                 mtcars |> digest_to_checksum()               |> dplyr::pull("checksum"))
+    expect_identical(
+      mtcars |> digest_to_checksum(col = "checky") |> dplyr::pull("checky"),
+      mtcars |> digest_to_checksum()               |> dplyr::pull("checksum")
+    )
 
 
-    expect_equal(mtcars |> dplyr::mutate(name = rownames(mtcars)) |> digest_to_checksum() |> colnames(),
-                 get_table(conn, "__mtcars") |> digest_to_checksum() |> colnames())
+    expect_identical(
+      mtcars |> dplyr::mutate(name = rownames(mtcars)) |> digest_to_checksum() |> colnames(),
+      get_table(conn, "__mtcars") |> digest_to_checksum() |> colnames()
+    )
 
 
     # Check that NA's generate unique checksums

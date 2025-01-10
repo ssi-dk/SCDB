@@ -56,3 +56,22 @@ test_that("param_and_field_linter works", {
   lintr::expect_lint("#' @param test (`type`)\\cr", NULL, param_and_field_linter())
   lintr::expect_lint("#' @field test (`type`)\\cr", NULL, param_and_field_linter())
 })
+
+
+test_that("documentation_template_linter works", {
+  skip_if_not_installed("lintr")
+  skip_if_not_installed("devtools")
+  skip_if(!identical(Sys.getenv("R_CHECK"), "true"), "Skip if running in R_check")
+
+  lintr::expect_lint(
+    "#' @param observable text", # rd_observable defined in R/0_documentation.R                                         # nolint: documentation_template_linter, param_and_field_linter
+    list("line_number" = 1, "type" = "style"),
+    documentation_template_linter()
+  )
+
+  lintr::expect_lint(
+    "#' @param observable `r rd_test`",
+    NULL,
+    documentation_template_linter()
+  )
+})

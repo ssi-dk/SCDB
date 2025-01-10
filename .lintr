@@ -1,19 +1,9 @@
-linters: c(
-    diseasy_code_linters(),
-    all_linters(
-      line_length_linter = NULL,          # We use 120, nolint-aware line length linter instead
-      cyclocomp_linter = NULL,            # Not required in diseasy style guide
-      keyword_quote_linter = NULL,        # Not required in diseasy style guide
-      implicit_integer_linter = NULL,     # Not required in diseasy style guide
-      extraction_operator_linter = NULL,  # Fails for .data$*
-      nonportable_path_linter = NULL,     # Any \\ is flagged. Therefore fails when escaping backslashes
-      undesirable_function_linter = NULL, # Library calls in vignettes are flagged and any call to options
-      unnecessary_lambda_linter = NULL,   # Fails for purrr::map with additional function arguments
-      strings_as_factors_linter = NULL,   # Seems to be some backwards compatibility stuff.
-      expect_identical_linter = NULL      # Seems a little aggressive to require this.
-    )
+linters: diseasy_code_linters()
+exclude_linter: paste0(
+    "^ *: *(", # Any number of spaces before and after the colon
+    paste(names(diseasy_code_linters()), collapse = "|"), # Any of our linters
+    ",| )+(\\.|$)" # As a comma separated list (with optional spaces) followed by a period or end of line
   )
-exclude_linter: r"{^ *: *([\w, ]*)(.|$)}"
 exclusions: c(
     list(
       "R/0_linters.R" = list(

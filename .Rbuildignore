@@ -15,3 +15,4 @@ man-roxygen/*
 ^README.Rmd$
 ^revdep$
 ^data-raw$
+^pkg-build$

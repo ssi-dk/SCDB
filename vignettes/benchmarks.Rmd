@@ -67,11 +67,14 @@ on_main <- tryCatch({
   return(identical(Sys.getenv("CI"), "true"))
 })
 
-# If the SHA has been merged, use as the "main" version and remove the other, older, main version
+# If the SHA has been merged, use as the "main" version and remove the other,
+# older, main version
 if (on_main) {
   benchmarks <- benchmarks |>
-    dplyr::filter(version != "main") |>
-    dplyr::mutate(version = dplyr::if_else(.data$version == "CRAN", "CRAN", "development"))
+    dplyr::filter(.data$version != "main") |>
+    dplyr::mutate(
+      "version" = dplyr::if_else(.data$version == "CRAN", "CRAN", "development")
+    )
 }
 
 # Mean and standard deviation (see ggplot2::mean_se())
@@ -85,7 +88,9 @@ mean_sd <- function(x) {
 ```{r benchmark_1, echo = FALSE, eval = requireNamespace("here")}
 # Use data for benchmark 1
 benchmark_1 <- benchmarks |>
-  dplyr::filter(!stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity")))
+  dplyr::filter(
+    !stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity"))
+  )
 
 # Add note slow backends
 slow_backends <- benchmark_1 |>
@@ -94,10 +99,14 @@ slow_backends <- benchmark_1 |>
   dplyr::pull("database")
 
 benchmark_1 <- benchmark_1 |>
-  dplyr::mutate("database" = paste0(database, ifelse(database %in% slow_backends, "*", "")))
+  dplyr::mutate(
+    "database" = paste0(database, ifelse(database %in% slow_backends, "*", ""))
+  )
 
 # Insert newline into database name to improve rendering of figures
-labeller <- ggplot2::as_labeller(\(l) stringr::str_replace_all(l, stringr::fixed(" v"), "\nv"))
+labeller <- ggplot2::as_labeller(
+  \(l) stringr::str_replace_all(l, stringr::fixed(" v"), "\nv")
+)
 
 
 
@@ -105,7 +114,12 @@ g <- ggplot2::ggplot(
   benchmark_1,
   ggplot2::aes(x = version, y = time / 1e9)
 ) +
-  ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
+  ggplot2::stat_summary(
+    fun.data = mean_sd,
+    geom = "pointrange",
+    size = 0.5,
+    linewidth = 1
+  ) +
   ggplot2::facet_grid(
     rows = ggplot2::vars(benchmark_function),
     cols = ggplot2::vars(database),
@@ -114,7 +128,9 @@ g <- ggplot2::ggplot(
   ggplot2::labs(x = "Codebase version", y = "Time (s)")
 
 if (length(slow_backends) > 1) {
-  g <- g + ggplot2::labs(caption = "* IMPORTANT: Benchmark data halved for this backend!")
+  g <- g + ggplot2::labs(
+    caption = "* IMPORTANT: Benchmark data halved for this backend!"
+  )
 }
 
 g
@@ -138,20 +154,39 @@ batching the updates via the `filters` argument.
 ```{r benchmark_2, echo = FALSE, eval = requireNamespace("here")}
 # Use data for benchmark 2
 benchmark_2 <- benchmarks |>
-  dplyr::filter(stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity"))) |>
-  dplyr::mutate("benchmark_function" = stringr::str_remove_all(benchmark_function, stringr::fixed("- complexity")))
+  dplyr::filter(
+    stringr::str_ends(
+      .data$benchmark_function,
+      stringr::fixed("complexity")
+    )
+  ) |>
+  dplyr::mutate(
+    "benchmark_function" = stringr::str_remove_all(
+      benchmark_function,
+      stringr::fixed("- complexity")
+    )
+  )
 
 ggplot2::ggplot(
   benchmark_2,
   ggplot2::aes(x = n * nrow(iris) / 1e3, y = time / 1e9, color = version)
 ) +
-  ggplot2::stat_summary(fun.data = mean_sd, geom = "pointrange", size = 0.5, linewidth = 1) +
+  ggplot2::stat_summary(
+    fun.data = mean_sd,
+    geom = "pointrange",
+    size = 0.5,
+    linewidth = 1
+  ) +
   ggplot2::geom_smooth(method = "lm", formula = y ~ x, se = FALSE, linetype = 3) +
   ggplot2::facet_grid(
     rows = ggplot2::vars(benchmark_function),
     cols = ggplot2::vars(database),
     labeller = labeller
   ) +
-  ggplot2::labs(x = "Data size (1,000 rows)", y = "Time (s)", color = "Codebase version") +
+  ggplot2::labs(
+    x = "Data size (1,000 rows)",
+    y = "Time (s)",
+    color = "Codebase version"
+  ) +
   ggplot2::theme(panel.spacing = grid::unit(1, "lines"), legend.position = "bottom")
 ```

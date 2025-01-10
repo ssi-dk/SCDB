@@ -18,19 +18,19 @@ test_that("get_table() works when tables/view exist", {
 
     # Lets try different ways to read __mtcars (added during setup)
     expect_mapequal(get_table(conn, "__mtcars")  |> dplyr::collect(), mtcars_t)
-    expect_equal(get_table(conn, id("__mtcars")) |> dplyr::collect(), mtcars_t)
+    expect_identical(get_table(conn, id("__mtcars")) |> dplyr::collect(), mtcars_t)
     t <- "__mtcars"
-    expect_equal(get_table(conn, t) |> dplyr::collect(), mtcars_t)
+    expect_identical(get_table(conn, t) |> dplyr::collect(), mtcars_t)
     t <- id("__mtcars")
-    expect_equal(get_table(conn, t) |> dplyr::collect(), mtcars_t)
+    expect_identical(get_table(conn, t) |> dplyr::collect(), mtcars_t)
 
     # And test.mtcars (added during setup)
-    expect_equal(get_table(conn, "test.mtcars") |> dplyr::collect(), mtcars_t)
-    expect_equal(get_table(conn, id("test.mtcars", conn)) |> dplyr::collect(), mtcars_t)
+    expect_identical(get_table(conn, "test.mtcars") |> dplyr::collect(), mtcars_t)
+    expect_identical(get_table(conn, id("test.mtcars", conn)) |> dplyr::collect(), mtcars_t)
     t <- "test.mtcars"
-    expect_equal(get_table(conn, t) |> dplyr::collect(), mtcars_t)
+    expect_identical(get_table(conn, t) |> dplyr::collect(), mtcars_t)
     t <- id("test.mtcars", conn)
-    expect_equal(get_table(conn, t) |> dplyr::collect(), mtcars_t)
+    expect_identical(get_table(conn, t) |> dplyr::collect(), mtcars_t)
 
 
     # Check for the existence of views on backends that support it (added here)
@@ -44,7 +44,7 @@ test_that("get_table() works when tables/view exist", {
 
       view_1 <- paste(c(get_schema(conn), "__mtcars_view"), collapse = ".")
 
-      expect_identical(nrow(get_table(conn, view_1)), 10)
+      expect_identical(nrow(get_table(conn, view_1)), 10L)
       expect_identical(
         dplyr::collect(get_table(conn, view_1)),
         dplyr::collect(utils::head(get_table(conn, "__mtcars"), 10))
