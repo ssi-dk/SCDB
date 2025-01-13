@@ -114,44 +114,45 @@ benchmark_1 <- benchmarks %>%
     !stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity"))
   )
 
-# Add note slow backends
-slow_backends <- benchmark_1 %>%
-  dplyr::distinct(.data$database, .data$n) %>%
-  dplyr::filter(.data$n < max(.data$n)) %>%
-  dplyr::pull("database")
-
-benchmark_1 <- benchmark_1 %>%
-  dplyr::mutate(
-    "database" = paste0(database, ifelse(database %in% slow_backends, "*", ""))
-  )
-
 # Insert newline into database name to improve rendering of figures
 labeller <- ggplot2::as_labeller(
   function(l) stringr::str_replace_all(l, stringr::fixed(" v"), "\nv")
 )
 
-
+# Apply "dodging" to sub-groups to show graphically
+dodge <- ggplot2::position_dodge(width = 0.6)
 
 g <- ggplot2::ggplot(
   benchmark_1,
-  ggplot2::aes(x = version, y = time / 1e9)
+  ggplot2::aes(x = version, y = time / 1e9, color = database)
 ) +
   ggplot2::stat_summary(
     fun.data = mean_sd,
     geom = "pointrange",
-    size = 0.5,
-    linewidth = 1
+    size = 0.5, linewidth = 1,
+    position = dodge
   ) +
+  ggplot2::labs(x = "Codebase version", y = "Time (s)") +
+  ggplot2::theme(
+    legend.position = "bottom",
+    legend.justification = "left"
+  )
+
+
+if (on_cran) {
+  # Reduce font size for CRAN version
+  g <- g + ggplot2::theme(text = ggplot2::element_text(size = 8))
+
+  # Make the legend two rows
+  g <- g + ggplot2::guides(color = ggplot2::guide_legend(nrow = 2, byrow = TRUE))
+
+} else {
+  # Add facets to non-CRAN rendering
+  g <- g +
   ggplot2::facet_grid(
     rows = ggplot2::vars(benchmark_function),
     cols = ggplot2::vars(database),
     labeller = labeller
-  ) +
-  ggplot2::labs(x = "Codebase version", y = "Time (s)")
-
-if (length(slow_backends) > 1) {
-  g <- g + ggplot2::labs(
-    caption = "* IMPORTANT: Benchmark data halved for this backend!"
   )
 }
 
@@ -189,26 +190,52 @@ benchmark_2 <- benchmarks %>%
     )
   )
 
-ggplot2::ggplot(
+
+# Apply "dodging" to sub-groups to show graphically
+dodge <- ggplot2::position_dodge(width = 0.6)
+
+# Set aesthetics for CRAN and non-CRAN versions
+if (on_cran) {
+  aes <- ggplot2::aes(x = n * nrow(iris) / 1e3, y = time / 1e9, color = database)
+} else {
+  aes <- ggplot2::aes(x = n * nrow(iris) / 1e3, y = time / 1e9, color = version)
+}
+
+g <- ggplot2::ggplot(
   benchmark_2,
-  ggplot2::aes(x = n * nrow(iris) / 1e3, y = time / 1e9, color = version)
+  aes
 ) +
   ggplot2::stat_summary(
     fun.data = mean_sd,
     geom = "pointrange",
-    size = 0.5,
-    linewidth = 1
+    size = 0.5, linewidth = 1,
+    position = dodge
   ) +
   ggplot2::geom_smooth(method = "lm", formula = y ~ x, se = FALSE, linetype = 3) +
-  ggplot2::facet_grid(
-    rows = ggplot2::vars(benchmark_function),
-    cols = ggplot2::vars(database),
-    labeller = labeller
-  ) +
   ggplot2::labs(
     x = "Data size (1,000 rows)",
     y = "Time (s)",
     color = "Codebase version"
   ) +
   ggplot2::theme(panel.spacing = grid::unit(1, "lines"), legend.position = "bottom")
+
+
+if (on_cran) {
+  # Reduce font size for CRAN version
+  g <- g + ggplot2::theme(text = ggplot2::element_text(size = 8))
+
+  # Make the legend two rows
+  g <- g + ggplot2::guides(color = ggplot2::guide_legend(nrow = 2, byrow = TRUE))
+
+} else {
+  # Add facets to non-CRAN rendering
+  g <- g +
+  ggplot2::facet_grid(
+    rows = ggplot2::vars(benchmark_function),
+    cols = ggplot2::vars(database),
+    labeller = labeller
+  )
+}
+
+g
 ```
