@@ -54,14 +54,14 @@ table_exists.DBIConnection <- function(conn, db_table) {
   if (inherits(db_table, "Id")) {
     db_table_id <- id(db_table, conn) # Ensure Id is fully qualified (has schema)
 
-    exact_match <- tables |>
+    exact_match <- tables %>%
       dplyr::filter(
         .data$table == db_table_id@name["table"],
         .data$schema == db_table_id@name["schema"]
       )
 
     if ("catalog" %in% names(db_table_id@name)) {
-      exact_match <- exact_match |>
+      exact_match <- exact_match %>%
         dplyr::filter(.data$catalog == db_table_id@name["catalog"])
     }
 
@@ -78,9 +78,9 @@ table_exists.DBIConnection <- function(conn, db_table) {
     matches <- dplyr::union_all(
       tables,
       dplyr::mutate(dplyr::filter(tables, .data$schema == get_schema(conn)), schema = NA_character_)
-    ) |>
-      tidyr::unite("table_str", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
-      dplyr::filter(.data$table_str == !!db_table) |>
+    ) %>%
+      tidyr::unite("table_str", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) %>%
+      dplyr::filter(.data$table_str == !!db_table) %>%
       dplyr::select(!"table_str")
 
     if (nrow(matches) <= 1) {

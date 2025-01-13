@@ -38,12 +38,12 @@ digest_to_checksum <- function(.data, col = "checksum", exclude = NULL) {
 
   hash_cols <- dbplyr::ident(setdiff(colnames(.data), c(col, exclude)))
 
-  .data <- .data |>
-    dplyr::mutate(
-      {{ col }} := !!dplyr::sql(
-        glue::glue("CONVERT(CHAR(64), HashBytes('SHA2_256', (SELECT {toString(hash_cols)} FOR XML RAW)), 2)")
-      )
+  .data <- dplyr::mutate(
+    .data,
+    {{ col }} := !!dplyr::sql(
+      glue::glue("CONVERT(CHAR(64), HashBytes('SHA2_256', (SELECT {toString(hash_cols)} FOR XML RAW)), 2)")
     )
+  )
 
   return(.data)
 }
@@ -57,7 +57,7 @@ digest_to_checksum.default <- function(
   hash_cols <- setdiff(colnames(.data), c(col, exclude))
 
   # The md5 algorithm needs character inputs, so we convert the hash columns to character and concatenate
-  checksums <- .data |>
+  checksums <- .data %>%
     dplyr::mutate(dplyr::across(
       tidyselect::all_of(hash_cols),
       ~ dplyr::coalesce(as.character(.), ""),
@@ -65,18 +65,18 @@ digest_to_checksum.default <- function(
     ))
 
   # Compute checksums locally then join back onto original data
-  checksums <- checksums |>
-    dplyr::collect() |>
-    tidyr::unite(!!col, tidyselect::ends_with(".__chr"), remove = FALSE) |>
+  checksums <- checksums %>%
+    dplyr::collect() %>%
+    tidyr::unite(!!col, tidyselect::ends_with(".__chr"), remove = FALSE) %>%
     dplyr::transmute(
       id__ = dplyr::row_number(),
       dplyr::across(tidyselect::all_of(col), openssl::md5)
-    ) |>
-    dplyr::copy_to(dbplyr::remote_con(.data), df = _, name = unique_table_name())
+    ) %>%
+    dplyr::copy_to(dbplyr::remote_con(.data), df = ., name = unique_table_name())
 
-  .data <- .data |>
-    dplyr::mutate(id__ = dplyr::row_number()) |>
-    dplyr::left_join(checksums, by = "id__", copy = TRUE) |>
+  .data <- .data %>%
+    dplyr::mutate(id__ = dplyr::row_number()) %>%
+    dplyr::left_join(checksums, by = "id__", copy = TRUE) %>%
     dplyr::select(!"id__")
 
   return(.data)
@@ -98,13 +98,13 @@ digest_to_checksum_native_md5 <- function(
   hash_cols <- setdiff(colnames(.data), c(col, exclude))
 
   # The md5 algorithm needs character inputs, so we convert the hash columns to character and concatenate
-  .data <- .data |>
+  .data <- .data %>%
     dplyr::mutate(dplyr::across(
       tidyselect::all_of(hash_cols),
       ~ dplyr::coalesce(as.character(.), ""),
       .names = "{.col}.__chr"
-    )) |>
-    tidyr::unite(!!col, tidyselect::ends_with(".__chr"), remove = TRUE) |>
+    )) %>%
+    tidyr::unite(!!col, tidyselect::ends_with(".__chr"), remove = TRUE) %>%
     dplyr::mutate(dplyr::across(tidyselect::all_of(col), md5))
 
   return(.data)

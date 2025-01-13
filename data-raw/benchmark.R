@@ -35,7 +35,7 @@ for (version in c("CRAN", "main", "branch")) {
   # Install the missing packages
   .libPaths(c(lib_path, lib_paths_default))
   pak::lockfile_create(source, "SCDB.lock")
-  missing <- jsonlite::fromJSON("SCDB.lock")$packages$ref |>
+  missing <- jsonlite::fromJSON("SCDB.lock")$packages$ref %>%
     purrr::discard(rlang::is_installed)
   if (length(missing) > 0) pak::pkg_install(missing, lib = lib_path)
 }
@@ -76,11 +76,8 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
 
     # Our benchmark data is the iris data set but repeated to increase the data size
     data_generator <- function(repeats) {
-      purrr::map(
-        seq(repeats),
-        \(it) dplyr::mutate(iris, r = dplyr::row_number() + (it - 1) * nrow(iris))
-      ) |>
-        purrr::reduce(rbind) |>
+      purrr::map(seq(repeats), ~ dplyr::mutate(iris, r = dplyr::row_number() + (.x - 1) * nrow(iris))) %>%
+        purrr::reduce(rbind) %>%
         dplyr::rename_with(~ tolower(gsub(".", "_", .x, fixed = TRUE)))
     }
 
@@ -88,7 +85,7 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
     try({
       n <- 10
       data_1 <- data_generator(n)
-      data_2 <- data_generator(2 * n) |>
+      data_2 <- data_generator(2 * n) %>%
         dplyr::mutate(
           "sepal_length" = dplyr::if_else(
             .data$sepal_length > median(.data$sepal_length),
@@ -96,7 +93,7 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
             .data$sepal_length / 2
           )
         )
-      data_3 <- data_generator(3 * n) |>
+      data_3 <- data_generator(3 * n) %>%
         dplyr::mutate(
           "sepal_length" = dplyr::if_else(
             .data$sepal_length > median(.data$sepal_length),
@@ -127,12 +124,12 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
       }
 
       scdb_updates <- function(conn, data_on_conn) {
-        purrr::walk2(data_on_conn, ts, \(data, ts) scdb_update_step(conn, data, ts))
+        purrr::walk2(data_on_conn, ts, ~ scdb_update_step(conn, .x, .y))
         DBI::dbRemoveTable(conn, name = "SCDB_benchmark_1")
       }
 
       # Construct the list of benchmarks
-      update_snapshot_benchmark <- microbenchmark::microbenchmark(scdb_updates(conn, data_on_conn), times = 25) |>
+      update_snapshot_benchmark <- microbenchmark::microbenchmark(scdb_updates(conn, data_on_conn), times = 25) %>%
         dplyr::mutate(
           "benchmark_function" = "update_snapshot()",
           "database" = names(conns)[[1]],
@@ -148,8 +145,8 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
     try({
       for (n in floor(10^(seq(1, 3, length.out = 5)))) {
 
-        data <- data_generator(n) |>
-          dplyr::copy_to(conn, df = _, name = id("test.SCDB_data", conn), overwrite = TRUE, temporary = FALSE)
+        data <- data_generator(n) %>%
+          dplyr::copy_to(conn, df = ., name = id("test.SCDB_data", conn), overwrite = TRUE, temporary = FALSE)
 
         # Define the SCDB update function
         scdb_updates <- function(conn, data) {
@@ -159,7 +156,7 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
         }
 
         # Construct the list of benchmarks
-        update_snapshot_benchmark <- microbenchmark::microbenchmark(scdb_updates(conn, data), times = 5) |>
+        update_snapshot_benchmark <- microbenchmark::microbenchmark(scdb_updates(conn, data), times = 5) %>%
           dplyr::mutate(
             "benchmark_function" = "update_snapshot() - complexity",
             "database" = names(conns)[[1]],

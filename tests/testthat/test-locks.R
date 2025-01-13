@@ -66,7 +66,7 @@ test_that("lock helpers works in default and test schema", {
 
       ## Check that we cannot steal locks
       # Get the PID of a background process that will linger for a while
-      bg_process <- callr::r_bg(\() Sys.sleep(10))
+      bg_process <- callr::r_bg(function() Sys.sleep(10))
       expect_false(bg_process$get_pid() == Sys.getpid())
 
       # Add a valid lock that we do not own

@@ -189,13 +189,13 @@ Logger <- R6::R6Class(                                                          
       if (!is.null(private$log_conn) && DBI::dbIsValid(private$log_conn) && !is.null(self$log_tbl) &&
             table_exists(private$log_conn, private$log_table_id)) {
 
-        patch <- data.frame(log_file = self$log_filename) |>
-          dplyr::copy_to(
-            dest = private$log_conn,
-            df = _,
-            name = unique_table_name(),
-            temporary = TRUE
-          )
+        patch <- data.frame(log_file = self$log_filename)
+        patch <- dplyr::copy_to(
+          dest = private$log_conn,
+          df = patch,
+          name = unique_table_name(),
+          temporary = TRUE
+        )
         defer_db_cleanup(patch) # Clean up on exit
 
         # Mutating after copying ensures consistency in SQL translation
@@ -235,9 +235,9 @@ Logger <- R6::R6Class(                                                          
       if (is.null(self$log_path) && !is.null(private$log_conn) && DBI::dbIsValid(private$log_conn) &&
             !is.null(self$log_tbl) && table_exists(private$log_conn, private$log_table_id)) {
 
-        expected_rows <- self$log_tbl |>
-          dplyr::filter(log_file == !!self$log_filename) |>
-          dplyr::count() |>
+        expected_rows <- self$log_tbl %>%
+          dplyr::filter(log_file == !!self$log_filename) %>%
+          dplyr::count() %>%
           dplyr::pull()
 
         query <- dbplyr::build_sql(
@@ -341,13 +341,12 @@ Logger <- R6::R6Class(                                                          
         patch <- dplyr::mutate(patch, catalog = purrr::pluck(private$db_table, "name", "catalog"), .before = "schema")
       }
 
-      patch <- patch |>
-        dplyr::copy_to(
-          dest = private$log_conn,
-          df = _,
-          name = unique_table_name(),
-          temporary = TRUE
-        )
+      patch <- dplyr::copy_to(
+        dest = private$log_conn,
+        df = patch,
+        name = unique_table_name(),
+        temporary = TRUE
+      )
       defer_db_cleanup(patch) # Clean up on exit
 
       dplyr::rows_append(

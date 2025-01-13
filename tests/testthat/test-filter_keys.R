@@ -5,26 +5,26 @@ test_that("filter_keys() works", {
 
     expect_identical(
       x,
-      x |> filter_keys(NULL)
+      x %>% filter_keys(NULL)
     )
 
-    filter <- x |> utils::head(10) |> dplyr::select("name")
+    filter <- x %>% utils::head(10) %>% dplyr::select("name")
     expect_identical(
-      x |>
-        dplyr::filter(name %in% !!dplyr::pull(filter, "name")) |>
+      x %>%
+        dplyr::filter(name %in% !!dplyr::pull(filter, "name")) %>%
         dplyr::collect(),
-      x |>
-        filter_keys(filter) |>
+      x %>%
+        filter_keys(filter) %>%
         dplyr::collect()
     )
 
-    filter <- x |> utils::head(10) |> dplyr::select("vs", "am") |> dplyr::distinct()
+    filter <- x %>% utils::head(10) %>% dplyr::select("vs", "am") %>% dplyr::distinct()
     expect_identical(
-      x |>
-        dplyr::inner_join(filter, by = c("vs", "am")) |>
+      x %>%
+        dplyr::inner_join(filter, by = c("vs", "am")) %>%
         dplyr::collect(),
-      x |>
-        filter_keys(filter) |>
+      x %>%
+        filter_keys(filter) %>%
         dplyr::collect()
     )
 
@@ -48,17 +48,17 @@ test_that("filter_keys() works with copy = TRUE", {
 
     x <- get_table(conn, "__mtcars")
 
-    filter <- x |>
-      utils::head(10) |>
-      dplyr::select("name") |>
+    filter <- x %>%
+      utils::head(10) %>%
+      dplyr::select("name") %>%
       dplyr::collect()
 
     expect_identical(
-      x |>
-        dplyr::filter(.data$name %in% !!dplyr::pull(filter, "name")) |>
+      x %>%
+        dplyr::filter(.data$name %in% !!dplyr::pull(filter, "name")) %>%
         dplyr::collect(),
-      x |>
-        filter_keys(filter, copy = TRUE) |>
+      x %>%
+        filter_keys(filter, copy = TRUE) %>%
         dplyr::collect()
     )
 

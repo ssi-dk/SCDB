@@ -22,7 +22,7 @@ Encoding: UTF-8
 RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE, r6 = TRUE)
 Depends:
-    R (>= 3.5.0)
+    R (>= 3.6.0)
 Imports:
     checkmate,
     DBI,
@@ -39,7 +39,8 @@ Imports:
     stringr,
     tidyr,
     tidyselect,
-    utils
+    utils,
+    magrittr
 Suggests:
     callr,
     conflicted,

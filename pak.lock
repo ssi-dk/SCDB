@@ -2536,7 +2536,7 @@
       "type": "local",
       "direct": true,
       "binary": false,
-      "dependencies": ["checkmate", "DBI", "dbplyr", "dplyr", "glue", "lifecycle", "openssl", "parallelly", "purrr", "rlang", "R6", "stringr", "tidyr", "tidyselect"],
+      "dependencies": ["checkmate", "DBI", "dbplyr", "dplyr", "glue", "lifecycle", "openssl", "parallelly", "purrr", "rlang", "R6", "stringr", "tidyr", "tidyselect", "magrittr"],
       "vignettes": false,
       "metadata": {
         "RemotePkgRef": "local::.",
@@ -2849,7 +2849,7 @@
     {
       "ref": "openssl",
       "package": "openssl",
-      "version": "2.3.0",
+      "version": "2.3.1",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -2861,10 +2861,10 @@
         "RemoteRef": "openssl",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "2.3.0"
+        "RemoteSha": "2.3.1"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/openssl_2.3.0.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/openssl_2.3.0.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/openssl_2.3.1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/openssl_2.3.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,

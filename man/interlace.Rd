@@ -42,14 +42,14 @@ onto a single time axis.
   t1 <- data.frame(key = c("A", "A", "B"),
                    obs_1   = c(1, 2, 2),
                    valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-01-01")),
-                   valid_until = as.Date(c("2021-02-01", "2021-03-01", NA))) |>
-    dplyr::copy_to(conn, df = _, name = "t1")
+                   valid_until = as.Date(c("2021-02-01", "2021-03-01", NA)))
+  t1 <- dplyr::copy_to(conn, df = t1, name = "t1")
 
   t2 <- data.frame(key = c("A", "B"),
                    obs_2 = c("a", "b"),
                    valid_from  = as.Date(c("2021-01-01", "2021-01-01")),
-                   valid_until = as.Date(c("2021-04-01", NA))) |>
-    dplyr::copy_to(conn, df = _, name = "t2")
+                   valid_until = as.Date(c("2021-04-01", NA)))
+  t2 <- dplyr::copy_to(conn, df = t2, name = "t2")
 
   interlace(list(t1, t2), by = "key")
 

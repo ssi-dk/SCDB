@@ -26,7 +26,7 @@ Slices a data object based on time / date
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
   conn <- get_connection()
 
-  m <- mtcars |>
+  m <- mtcars \%>\%
     dplyr::mutate(
       "from_ts" = dplyr::if_else(dplyr::row_number() > 10,
                                  as.Date("2020-01-01"),

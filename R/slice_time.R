@@ -9,7 +9,7 @@
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection()
 #'
-#'   m <- mtcars |>
+#'   m <- mtcars %>%
 #'     dplyr::mutate(
 #'       "from_ts" = dplyr::if_else(dplyr::row_number() > 10,
 #'                                  as.Date("2020-01-01"),
@@ -35,7 +35,7 @@ slice_time <- function(.data, slice_ts, from_ts = "from_ts", until_ts = "until_t
   checkmate::assert_character(until_ts, add = coll)
   checkmate::reportAssertions(coll)
 
-  .data <- .data |>
+  .data <- .data %>%
     dplyr::filter(dplyr::if_any(tidyselect::all_of(from_ts), ~ . <= !!slice_ts),
                   dplyr::if_any(tidyselect::all_of(until_ts), ~ is.na(.) | !!slice_ts < .))
 

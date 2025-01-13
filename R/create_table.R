@@ -28,11 +28,13 @@ create_table <- function(.data, conn = NULL, db_table, ...) {                   
   }
 
   # Add "metadata" columns to .data
-  .data <- .data |>
-    dplyr::mutate(checksum = NA_character_,
-                  from_ts  = as.POSIXct(NA_real_),
-                  until_ts = as.POSIXct(NA_real_),
-                  .after = tidyselect::everything())
+  .data <- dplyr::mutate(
+    .data,
+    "checksum" = NA_character_,
+    "from_ts"  = as.POSIXct(NA_real_, origin = "1970-01-01"),
+    "until_ts" = as.POSIXct(NA_real_, origin = "1970-01-01"),
+    .after = tidyselect::everything()
+  )
 
   # Early return if there is no connection to push to
   if (is.null(conn)) return(invisible(utils::head(.data, 0)))

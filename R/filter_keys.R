@@ -46,16 +46,16 @@ filter_keys.tbl_sql <- function(.data, filters, by = NULL, na_by = NULL, ...) {
 
   if (is.null(by) && is.null(na_by)) {
     # Determine key types
-    key_types <- filters |>
-      dplyr::ungroup() |>
+    key_types <- filters %>%
+      dplyr::ungroup() %>%
       dplyr::summarise(dplyr::across(
         .cols = tidyselect::everything(),
         .fns = ~ sum(ifelse(is.na(.), 0, 1), na.rm = TRUE)                                                              # nolint: redundant_ifelse_linter
-      )) |>
+      )) %>%
       tidyr::pivot_longer(tidyselect::everything(), names_to = "column_name", values_to = "is_na")
 
-    by    <- key_types |> dplyr::filter(.data$is_na > 0) |> dplyr::pull("column_name")
-    na_by <- key_types |> dplyr::filter(.data$is_na == 0)  |> dplyr::pull("column_name")
+    by    <- key_types %>% dplyr::filter(.data$is_na > 0) %>% dplyr::pull("column_name")
+    na_by <- key_types %>% dplyr::filter(.data$is_na == 0) %>% dplyr::pull("column_name")
 
     if (length(by) == 0)    by    <- NULL
     if (length(na_by) == 0) na_by <- NULL

@@ -149,7 +149,7 @@ assert_timestamp_like <- function(timestamp, ..., add = NULL) {
 #' @noRd
 assert_dbtable_like <- function(db_table, ..., add = NULL) {
   checkmate::assert(
-    checkmate::check_character(db_table, pattern = r"{^\w*.\w*$}", ...),
+    checkmate::check_character(db_table, pattern = "^\\w*.\\w*$", ...),
     checkmate::check_class(db_table, "Id", ...),
     checkmate::check_class(db_table, "tbl_dbi", ...),
     add = add

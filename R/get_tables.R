@@ -34,21 +34,21 @@ get_tables.SQLiteConnection <- function(conn, pattern = NULL, show_temporary = T
                  "WHERE NOT name IN ('sqlite_schema', 'sqlite_temp_schema')",
                  "AND NOT name LIKE 'sqlite_stat%'")
 
-  tables <- DBI::dbGetQuery(conn, query) |>
+  tables <- DBI::dbGetQuery(conn, query) %>%
     dplyr::mutate("schema" = as.character(.data$schema)) # Ensure schema is character (even if empty)
 
   if (!show_temporary) {
-    tables <- tables |>
+    tables <- tables %>%
       dplyr::filter(.data$schema != "temp")
   }
 
   if (!is.null(pattern)) {
-    tables <- tables |>
+    tables <- tables %>%
       dplyr::mutate(db_table_str = ifelse(
         is.na(.data$schema), .data$table,
         paste(.data$schema, .data$table, sep = ".")
-      )) |>
-      dplyr::filter(grepl(pattern, .data$db_table_str)) |>
+      )) %>%
+      dplyr::filter(grepl(pattern, .data$db_table_str)) %>%
       dplyr::select(!"db_table_str")
   }
 
@@ -78,21 +78,21 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE)
   tables <- DBI::dbGetQuery(conn, query)
 
   if (!show_temporary) {
-    tables <- tables |>
+    tables <- tables %>%
       dplyr::filter(!.data$is_temporary)
   }
 
-  tables <- tables |>
+  tables <- tables %>%
     dplyr::select(!"is_temporary")
 
 
   if (!is.null(pattern)) {
-    tables <- tables |>
+    tables <- tables %>%
       dplyr::mutate(db_table_str = ifelse(
         is.na(.data$schema), .data$table,
         paste(.data$schema, .data$table, sep = ".")
-      )) |>
-      dplyr::filter(grepl(pattern, .data$db_table_str)) |>
+      )) %>%
+      dplyr::filter(grepl(pattern, .data$db_table_str)) %>%
       dplyr::select(!"db_table_str")
   }
 
@@ -121,21 +121,21 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE)
   tables <- DBI::dbGetQuery(conn, query)
 
   if (!show_temporary) {
-    tables <- tables |>
+    tables <- tables %>%
       dplyr::filter(.data$is_temporary == 0)
   }
 
   # Filter out trailing underscores added by engine
-  tables <- tables |>
+  tables <- tables %>%
     dplyr::mutate(table = stringr::str_remove(.data$table, "_{10,}[0-9a-fA-F]+$"))
 
-  tables <- tables |>
+  tables <- tables %>%
     dplyr::select(!"is_temporary")
 
   if (!is.null(pattern)) {
-    tables <- tables |>
-      tidyr::unite("db_table_str", "catalog", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
-      dplyr::filter(grepl(pattern, .data$db_table_str)) |>
+    tables <- tables %>%
+      tidyr::unite("db_table_str", "catalog", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) %>%
+      dplyr::filter(grepl(pattern, .data$db_table_str)) %>%
       dplyr::select(!"db_table_str")
   }
 
@@ -148,21 +148,21 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE)
 get_tables.duckdb_connection <- function(conn, pattern = NULL, show_temporary = TRUE) {
   query <- paste("SHOW ALL TABLES;")
 
-  tables <- DBI::dbGetQuery(conn, query) |>
+  tables <- DBI::dbGetQuery(conn, query) %>%
     dplyr::transmute("catalog" = .data$database, .data$schema, "table" = .data$name, .data$temporary)
 
   if (!show_temporary) {
-    tables <- tables |>
+    tables <- tables %>%
       dplyr::filter(!.data$temporary)
   }
 
-  tables <- tables |>
+  tables <- tables %>%
     dplyr::select(!"temporary")
 
   if (!is.null(pattern)) {
-    tables <- tables |>
-      tidyr::unite("db_table_str", "catalog", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) |>
-      dplyr::filter(grepl(pattern, .data$db_table_str)) |>
+    tables <- tables %>%
+      tidyr::unite("db_table_str", "catalog", "schema", "table", sep = ".", na.rm = TRUE, remove = FALSE) %>%
+      dplyr::filter(grepl(pattern, .data$db_table_str)) %>%
       dplyr::select(!"db_table_str")
   }
 
@@ -179,7 +179,7 @@ get_tables.OdbcConnection <- function(conn, pattern = NULL, show_temporary = TRU
                  "INNER JOIN sys.schemas s",
                  "ON t.schema_id = s.schema_id")
 
-  tables <- DBI::dbGetQuery(conn, query) |>
+  tables <- DBI::dbGetQuery(conn, query) %>%
     dplyr::mutate(schema = dplyr::na_if(.data$schema, "dbo"))
 
   return(tables)
@@ -196,7 +196,7 @@ get_tables.DBIConnection <- function(conn, pattern = NULL, show_temporary = TRUE
   checkmate::assert_character(pattern, null.ok = TRUE)
 
   # Retrieve all objects in conn
-  objs <- DBI::dbListObjects(conn) |>
+  objs <- DBI::dbListObjects(conn) %>%
     dplyr::select(table)
 
   # purrr::map fails if .x is empty, avoid by returning early
@@ -204,18 +204,22 @@ get_tables.DBIConnection <- function(conn, pattern = NULL, show_temporary = TRUE
     return(data.frame(schema = character(), table = character()))
   }
 
-  tables <- objs$table |> # For each top-level object (except tables)...
-    purrr::map(\(.x) {
+  tables <- objs$table %>% # For each top-level object (except tables)...
+    purrr::map(~ {
       if (names(.x@name) == "table") {
         return(data.frame(schema = NA_character_, table = .x@name["table"]))
       }
 
       # ...retrieve all tables
-      DBI::dbListObjects(conn, .x) |>
-        dplyr::pull(table) |>
-        purrr::map(\(.y) data.frame(schema = .x@name, table = .y@name["table"])) |>
+      DBI::dbListObjects(conn, .x) %>%
+        dplyr::pull(table) %>%
+        purrr::map(
+          function(.y) {
+            data.frame(schema = .x@name, table = .y@name["table"])
+          }
+        ) %>%
         purrr::reduce(rbind.data.frame)
-    }) |>
+    }) %>%
     purrr::reduce(rbind.data.frame)
 
   # Skip dbplyr temporary tables

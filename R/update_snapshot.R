@@ -138,10 +138,10 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
 
   ### Check for current update status
-  db_latest <- db_table |>
-    dplyr::summarize(max(.data$from_ts, na.rm = TRUE)) |>
-    dplyr::pull() |>
-    as.character() |>
+  db_latest <- db_table %>%
+    dplyr::summarize(max(.data$from_ts, na.rm = TRUE)) %>%
+    dplyr::pull() %>%
+    as.character() %>%
     dplyr::coalesce("1900-01-01 00:00:00")
 
   # Convert timestamp to character to prevent inconsistent R behavior with date/timestamps
@@ -161,9 +161,9 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
 
   ### Filter and compute checksums for incoming data
-  .data <- .data |>
-    dplyr::ungroup() |>
-    filter_keys(filters) |>
+  .data <- .data %>%
+    dplyr::ungroup() %>%
+    filter_keys(filters) %>%
     dplyr::select(colnames(dplyr::select(db_table, !tidyselect::any_of(c("checksum", "from_ts", "until_ts")))))
 
   # Copy to the target connection if needed
@@ -177,14 +177,17 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   defer_db_cleanup(.data)
 
   ### Determine the next timestamp in the data (can be NA if none is found)
-  next_timestamp <- min(db_table |>
-                          dplyr::filter(.data$from_ts  > timestamp) |>
-                          dplyr::summarize(next_timestamp = min(.data$from_ts, na.rm = TRUE)) |>
-                          dplyr::pull("next_timestamp"),
-                        db_table |>
-                          dplyr::filter(.data$until_ts > timestamp) |>
-                          dplyr::summarize(next_timestamp = min(.data$until_ts, na.rm = TRUE)) |>
-                          dplyr::pull("next_timestamp")) |>
+  next_timestamp <- min(
+    db_table %>%
+      dplyr::filter(.data$from_ts  > timestamp) %>%
+      dplyr::summarize(next_timestamp = min(.data$from_ts, na.rm = TRUE)) %>%
+      dplyr::pull("next_timestamp"),
+    db_table %>%
+      dplyr::filter(.data$until_ts > timestamp) %>%
+      dplyr::summarize(next_timestamp = min(.data$until_ts, na.rm = TRUE)) %>%
+      dplyr::pull("next_timestamp")
+  ) %>%
+    as.POSIXct(origin = "1970-01-01") %>%
     strftime()
 
 
@@ -209,7 +212,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   # Generate SQL at lower level than tidyverse to get the affected rows without computing.
   slice_ts <- db_timestamp(timestamp, conn)
 
-  currently_valid_checksums <- db_table |>
+  currently_valid_checksums <- db_table %>%
     dplyr::select("checksum")
 
 
@@ -275,7 +278,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     # First we identify the records with this stitching
     consecutive_rows <- dplyr::inner_join(
       dplyr::tbl(conn, db_table_id),
-      dplyr::tbl(conn, db_table_id) |> dplyr::select("checksum", "from_ts", "until_ts"),
+      dplyr::tbl(conn, db_table_id) %>% dplyr::select("checksum", "from_ts", "until_ts"),
       suffix = c("", ".p"),
       sql_on = paste(
         '"RHS"."checksum" = "LHS"."checksum" AND ',
@@ -286,8 +289,8 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     # If the record has the earlier from_ts, we use the until_ts of the other.
     # If the record has the later from_ts, we set until_ts equal to from_ts to trigger
     # clean up later in update_snapshot.
-    consecutive_rows_fix <- consecutive_rows |>
-      dplyr::mutate("until_ts" = ifelse(.data$from_ts < .data$from_ts.p, .data$until_ts.p, .data$from_ts)) |>
+    consecutive_rows_fix <- consecutive_rows %>%
+      dplyr::mutate("until_ts" = ifelse(.data$from_ts < .data$from_ts.p, .data$until_ts.p, .data$from_ts)) %>%
       dplyr::select(!tidyselect::ends_with(".p"))
 
     if (inherits(conn, "duckdb_connection")) {
@@ -327,8 +330,8 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   # If several updates come in a single day, some records may have from_ts = until_ts.
   # Alternatively, the above handling of consecutive records will make records have from_ts = until_ts
   # We remove these records here
-  redundant_rows <- dplyr::tbl(conn, db_table_id) |>
-    dplyr::filter(.data$from_ts == .data$until_ts) |>
+  redundant_rows <- dplyr::tbl(conn, db_table_id) %>%
+    dplyr::filter(.data$from_ts == .data$until_ts) %>%
     dplyr::select("checksum", "from_ts")
 
   sql_fix_redundant <- dbplyr::sql_query_delete(

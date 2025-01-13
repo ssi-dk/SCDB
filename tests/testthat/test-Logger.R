@@ -92,8 +92,8 @@ test_that("Logger: logging to file works", {
 
   # Test logging to file has the right formatting and message type
   expect_no_message(logger$log_info("test filewriting", tic = logger$start_time))
-  tryCatch(logger$log_warn("test filewriting", tic = logger$start_time), warning = \(w) NULL)
-  tryCatch(logger$log_error("test filewriting", tic = logger$start_time), error = \(e) NULL)
+  tryCatch(logger$log_warn("test filewriting", tic = logger$start_time), warning = function(w) NULL)
+  tryCatch(logger$log_error("test filewriting", tic = logger$start_time), error = function(e) NULL)
 
   ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_true(logger$log_filename %in% dir(log_path))
@@ -401,7 +401,7 @@ test_that("Logger: log_file is NULL in database if not writing to file", {
     # Test that an error is thrown if the database record has been finalized
     expect_error(
       logger$log_to_db(message = "This should produce an error"),
-      r"{Logger has already been finalized\. Cannot write to database log table\.}"
+      "Logger has already been finalized\\. Cannot write to database log table\\."
     )
 
 
