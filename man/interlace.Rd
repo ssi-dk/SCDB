@@ -2,12 +2,9 @@
 % Please edit documentation in R/interlace.R
 \name{interlace}
 \alias{interlace}
-\alias{interlace_sql}
 \title{Combine any number of tables, where each has their own time axis of validity}
 \usage{
 interlace(tables, by = NULL, colnames = NULL)
-
-interlace_sql(tables, by = NULL, colnames = NULL)
 }
 \arguments{
 \item{tables}{(\code{list}(\code{tbl_dbi(1)}))\cr
@@ -32,8 +29,6 @@ The combination of input queries with a single, interlaced valid_from / valid_un
 \description{
 The function "interlaces" the queries and combines their validity time axes (valid_from and valid_until)
 onto a single time axis.
-
-\code{interlace_sql()} is deprecated in favor of \code{interlace()}
 }
 \examples{
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

@@ -14,6 +14,8 @@
 
 * `nrow()` now always returns integers (#163).
 
+* `interlace_sql` has been fully deprecated and removed (#169).
+
 ## Documentation
 
 * A vignette including benchmarks of `update_snapshot()` across various backends is added (#138).
