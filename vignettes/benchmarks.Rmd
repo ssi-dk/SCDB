@@ -129,7 +129,8 @@ g <- ggplot2::ggplot(
   ggplot2::stat_summary(
     fun.data = mean_sd,
     geom = "pointrange",
-    size = 0.5, linewidth = 1,
+    size = 0.5, 
+    linewidth = 1,
     position = dodge
   ) +
   ggplot2::scale_x_discrete(guide = ggplot2::guide_axis(n.dodge = 2)) +
