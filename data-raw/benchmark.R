@@ -144,7 +144,7 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
           "n" = n
         )
 
-      dir.create("inst/extdata", showWarnings = FALSE)
+      dir.create("inst/extdata", showWarnings = FALSE, recursive = TRUE)
       saveRDS(
         update_snapshot_benchmark,
         glue::glue("inst/extdata/benchmark-update_snapshot_{names(conns)[[1]]}_{version}.rds")
@@ -174,7 +174,7 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
             "n" = n
           )
 
-        dir.create("inst/extdata", showWarnings = FALSE)
+        dir.create("inst/extdata", showWarnings = FALSE, recursive = TRUE)
         saveRDS(
           update_snapshot_benchmark,
           glue::glue("inst/extdata/benchmark-update_snapshot_complexity_{n}_{names(conns)[[1]]}_{version}.rds")
