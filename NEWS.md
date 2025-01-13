@@ -2,7 +2,7 @@
 
 ## New features
 
-* Added function `create_index` to allow easy creating of an index on a table (#137).
+* Added function `create_index()` to allow easy creating of an index on a table (#137).
 
 ## Improvements and Fixes
 
