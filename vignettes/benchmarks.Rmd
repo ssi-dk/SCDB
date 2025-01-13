@@ -132,11 +132,9 @@ g <- ggplot2::ggplot(
     size = 0.5, linewidth = 1,
     position = dodge
   ) +
+  ggplot2::scale_x_discrete(guide = ggplot2::guide_axis(n.dodge = 2)) +
   ggplot2::labs(x = "Codebase version", y = "Time (s)") +
-  ggplot2::theme(
-    legend.position = "bottom",
-    legend.justification = "left"
-  )
+  ggplot2::theme(legend.position = "bottom")
 
 
 if (on_cran) {
@@ -144,7 +142,7 @@ if (on_cran) {
   g <- g + ggplot2::theme(text = ggplot2::element_text(size = 8))
 
   # Make the legend two rows
-  g <- g + ggplot2::guides(color = ggplot2::guide_legend(nrow = 2, byrow = TRUE))
+  g <- g + ggplot2::guides(color = ggplot2::guide_legend(title = "", nrow = 2, byrow = TRUE))
 
 } else {
   # Add facets to non-CRAN rendering
@@ -225,7 +223,7 @@ if (on_cran) {
   g <- g + ggplot2::theme(text = ggplot2::element_text(size = 8))
 
   # Make the legend two rows
-  g <- g + ggplot2::guides(color = ggplot2::guide_legend(nrow = 2, byrow = TRUE))
+  g <- g + ggplot2::guides(color = ggplot2::guide_legend(title = "", nrow = 2, byrow = TRUE))
 
 } else {
   # Add facets to non-CRAN rendering
