@@ -47,12 +47,14 @@ All benchmarks are run on the same machine.
 ```{r benchmark context, results = "asis", include = FALSE}
 if (on_cran) {
   cat(
-    "The results of the benchmark are shown graphically below (mean and standard deviation), where measure the",
+    "The results of the benchmark are shown graphically below",
+    "(mean and standard deviation), where measure the",
     "performance of `SCDB`."
   )
 } else {
   cat(
-    "The results of the benchmark are shown graphically below (mean and standard deviation), where we compare the",
+    "The results of the benchmark are shown graphically below",
+    "(mean and standard deviation), where we compare the",
     "current development version of `SCDB` with the current CRAN version."
   )
 }
@@ -87,16 +89,20 @@ on_main <- tryCatch({
 })
 
 # If we are on CRAN, use the newest benchmark (version = sha)
-# This benchmark is then labelled with the newest version number of SCDB (the one we just deployed to CRAN)
+# This benchmark is then labelled with the newest version number of SCDB
+# (the one we just deployed to CRAN)
 if (on_cran) {
   benchmarks <- benchmarks %>%
     dplyr::filter(.data$version == !!sha) %>%
     dplyr::mutate("version" = paste0("SCDB v", packageVersion("SCDB")))
 } else if (on_main) {
-  # If the SHA has been merged, use as the "main" version and remove the other, older, main version
+  # If the SHA has been merged, use as the "main" version and remove the other,
+  # older, main version
   benchmarks <- benchmarks %>%
     dplyr::filter(.data$version != "main") %>%
-    dplyr::mutate("version" = dplyr::if_else(.data$version == sha, "development", .data$version))
+    dplyr::mutate(
+      "version" = dplyr::if_else(.data$version == sha, "development", .data$version)
+    )
 }
 
 # Mean and standard deviation (see ggplot2::mean_se())
@@ -129,7 +135,7 @@ g <- ggplot2::ggplot(
   ggplot2::stat_summary(
     fun.data = mean_sd,
     geom = "pointrange",
-    size = 0.5, 
+    size = 0.5,
     linewidth = 1,
     position = dodge
   ) +
@@ -143,16 +149,18 @@ if (on_cran) {
   g <- g + ggplot2::theme(text = ggplot2::element_text(size = 8))
 
   # Make the legend two rows
-  g <- g + ggplot2::guides(color = ggplot2::guide_legend(title = "", nrow = 2, byrow = TRUE))
+  g <- g + ggplot2::guides(
+    color = ggplot2::guide_legend(title = "", nrow = 2, byrow = TRUE)
+  )
 
 } else {
   # Add facets to non-CRAN rendering
   g <- g +
-  ggplot2::facet_grid(
-    rows = ggplot2::vars(benchmark_function),
-    cols = ggplot2::vars(database),
-    labeller = labeller
-  )
+    ggplot2::facet_grid(
+      rows = ggplot2::vars(benchmark_function),
+      cols = ggplot2::vars(database),
+      labeller = labeller
+    )
 }
 
 g
@@ -224,16 +232,18 @@ if (on_cran) {
   g <- g + ggplot2::theme(text = ggplot2::element_text(size = 8))
 
   # Make the legend two rows
-  g <- g + ggplot2::guides(color = ggplot2::guide_legend(title = "", nrow = 2, byrow = TRUE))
+  g <- g + ggplot2::guides(
+    color = ggplot2::guide_legend(title = "", nrow = 2, byrow = TRUE)
+  )
 
 } else {
   # Add facets to non-CRAN rendering
   g <- g +
-  ggplot2::facet_grid(
-    rows = ggplot2::vars(benchmark_function),
-    cols = ggplot2::vars(database),
-    labeller = labeller
-  )
+    ggplot2::facet_grid(
+      rows = ggplot2::vars(benchmark_function),
+      cols = ggplot2::vars(database),
+      labeller = labeller
+    )
 }
 
 g
