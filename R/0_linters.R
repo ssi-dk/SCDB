@@ -17,6 +17,7 @@ diseasy_code_linters <- function() {
       "documentation_template_linter" = documentation_template_linter()
     ),
     lintr::all_linters(
+      object_length_linter = lintr::object_length_linter(length = 40L), # We allow for longer variable names
       line_length_linter = NULL,          # We use 120, nolint-aware line length linter instead
       cyclocomp_linter = NULL,            # Not required in diseasy style guide
       keyword_quote_linter = NULL,        # Not required in diseasy style guide
@@ -269,7 +270,7 @@ param_and_field_linter <- function() {
 
       # Remove auto-generated documentation
       detection_info <- detection_info |>
-        dplyr::filter(!stringr::str_detect(.data$rd_line, r"{@(param|field) +[\.\w]+ +`r }"))
+        dplyr::filter(!stringr::str_detect(.data$rd_line, r"{@(param|field) +[\.\,\w]+ +`r }"))
 
 
 

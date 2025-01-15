@@ -61,7 +61,8 @@ test_that("param_and_field_linter works", {
 test_that("documentation_template_linter works", {
   skip_if_not_installed("lintr")
   skip_if_not_installed("devtools")
-  skip_if(!identical(Sys.getenv("R_CHECK"), "true"), "Skip if running in R_check")
+  skip_if(!interactive(), "Skip if running in R_check")
+  skip_on_cran()
 
   lintr::expect_lint(
     "#' @param observable text", # rd_observable defined in R/0_documentation.R                                         # nolint: documentation_template_linter, param_and_field_linter
