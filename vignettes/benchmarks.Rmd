@@ -14,8 +14,9 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-# Set a flag to determine if this is being run on CRAN
-on_cran <- !identical(Sys.getenv("NOT_CRAN"), "true")
+# Set a flag to determine if the vignette should be run in simple context (vignettes)
+# or in an extended context (pkgdown)
+simple_rendering <- !pkgdown::in_pkgdown()
 
 # NOTE:
 # To re-run the benchmarks, run the "benchmark" workflow on GitHub
@@ -45,7 +46,7 @@ The performance of this benchmark function is timed with the `{microbenchmark}` 
 All benchmarks are run on the same machine.
 
 ```{r benchmark context, results = "asis", include = FALSE}
-if (on_cran) {
+if (simple_rendering) {
   cat(
     "The results of the benchmark are shown graphically below",
     "(mean and standard deviation), where measure the",
@@ -88,10 +89,9 @@ on_main <- tryCatch({
   return(identical(Sys.getenv("CI"), "true"))
 })
 
-# If we are on CRAN, use the newest benchmark (version = sha)
+# In the simple context we use the newest benchmark (version = sha)
 # This benchmark is then labelled with the newest version number of SCDB
-# (the one we just deployed to CRAN)
-if (on_cran) {
+if (simple_rendering) {
   benchmarks <- benchmarks %>%
     dplyr::filter(.data$version == !!sha) %>%
     dplyr::mutate("version" = paste0("SCDB v", packageVersion("SCDB")))
@@ -144,8 +144,8 @@ g <- ggplot2::ggplot(
   ggplot2::theme(legend.position = "bottom")
 
 
-if (on_cran) {
-  # Reduce font size for CRAN version
+if (simple_rendering) {
+  # Reduce font size for simple version
   g <- g + ggplot2::theme(text = ggplot2::element_text(size = 8))
 
   # Make the legend two rows
@@ -154,7 +154,7 @@ if (on_cran) {
   )
 
 } else {
-  # Add facets to non-CRAN rendering
+  # Add facets to extended rendering
   g <- g +
     ggplot2::facet_grid(
       rows = ggplot2::vars(benchmark_function),
@@ -201,8 +201,8 @@ benchmark_2 <- benchmarks %>%
 # Apply "dodging" to sub-groups to show graphically
 dodge <- ggplot2::position_dodge(width = 0.6)
 
-# Set aesthetics for CRAN and non-CRAN versions
-if (on_cran) {
+# Set aesthetics for simple and extended versions
+if (simple_rendering) {
   aes <- ggplot2::aes(x = n * nrow(iris) / 1e3, y = time / 1e9, color = database)
 } else {
   aes <- ggplot2::aes(x = n * nrow(iris) / 1e3, y = time / 1e9, color = version)
@@ -227,8 +227,8 @@ g <- ggplot2::ggplot(
   ggplot2::theme(panel.spacing = grid::unit(1, "lines"), legend.position = "bottom")
 
 
-if (on_cran) {
-  # Reduce font size for CRAN version
+if (simple_rendering) {
+  # Reduce font size for simple version
   g <- g + ggplot2::theme(text = ggplot2::element_text(size = 8))
 
   # Make the legend two rows
@@ -237,7 +237,7 @@ if (on_cran) {
   )
 
 } else {
-  # Add facets to non-CRAN rendering
+  # Add facets to extended rendering
   g <- g +
     ggplot2::facet_grid(
       rows = ggplot2::vars(benchmark_function),
