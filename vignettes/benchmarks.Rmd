@@ -14,6 +14,10 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+# Set a flag to determine if the vignette should be run in simple context (vignettes)
+# or in an extended context (pkgdown)
+simple_rendering <- !pkgdown::in_pkgdown()
+
 # NOTE:
 # To re-run the benchmarks, run the "benchmark" workflow on GitHub
 ```
@@ -41,8 +45,21 @@ then update it to the second and third snapshot. Finally, the table is deleted.
 The performance of this benchmark function is timed with the `{microbenchmark}` package using 10 replicates.
 All benchmarks are run on the same machine.
 
-The results of the benchmark are shown graphically below (mean and standard deviation), where we compare the current
-development version of `SCDB` with the current CRAN version.
+```{r benchmark context, results = "asis", include = FALSE}
+if (simple_rendering) {
+  cat(
+    "The results of the benchmark are shown graphically below",
+    "(mean and standard deviation), where measure the",
+    "performance of `SCDB`."
+  )
+} else {
+  cat(
+    "The results of the benchmark are shown graphically below",
+    "(mean and standard deviation), where we compare the",
+    "current development version of `SCDB` with the current CRAN version."
+  )
+}
+```
 
 ```{r benchmark_preprocessing, echo = FALSE, eval = requireNamespace("here")}
 benchmark_location <- c(
@@ -52,12 +69,13 @@ benchmark_location <- c(
   purrr::discard(~ identical(., "")) %>%
   purrr::pluck(1)
 
-benchmarks <- readRDS(benchmark_location)
+benchmarks <- readRDS(benchmark_location) %>%
+  dplyr::mutate("version" = as.character(.data$version))
 
 # Determine if the SHA is on main
 sha <- benchmarks %>%
-  dplyr::distinct(version) %>%
-  dplyr::filter(!(version %in% c("CRAN", "main", "branch"))) %>%
+  dplyr::distinct(.data$version) %>%
+  dplyr::filter(!startsWith(.data$version, "SCDB"), .data$version != "main") %>%
   dplyr::pull("version")
 
 # Check local git history
@@ -71,13 +89,19 @@ on_main <- tryCatch({
   return(identical(Sys.getenv("CI"), "true"))
 })
 
-# If the SHA has been merged, use as the "main" version and remove the other,
-# older, main version
-if (on_main) {
+# In the simple context we use the newest benchmark (version = sha)
+# This benchmark is then labelled with the newest version number of SCDB
+if (simple_rendering) {
+  benchmarks <- benchmarks %>%
+    dplyr::filter(.data$version == !!sha) %>%
+    dplyr::mutate("version" = paste0("SCDB v", packageVersion("SCDB")))
+} else if (on_main) {
+  # If the SHA has been merged, use as the "main" version and remove the other,
+  # older, main version
   benchmarks <- benchmarks %>%
     dplyr::filter(.data$version != "main") %>%
     dplyr::mutate(
-      "version" = dplyr::if_else(.data$version == "CRAN", "CRAN", "development")
+      "version" = dplyr::if_else(.data$version == sha, "development", .data$version)
     )
 }
 
@@ -96,45 +120,47 @@ benchmark_1 <- benchmarks %>%
     !stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity"))
   )
 
-# Add note slow backends
-slow_backends <- benchmark_1 %>%
-  dplyr::distinct(.data$database, .data$n) %>%
-  dplyr::filter(.data$n < max(.data$n)) %>%
-  dplyr::pull("database")
-
-benchmark_1 <- benchmark_1 %>%
-  dplyr::mutate(
-    "database" = paste0(database, ifelse(database %in% slow_backends, "*", ""))
-  )
-
 # Insert newline into database name to improve rendering of figures
 labeller <- ggplot2::as_labeller(
   function(l) stringr::str_replace_all(l, stringr::fixed(" v"), "\nv")
 )
 
-
+# Apply "dodging" to sub-groups to show graphically
+dodge <- ggplot2::position_dodge(width = 0.6)
 
 g <- ggplot2::ggplot(
   benchmark_1,
-  ggplot2::aes(x = version, y = time / 1e9)
+  ggplot2::aes(x = version, y = time / 1e9, color = database)
 ) +
   ggplot2::stat_summary(
     fun.data = mean_sd,
     geom = "pointrange",
     size = 0.5,
-    linewidth = 1
+    linewidth = 1,
+    position = dodge
   ) +
-  ggplot2::facet_grid(
-    rows = ggplot2::vars(benchmark_function),
-    cols = ggplot2::vars(database),
-    labeller = labeller
-  ) +
-  ggplot2::labs(x = "Codebase version", y = "Time (s)")
+  ggplot2::scale_x_discrete(guide = ggplot2::guide_axis(n.dodge = 2)) +
+  ggplot2::labs(x = "Codebase version", y = "Time (s)") +
+  ggplot2::theme(legend.position = "bottom")
 
-if (length(slow_backends) > 1) {
-  g <- g + ggplot2::labs(
-    caption = "* IMPORTANT: Benchmark data halved for this backend!"
+
+if (simple_rendering) {
+  # Reduce font size for simple version
+  g <- g + ggplot2::theme(text = ggplot2::element_text(size = 8))
+
+  # Make the legend two rows
+  g <- g + ggplot2::guides(
+    color = ggplot2::guide_legend(title = "", nrow = 2, byrow = TRUE)
   )
+
+} else {
+  # Add facets to extended rendering
+  g <- g +
+    ggplot2::facet_grid(
+      rows = ggplot2::vars(benchmark_function),
+      cols = ggplot2::vars(database),
+      labeller = labeller
+    )
 }
 
 g
@@ -171,26 +197,54 @@ benchmark_2 <- benchmarks %>%
     )
   )
 
-ggplot2::ggplot(
+
+# Apply "dodging" to sub-groups to show graphically
+dodge <- ggplot2::position_dodge(width = 0.6)
+
+# Set aesthetics for simple and extended versions
+if (simple_rendering) {
+  aes <- ggplot2::aes(x = n * nrow(iris) / 1e3, y = time / 1e9, color = database)
+} else {
+  aes <- ggplot2::aes(x = n * nrow(iris) / 1e3, y = time / 1e9, color = version)
+}
+
+g <- ggplot2::ggplot(
   benchmark_2,
-  ggplot2::aes(x = n * nrow(iris) / 1e3, y = time / 1e9, color = version)
+  aes
 ) +
   ggplot2::stat_summary(
     fun.data = mean_sd,
     geom = "pointrange",
-    size = 0.5,
-    linewidth = 1
+    size = 0.5, linewidth = 1,
+    position = dodge
   ) +
   ggplot2::geom_smooth(method = "lm", formula = y ~ x, se = FALSE, linetype = 3) +
-  ggplot2::facet_grid(
-    rows = ggplot2::vars(benchmark_function),
-    cols = ggplot2::vars(database),
-    labeller = labeller
-  ) +
   ggplot2::labs(
     x = "Data size (1,000 rows)",
     y = "Time (s)",
     color = "Codebase version"
   ) +
   ggplot2::theme(panel.spacing = grid::unit(1, "lines"), legend.position = "bottom")
+
+
+if (simple_rendering) {
+  # Reduce font size for simple version
+  g <- g + ggplot2::theme(text = ggplot2::element_text(size = 8))
+
+  # Make the legend two rows
+  g <- g + ggplot2::guides(
+    color = ggplot2::guide_legend(title = "", nrow = 2, byrow = TRUE)
+  )
+
+} else {
+  # Add facets to extended rendering
+  g <- g +
+    ggplot2::facet_grid(
+      rows = ggplot2::vars(benchmark_function),
+      cols = ggplot2::vars(database),
+      labeller = labeller
+    )
+}
+
+g
 ```

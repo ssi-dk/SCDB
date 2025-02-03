@@ -131,7 +131,7 @@
     {
       "ref": "bit64",
       "package": "bit64",
-      "version": "4.5.2",
+      "version": "4.6.0-1",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -143,10 +143,10 @@
         "RemoteRef": "bit64",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "4.5.2"
+        "RemoteSha": "4.6.0-1"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/bit64_4.5.2.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/bit64_4.5.2.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/bit64_4.6.0-1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/bit64_4.6.0-1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -2887,7 +2887,7 @@
     {
       "ref": "pak",
       "package": "pak",
-      "version": "0.8.0",
+      "version": "0.8.0.1",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -2899,10 +2899,10 @@
         "RemoteRef": "pak",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "0.8.0"
+        "RemoteSha": "0.8.0.1"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/pak_0.8.0.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/pak_0.8.0.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/pak_0.8.0.1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/pak_0.8.0.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -2980,7 +2980,7 @@
     {
       "ref": "pkgbuild",
       "package": "pkgbuild",
-      "version": "1.4.5",
+      "version": "1.4.6",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -2992,10 +2992,10 @@
         "RemoteRef": "pkgbuild",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.4.5"
+        "RemoteSha": "1.4.6"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/pkgbuild_1.4.5.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/pkgbuild_1.4.5.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/pkgbuild_1.4.6.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/pkgbuild_1.4.6.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -4387,11 +4387,11 @@
     {
       "ref": "systemfonts",
       "package": "systemfonts",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": "lifecycle",
+      "dependencies": ["jsonlite", "lifecycle"],
       "vignettes": false,
       "metadata": {
         "RemotePkgRef": "systemfonts",
@@ -4399,10 +4399,10 @@
         "RemoteRef": "systemfonts",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.1.0"
+        "RemoteSha": "1.2.0"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/systemfonts_1.1.0.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/systemfonts_1.1.0.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/systemfonts_1.2.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/systemfonts_1.2.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
