@@ -1,7 +1,7 @@
 Package: SCDB
 Type: Package
 Title: Easily Access and Maintain Time-Based Versioned Data (Slowly-Changing-Dimension)
-Version: 0.4.1.9000
+Version: 0.5.0.9000
 Authors@R:
 	  c(person("Rasmus Skytte", "Randl\U00F8v", , "rske@ssi.dk",
 	           role = c("aut", "cre", "rev"),
@@ -11,6 +11,7 @@ Authors@R:
 	           comment = c(ORCID = "0009-0006-8090-406X")),
         person("Lasse Engbo", "Christiansen", , "lsec@ssi.dk", role = c("rev"),
              comment = c(ORCID = "0000-0001-5019-1931")),
+        person("Sofia Myrup", "Otero", , "smot@ssi.dk", role = c("rev")),
 	    person("Statens Serum Institut",
 	           role = c("cph", "fnd")))
 Description: A collection of functions that enable easy access and updating of a database of data over time.
@@ -29,7 +30,6 @@ Imports:
     dbplyr (>= 2.4.0),
     dplyr,
     glue,
-    lifecycle,
     methods,
     openssl,
     parallelly,

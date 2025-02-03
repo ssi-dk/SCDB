@@ -1,8 +1,10 @@
 # SCDB (development version)
 
+# SCDB 0.5.0
+
 ## New features
 
-* Added function `create_index` to allow easy creating of an index on a table (#137).
+* Added function `create_index()` to allow easy creating of an index on a table (#137).
 
 ## Improvements and Fixes
 
@@ -11,6 +13,10 @@
 * `*_joins()` can now take `dplyr::join_by()` as `by` argument when no `na_by` argument is given (#156).
 
 * `SCDB` has been made backwards compatibility to R >= 3.6 (#164).
+
+* `nrow()` now always returns integers (#163).
+
+* `interlace_sql` has been fully deprecated and removed (#169).
 
 ## Documentation
 
