@@ -3,6 +3,7 @@
 <url><loc>https://ssi-dk.github.io/SCDB/LICENSE.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/PULL_REQUEST_TEMPLATE.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/articles/SCDB.html</loc></url>
+<url><loc>https://ssi-dk.github.io/SCDB/articles/benchmarks.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/articles/index.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/articles/slowly-changing-dimension.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/authors.html</loc></url>
@@ -12,6 +13,7 @@
 <url><loc>https://ssi-dk.github.io/SCDB/reference/LoggerNull.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/reference/SCDB-package.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/reference/close_connection.html</loc></url>
+<url><loc>https://ssi-dk.github.io/SCDB/reference/create_index.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/reference/create_logs_if_missing.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/reference/create_table.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/reference/db_locks.html</loc></url>
@@ -29,6 +31,7 @@
 <url><loc>https://ssi-dk.github.io/SCDB/reference/is.historical.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/reference/joins.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/reference/nrow.html</loc></url>
+<url><loc>https://ssi-dk.github.io/SCDB/reference/pipe.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/reference/schema_exists.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/reference/slice_time.html</loc></url>
 <url><loc>https://ssi-dk.github.io/SCDB/reference/table_exists.html</loc></url>
