@@ -89,7 +89,7 @@ lock_table <- function(conn, db_table, schema = NULL) {
           "pid" = Sys.getpid(),
           "lock_start" = as.numeric(Sys.time())
         ),
-        name = unique_table_name()
+        name = unique_table_name("SCDB_lock")
       )
 
       dplyr::rows_insert(db_lock_table, lock, by = c("schema", "table"), conflict = "ignore", in_place = TRUE)
@@ -172,7 +172,7 @@ unlock_table <- function(conn, db_table, schema = NULL, pid = Sys.getpid()) {
           "table" = purrr::pluck(db_table_id, "name", "table"),
           "pid" = pid
         ),
-        name = unique_table_name()
+        name = unique_table_name("SCDB_lock")
       )
 
       dplyr::rows_delete(db_lock_table, lock, by = c("schema", "table", "pid"), unmatched = "ignore", in_place = TRUE)
