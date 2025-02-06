@@ -73,11 +73,11 @@ digest_to_checksum.default <- function(
       dplyr::across(tidyselect::all_of(col), openssl::md5)
     ) %>%
     dplyr::copy_to(dbplyr::remote_con(.data), df = ., name = unique_table_name("SCDB_digest_to_checksum_helper"))
+  defer_db_cleanup(checksums)
 
   .data <- .data %>%
     dplyr::mutate(id__ = dplyr::row_number()) %>%
-    dplyr::left_join(checksums, by = "id__", copy = TRUE) %>%
-    dplyr::select(!"id__")
+    dplyr::left_join(checksums, by = "id__") %>%
     dplyr::select(!"id__") %>%
     dplyr::compute(unique_table_name("SCDB_digest_to_checksum"))
 
