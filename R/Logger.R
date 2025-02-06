@@ -193,7 +193,7 @@ Logger <- R6::R6Class(                                                          
         patch <- dplyr::copy_to(
           dest = private$log_conn,
           df = patch,
-          name = unique_table_name(),
+          name = unique_table_name("SCDB_logger_patch"),
           temporary = TRUE
         )
         defer_db_cleanup(patch) # Clean up on exit
@@ -344,7 +344,7 @@ Logger <- R6::R6Class(                                                          
       patch <- dplyr::copy_to(
         dest = private$log_conn,
         df = patch,
-        name = unique_table_name(),
+        name = unique_table_name("SCDB_logger_patch"),
         temporary = TRUE
       )
       defer_db_cleanup(patch) # Clean up on exit

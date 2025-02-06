@@ -2849,7 +2849,7 @@
     {
       "ref": "openssl",
       "package": "openssl",
-      "version": "2.3.1",
+      "version": "2.3.2",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -2861,10 +2861,10 @@
         "RemoteRef": "openssl",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "2.3.1"
+        "RemoteSha": "2.3.2"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/openssl_2.3.1.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/openssl_2.3.1.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/openssl_2.3.2.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/openssl_2.3.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -3297,7 +3297,7 @@
     {
       "ref": "purrr",
       "package": "purrr",
-      "version": "1.0.2",
+      "version": "1.0.4",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -3309,10 +3309,10 @@
         "RemoteRef": "purrr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.0.2"
+        "RemoteSha": "1.0.4"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/purrr_1.0.2.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/purrr_1.0.2.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/purrr_1.0.4.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/purrr_1.0.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -4163,7 +4163,7 @@
     {
       "ref": "sessioninfo",
       "package": "sessioninfo",
-      "version": "1.2.2",
+      "version": "1.2.3",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -4175,10 +4175,10 @@
         "RemoteRef": "sessioninfo",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.2.2"
+        "RemoteSha": "1.2.3"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/sessioninfo_1.2.2.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/sessioninfo_1.2.2.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/sessioninfo_1.2.3.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/sessioninfo_1.2.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,

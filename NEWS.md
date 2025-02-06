@@ -1,5 +1,10 @@
 # SCDB (development version)
 
+## Improvements and Fixes
+
+* Intermediary tables are now being cleaned up (#174).
+
+
 # SCDB 0.5.0
 
 ## New features
