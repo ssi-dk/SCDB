@@ -1,5 +1,11 @@
 # SCDB (development version)
 
+## Improvements and Fixes
+
+* `defer_db_cleanup()` now returns `db_table` (invisibly) for inline manipulation (#173)
+
+
+
 # SCDB 0.5.0
 
 ## New features

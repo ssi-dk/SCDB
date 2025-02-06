@@ -48,6 +48,28 @@ test_that("defer_db_cleanup() works with withr::deferred_run", {
 })
 
 
+test_that("defer_db_cleanup() works inline", {
+  for (conn in get_test_conns()) {
+    mt <- dplyr::copy_to(conn, mtcars, unique_table_name())
+    mt_id <- id(mt)
+
+    mt_modified <- mt %>%
+      defer_db_cleanup() %>%
+      dplyr::mutate("test" = 2)
+
+
+    expect_no_error(dplyr::collect(mt_modified)) # mt_modified is fully working table
+    expect_true(DBI::dbExistsTable(conn, mt_id)) # mt exists
+
+    expect_message(withr::deferred_run(), "Ran 1/1 deferred expressions")
+
+    expect_false(DBI::dbExistsTable(conn, mt_id)) # mt no longer exists
+
+    connection_clean_up(conn)
+  }
+})
+
+
 test_that("unique_table_name() works", {
   table_1 <- unique_table_name()
   table_2 <- unique_table_name()
