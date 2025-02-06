@@ -79,6 +79,8 @@ defer_db_cleanup <- function(db_table) {
       DBI::dbRemoveTable(conn, db_table_id)
     }
   )
+
+  return(invisible(db_table))
 }
 
 
