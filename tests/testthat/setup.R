@@ -63,10 +63,15 @@ for (conn in get_test_conns()) {
 #' @template conn
 #' @return NULL (called for side effects)
 #' @import rlang .data
+#' @importFrom magrittr %>%
 #' @noRd
 connection_clean_up <- function(conn) {
-  if (nrow(dplyr::filter(get_tables(conn, show_temporary = TRUE), stringr::str_detect(.data$table, "^#?dbplyr_")))) {
-    warning("Temporary dbplyr tables ('dbplyr_###') are not cleaned up!")
+  dbplyr_tables <- get_tables(conn, show_temporary = TRUE) %>%
+    dplyr::pull("table") %>%
+    purrr::keep(~ stringr::str_detect(., "^#?dbplyr_"))
+
+  if (length(dbplyr_tables) > 0) {
+    warning("Temporary dbplyr tables ('dbplyr_###') are not cleaned up!", call. = FALSE)
   }
   DBI::dbDisconnect(conn)
 }

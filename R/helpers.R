@@ -97,7 +97,7 @@ defer_db_cleanup <- function(db_table) {
 #' @return A character string for a table name based on the given scope parameter
 #' @export
 unique_table_name <- function(scope = "SCDB") {
-  name <- paste0(sample(c(letters, LETTERS, 0:9), 10, replace = TRUE), collapse = "")
+  name <- paste(sample(c(letters, LETTERS, 0:9), 10, replace = TRUE), collapse = "")
   return(glue::glue("{scope}_{name}"))
 }
 
