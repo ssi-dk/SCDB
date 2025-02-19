@@ -73,8 +73,14 @@ get_test_conns <- function(skip_backends = NULL) {
 
 
   get_driver <- function(x = character(), ...) {                                                                        # nolint: object_usage_linter
-    if (!grepl(".*::.*", x)) stop("Package must be specified with namespace (e.g. RSQLite::SQLite)!\n",
-                                  "Received: ", x)
+    if (!grepl(".*::.*", x)) {
+      stop(
+        "Package must be specified with namespace (e.g. RSQLite::SQLite)!\n",
+        "Received: ",
+        x,
+        call. = FALSE
+      )
+    }
     parts <- strsplit(x, "::", fixed = TRUE)[[1]]
 
     # Skip unavailable packages
@@ -168,7 +174,7 @@ checkmate_err_msg <- function(expr) {
       msg <- stringr::str_remove_all(msg, stringr::fixed("\n *"))
       msg <- stringr::str_remove_all(msg, stringr::fixed("* "))
 
-      stop(simpleError(message = msg))
+      stop(simpleError(message = msg))                                                                                  # nolint: condition_call_linter
     }
   )
 }

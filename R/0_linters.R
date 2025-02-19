@@ -20,13 +20,18 @@ diseasy_code_linters <- function() {
       object_length_linter = lintr::object_length_linter(length = 40L), # We allow for longer variable names
       line_length_linter = NULL,          # We use 120, nolint-aware line length linter instead
       cyclocomp_linter = NULL,            # Not required in diseasy style guide
-      keyword_quote_linter = NULL,        # Not required in diseasy style guide
-      implicit_integer_linter = NULL,     # Not required in diseasy style guide
-      extraction_operator_linter = NULL,  # Fails for .data$*
+      keyword_quote_linter = NULL,        # Quoting variables names improves readability over R defaults
+      implicit_integer_linter = NULL,     # Flags too many cases where integer status is not relevant
       nonportable_path_linter = NULL,     # Any \\ is flagged. Therefore fails when escaping backslashes
       undesirable_function_linter = NULL, # Library calls in vignettes are flagged and any call to options
       unnecessary_lambda_linter = NULL,   # Fails for purrr::map with additional function arguments
-      strings_as_factors_linter = NULL    # Seems to be some backwards compatibility stuff.
+      unnecessary_nesting_linter = NULL,  # Fails for purrr::map with additional function arguments
+      strings_as_factors_linter = NULL,   # Seems to be some backwards compatibility stuff.
+      return_linter = NULL,               # We use explicit return statements
+      one_call_pipe_linter = NULL,        # One-call pipes can improve readability and code mobility
+      nested_pipe_linter = NULL,          # Nested pipes can improve readability and code mobility
+      nzchar_linter = NULL,               # Testing for equality is simpler, more readable, and less janky
+      object_overwrite_linter = NULL      # It is reasonable to use simple names for things. Use scoping (::) instead
     )
   )
 
