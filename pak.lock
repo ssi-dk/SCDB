@@ -441,7 +441,7 @@
     {
       "ref": "cli",
       "package": "cli",
-      "version": "3.6.3",
+      "version": "3.6.4",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -453,10 +453,10 @@
         "RemoteRef": "cli",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "3.6.3"
+        "RemoteSha": "3.6.4"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/cli_3.6.3.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/cli_3.6.3.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/cli_3.6.4.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/cli_3.6.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -710,37 +710,6 @@
           "post_install": {}
         }
       ],
-      "needscompilation": false,
-      "repotype": "cranlike"
-    },
-    {
-      "ref": "cyclocomp",
-      "package": "cyclocomp",
-      "version": "1.1.1",
-      "type": "standard",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["callr", "crayon", "desc", "remotes", "withr"],
-      "vignettes": false,
-      "metadata": {
-        "RemotePkgRef": "cyclocomp",
-        "RemoteType": "standard",
-        "RemoteRef": "cyclocomp",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
-        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.1.1"
-      },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/cyclocomp_1.1.1.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/cyclocomp_1.1.1.tar.gz",
-      "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-      "rversion": "4.4",
-      "directpkg": false,
-      "license": "MIT + file LICENSE",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": "",
-      "sysreqs": "",
-      "sysreqs_packages": {},
       "needscompilation": false,
       "repotype": "cranlike"
     },
@@ -2501,11 +2470,11 @@
     {
       "ref": "lintr",
       "package": "lintr",
-      "version": "3.1.2",
+      "version": "3.2.0",
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["backports", "codetools", "cyclocomp", "digest", "glue", "knitr", "rex", "xml2", "xmlparsedata"],
+      "dependencies": ["backports", "cli", "codetools", "digest", "glue", "knitr", "rex", "xml2", "xmlparsedata"],
       "vignettes": false,
       "metadata": {
         "RemotePkgRef": "lintr",
@@ -2513,10 +2482,10 @@
         "RemoteRef": "lintr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "3.1.2"
+        "RemoteSha": "3.2.0"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/lintr_3.1.2.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/lintr_3.1.2.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/lintr_3.2.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/lintr_3.2.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -2849,7 +2818,7 @@
     {
       "ref": "openssl",
       "package": "openssl",
-      "version": "2.3.1",
+      "version": "2.3.2",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -2861,10 +2830,10 @@
         "RemoteRef": "openssl",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "2.3.1"
+        "RemoteSha": "2.3.2"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/openssl_2.3.1.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/openssl_2.3.1.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/openssl_2.3.2.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/openssl_2.3.2.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -3297,7 +3266,7 @@
     {
       "ref": "purrr",
       "package": "purrr",
-      "version": "1.0.2",
+      "version": "1.0.4",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -3309,10 +3278,10 @@
         "RemoteRef": "purrr",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.0.2"
+        "RemoteSha": "1.0.4"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/purrr_1.0.2.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/purrr_1.0.2.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/purrr_1.0.4.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/purrr_1.0.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -3328,7 +3297,7 @@
     {
       "ref": "R6",
       "package": "R6",
-      "version": "2.5.1",
+      "version": "2.6.1",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -3340,10 +3309,10 @@
         "RemoteRef": "R6",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "2.5.1"
+        "RemoteSha": "2.6.1"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/R6_2.5.1.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/R6_2.5.1.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/R6_2.6.1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/R6_2.6.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -4163,7 +4132,7 @@
     {
       "ref": "sessioninfo",
       "package": "sessioninfo",
-      "version": "1.2.2",
+      "version": "1.2.3",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -4175,10 +4144,10 @@
         "RemoteRef": "sessioninfo",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.2.2"
+        "RemoteSha": "1.2.3"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/sessioninfo_1.2.2.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/sessioninfo_1.2.2.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/sessioninfo_1.2.3.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/sessioninfo_1.2.3.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
