@@ -24,7 +24,7 @@ create_table <- function(.data, conn = NULL, db_table, ...) {                   
   checkmate::assert_character(names(.data), unique = TRUE)
 
   if (is.historical(.data)) {
-    stop("checksum/from_ts/until_ts column(s) already exist(s) in .data!")
+    stop("checksum/from_ts/until_ts column(s) already exist(s) in .data!", call. = FALSE)
   }
 
   # Add "metadata" columns to .data
@@ -77,7 +77,7 @@ create_table <- function(.data, conn = NULL, db_table, ...) {                   
 
   # Check if the table already exists
   if (table_exists(conn, id(db_table_id, conn))) {
-    stop("Table ", db_table_id, " already exists!")
+    stop("Table ", db_table_id, " already exists!", call. = FALSE)
   }
 
   # Create the table on the remote and return the table

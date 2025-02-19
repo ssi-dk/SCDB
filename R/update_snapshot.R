@@ -76,7 +76,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   if (table_exists(conn, db_table_id)) {
     # Obtain a lock on the table
     if (!lock_table(conn, db_table_id, schema = get_schema(db_table_id))) {
-      stop("A lock could not be obtained on the table")
+      stop("A lock could not be obtained on the table", call. = FALSE)
     }
 
     db_table <- dplyr::tbl(conn, db_table_id)

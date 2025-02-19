@@ -36,11 +36,10 @@ forecasts_full <- tribble(
 forecasts_scd <- forecasts_full %>%
   mutate(ForecastFrom = ForecastDate,
          ForecastUntil = case_when(
-           City == "Houston" ~ NA,
-           ForecastDate == "2023-09-29" ~ NA,
-           TRUE ~ "2023-09-29"
+           City == "Houston" ~ as.Date(NA),
+           ForecastDate == "2023-09-29" ~ as.Date(NA),
+           TRUE ~ as.Date("2023-09-29")
          )) %>%
-  mutate(across("ForecastUntil", as.Date)) %>%
   filter(!(City == "Houston" & ForecastFrom == "2023-09-29")) %>%
   distinct() %>%
   select(!"ForecastDate") %>%

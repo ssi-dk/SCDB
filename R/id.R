@@ -90,7 +90,8 @@ id.tbl_dbi <- function(db_table, ...) {
   if (is.null(dbplyr::remote_table(db_table))) {
     stop(
       "Table identification can only be determined if the lazy query is unmodified ",
-      "(i.e. no dplyr manipulation steps can be made)!"
+      "(i.e. no dplyr manipulation steps can be made)!",
+      call. = FALSE
     )
   }
 
@@ -99,7 +100,7 @@ id.tbl_dbi <- function(db_table, ...) {
 
   # Check table still exists
   if (!table_exists(table_conn, db_table)) {
-    stop("Table does not exist (anymore) and id cannot be determined!")
+    stop("Table does not exist (anymore) and id cannot be determined!", call. = FALSE)
   }
 
   table_ident <- dbplyr::remote_table(db_table)
@@ -110,7 +111,7 @@ id.tbl_dbi <- function(db_table, ...) {
     components <- components[rev(seq_along(components))] # Reverse order (table, schema?, catalog?)
 
     if (length(components) > 3) {
-      stop("Unknown table specification")
+      stop("Unknown table specification", call. = FALSE)
     }
 
     table <- purrr::pluck(components, 1)
@@ -143,7 +144,8 @@ id.tbl_dbi <- function(db_table, ...) {
         "Table identification has been corrupted! ",
         "The table ({paste(c(catalog, schema, table), collapse = '.')}) does not contain enough information about its ",
         "schema/catalog and multiple tables were matched."
-      )
+      ),
+      call. = FALSE
     )
   }
 

@@ -49,7 +49,7 @@ create_index.SQLiteConnection <- function(conn, db_table, columns) {
     purrr::map(
       c(
         schema,
-        paste0(c(table, "scdb_index", columns), collapse = "_")
+        paste(c(table, "scdb_index", columns), collapse = "_")
       ),
       shQuote
     ),

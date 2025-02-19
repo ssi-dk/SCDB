@@ -87,7 +87,7 @@ test_that("get_table() works when table does not exist in default schema", {
       )
 
     } else {
-      warning("Non-existing table in default schema could not be generated!")
+      warning("Non-existing table in default schema could not be generated!", call. = FALSE)
     }
 
     connection_clean_up(conn)
@@ -122,7 +122,7 @@ test_that("get_table() works when table does not exist in non-existing schema", 
       )
 
     } else {
-      warning("Non-existing schema could not be generated!")
+      warning("Non-existing schema could not be generated!", call. = FALSE)
     }
 
     connection_clean_up(conn)

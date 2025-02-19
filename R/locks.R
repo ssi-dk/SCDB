@@ -132,7 +132,8 @@ lock_table <- function(conn, db_table, schema = NULL) {
           "Active lock (user = {lock_owner_user}, PID = {lock_owner_pid}) ",
           "on table {db_table_id} is no longer a valid PID! ",
           "Process likely crashed before completing."
-        )
+        ),
+        call. = FALSE
       )
     }
 

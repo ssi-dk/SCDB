@@ -33,7 +33,7 @@ test_field_in_documentation <- function(field) {
 
   } else {
 
-    stop(".Rd files could not be located")
+    stop(".Rd files could not be located", call. = FALSE)
 
   }
 

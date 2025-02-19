@@ -69,7 +69,7 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
       version == "branch" ~ glue::glue("ssi-dk-SCDB-{sha}")
     )
 
-    library("SCDB", lib.loc = here::here("installations", lib_dir))
+    library("SCDB", lib.loc = here::here("installations", lib_dir))                                                     # nolint: library_call_linter
 
     # Add proper version labels to the benchmarks
     if (version == "CRAN") {
