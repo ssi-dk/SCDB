@@ -27,7 +27,7 @@ test_that("table_exists() works for default schema", {
       expect_false(table_exists(conn, DBI::Id(schema = get_schema(conn), table = invalid_table_name)))
 
     } else {
-      warning("Non-existing table in default schema could not be generated!")
+      warning("Non-existing table in default schema could not be generated!", call. = FALSE)
     }
 
     connection_clean_up(conn)
@@ -65,7 +65,7 @@ test_that("table_exists() works for non-default schema", {
       expect_false(table_exists(conn, DBI::Id(schema = invalid_schema_name, table = "mtcars")))
 
     } else {
-      warning("Non-existing schema could not be generated!")
+      warning("Non-existing schema could not be generated!", call. = FALSE)
     }
 
     connection_clean_up(conn)

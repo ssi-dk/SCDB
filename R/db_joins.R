@@ -309,7 +309,7 @@ semi_join.tbl_sql <- function(x, y, by = NULL, ...) {
     return(NextMethod("semi_join"))
   }
 
-  stop("Not implemented")
+  stop("Not implemented", call. = FALSE)
 }
 
 
@@ -323,5 +323,5 @@ anti_join.tbl_sql <- function(x, y, by = NULL, ...) {
     return(NextMethod("anti_join"))
   }
 
-  stop("Not implemented")
+  stop("Not implemented", call. = FALSE)
 }

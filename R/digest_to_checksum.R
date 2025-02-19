@@ -24,7 +24,10 @@ digest_to_checksum <- function(.data, col = "checksum", exclude = NULL) {
   checkmate::assert_character(exclude, null.ok = TRUE)
 
   if (as.character(dplyr::ensym(col)) %in% colnames(.data)) {
-    warning(glue::glue("Column {as.character(dplyr::ensym(col))} already exists in data and will be overwritten!"))
+    warning(
+      glue::glue("Column {as.character(dplyr::ensym(col))} already exists in data and will be overwritten!"),
+      call. = FALSE
+    )
   }
 
   UseMethod("digest_to_checksum", .data)

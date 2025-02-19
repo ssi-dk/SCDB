@@ -64,7 +64,7 @@ get_connection.SQLiteDriver <- function(
 
   # Check if connection can be established given these settings
   status <- do.call(DBI::dbCanConnect, args = args)
-  if (!status) stop(attr(status, "reason"))
+  if (!status) stop(attr(status, "reason"), call. = FALSE)
 
   return(do.call(DBI::dbConnect, args = args))
 }
@@ -122,7 +122,7 @@ get_connection.PqDriver <- function(
 
   # Check if connection can be established given these settings
   status <- do.call(DBI::dbCanConnect, args = args)
-  if (!status) stop(attr(status, "reason"))
+  if (!status) stop(attr(status, "reason"), call. = FALSE)
 
   return(do.call(DBI::dbConnect, args = args))
 }
@@ -166,7 +166,7 @@ get_connection.OdbcDriver <- function(
 
   # Check if connection can be established given these settings
   status <- do.call(DBI::dbCanConnect, args = args)
-  if (!status) stop(attr(status, "reason"))
+  if (!status) stop(attr(status, "reason"), call. = FALSE)
 
   return(do.call(DBI::dbConnect, args = args))
 }
@@ -220,13 +220,14 @@ get_connection.default <- function(drv, ...) {
 
   # Check if connection can be established given these settings
   status <- do.call(DBI::dbCanConnect, args = args)
-  if (!status) stop(attr(status, "reason"))
+  if (!status) stop(attr(status, "reason"), call. = FALSE)
 
   conn <- do.call(DBI::dbConnect, args = args)
 
   warning(
     "Connections of class '", class(conn),
-    "' is currently not formally supported and SCDB may not perform as expected."
+    "' is currently not formally supported and SCDB may not perform as expected.",
+    call. = FALSE
   )
 
   return(conn)

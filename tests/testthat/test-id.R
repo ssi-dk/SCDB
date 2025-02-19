@@ -69,7 +69,7 @@ test_that("id() works for character input with implied schema when schema does n
       )
 
     } else {
-      warning("Non-existing schema could not be generated!")
+      warning("Non-existing schema could not be generated!", call. = FALSE)
     }
 
     connection_clean_up(conn)

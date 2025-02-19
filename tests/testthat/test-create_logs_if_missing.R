@@ -57,7 +57,7 @@ test_that("create_logs_if_missing() can create logs in default and test schema",
         expect_identical(nrow(dplyr::tbl(conn, id(logs_id, conn))), 0L)
 
       } else {
-        warning("Non-existing table in default schema could not be generated!")
+        warning("Non-existing table in default schema could not be generated!", call. = FALSE)
       }
 
     }

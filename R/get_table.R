@@ -47,7 +47,7 @@ get_table <- function(conn, db_table = NULL, slice_ts = NA, include_slice_info =
   tryCatch({
     q <- dplyr::tbl(conn, db_table_id)
   }, error = function(e) {
-    stop(glue::glue("Table {as.character(db_table_id)} could not be found!"))
+    stop(glue::glue("Table {as.character(db_table_id)} could not be found!"), call. = FALSE)
   })
 
   # Check whether data is historical
