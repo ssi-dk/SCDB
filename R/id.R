@@ -20,7 +20,7 @@
 #' @return
 #'   A `DBI::Id` object parsed from db_table (see details).
 #' @examples
-#'   id("schema.table")
+#' id("schema.table")
 #' @seealso [DBI::Id] which this function wraps.
 #' @export
 id <- function(db_table, ...) {
@@ -138,7 +138,7 @@ id.tbl_dbi <- function(db_table, ...) {
   if (!is.null(schema)) matches <- dplyr::filter(matches, .data$schema == !!schema)
   if (!is.null(catalog)) matches <- dplyr::filter(matches, .data$catalog == !!catalog)
 
-  if (nrow(matches) > 1)  {
+  if (nrow(matches) > 1) {
     stop(
       glue::glue(
         "Table identification has been corrupted! ",

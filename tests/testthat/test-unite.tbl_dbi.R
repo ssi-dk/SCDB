@@ -25,38 +25,46 @@ test_that("unite.tbl_dbi() works", {
     # is to account for SQLite not having integer data-types. If we do not first convert to character,
     # there will be differences between the objects that are trivial, so we remove these with this operation
     # this way, the test should (hopefully) only fail if there are non-trivial differences
-    expect_mapequal(get_table(conn, "__mtcars") %>%
-                      tidyr::unite("new_col", mpg, hp) %>%
-                      dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) %>%
-                      dplyr::collect(),
-                    get_table(conn, "__mtcars") %>%
-                      dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) %>%
-                      dplyr::collect() %>%
-                      tidyr::unite("new_col", mpg, hp))
+    expect_mapequal(
+      get_table(conn, "__mtcars") %>%
+        tidyr::unite("new_col", mpg, hp) %>%
+        dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) %>%
+        dplyr::collect(),
+      get_table(conn, "__mtcars") %>%
+        dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) %>%
+        dplyr::collect() %>%
+        tidyr::unite("new_col", mpg, hp)
+    )
 
     col <- "new_col"
-    expect_mapequal(get_table(conn, "__mtcars") %>%
-                      tidyr::unite(col, mpg, hp) %>%
-                      dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) %>%
-                      dplyr::collect(),
-                    get_table(conn, "__mtcars") %>%
-                      dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) %>%
-                      dplyr::collect() %>%
-                      tidyr::unite(col, mpg, hp))
+    expect_mapequal(
+      get_table(conn, "__mtcars") %>%
+        tidyr::unite(col, mpg, hp) %>%
+        dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) %>%
+        dplyr::collect(),
+      get_table(conn, "__mtcars") %>%
+        dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) %>%
+        dplyr::collect() %>%
+        tidyr::unite(col, mpg, hp)
+    )
 
-    expect_mapequal(get_table(conn, "__mtcars") %>%
-                      tidyr::unite(!!col, mpg, hp) %>%
-                      dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) %>%
-                      dplyr::collect(),
-                    get_table(conn, "__mtcars") %>%
-                      dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) %>%
-                      dplyr::collect() %>%
-                      tidyr::unite(!!col, mpg, hp))
+    expect_mapequal(
+      get_table(conn, "__mtcars") %>%
+        tidyr::unite(!!col, mpg, hp) %>%
+        dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) %>%
+        dplyr::collect(),
+      get_table(conn, "__mtcars") %>%
+        dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) %>%
+        dplyr::collect() %>%
+        tidyr::unite(!!col, mpg, hp)
+    )
 
     # Unite places cols in a particular way, lets be sure we match
     qq <- dplyr::mutate(q, dplyr::across(tidyselect::everything(), as.character)) # we convert to character since SQLite
-    expect_identical(qq %>% tidyr::unite("test_col", vs, am) %>% dplyr::collect(),
-                     qq %>% dplyr::collect() %>% tidyr::unite("test_col", vs, am))
+    expect_identical(
+      qq %>% tidyr::unite("test_col", vs, am) %>% dplyr::collect(),
+      qq %>% dplyr::collect() %>% tidyr::unite("test_col", vs, am)
+    )
 
     connection_clean_up(conn)
   }

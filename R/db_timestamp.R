@@ -7,15 +7,18 @@
 #' @return
 #'   The given timestamp converted to a SQL-backend dependent timestamp.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection()
+#' conn <- get_connection()
 #'
-#'   db_timestamp(Sys.time(), conn)
+#' db_timestamp(Sys.time(), conn)
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #' @export
 db_timestamp <- function(timestamp, conn = NULL) {
-  if (is.null(conn)) db_timestamp.NULL(timestamp, conn)
-  else UseMethod("db_timestamp", conn)
+  if (is.null(conn)) {
+    db_timestamp.NULL(timestamp, conn)
+  } else {
+    UseMethod("db_timestamp", conn)
+  }
 }
 
 #' @export

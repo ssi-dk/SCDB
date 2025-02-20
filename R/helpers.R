@@ -4,12 +4,12 @@
 #' @return
 #'   The number of records in the object.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection()
+#' conn <- get_connection()
 #'
-#'   m <- dplyr::copy_to(conn, mtcars)
-#'   nrow(m) == nrow(mtcars) # TRUE
+#' m <- dplyr::copy_to(conn, mtcars)
+#' nrow(m) == nrow(mtcars) # TRUE
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #' @export
 nrow <- function(.data) {
   if (inherits(.data, "tbl_dbi")) {
@@ -26,15 +26,15 @@ nrow <- function(.data) {
 #' @return
 #'   `TRUE` if `.data` contains the columns: "checksum", "from_ts", and "until_ts". `FALSE` otherwise.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection()
+#' conn <- get_connection()
 #'
-#'   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
-#'   create_table(mtcars, conn, db_table = id("mtcars_historical", conn))
+#' dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
+#' create_table(mtcars, conn, db_table = id("mtcars_historical", conn))
 #'
-#'   is.historical(get_table(conn, "mtcars")) # FALSE
-#'   is.historical(get_table(conn, "mtcars_historical")) # TRUE
+#' is.historical(get_table(conn, "mtcars")) # FALSE
+#' is.historical(get_table(conn, "mtcars_historical")) # TRUE
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #' @export
 is.historical <- function(.data) {                                                                                      # nolint: object_name_linter
 
@@ -51,20 +51,20 @@ is.historical <- function(.data) {                                              
 #' @param db_table (`tbl_sql`)\cr
 #'   A unmanipulated reference to a sql table.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection()
+#' conn <- get_connection()
 #'
-#'   mt <- dplyr::copy_to(conn, mtcars)
-#'   id_mt <- id(mt)
+#' mt <- dplyr::copy_to(conn, mtcars)
+#' id_mt <- id(mt)
 #'
-#'   defer_db_cleanup(mt)
+#' defer_db_cleanup(mt)
 #'
-#'   DBI::dbExistsTable(conn, id_mt) # TRUE
+#' DBI::dbExistsTable(conn, id_mt) # TRUE
 #'
-#'   withr::deferred_run()
+#' withr::deferred_run()
 #'
-#'   DBI::dbExistsTable(conn, id_mt) # FALSE
+#' DBI::dbExistsTable(conn, id_mt) # FALSE
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #' @return NULL (called for side effects)
 #' @export
 defer_db_cleanup <- function(db_table) {
@@ -88,11 +88,11 @@ defer_db_cleanup <- function(db_table) {
 #' @param scope (`character(1)`)\cr
 #'   A naming scope to generate the table name within.
 #' @examples
-#'   print(unique_table_name()) # SCDB_<10 alphanumerical letters>
-#'   print(unique_table_name()) # SCDB_<10 alphanumerical letters>
+#' print(unique_table_name()) # SCDB_<10 alphanumerical letters>
+#' print(unique_table_name()) # SCDB_<10 alphanumerical letters>
 #'
-#'   print(unique_table_name("test")) # test_<10 alphanumerical letters>
-#'   print(unique_table_name("test")) # test_<10 alphanumerical letters>
+#' print(unique_table_name("test")) # test_<10 alphanumerical letters>
+#' print(unique_table_name("test")) # test_<10 alphanumerical letters>
 #'
 #' @return A character string for a table name based on the given scope parameter
 #' @export

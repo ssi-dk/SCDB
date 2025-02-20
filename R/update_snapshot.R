@@ -27,35 +27,43 @@
 #' @return
 #'   No return value, called for side effects.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection()
+#' conn <- get_connection()
 #'
-#'   data <- dplyr::copy_to(conn, mtcars)
+#' data <- dplyr::copy_to(conn, mtcars)
 #'
-#'   # Copy the first 3 records
-#'   update_snapshot(
-#'     head(data, 3),
-#'     conn = conn,
-#'     db_table = "test.mtcars",
-#'     timestamp = Sys.time()
-#'   )
+#' # Copy the first 3 records
+#' update_snapshot(
+#'   head(data, 3),
+#'   conn = conn,
+#'   db_table = "test.mtcars",
+#'   timestamp = Sys.time()
+#' )
 #'
-#'   # Update with the first 5 records
-#'   update_snapshot(
-#'     head(data, 5),
-#'     conn = conn,
-#'     db_table = "test.mtcars",
-#'     timestamp = Sys.time()
-#'   )
+#' # Update with the first 5 records
+#' update_snapshot(
+#'   head(data, 5),
+#'   conn = conn,
+#'   db_table = "test.mtcars",
+#'   timestamp = Sys.time()
+#' )
 #'
-#'   dplyr::tbl(conn, "test.mtcars")
+#' dplyr::tbl(conn, "test.mtcars")
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #' @seealso filter_keys
 #' @importFrom rlang .data
 #' @export
-update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, message = NULL, tic = Sys.time(),
-                            logger = NULL,
-                            enforce_chronological_order = TRUE) {
+update_snapshot <- function(
+  .data,
+  conn,
+  db_table,
+  timestamp,
+  filters = NULL,
+  message = NULL,
+  tic = Sys.time(),
+  logger = NULL,
+  enforce_chronological_order = TRUE
+) {
 
   # Check arguments
   checkmate::assert_class(.data, "tbl_dbi")
@@ -114,8 +122,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     logger$log_error("Table does not seem like a historical table", tic = tic) # Use input time in log
   }
 
-  if (!setequal(colnames(.data),
-                colnames(dplyr::select(db_table, !c("checksum", "from_ts", "until_ts"))))) {
+  if (!setequal(colnames(.data), colnames(dplyr::select(db_table, !c("checksum", "from_ts", "until_ts"))))) {
 
     # Release table lock
     unlock_table(conn, db_table_id, get_schema(db_table_id))
@@ -154,8 +161,10 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     unlock_table(conn, db_table_id, get_schema(db_table_id))
 
     logger$log_to_db(success = FALSE, end_time = !!db_timestamp(tic, conn))
-    logger$log_error("Given timestamp", timestamp, "is earlier than latest",
-                     "timestamp in table:", db_latest, tic = tic) # Use input time in log
+    logger$log_error(
+      "Given timestamp", timestamp, "is earlier than latest",
+      "timestamp in table:", db_latest, tic = tic # Use input time in log
+    )
   }
 
 

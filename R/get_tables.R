@@ -8,15 +8,15 @@
 #' @return
 #'   A data.frame containing table names including schema (and catalog when available) in the database.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection()
+#' conn <- get_connection()
 #'
-#'   dplyr::copy_to(conn, mtcars, name = "my_test_table_1", temporary = FALSE)
-#'   dplyr::copy_to(conn, mtcars, name = "my_test_table_2")
+#' dplyr::copy_to(conn, mtcars, name = "my_test_table_1", temporary = FALSE)
+#' dplyr::copy_to(conn, mtcars, name = "my_test_table_2")
 #'
-#'   get_tables(conn, pattern = "my_[th]est")
-#'   get_tables(conn, pattern = "my_[th]est", show_temporary = FALSE)
+#' get_tables(conn, pattern = "my_[th]est")
+#' get_tables(conn, pattern = "my_[th]est", show_temporary = FALSE)
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #' @importFrom rlang .data
 #' @export
 get_tables <- function(conn, pattern = NULL, show_temporary = TRUE) {
@@ -30,9 +30,11 @@ get_tables <- function(conn, pattern = NULL, show_temporary = TRUE) {
 #' @importFrom rlang .data
 #' @export
 get_tables.SQLiteConnection <- function(conn, pattern = NULL, show_temporary = TRUE) {
-  query <- paste("SELECT schema, name 'table' FROM pragma_table_list",
-                 "WHERE NOT name IN ('sqlite_schema', 'sqlite_temp_schema')",
-                 "AND NOT name LIKE 'sqlite_stat%'")
+  query <- paste(
+    "SELECT schema, name 'table' FROM pragma_table_list",
+    "WHERE NOT name IN ('sqlite_schema', 'sqlite_temp_schema')",
+    "AND NOT name LIKE 'sqlite_stat%'"
+  )
 
   tables <- DBI::dbGetQuery(conn, query) %>%
     dplyr::mutate("schema" = as.character(.data$schema)) # Ensure schema is character (even if empty)
@@ -172,12 +174,14 @@ get_tables.duckdb_connection <- function(conn, pattern = NULL, show_temporary = 
 
 #' @export
 get_tables.OdbcConnection <- function(conn, pattern = NULL, show_temporary = TRUE) {
-  query <- paste("SELECT",
-                 "s.name AS [schema],",
-                 "t.name AS [table]",
-                 "FROM sys.tables t",
-                 "INNER JOIN sys.schemas s",
-                 "ON t.schema_id = s.schema_id")
+  query <- paste(
+    "SELECT",
+    "s.name AS [schema],",
+    "t.name AS [table]",
+    "FROM sys.tables t",
+    "INNER JOIN sys.schemas s",
+    "ON t.schema_id = s.schema_id"
+  )
 
   tables <- DBI::dbGetQuery(conn, query) %>%
     dplyr::mutate(schema = dplyr::na_if(.data$schema, "dbo"))

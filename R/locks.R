@@ -30,13 +30,13 @@ NULL
 #'
 #'   * `unlock_table()` returns `NULL` (called for side effects).
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- DBI::dbConnect(RSQLite::SQLite())
+#' conn <- DBI::dbConnect(RSQLite::SQLite())
 #'
-#'   lock_table(conn, "test_table") # TRUE
+#' lock_table(conn, "test_table") # TRUE
 #'
-#'   unlock_table(conn, "test_table")
+#' unlock_table(conn, "test_table")
 #'
-#'   DBI::dbDisconnect(conn)
+#' DBI::dbDisconnect(conn)
 #' @export
 lock_table <- function(conn, db_table, schema = NULL) {
   checkmate::assert_class(conn, "DBIConnection")
@@ -103,8 +103,10 @@ lock_table <- function(conn, db_table, schema = NULL) {
 
   # Determine the owner of the lock
   lock_entry <- db_lock_table %>%
-    dplyr::filter(.data$schema == !!purrr::pluck(db_table_id, "name", "schema"),
-                  .data$table  == !!purrr::pluck(db_table_id, "name", "table"))
+    dplyr::filter(
+      .data$schema == !!purrr::pluck(db_table_id, "name", "schema"),
+      .data$table  == !!purrr::pluck(db_table_id, "name", "table")
+    )
 
   lock_owner_user <- dplyr::pull(lock_entry, "user")
   lock_owner_pid <- dplyr::pull(lock_entry, "pid")

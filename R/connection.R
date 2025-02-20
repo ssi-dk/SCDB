@@ -21,13 +21,13 @@
 #' @return
 #'   An object that inherits from `DBIConnection` driver specified in `drv`.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection(drv = RSQLite::SQLite(), dbname = ":memory:")
+#' conn <- get_connection(drv = RSQLite::SQLite(), dbname = ":memory:")
 #'
-#'   DBI::dbIsValid(conn) # TRUE
+#' DBI::dbIsValid(conn) # TRUE
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #'
-#'   DBI::dbIsValid(conn) # FALSE
+#' DBI::dbIsValid(conn) # FALSE
 #' @export
 get_connection <- function(drv, ...) {
   if (missing(drv)) {
@@ -41,10 +41,11 @@ get_connection <- function(drv, ...) {
 #' @seealso [RSQLite::SQLite]
 #' @export
 get_connection.SQLiteDriver <- function(
-    drv,
-    dbname = ":memory:",
-    ...,
-    bigint = c("integer", "bigint64", "numeric", "character")) {
+  drv,
+  dbname = ":memory:",
+  ...,
+  bigint = c("integer", "bigint64", "numeric", "character")
+) {
 
   # Resolve the bigint argument (if not set, first of default vector is used)
   bigint <- match.arg(bigint)
@@ -83,17 +84,18 @@ get_connection.SQLiteDriver <- function(
 #' @seealso [RPostgres::Postgres]
 #' @export
 get_connection.PqDriver <- function(
-    drv,
-    dbname = NULL,
-    host = NULL,
-    port = NULL,
-    password = NULL,
-    user = NULL,
-    ...,
-    bigint = c("integer", "bigint64", "numeric", "character"),
-    check_interrupts = TRUE,
-    timezone = Sys.timezone(),
-    timezone_out = Sys.timezone()) {
+  drv,
+  dbname = NULL,
+  host = NULL,
+  port = NULL,
+  password = NULL,
+  user = NULL,
+  ...,
+  bigint = c("integer", "bigint64", "numeric", "character"),
+  check_interrupts = TRUE,
+  timezone = Sys.timezone(),
+  timezone_out = Sys.timezone()
+) {
 
   # Resolve the bigint argument (if not set, first of default vector is used)
   bigint <- match.arg(bigint)
@@ -133,12 +135,13 @@ get_connection.PqDriver <- function(
 #' @seealso [odbc::odbc]
 #' @export
 get_connection.OdbcDriver <- function(
-    drv,
-    dsn = NULL,
-    ...,
-    bigint = c("integer", "bigint64", "numeric", "character"),
-    timezone = Sys.timezone(),
-    timezone_out = Sys.timezone()) {
+  drv,
+  dsn = NULL,
+  ...,
+  bigint = c("integer", "bigint64", "numeric", "character"),
+  timezone = Sys.timezone(),
+  timezone_out = Sys.timezone()
+) {
 
   # Resolve the bigint argument (if not set, first of default vector is used)
   bigint <- match.arg(bigint)
@@ -177,11 +180,12 @@ get_connection.OdbcDriver <- function(
 #' @seealso [duckdb::duckdb]
 #' @export
 get_connection.duckdb_driver <- function(
-    drv,
-    dbdir = ":memory:",
-    ...,
-    bigint = c("numeric", "character"),
-    timezone_out = Sys.timezone()) {
+  drv,
+  dbdir = ":memory:",
+  ...,
+  bigint = c("numeric", "character"),
+  timezone_out = Sys.timezone()
+) {
 
   # Resolve the bigint argument (if not set, first of default vector is used)
   bigint <- match.arg(bigint)
@@ -239,9 +243,9 @@ get_connection.default <- function(drv, ...) {
 #' @template conn
 #' @inherit DBI::dbDisconnect return
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection()
+#' conn <- get_connection()
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #' @export
 close_connection <- function(conn) {
 

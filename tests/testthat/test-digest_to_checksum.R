@@ -19,17 +19,23 @@ test_that("digest_to_checksum() works", {
 
 
     # Check that NA's generate unique checksums
-    x <- data.frame(col1 = c("A", NA),
-                    col2 = c(NA, "A"))
+    x <- data.frame(
+      col1 = c("A", NA),
+      col2 = c(NA, "A")
+    )
 
     # .. locally
-    checksums <- x %>% digest_to_checksum() %>% dplyr::pull("checksum")
+    checksums <- x %>%
+      digest_to_checksum() %>%
+      dplyr::pull("checksum")
     expect_false(checksums[1] == checksums[2])
 
     # .. and on the remote
     x <- dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
 
-    checksums <- x %>% digest_to_checksum() %>% dplyr::pull("checksum")
+    checksums <- x %>%
+      digest_to_checksum() %>%
+      dplyr::pull("checksum")
     expect_false(checksums[1] == checksums[2])
 
     connection_clean_up(conn)

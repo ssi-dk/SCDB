@@ -79,15 +79,18 @@ sha <- benchmarks %>%
   dplyr::pull("version")
 
 # Check local git history
-on_main <- tryCatch({
-  system(glue::glue("git branch main --contains {sha}"), intern = TRUE) %>%
-    stringr::str_detect(stringr::fixed("main")) %>%
-    isTRUE()
-}, warning = function(w) {
-  # If on GitHub, git is not installed and we assume TRUE.
-  # This will render the vignette as it will look once merged onto main.
-  return(identical(Sys.getenv("CI"), "true"))
-})
+on_main <- tryCatch(
+  {
+    system(glue::glue("git branch main --contains {sha}"), intern = TRUE) %>%
+      stringr::str_detect(stringr::fixed("main")) %>%
+      isTRUE()
+  },
+  warning = function(w) {
+    # If on GitHub, git is not installed and we assume TRUE.
+    # This will render the vignette as it will look once merged onto main.
+    return(identical(Sys.getenv("CI"), "true"))
+  }
+)
 
 # In the simple context we use the newest benchmark (version = sha)
 # This benchmark is then labelled with the newest version number of SCDB

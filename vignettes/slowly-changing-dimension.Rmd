@@ -19,7 +19,6 @@ library(tidyverse)
 ```
 
 ```{r setup, include = FALSE, eval = requireNamespace("tidyverse")}
-
 forecasts_full <- tribble(
   ~City, ~Forecast, ~ForecastDate,
   "New York",    20, "2023-09-28",
@@ -34,12 +33,14 @@ forecasts_full <- tribble(
   mutate(across("ForecastDate", as.Date))
 
 forecasts_scd <- forecasts_full %>%
-  mutate(ForecastFrom = ForecastDate,
-         ForecastUntil = case_when(
-           City == "Houston" ~ as.Date(NA),
-           ForecastDate == "2023-09-29" ~ as.Date(NA),
-           TRUE ~ as.Date("2023-09-29")
-         )) %>%
+  mutate(
+    ForecastFrom = ForecastDate,
+    ForecastUntil = case_when(
+      City == "Houston" ~ as.Date(NA),
+      ForecastDate == "2023-09-29" ~ as.Date(NA),
+      TRUE ~ as.Date("2023-09-29")
+    )
+  ) %>%
   filter(!(City == "Houston" & ForecastFrom == "2023-09-29")) %>%
   distinct() %>%
   select(!"ForecastDate") %>%
@@ -93,7 +94,6 @@ history.
 
 Our table now provides much more information for the user through filtering:
 ```{r forecasts_full_examples, eval = requireNamespace("tidyverse")}
-
 # Current forecasts
 forecasts_full %>%
   slice_max(ForecastDate, n = 1) %>%
@@ -129,38 +129,54 @@ large amounts of data over large periods of time.
 
 ```{r adresses_setup, include = FALSE, eval = requireNamespace("tidyverse")}
 addresses <- tibble::tibble(
-  ID = c(1,
-         2,
-         1,
-         1),
-  GivenName = c("Alice",
-                "Robert",
-                "Alice",
-                "Alice"),
-  Surname = c("Doe",
-              "Tables",
-              "Doe",
-              "Doe"),
-  Address = c("Donut Plains 1",
-              "Rainbow Road 8",
-              "Donut Plains 1",
-              "Rainbow Road 8"),
-  MovedIn = c("1989-06-26",
-              "1989-12-13",
-              "1989-06-26",
-              "2021-03-01"),
-  MovedOut = c(NA,
-               NA,
-               "2021-03-01",
-               NA),
-  ValidFrom = c("1989-06-26",
-                "1989-12-13",
-                "2021-03-08",
-                "2021-03-08"),
-  ValidUntil = c("2021-03-08",
-                 NA,
-                 NA,
-                 NA)
+  ID = c(
+    1,
+    2,
+    1,
+    1
+  ),
+  GivenName = c(
+    "Alice",
+    "Robert",
+    "Alice",
+    "Alice"
+  ),
+  Surname = c(
+    "Doe",
+    "Tables",
+    "Doe",
+    "Doe"
+  ),
+  Address = c(
+    "Donut Plains 1",
+    "Rainbow Road 8",
+    "Donut Plains 1",
+    "Rainbow Road 8"
+  ),
+  MovedIn = c(
+    "1989-06-26",
+    "1989-12-13",
+    "1989-06-26",
+    "2021-03-01"
+  ),
+  MovedOut = c(
+    NA,
+    NA,
+    "2021-03-01",
+    NA
+  ),
+  ValidFrom = c(
+    "1989-06-26",
+    "1989-12-13",
+    "2021-03-08",
+    "2021-03-08"
+  ),
+  ValidUntil = c(
+    "2021-03-08",
+    NA,
+    NA,
+    NA
+  )
 ) %>%
   mutate(across(c("MovedIn", "MovedOut", "ValidFrom", "ValidUntil"), as.Date))
 
@@ -173,8 +189,10 @@ addresses2 <- addresses %>%
 
     .data %>%
       filter(Address == "Rainbow Road 8") %>%
-      mutate(Surname = "Tables",
-             ValidFrom = !!name_change_date) %>%
+      mutate(
+        Surname = "Tables",
+        ValidFrom = !!name_change_date
+      ) %>%
       bind_rows(.data)
   } %>%
   mutate(
@@ -183,8 +201,7 @@ addresses2 <- addresses %>%
       origin = "1970-01-01"
     )
   ) %>%
-  bind_rows(filter(addresses,
-                   ID == 2)) %>%
+  bind_rows(filter(addresses, ID == 2)) %>%
   arrange(ValidFrom) %>%
   distinct()
 ```
@@ -213,9 +230,11 @@ When using Type 2 history, this feature is correctly replicated when reconstruct
 slice_timestamp <- "2021-03-02"
 
 addresses %>%
-  filter(ID == 1,
-         ValidFrom < !!slice_timestamp,
-         ValidUntil >= !!slice_timestamp | is.na(ValidUntil)) %>%
+  filter(
+    ID == 1,
+    ValidFrom < !!slice_timestamp,
+    ValidUntil >= !!slice_timestamp | is.na(ValidUntil)
+  ) %>%
   select(!c("ValidFrom", "ValidUntil"))
 ```
 In other words, even though Alice's address was subsequently updated in the registry, we can still see that she *was*
@@ -225,9 +244,11 @@ This modeling of "timelines of timelines" is also called bitemporal modeling.
 By now, things are going well between Alice and Robert; they get married, with Alice taking Robert's surname.
 It is the same person that has lived with Robert, but as of the day of marriage, she has a different name:
 ```{r addresses2, eval = requireNamespace("tidyverse")}
-filter(addresses2,
-       ID == 1,
-       Address == "Rainbow Road 8") %>%
+filter(
+  addresses2,
+  ID == 1,
+  Address == "Rainbow Road 8"
+) %>%
   select(ID, GivenName, Surname, MovedIn, MovedOut, ValidFrom, ValidUntil)
 ```
 
@@ -237,19 +258,23 @@ This is now also reflected in the data; the `MovedIn` date is persistent across 
 slice_timestamp <- "2022-03-04"
 
 addresses2 %>%
-  filter(Address == "Rainbow Road 8",
-         is.na(MovedOut),
-         ValidFrom < !!slice_timestamp,
-         ValidUntil >= !!slice_timestamp | is.na(ValidUntil)) %>%
+  filter(
+    Address == "Rainbow Road 8",
+    is.na(MovedOut),
+    ValidFrom < !!slice_timestamp,
+    ValidUntil >= !!slice_timestamp | is.na(ValidUntil)
+  ) %>%
   select(ID, GivenName, Surname, MovedIn, MovedOut)
 
 slice_timestamp <- "2023-09-29"
 
 addresses2 %>%
-  filter(Address == "Rainbow Road 8",
-         is.na(MovedOut),
-         ValidFrom < !!slice_timestamp,
-         ValidUntil >= !!slice_timestamp | is.na(ValidUntil)) %>%
+  filter(
+    Address == "Rainbow Road 8",
+    is.na(MovedOut),
+    ValidFrom < !!slice_timestamp,
+    ValidUntil >= !!slice_timestamp | is.na(ValidUntil)
+  ) %>%
   select(ID, GivenName, Surname, MovedIn, MovedOut)
 ```
 

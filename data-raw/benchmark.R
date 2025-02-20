@@ -127,7 +127,8 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
       # Define the SCDB update functions
       scdb_update_step <- function(conn, data, ts) {
         update_snapshot(data, conn, "SCDB_benchmark_1", timestamp = ts,
-                        logger = Logger$new(output_to_console = FALSE, warn = FALSE))
+          logger = Logger$new(output_to_console = FALSE, warn = FALSE)
+        )
       }
 
       scdb_updates <- function(conn, data_on_conn) {
@@ -161,7 +162,8 @@ if (identical(Sys.getenv("CI"), "true") && identical(Sys.getenv("BACKEND"), ""))
         # Define the SCDB update function
         scdb_updates <- function(conn, data) {
           update_snapshot(data, conn, "SCDB_benchmark_2", timestamp = "2021-01-01",
-                          logger = Logger$new(output_to_console = FALSE, warn = FALSE))
+            logger = Logger$new(output_to_console = FALSE, warn = FALSE)
+          )
           DBI::dbRemoveTable(conn, name = "SCDB_benchmark_2")
         }
 

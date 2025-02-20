@@ -84,9 +84,11 @@ test_that("Logger: logging to file works", {
   expect_identical(logger$log_path, log_path)
   expect_identical(
     logger$log_filename,
-    glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
-               "{format(as.POSIXct(timestamp), '%Y_%m_%d')}.",
-               "{db_table}.log")
+    glue::glue(
+      "{format(logger$start_time, '%Y%m%d.%H%M')}.",
+      "{format(as.POSIXct(timestamp), '%Y_%m_%d')}.",
+      "{db_table}.log"
+    )
   )
 
 
@@ -125,9 +127,11 @@ test_that("Logger: logging to file works", {
   expect_identical(logger$log_path, log_path)
   expect_identical(
     logger$log_filename,
-    glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
-               "{format(as.POSIXct(timestamp), '%Y_%m_%d')}.",
-               "{db_table}.log")
+    glue::glue(
+      "{format(logger$start_time, '%Y%m%d.%H%M')}.",
+      "{format(as.POSIXct(timestamp), '%Y_%m_%d')}.",
+      "{db_table}.log"
+    )
   )
 
 
@@ -176,11 +180,13 @@ test_that("Logger: logging to database works", {
     timestamp <- "2022-04-01 09:00:00"
 
     # Create logger and test configuration
-    logger <- Logger$new(db_table = db_table,
-                         timestamp = timestamp,
-                         log_table_id = db_table,
-                         log_conn = conn,
-                         warn = FALSE)
+    logger <- Logger$new(
+      db_table = db_table,
+      timestamp = timestamp,
+      log_table_id = db_table,
+      log_conn = conn,
+      warn = FALSE
+    )
 
     log_table_id <- dplyr::tbl(conn, id(db_table, conn))
     expect_identical(logger$log_tbl, log_table_id)
@@ -228,17 +234,21 @@ test_that("Logger: all logging simultaneously works", {
     timestamp <- "2022-05-01 09:00:00"
 
     # Create logger and test configuration
-    logger <- Logger$new(db_table = db_table, timestamp = timestamp, log_path = log_path,
-                         log_table_id = db_table, log_conn = conn, warn = FALSE)
+    logger <- Logger$new(
+      db_table = db_table, timestamp = timestamp, log_path = log_path,
+      log_table_id = db_table, log_conn = conn, warn = FALSE
+    )
 
     log_table_id <- dplyr::tbl(conn, id(db_table, conn))
     expect_identical(logger$log_path, log_path)
     expect_identical(logger$log_tbl, log_table_id)
     expect_identical(
       logger$log_filename,
-      glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
-                 "{format(as.POSIXct(timestamp), '%Y_%m_%d')}.",
-                 "{id(db_table, conn)}.log")
+      glue::glue(
+        "{format(logger$start_time, '%Y%m%d.%H%M')}.",
+        "{format(as.POSIXct(timestamp), '%Y_%m_%d')}.",
+        "{id(db_table, conn)}.log"
+      )
     )
 
     # Test logging to console has the right formatting and message type

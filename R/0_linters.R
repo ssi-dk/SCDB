@@ -4,7 +4,7 @@
 #'   A curated list of linters to ensure adherence to the `diseasy` documentation and code standards
 #' @name diseasy_linters
 #' @examples
-#'   diseasy_code_linters()
+#' diseasy_code_linters()
 #' @return A list of linters
 #' @noRd
 diseasy_code_linters <- function() {

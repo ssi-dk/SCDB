@@ -10,16 +10,16 @@
 #' @return
 #'   `TRUE` if db_table can be parsed to a table found in `conn`.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection()
+#' conn <- get_connection()
 #'
-#'   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
-#'   dplyr::copy_to(conn, iris, name = "iris")
+#' dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
+#' dplyr::copy_to(conn, iris, name = "iris")
 #'
-#'   table_exists(conn, "mtcars")    # TRUE
-#'   table_exists(conn, "iris")      # FALSE
-#'   table_exists(conn, "temp.iris") # TRUE
+#' table_exists(conn, "mtcars")    # TRUE
+#' table_exists(conn, "iris")      # FALSE
+#' table_exists(conn, "temp.iris") # TRUE
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #' @importFrom rlang .data
 #' @export
 table_exists <- function(conn, db_table) {
@@ -31,13 +31,15 @@ table_exists <- function(conn, db_table) {
 
   # Check arguments
   if (inherits(db_table, "tbl_dbi")) {
-    exists <- tryCatch({
-      dplyr::collect(utils::head(db_table, 0))
-      return(TRUE)
-    },
-    error = function(e) {
-      return(FALSE)
-    })
+    exists <- tryCatch(
+      {
+        dplyr::collect(utils::head(db_table, 0))
+        return(TRUE)
+      },
+      error = function(e) {
+        return(FALSE)
+      }
+    )
 
     return(exists)
   }

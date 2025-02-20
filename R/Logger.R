@@ -11,16 +11,16 @@
 #' @return
 #'   A new instance of the `Logger` [R6][R6::R6Class] class.
 #' @examples
-#'   logger <- Logger$new(
-#'     db_table = "test.table",
-#'     timestamp = "2020-01-01 09:00:00"
-#'   )
+#' logger <- Logger$new(
+#'   db_table = "test.table",
+#'   timestamp = "2020-01-01 09:00:00"
+#' )
 #'
-#'   logger$log_info("This is an info message")
-#'   logger$log_to_db(message = "This is a message")
+#' logger$log_info("This is an info message")
+#' logger$log_to_db(message = "This is a message")
 #'
-#'   try(logger$log_warn("This is a warning!"))
-#'   try(logger$log_error("This is an error!"))
+#' try(logger$log_warn("This is a warning!"))
+#' try(logger$log_error("This is an error!"))
 #' @export
 #' @importFrom R6 R6Class
 Logger <- R6::R6Class(                                                                                                  # nolint: object_name_linter
@@ -130,8 +130,13 @@ Logger <- R6::R6Class(                                                          
     #'   The format of the timestamp used in the log message (parsable by [strftime()]).
     #' @return
     #'   Returns the log message invisibly
-    log_info = function(..., tic = Sys.time(), output_to_console = self$output_to_console, log_type = "INFO",
-                        timestamp_format = getOption("SCDB.log_timestamp_format", "%F %R:%OS3")) {
+    log_info = function(
+      ...,
+      tic = Sys.time(),
+      output_to_console = self$output_to_console,
+      log_type = "INFO",
+      timestamp_format = getOption("SCDB.log_timestamp_format", "%F %R:%OS3")
+    ) {
 
       coll <- checkmate::makeAssertCollection()
       checkmate::assert_logical(output_to_console, add = coll)
@@ -187,8 +192,10 @@ Logger <- R6::R6Class(                                                          
       }
 
       # Only write if we have a valid connection
-      if (!is.null(private$log_conn) && DBI::dbIsValid(private$log_conn) && !is.null(self$log_tbl) &&
-            table_exists(private$log_conn, private$log_table_id)) {
+      if (
+        !is.null(private$log_conn) && DBI::dbIsValid(private$log_conn) && !is.null(self$log_tbl) &&
+          table_exists(private$log_conn, private$log_table_id)
+      ) {
 
         patch <- data.frame(log_file = self$log_filename)
         patch <- dplyr::copy_to(
@@ -233,8 +240,10 @@ Logger <- R6::R6Class(                                                          
 
 
       # Remove the log_file from the log table if no actual file is being written
-      if (is.null(self$log_path) && !is.null(private$log_conn) && DBI::dbIsValid(private$log_conn) &&
-            !is.null(self$log_tbl) && table_exists(private$log_conn, private$log_table_id)) {
+      if (
+        is.null(self$log_path) && !is.null(private$log_conn) && DBI::dbIsValid(private$log_conn) &&
+          !is.null(self$log_tbl) && table_exists(private$log_conn, private$log_table_id)
+      ) {
 
         expected_rows <- self$log_tbl %>%
           dplyr::filter(log_file == !!self$log_filename) %>%
@@ -256,10 +265,12 @@ Logger <- R6::R6Class(                                                          
 
         affected_rows <- DBI::dbExecute(private$log_conn, query)
         if (affected_rows != expected_rows) {
-          rlang::warn("Something went wrong while finalizing Logger",
-                      log_filename = self$log_filename,
-                      affected_rows = affected_rows,
-                      expected_rows = expected_rows)
+          rlang::warn(
+            "Something went wrong while finalizing Logger",
+            log_filename = self$log_filename,
+            affected_rows = affected_rows,
+            expected_rows = expected_rows
+          )
         } else {
           private$finalized <- TRUE
         }
@@ -466,12 +477,12 @@ Logger <- R6::R6Class(                                                          
 #' @return
 #'   A new instance of the `LoggerNull` [R6][R6::R6Class] class.
 #' @examples
-#'   logger <- LoggerNull$new()
+#' logger <- LoggerNull$new()
 #'
-#'   logger$log_info("This message will not print!")
-#'   logger$log_to_db(message = "This message will no be written in database!")
-#'   try(logger$log_warn("This is a warning!"))
-#'   try(logger$log_error("This is an error!"))
+#' logger$log_info("This message will not print!")
+#' logger$log_to_db(message = "This message will no be written in database!")
+#' try(logger$log_warn("This is a warning!"))
+#' try(logger$log_error("This is an error!"))
 #' @export
 #' @importFrom R6 R6Class
 LoggerNull <- R6::R6Class(                                                                                              # nolint: object_name_linter

@@ -46,9 +46,11 @@ join_na_not_null <- function(by, na_by = NULL) {
 
   if (!missing(na_by)) {
     for (i in seq_along(na_by)) {
-      sql_on <- paste0(sql_on,
-                       '("LHS"."', na_by[i], '" IS NULL AND "RHS"."', na_by[i], '" IS NULL ',
-                       'OR "LHS"."', na_by[i], '" = "RHS"."', na_by[i], '")')
+      sql_on <- paste0(
+        sql_on,
+        '("LHS"."', na_by[i], '" IS NULL AND "RHS"."', na_by[i], '" IS NULL ',
+        'OR "LHS"."', na_by[i], '" = "RHS"."', na_by[i], '")'
+      )
       if (i < length(na_by)) {
         sql_on <- paste(sql_on, "\nAND ")
       }
@@ -83,10 +85,16 @@ select_na_sql <- function(x, y, by, na_by, left = TRUE) {
   cy  <- dplyr::setdiff(colnames(y), colnames(x)) # Variables only in y
 
   sql_select <-
-    c(paste0(colnames(x), ifelse(colnames(x) %in% cx, "", ".x")),
-      paste0(colnames(y), ifelse(colnames(y) %in% cy, "", ".y"))[!colnames(y) %in% all_by]) %>%
-    stats::setNames(c(colnames(x),
-                      paste0(colnames(y), ifelse(colnames(y) %in% colnames(x), ".y", ""))[!colnames(y) %in% all_by]))
+    c(
+      paste0(colnames(x), ifelse(colnames(x) %in% cx, "", ".x")),
+      paste0(colnames(y), ifelse(colnames(y) %in% cy, "", ".y"))[!colnames(y) %in% all_by]
+    ) %>%
+    stats::setNames(
+      c(
+        colnames(x),
+        paste0(colnames(y), ifelse(colnames(y) %in% colnames(x), ".y", ""))[!colnames(y) %in% all_by]
+      )
+    )
 
   return(sql_select)
 }
@@ -99,10 +107,15 @@ select_na_sql <- function(x, y, by, na_by, left = TRUE) {
 #' @noRd
 join_warn <- function() {
   if (interactive() && identical(parent.frame(n = 2), globalenv())) {
-    rlang::warn(paste("*_joins in database-backend does not match NA by default.\n",
-                      "If your data contains NA, the columns with NA values must be supplied to \"na_by\",",
-                      "or you must specifiy na_matches = \"na\""),
-                .frequency = "once", .frequency_id = "*_join NA warning")
+    rlang::warn(
+      paste(
+        "*_joins in database-backend does not match NA by default.\n",
+        "If your data contains NA, the columns with NA values must be supplied to \"na_by\",",
+        "or you must specify na_matches = \"na\""
+      ),
+      .frequency = "once",
+      .frequency_id = "*_join NA warning"
+    )
   }
 }
 
@@ -114,8 +127,11 @@ join_warn <- function() {
 #' @noRd
 join_warn_experimental <- function() {
   if (interactive() && identical(parent.frame(n = 2), globalenv())) {
-    rlang::warn("*_joins with na_by is still experimental. Please report issues.",
-                .frequency = "once", .frequency_id = "*_join NA warning")
+    rlang::warn(
+      "*_joins with na_by is still experimental. Please report issues.",
+      .frequency = "once",
+      .frequency_id = "*_join NA warning"
+    )
   }
 }
 
@@ -139,33 +155,33 @@ join_warn_experimental <- function() {
 #' query, and use \code{\link[dbplyr:collect.tbl_sql]{collect()}} to execute the query
 #' and return data to R.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   library(dplyr, warn.conflicts = FALSE)
-#'   library(dbplyr, warn.conflicts = FALSE)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(dbplyr, warn.conflicts = FALSE)
 #'
-#'   band_db <- tbl_memdb(dplyr::band_members)
-#'   instrument_db <- tbl_memdb(dplyr::band_instruments)
+#' band_db <- tbl_memdb(dplyr::band_members)
+#' instrument_db <- tbl_memdb(dplyr::band_instruments)
 #'
-#'   left_join(band_db, instrument_db) %>%
-#'     show_query()
+#' left_join(band_db, instrument_db) %>%
+#'   show_query()
 #'
-#'   # Can join with local data frames by setting copy = TRUE
-#'   left_join(band_db, dplyr::band_instruments, copy = TRUE)
+#' # Can join with local data frames by setting copy = TRUE
+#' left_join(band_db, dplyr::band_instruments, copy = TRUE)
 #'
-#'   # Unlike R, joins in SQL don't usually match NAs (NULLs)
-#'   db <- memdb_frame(x = c(1, 2, NA))
-#'   label <- memdb_frame(x = c(1, NA), label = c("one", "missing"))
-#'   left_join(db, label, by = "x")
+#' # Unlike R, joins in SQL don't usually match NAs (NULLs)
+#' db <- memdb_frame(x = c(1, 2, NA))
+#' label <- memdb_frame(x = c(1, NA), label = c("one", "missing"))
+#' left_join(db, label, by = "x")
 #'
-#'   # But you can activate R's usual behaviour with the na_matches argument
-#'   left_join(db, label, by = "x", na_matches = "na")
+#' # But you can activate R's usual behaviour with the na_matches argument
+#' left_join(db, label, by = "x", na_matches = "na")
 #'
-#'   # By default, joins are equijoins, but you can use `sql_on` to
-#'   # express richer relationships
-#'   db1 <- memdb_frame(x = 1:5)
-#'   db2 <- memdb_frame(x = 1:3, y = letters[1:3])
+#' # By default, joins are equijoins, but you can use `sql_on` to
+#' # express richer relationships
+#' db1 <- memdb_frame(x = 1:5)
+#' db2 <- memdb_frame(x = 1:3, y = letters[1:3])
 #'
-#'   left_join(db1, db2) %>% show_query()
-#'   left_join(db1, db2, sql_on = "LHS.x < RHS.x") %>% show_query()
+#' left_join(db1, db2) %>% show_query()
+#' left_join(db1, db2, sql_on = "LHS.x < RHS.x") %>% show_query()
 #' @seealso [dplyr::mutate-joins] which this function wraps.
 #' @seealso [dbplyr::join.tbl_sql] which this function wraps.
 #' @seealso [dplyr::show_query]

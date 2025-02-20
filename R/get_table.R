@@ -14,16 +14,16 @@
 #'   Note that a temporary table will be preferred over ordinary tables in the default schema (see [get_schema()]) with
 #'   an identical name.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection()
+#' conn <- get_connection()
 #'
-#'   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
+#' dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
 #'
-#'   get_table(conn)
-#'   if (table_exists(conn, "mtcars")) {
-#'     get_table(conn, "mtcars")
-#'   }
+#' get_table(conn)
+#' if (table_exists(conn, "mtcars")) {
+#'   get_table(conn, "mtcars")
+#' }
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #' @importFrom rlang .data
 #' @export
 get_table <- function(conn, db_table = NULL, slice_ts = NA, include_slice_info = FALSE) {
@@ -44,11 +44,14 @@ get_table <- function(conn, db_table = NULL, slice_ts = NA, include_slice_info =
   db_table_id <- id(db_table, conn = conn)
 
   # Look-up table in database
-  tryCatch({
-    q <- dplyr::tbl(conn, db_table_id)
-  }, error = function(e) {
-    stop(glue::glue("Table {as.character(db_table_id)} could not be found!"), call. = FALSE)
-  })
+  tryCatch(
+    {
+      q <- dplyr::tbl(conn, db_table_id)
+    },
+    error = function(e) {
+      stop(glue::glue("Table {as.character(db_table_id)} could not be found!"), call. = FALSE)
+    }
+  )
 
   # Check whether data is historical
   if (is.historical(q) && !is.null(slice_ts)) {

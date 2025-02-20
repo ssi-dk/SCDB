@@ -7,12 +7,12 @@
 #' @return
 #'   NULL (called for side effects)
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection()
+#' conn <- get_connection()
 #'
-#'   mt <- dplyr::copy_to(conn, dplyr::distinct(mtcars, .data$mpg, .data$cyl), name = "mtcars")
-#'   create_index(conn, mt, c("mpg", "cyl"))
+#' mt <- dplyr::copy_to(conn, dplyr::distinct(mtcars, .data$mpg, .data$cyl), name = "mtcars")
+#' create_index(conn, mt, c("mpg", "cyl"))
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #' @export
 create_index <- function(conn, db_table, columns) {
   checkmate::assert_class(conn, "DBIConnection")

@@ -6,11 +6,11 @@
 #' @return
 #'   TRUE if the given schema is found on `conn`.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection()
+#' conn <- get_connection()
 #'
-#'   schema_exists(conn, "test")
+#' schema_exists(conn, "test")
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #' @export
 schema_exists <- function(conn, schema) {
   UseMethod("schema_exists")
@@ -45,7 +45,9 @@ schema_exists.default <- function(conn, schema) {
   matches <- sapply(objs$table, ~ methods::slot(.x, "name")) %>%
     (names(.) == "schema" & . == schema)
 
-  if (any(matches)) return(TRUE)
+  if (any(matches)) {
+    return(TRUE)
+  }
 
   tryCatch(
     {

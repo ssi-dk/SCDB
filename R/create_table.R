@@ -8,11 +8,11 @@
 #' @return
 #'   Invisibly returns the table as it looks on the destination (or locally if `conn` is `NULL`).
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection()
+#' conn <- get_connection()
 #'
-#'   create_table(mtcars, conn = conn, db_table = "mtcars")
+#' create_table(mtcars, conn = conn, db_table = "mtcars")
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #' @export
 create_table <- function(.data, conn = NULL, db_table, ...) {                                                           # nolint: function_argument_linter
 
@@ -37,7 +37,9 @@ create_table <- function(.data, conn = NULL, db_table, ...) {                   
   )
 
   # Early return if there is no connection to push to
-  if (is.null(conn)) return(invisible(utils::head(.data, 0)))
+  if (is.null(conn)) {
+    return(invisible(utils::head(.data, 0)))
+  }
 
   # Convert to id
   # But supply no "conn" argument to prevent inference of (default) schema

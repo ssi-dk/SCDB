@@ -257,8 +257,10 @@ test_that("update_snapshot() can insert a snapshot between existing dates", {
     )
 
     # But not with the variable set
-    update_snapshot(.data, conn, "test.SCDB_tmp1", "2022-10-02 09:00:00",
-                    logger = LoggerNull$new(), enforce_chronological_order = FALSE)
+    update_snapshot(
+      .data, conn, "test.SCDB_tmp1", "2022-10-02 09:00:00",
+      logger = LoggerNull$new(), enforce_chronological_order = FALSE
+    )
 
 
     target <- dplyr::tbl(conn, id("test.SCDB_tmp1", conn))
@@ -315,16 +317,22 @@ test_that("update_snapshot() works (holistic test 1)", {
 
     logger <- LoggerNull$new()
     update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01", logger = logger)
-    expect_identical(dplyr::collect(t0) %>% dplyr::arrange(col1),
-                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1))
+    expect_identical(
+      dplyr::collect(t0) %>% dplyr::arrange(col1),
+      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1)
+    )
 
     update_snapshot(t1, conn, "test.SCDB_tmp1", "2022-02-01", logger = logger)
-    expect_identical(dplyr::collect(t1) %>% dplyr::arrange(col1),
-                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1))
+    expect_identical(
+      dplyr::collect(t1) %>% dplyr::arrange(col1),
+      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1)
+    )
 
     update_snapshot(t2, conn, "test.SCDB_tmp1", "2022-02-01", logger = logger)
-    expect_identical(dplyr::collect(t2) %>% dplyr::arrange(col1),
-                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1))
+    expect_identical(
+      dplyr::collect(t2) %>% dplyr::arrange(col1),
+      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1)
+    )
 
     t <- list(t0, t1, t2) %>%
       purrr::reduce(dplyr::union) %>%
@@ -366,12 +374,16 @@ test_that("update_snapshot() works (holistic test 2)", {
     # Check non-chronological insertion
     logger <- LoggerNull$new()
     update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01", logger = logger)
-    expect_identical(dplyr::collect(t0) %>% dplyr::arrange(col1),
-                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1))
+    expect_identical(
+      dplyr::collect(t0) %>% dplyr::arrange(col1),
+      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1)
+    )
 
     update_snapshot(t2, conn, "test.SCDB_tmp1", "2022-03-01", logger = logger)
-    expect_identical(dplyr::collect(t2) %>% dplyr::arrange(col1),
-                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1))
+    expect_identical(
+      dplyr::collect(t2) %>% dplyr::arrange(col1),
+      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1)
+    )
 
     update_snapshot(t1, conn, "test.SCDB_tmp1", "2022-02-01", logger = logger, enforce_chronological_order = FALSE)
     expect_identical(
@@ -380,17 +392,21 @@ test_that("update_snapshot() works (holistic test 2)", {
     )
 
     t_ref <-
-      tibble::tibble(col1     = c("A",          "B",          "A",          "C",          "B",          "C"),
-                     col2     = c(NA_real_,     NA_real_,     1,            NA_real_,     2,            3),
-                     from_ts  = c("2022-01-01", "2022-01-01", "2022-02-01", "2022-02-01", "2022-03-01", "2022-03-01"),
-                     until_ts = c("2022-02-01", "2022-03-01", NA,           "2022-03-01", NA,           NA))
+      tibble::tibble(
+        col1     = c("A",          "B",          "A",          "C",          "B",          "C"),
+        col2     = c(NA_real_,     NA_real_,     1,            NA_real_,     2,            3),
+        from_ts  = c("2022-01-01", "2022-01-01", "2022-02-01", "2022-02-01", "2022-03-01", "2022-03-01"),
+        until_ts = c("2022-02-01", "2022-03-01", NA,           "2022-03-01", NA,           NA)
+      )
 
     expect_identical(
       get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
         dplyr::select(!"checksum") %>%
         dplyr::collect() %>%
-        dplyr::mutate(from_ts  = strftime(from_ts),
-                      until_ts = strftime(until_ts)) %>%
+        dplyr::mutate(
+          from_ts  = strftime(from_ts),
+          until_ts = strftime(until_ts)
+        ) %>%
         dplyr::arrange(col1, from_ts),
       t_ref %>%
         dplyr::arrange(col1, from_ts)
@@ -459,12 +475,14 @@ test_that("update_snapshot() works with Id objects", {
 
     target_table <- id("test.mtcars_modified", conn)
 
-    logger <- Logger$new(output_to_console = FALSE,
-                         timestamp = Sys.time(),
-                         db_table = "test.mtcars_modified",
-                         log_conn = NULL,
-                         log_table_id = NULL,
-                         warn = FALSE)
+    logger <- Logger$new(
+      output_to_console = FALSE,
+      timestamp = Sys.time(),
+      db_table = "test.mtcars_modified",
+      log_conn = NULL,
+      log_table_id = NULL,
+      warn = FALSE
+    )
 
     expect_no_error(
       mtcars %>%

@@ -30,17 +30,17 @@
 #'   always be `main`.
 #'
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection()
+#' conn <- get_connection()
 #'
-#'   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
+#' dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)
 #'
-#'   get_schema(conn)
-#'   get_schema(get_table(conn, id("mtcars", conn = conn)))
+#' get_schema(conn)
+#' get_schema(get_table(conn, id("mtcars", conn = conn)))
 #'
-#'   get_catalog(conn)
-#'   get_catalog(get_table(conn, id("mtcars", conn = conn)))
+#' get_catalog(conn)
+#' get_catalog(get_table(conn, id("mtcars", conn = conn)))
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #' @export
 get_schema <- function(obj, ...) {
   UseMethod("get_schema")
@@ -59,7 +59,7 @@ get_schema.Id <- function(obj,  ...) {
 #' @export
 #' @rdname get_schema
 get_schema.PqConnection <- function(obj, temporary = FALSE,  ...) {
-  if (temporary)  {
+  if (temporary) {
     temp_schema <- DBI::dbGetQuery(obj, "SELECT nspname FROM pg_namespace WHERE oid = pg_my_temp_schema();")$nspname
 
     # If no temporary tables have been created, the temp schema has not been determined yet and we create a temporary
@@ -80,7 +80,7 @@ get_schema.PqConnection <- function(obj, temporary = FALSE,  ...) {
 #' @export
 #' @rdname get_schema
 get_schema.SQLiteConnection <- function(obj, temporary = FALSE,  ...) {
-  if (temporary)  {
+  if (temporary) {
     return("temp")
   } else {
     return("main")
@@ -89,10 +89,12 @@ get_schema.SQLiteConnection <- function(obj, temporary = FALSE,  ...) {
 
 #' @export
 `get_schema.Microsoft SQL Server` <- function(obj, ...) {
-  query <- paste("SELECT ISNULL((SELECT",
-                 "COALESCE(default_schema_name, 'dbo') AS default_schema",
-                 "FROM sys.database_principals",
-                 "WHERE [name] = CURRENT_USER), 'dbo') default_schema")
+  query <- paste(
+    "SELECT ISNULL((SELECT",
+    "COALESCE(default_schema_name, 'dbo') AS default_schema",
+    "FROM sys.database_principals",
+    "WHERE [name] = CURRENT_USER), 'dbo') default_schema"
+  )
 
   return(DBI::dbGetQuery(obj, query)$default_schema)
 }

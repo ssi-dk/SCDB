@@ -16,23 +16,25 @@
 #' @return
 #'   The combination of input queries with a single, interlaced valid_from / valid_until time axis.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
-#'   conn <- get_connection()
+#' conn <- get_connection()
 #'
-#'   t1 <- data.frame(key = c("A", "A", "B"),
-#'                    obs_1   = c(1, 2, 2),
-#'                    valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-01-01")),
-#'                    valid_until = as.Date(c("2021-02-01", "2021-03-01", NA)))
-#'   t1 <- dplyr::copy_to(conn, df = t1, name = "t1")
+#' t1 <- data.frame(key = c("A", "A", "B"),
+#'   obs_1   = c(1, 2, 2),
+#'   valid_from  = as.Date(c("2021-01-01", "2021-02-01", "2021-01-01")),
+#'   valid_until = as.Date(c("2021-02-01", "2021-03-01", NA))
+#' )
+#' t1 <- dplyr::copy_to(conn, df = t1, name = "t1")
 #'
-#'   t2 <- data.frame(key = c("A", "B"),
-#'                    obs_2 = c("a", "b"),
-#'                    valid_from  = as.Date(c("2021-01-01", "2021-01-01")),
-#'                    valid_until = as.Date(c("2021-04-01", NA)))
-#'   t2 <- dplyr::copy_to(conn, df = t2, name = "t2")
+#' t2 <- data.frame(key = c("A", "B"),
+#'   obs_2 = c("a", "b"),
+#'   valid_from  = as.Date(c("2021-01-01", "2021-01-01")),
+#'   valid_until = as.Date(c("2021-04-01", NA))
+#' )
+#' t2 <- dplyr::copy_to(conn, df = t2, name = "t2")
 #'
-#'   interlace(list(t1, t2), by = "key")
+#' interlace(list(t1, t2), by = "key")
 #'
-#'   close_connection(conn)
+#' close_connection(conn)
 #' @return          The combination of input queries with a single, interlaced
 #'                  valid_from / valid_until time axis
 #' @importFrom rlang .data
@@ -74,50 +76,66 @@ interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
 
 
   # Get all changes to valid_from / valid_until
-  q1 <- tables %>% purrr::map(~ dplyr::select(.x, tidyselect::all_of(by), "valid_from"))
+  valid_from_changes <- tables %>% purrr::map(~ dplyr::select(.x, tidyselect::all_of(by), "valid_from"))
 
-  q2 <- tables %>%
+  valid_until_changes <- tables %>%
     purrr::map(~ {
       .x %>%
         dplyr::select(tidyselect::all_of(by), "valid_until") %>%
-        dplyr::rename(valid_from = "valid_until")
+        dplyr::rename("valid_from" = "valid_until")
     })
-  t <- dplyr::union(q1, q2) %>% purrr::reduce(dplyr::union)
+  validity_changes <- dplyr::union(valid_from_changes, valid_until_changes) %>%
+    purrr::reduce(dplyr::union) # Changes to validity stored in the "valid_from" column
 
-  # Sort and find valid_until in the combined validities
-  t <- t %>%
+  # Sort to find valid_until in the combined validities
+  validity_changes <- validity_changes %>%
     dplyr::group_by(dplyr::across(tidyselect::all_of(by))) %>%
-    dbplyr::window_order(.data$valid_from) %>%
-    dplyr::mutate(.row = dplyr::if_else(is.na(.data$valid_from),  # Some database backends considers NULL to be the
-                                        dplyr::n(),               # smallest, so we need to adjust for that
-                                        dplyr::row_number() - ifelse(is.na(dplyr::first(.data$valid_from)), 1, 0)))     # nolint: redundant_ifelse_linter
+    dbplyr::window_order(.data$valid_from)
 
-  t <- dplyr::left_join(t %>%
-                          dplyr::filter(.data$.row < dplyr::n()),
-                        t %>%
-                          dplyr::filter(.data$.row > 1) %>%
-                          dplyr::mutate(.row = .data$.row - 1) %>%
-                          dplyr::rename("valid_until" = "valid_from"),
-                        by = c(by, ".row")) %>%
+  # Some database backends considers NULL to be the smallest, so we need to adjust for that
+  validity_changes <- validity_changes %>%
+    dplyr::mutate(
+      .row = dplyr::if_else(
+        is.na(.data$valid_from),
+        dplyr::n(),
+        dplyr::row_number() - ifelse(is.na(dplyr::first(.data$valid_from)), 1, 0)                                       # nolint: redundant_ifelse_linter
+      )
+    )
+
+  # Generate all combinations of valid_from / valid_until from the detected
+  # changes in validity
+  validity_changes <- dplyr::left_join(
+    validity_changes %>%
+      dplyr::filter(.data$.row < dplyr::n()),
+
+    validity_changes %>%
+      dplyr::filter(.data$.row > 1) %>%
+      dplyr::mutate(.row = .data$.row - 1) %>%
+      dplyr::rename("valid_until" = "valid_from"),
+    by = c(by, ".row")
+  ) %>%
     dplyr::select(!".row") %>%
     dplyr::ungroup() %>%
-    dplyr::compute(name = unique_table_name("SCDB_interlace_t"))
-  defer_db_cleanup(t)
+    dplyr::compute(name = unique_table_name("SCDB_interlace_validity_changes"))
+  defer_db_cleanup(validity_changes)
 
 
   # Merge data onto the new validities using non-equi joins
   joiner <- function(.data, table) {
     .data %>%
       dplyr::left_join(table,
-                       suffix = c("", ".tmp"),
-                       sql_on = paste0('"LHS"."', by, '" = "RHS"."', by, '" AND
-                                      "LHS"."valid_from"  >= "RHS"."valid_from" AND
-                                     ("LHS"."valid_until" <= "RHS"."valid_until" OR "RHS"."valid_until" IS NULL)')) %>%
+        suffix = c("", ".tmp"),
+        sql_on = paste0(
+          '"LHS"."', by, '" = "RHS"."', by, '" AND
+          "LHS"."valid_from"  >= "RHS"."valid_from" AND
+          ("LHS"."valid_until" <= "RHS"."valid_until" OR "RHS"."valid_until" IS NULL)'
+        )
+      ) %>%
       dplyr::select(!tidyselect::ends_with(".tmp")) %>%
       dplyr::relocate(tidyselect::starts_with("valid_"), .after = tidyselect::everything())
   }
 
-  out <- purrr::reduce(tables, joiner, .init = t) %>%
+  out <- purrr::reduce(tables, joiner, .init = validity_changes) %>%
     dplyr::compute(name = unique_table_name("SCDB_interlace"))
 
   return(out)

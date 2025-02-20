@@ -7,19 +7,19 @@ utils::globalVariables(c("NULLIF", "CONCAT_WS"))
 #' @return
 #'   A tbl_dbi with the specified columns united into a new column named according to "col".
 #' @examplesIf Sys.info()["sysname"] != "Darwin"
-#'   library(tidyr, warn.conflicts = FALSE)
+#' library(tidyr, warn.conflicts = FALSE)
 #'
-#'   df <- expand_grid(x = c("a", NA), y = c("b", NA))
+#' df <- expand_grid(x = c("a", NA), y = c("b", NA))
 #'
-#'   unite(df, "z", x:y, remove = FALSE)
+#' unite(df, "z", x:y, remove = FALSE)
 #'
-#'   # To remove missing values:
-#'   unite(df, "z", x:y, na.rm = TRUE, remove = FALSE)
+#' # To remove missing values:
+#' unite(df, "z", x:y, na.rm = TRUE, remove = FALSE)
 #'
-#'   # Separate is almost the complement of unite
-#'   unite(df, "xy", x:y) %>%
-#'     separate(xy, c("x", "y"))
-#'   # (but note `x` and `y` contain now "NA" not NA)
+#' # Separate is almost the complement of unite
+#' unite(df, "xy", x:y) %>%
+#'   separate(xy, c("x", "y"))
+#' # (but note `x` and `y` contain now "NA" not NA)
 #' @importFrom rlang :=
 #' @exportS3Method tidyr::unite tbl_dbi
 unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALSE) {                                    # nolint: object_name_linter
@@ -54,10 +54,10 @@ unite.tbl_dbi <- function(data, col, ..., sep = "_", remove = TRUE, na.rm = FALS
   # CONCAT_WS does not exist in SQLite
   if (inherits(data, "tbl_SQLiteConnection")) {
     out <- data %>%
-      dplyr::mutate({{col}} := NULLIF(paste(!!!col_symbols, sep = sep), ""), .before = !!first_from)
+      dplyr::mutate({{ col }} := NULLIF(paste(!!!col_symbols, sep = sep), ""), .before = !!first_from)
   } else {
     out <- data %>%
-      dplyr::mutate({{col}} := NULLIF(CONCAT_WS(sep, !!!col_symbols), ""), .before = !!first_from)
+      dplyr::mutate({{ col }} := NULLIF(CONCAT_WS(sep, !!!col_symbols), ""), .before = !!first_from)
   }
 
   if (remove) out <- out %>% dplyr::select(!tidyselect::all_of(from_vars))

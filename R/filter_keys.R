@@ -15,17 +15,17 @@
 #' @param ... Further arguments passed to `dplyr::inner_join()`.
 #' @template .data_return
 #' @examples
-#'   # Filtering with null means no filtering is done
-#'   filter <- NULL
-#'   identical(filter_keys(mtcars, filter), mtcars) # TRUE
+#' # Filtering with null means no filtering is done
+#' filter <- NULL
+#' identical(filter_keys(mtcars, filter), mtcars) # TRUE
 #'
-#'   # Filtering by vs = 0
-#'   filter <- data.frame(vs = 0)
-#'   identical(filter_keys(mtcars, filter), dplyr::filter(mtcars, vs == 0)) # TRUE
+#' # Filtering by vs = 0
+#' filter <- data.frame(vs = 0)
+#' identical(filter_keys(mtcars, filter), dplyr::filter(mtcars, vs == 0)) # TRUE
 #'
-#'   # Filtering by the specific combinations of vs = 0 and am = 1
-#'   filter <- dplyr::distinct(mtcars, vs, am)
-#'   filter_keys(mtcars, filter)
+#' # Filtering by the specific combinations of vs = 0 and am = 1
+#' filter <- dplyr::distinct(mtcars, vs, am)
+#' filter_keys(mtcars, filter)
 #'
 #' @importFrom rlang .data
 #' @export
@@ -54,11 +54,20 @@ filter_keys.tbl_sql <- function(.data, filters, by = NULL, na_by = NULL, ...) {
       )) %>%
       tidyr::pivot_longer(tidyselect::everything(), names_to = "column_name", values_to = "is_na")
 
-    by    <- key_types %>% dplyr::filter(.data$is_na > 0) %>% dplyr::pull("column_name")
-    na_by <- key_types %>% dplyr::filter(.data$is_na == 0) %>% dplyr::pull("column_name")
+    by <- key_types %>%
+      dplyr::filter(.data$is_na > 0) %>%
+      dplyr::pull("column_name")
 
-    if (length(by) == 0)    by    <- NULL
-    if (length(na_by) == 0) na_by <- NULL
+    na_by <- key_types %>%
+      dplyr::filter(.data$is_na == 0) %>%
+      dplyr::pull("column_name")
+
+    if (length(by) == 0) {
+      by <- NULL
+    }
+    if (length(na_by) == 0) {
+      na_by <- NULL
+    }
   }
   return(dplyr::inner_join(.data, filters, by = by, na_by = na_by, ...))
 }

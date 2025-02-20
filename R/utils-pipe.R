@@ -12,7 +12,7 @@
 #' @param rhs (`any`)\cr A function call using the magrittr semantics.
 #' @return The result of calling `rhs(lhs)`.
 #' @examples
-#'   1:10 %>% sum()
+#' 1:10 %>% sum()
 NULL
 
 

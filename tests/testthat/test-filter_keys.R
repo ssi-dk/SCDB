@@ -8,7 +8,9 @@ test_that("filter_keys() works", {
       x %>% filter_keys(NULL)
     )
 
-    filter <- x %>% utils::head(10) %>% dplyr::select("name")
+    filter <- x %>%
+      utils::head(10) %>%
+      dplyr::select("name")
     expect_identical(
       x %>%
         dplyr::filter(name %in% !!dplyr::pull(filter, "name")) %>%
@@ -18,7 +20,10 @@ test_that("filter_keys() works", {
         dplyr::collect()
     )
 
-    filter <- x %>% utils::head(10) %>% dplyr::select("vs", "am") %>% dplyr::distinct()
+    filter <- x %>%
+      utils::head(10) %>%
+      dplyr::select("vs", "am") %>%
+      dplyr::distinct()
     expect_identical(
       x %>%
         dplyr::inner_join(filter, by = c("vs", "am")) %>%
