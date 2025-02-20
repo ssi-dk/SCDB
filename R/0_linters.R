@@ -238,7 +238,7 @@ non_ascii_linter <- function() {
 #'
 #' # okay
 #' lintr::lint(
-#'   text = "#' @param test (`numeric()`)\cr",
+#'   text = r"{#' @param test (`numeric()`)\cr}",
 #'   linters = param_and_field_linter()
 #' )
 #' @importFrom rlang .data
@@ -325,17 +325,17 @@ param_and_field_linter <- function() {
 #'
 #' @examples
 #' ## documentation_template_linter
-#' rd_parameter <- "(`character`)\cr Description of parameter" # Create a template for the "parameter" parameter
+#' rd_parameter <- r"{(`character`)\cr Description of parameter}" # Create a template for the "parameter" parameter
 #'
 #' # will produce lints
 #' lintr::lint(
-#'   text = "#' @param parameter (`character`)\cr Description of parameter",                                            # nolint: documentation_template_linter
+#'   text = r"{#' @param parameter (`character`)\cr Description of parameter}",                                            # nolint: documentation_template_linter
 #'   linters = documentation_template_linter()
 #' )
 #'
 #' # okay
 #' lintr::lint(
-#'   text = "#' @param parameter `r rd_parameter`",
+#'   text = r"{#' @param parameter `r rd_parameter`}",
 #'   linters = documentation_template_linter()
 #' )
 #'
