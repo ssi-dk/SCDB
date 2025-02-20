@@ -93,18 +93,18 @@ test_that("Logger: logging to file works", {
 
 
   # Test logging to file has the right formatting and message type
-  expect_no_message(logger$log_info("test filewriting", tic = logger$start_time))
-  tryCatch(logger$log_warn("test filewriting", tic = logger$start_time), warning = function(w) NULL)
-  tryCatch(logger$log_error("test filewriting", tic = logger$start_time), error = function(e) NULL)
+  expect_no_message(logger$log_info("test file writing", tic = logger$start_time))
+  tryCatch(logger$log_warn("test file writing", tic = logger$start_time), warning = function(w) NULL)
+  tryCatch(logger$log_error("test file writing", tic = logger$start_time), error = function(e) NULL)
 
   ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_true(logger$log_filename %in% dir(log_path))
   expect_identical(
     readLines(logger$log_realpath),
     c(
-      glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test filewriting"),
-      glue::glue("{ts_str} - {Sys.info()[['user']]} - WARNING - test filewriting"),
-      glue::glue("{ts_str} - {Sys.info()[['user']]} - ERROR - test filewriting")
+      glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test file writing"),
+      glue::glue("{ts_str} - {Sys.info()[['user']]} - WARNING - test file writing"),
+      glue::glue("{ts_str} - {Sys.info()[['user']]} - ERROR - test file writing")
     )
   )
 
@@ -136,14 +136,14 @@ test_that("Logger: logging to file works", {
 
 
   # Test logging to file still works
-  expect_no_message(logger$log_info("test filewriting", tic = logger$start_time))
+  expect_no_message(logger$log_info("test file writing", tic = logger$start_time))
 
   ts_str <- format(logger$start_time, "%F %R:%OS3")
   expect_true(logger$log_filename %in% dir(log_path))
   expect_identical(
     readLines(logger$log_realpath),
     glue::glue(
-      "{ts_str} - {Sys.info()[['user']]} - INFO - test filewriting"
+      "{ts_str} - {Sys.info()[['user']]} - INFO - test file writing"
     )
   )
 
@@ -254,16 +254,16 @@ test_that("Logger: all logging simultaneously works", {
     # Test logging to console has the right formatting and message type
     ts_str <- format(logger$start_time, "%F %R:%OS3")
     expect_message(
-      logger$log_info("test console and filewriting", tic = logger$start_time),
-      glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test console and filewriting")
+      logger$log_info("test console and file writing", tic = logger$start_time),
+      glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test console and file writing")
     )
     expect_warning(
-      logger$log_warn("test console and filewriting", tic = logger$start_time),
-      glue::glue("{ts_str} - {Sys.info()[['user']]} - WARNING - test console and filewriting")
+      logger$log_warn("test console and file writing", tic = logger$start_time),
+      glue::glue("{ts_str} - {Sys.info()[['user']]} - WARNING - test console and file writing")
     )
     expect_error(
-      logger$log_error("test console and filewriting", tic = logger$start_time),
-      glue::glue("{ts_str} - {Sys.info()[['user']]} - ERROR - test console and filewriting")
+      logger$log_error("test console and file writing", tic = logger$start_time),
+      glue::glue("{ts_str} - {Sys.info()[['user']]} - ERROR - test console and file writing")
     )
 
 
@@ -272,9 +272,9 @@ test_that("Logger: all logging simultaneously works", {
     expect_identical(
       readLines(logger$log_realpath),
       c(
-        glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test console and filewriting"),
-        glue::glue("{ts_str} - {Sys.info()[['user']]} - WARNING - test console and filewriting"),
-        glue::glue("{ts_str} - {Sys.info()[['user']]} - ERROR - test console and filewriting")
+        glue::glue("{ts_str} - {Sys.info()[['user']]} - INFO - test console and file writing"),
+        glue::glue("{ts_str} - {Sys.info()[['user']]} - WARNING - test console and file writing"),
+        glue::glue("{ts_str} - {Sys.info()[['user']]} - ERROR - test console and file writing")
       )
     )
 
@@ -516,7 +516,7 @@ test_that("LoggerNull: no file logging occurs", {
   # Create logger and test configuration
   logger <- expect_no_message(LoggerNull$new())
 
-  expect_no_message(logger$log_info("test filewriting", tic = logger$start_time))
+  expect_no_message(logger$log_info("test file writing", tic = logger$start_time))
   expect_false(logger$log_filename %in% dir(getOption("SCDB.log_path")))
 
   # Clean up
