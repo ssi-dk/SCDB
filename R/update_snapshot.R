@@ -25,7 +25,7 @@
 #' @param enforce_chronological_order (`logical(1)`)\cr
 #'   Are updates allowed if they are chronologically earlier than latest update?
 #' @param collapse_continuous_records (`logical(1)`)\cr
-#'   Check for records where from/until time stamps are equal and delete? Forced TRUE when enforce_chronological_order is FALSE.
+#'   Check for records where from/until time stamps are equal and delete? Forced `TRUE` when `enforce_chronological_order` is `FALSE`.
 #' @return
 #'   No return value, called for side effects.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
