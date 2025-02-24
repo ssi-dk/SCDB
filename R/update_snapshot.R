@@ -24,6 +24,9 @@
 #'   A configured logging object. If none is given, one is initialized with default arguments.
 #' @param enforce_chronological_order (`logical(1)`)\cr
 #'   Are updates allowed if they are chronologically earlier than latest update?
+#' @param collapse_continuous_records (`logical(1)`)\cr
+#'   Check for records where from/until time stamps are equal and delete?
+#'   Forced `TRUE` when `enforce_chronological_order` is `FALSE`.
 #' @return
 #'   No return value, called for side effects.
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
@@ -55,7 +58,8 @@
 #' @export
 update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, message = NULL, tic = Sys.time(),
                             logger = NULL,
-                            enforce_chronological_order = TRUE) {
+                            enforce_chronological_order = TRUE,
+                            collapse_continuous_records = TRUE) {
 
   # Check arguments
   checkmate::assert_class(.data, "tbl_dbi")
@@ -67,6 +71,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   assert_timestamp_like(tic)
   checkmate::assert_multi_class(logger, "Logger", null.ok = TRUE)
   checkmate::assert_logical(enforce_chronological_order)
+  checkmate::assert_logical(collapse_continuous_records)
 
 
   ### Create target table if not exists
@@ -331,22 +336,24 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   # If several updates come in a single day, some records may have from_ts = until_ts.
   # Alternatively, the above handling of consecutive records will make records have from_ts = until_ts
   # We remove these records here
-  redundant_rows <- dplyr::tbl(conn, db_table_id) %>%
-    dplyr::filter(.data$from_ts == .data$until_ts) %>%
-    dplyr::select("checksum", "from_ts")
+  if (collapse_continuous_records || !enforce_chronological_order) {
+    redundant_rows <- dplyr::tbl(conn, db_table_id) %>%
+      dplyr::filter(.data$from_ts == .data$until_ts) %>%
+      dplyr::select("checksum", "from_ts")
 
-  sql_fix_redundant <- dbplyr::sql_query_delete(
-    con = conn,
-    table = dbplyr::as.sql(db_table_id, con = conn),
-    from = dbplyr::sql_render(redundant_rows),
-    by = c("checksum", "from_ts")
-  )
+    sql_fix_redundant <- dbplyr::sql_query_delete(
+      con = conn,
+      table = dbplyr::as.sql(db_table_id, con = conn),
+      from = dbplyr::sql_render(redundant_rows),
+      by = c("checksum", "from_ts")
+    )
 
-  # Commit changes to DB
-  rs_fix_redundant <- DBI::dbSendQuery(conn, sql_fix_redundant)
-  n_redundant <- DBI::dbGetRowsAffected(rs_fix_redundant) / 2
-  DBI::dbClearResult(rs_fix_redundant)
-  logger$log_info("Continuous records collapsed:", n_redundant)
+    # Commit changes to DB
+    rs_fix_redundant <- DBI::dbSendQuery(conn, sql_fix_redundant)
+    n_redundant <- DBI::dbGetRowsAffected(rs_fix_redundant) / 2
+    DBI::dbClearResult(rs_fix_redundant)
+    logger$log_info("Continuous records collapsed:", n_redundant)
+  }
 
 
   # Clean up
