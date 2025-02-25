@@ -110,11 +110,6 @@ Logger <- R6::R6Class(                                                          
       }
     },
 
-    #' @description
-    #'   Remove generated `log_name` from database if not writing to a file.
-    finalize = function() {
-      self$finalize_db_entry()
-    },
 
     #' @description
     #'   Write a line to log (console / file).
@@ -360,6 +355,13 @@ Logger <- R6::R6Class(                                                          
         copy = TRUE,
         in_place = TRUE
       )
+    },
+
+
+    # @description
+    #   Remove generated `log_name` from database if not writing to a file.
+    finalize = function() {
+      self$finalize_db_entry()
     }
   ),
 
