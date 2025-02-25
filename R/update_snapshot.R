@@ -168,12 +168,13 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
   # Copy to the target connection if needed
   if (!identical(dbplyr::remote_con(.data), conn)) {
-    .data <- dplyr::copy_to(conn, .data, name = unique_table_name())
+    .data <- dplyr::copy_to(conn, .data, name = unique_table_name("SCDB_update_snapshot_input"))
     defer_db_cleanup(.data)
   }
 
   # Once we ensure .data is on the same connection as the target, we compute the checksums
-  .data <- dplyr::compute(digest_to_checksum(.data, col = "checksum"))
+  .data <- digest_to_checksum(.data, col = "checksum")
+  if (!inherits(conn, "SQLiteConnection")) .data <- dplyr::compute(.data) # SQLite was computed in digest_to_checksum
   defer_db_cleanup(.data)
 
   ### Determine the next timestamp in the data (can be NA if none is found)
@@ -197,7 +198,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
   # Apply filter to current records
   if (!is.null(filters) && !identical(dbplyr::remote_con(filters), conn)) {
-    filters <- dplyr::copy_to(conn, filters, name = unique_table_name())
+    filters <- dplyr::copy_to(conn, filters, name = unique_table_name("SCDB_update_snapshot_filter"))
     defer_db_cleanup(filters)
   }
   db_table <- filter_keys(db_table, filters)

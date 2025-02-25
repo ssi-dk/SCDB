@@ -101,7 +101,8 @@ interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
                         by = c(by, ".row")) %>%
     dplyr::select(!".row") %>%
     dplyr::ungroup() %>%
-    dplyr::compute(name = unique_table_name())
+    dplyr::compute(name = unique_table_name("SCDB_interlace_t"))
+  defer_db_cleanup(t)
 
 
   # Merge data onto the new validities using non-equi joins
@@ -116,5 +117,8 @@ interlace.tbl_sql <- function(tables, by = NULL, colnames = NULL) {
       dplyr::relocate(tidyselect::starts_with("valid_"), .after = tidyselect::everything())
   }
 
-  return(purrr::reduce(tables, joiner, .init = t))
+  out <- purrr::reduce(tables, joiner, .init = t) %>%
+    dplyr::compute(name = unique_table_name("SCDB_interlace"))
+
+  return(out)
 }
