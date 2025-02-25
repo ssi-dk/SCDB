@@ -49,7 +49,7 @@ A configured logging object. If none is given, one is initialized with default a
 Are updates allowed if they are chronologically earlier than latest update?}
 
 \item{collapse_continuous_records}{(\code{logical(1)})\cr
-Check for records where from/until time stamps are equal and delete? Forced TRUE when enforce_chronological_order is FALSE.}
+Whether to check for records where from/until time stamps are equal and delete them. Forced \code{TRUE} when \code{enforce_chronological_order} is \code{FALSE}.}
 }
 \value{
 No return value, called for side effects.
