@@ -13,6 +13,10 @@
 * `update_snapshot()` now handles the given `timestamp` more consistently (#187).
   Thanks to @kjakobse for discovering the issue.
 
+* `?Logger$finalize()` is now a private method (#180).
+  Required as of `R6` v2.4.0.
+
+
 # SCDB 0.5.0
 
 ## New features
