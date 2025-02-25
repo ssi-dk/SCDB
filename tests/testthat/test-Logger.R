@@ -393,7 +393,7 @@ test_that("Logger: log_file is NULL in database if not writing to file", {
     expect_match(db_log_file, "^.+$")
 
     # When finalising, log_file should be set to NULL
-    logger$finalize()
+    logger$.__enclos_env__$private$finalize()
 
     db_log_file <- dplyr::pull(dplyr::filter(logger$log_tbl, log_file == !!logger$log_filename))
     expect_length(db_log_file, 0)
@@ -428,7 +428,7 @@ test_that("Logger: $finalize() handles log table is at some point deleted", {
 
     expect_no_error(logger$log_to_db(n_insertions = 42))
 
-    expect_no_error(logger$finalize())
+    expect_no_error(logger$.__enclos_env__$private$finalize())
 
     # Clean up
     rm(logger)

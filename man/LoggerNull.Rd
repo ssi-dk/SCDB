@@ -33,7 +33,6 @@ Errors and warnings are still produced.
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="finalize"><a href='../../SCDB/html/Logger.html#method-Logger-finalize'><code>SCDB::Logger$finalize()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_error"><a href='../../SCDB/html/Logger.html#method-Logger-log_error'><code>SCDB::Logger$log_error()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_info"><a href='../../SCDB/html/Logger.html#method-Logger-log_info'><code>SCDB::Logger$log_info()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_warn"><a href='../../SCDB/html/Logger.html#method-Logger-log_warn'><code>SCDB::Logger$log_warn()</code></a></span></li>
