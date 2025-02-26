@@ -27,6 +27,7 @@ diseasy_code_linters <- function() {
       unnecessary_lambda_linter = NULL,   # Fails for purrr::map with additional function arguments
       unnecessary_nesting_linter = NULL,  # Fails for purrr::map with additional function arguments
       strings_as_factors_linter = NULL,   # Seems to be some backwards compatibility stuff.
+      literal_coercion_linter = NULL,     # Fails for mlr3 style roxygen2 docs with (`integer(1)`)
       return_linter = NULL,               # We use explicit return statements
       one_call_pipe_linter = NULL,        # One-call pipes can improve readability and code mobility
       nested_pipe_linter = NULL,          # Nested pipes can improve readability and code mobility
