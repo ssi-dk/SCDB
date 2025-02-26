@@ -3839,7 +3839,7 @@
     {
       "ref": "RPostgres",
       "package": "RPostgres",
-      "version": "1.4.7",
+      "version": "1.4.8",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -3851,10 +3851,10 @@
         "RemoteRef": "RPostgres",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.4.7"
+        "RemoteSha": "1.4.8"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/RPostgres_1.4.7.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/RPostgres_1.4.7.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/RPostgres_1.4.8.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/RPostgres_1.4.8.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
