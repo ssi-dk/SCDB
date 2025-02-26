@@ -54,6 +54,7 @@ Suggests:
     microbenchmark,
     odbc,
     pak,
+    RJDBC,
     rmarkdown,
     roxygen2,
     pkgdown,
