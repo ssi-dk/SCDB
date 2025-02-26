@@ -14,7 +14,7 @@ update_snapshot(
   tic = Sys.time(),
   logger = NULL,
   enforce_chronological_order = TRUE,
-  collapse_continuous_records = TRUE
+  collapse_continuous_records = FALSE
 )
 }
 \arguments{
@@ -56,13 +56,23 @@ Forced \code{TRUE} when \code{enforce_chronological_order} is \code{FALSE}.}
 No return value, called for side effects.
 }
 \description{
-\code{update_snapshots} makes it easy to create and update a historical data table on a remote (SQL) server.
+\code{update_snapshot()} makes it easy to create and update a historical data table on a remote (SQL) server.
 The function takes the data (\code{.data}) as it looks on a given point in time (\code{timestamp}) and then updates
 (or creates) an remote table identified by \code{db_table}.
 This update only stores the changes between the new data (\code{.data}) and the data currently stored on the remote.
 This way, the data can be reconstructed as it looked at any point in time while taking as little space as possible.
 
 See \code{vignette("basic-principles")} for further introduction to the function.
+}
+\details{
+The most common use case is having consecutive snapshots of a dataset and wanting to store the changes between
+them. If you have a special case where you want to insert data that is not consecutive, you can set the
+\code{enforce_chronological_order} to \code{FALSE}. This will allow you to insert data that is earlier than the latest
+time stamp.
+
+If you have more updates in a single day and use \code{Date()} rather than \code{POSIXct()}, as your time stamp, you
+may end up with records where \code{from_ts} and \code{until_ts} are equal. These records not normally accessible with
+\code{get_table()} and you may want to prevent these records using \code{collapse_continuous_records = TRUE}.
 }
 \examples{
 \dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
