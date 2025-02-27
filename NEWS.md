@@ -10,6 +10,9 @@
 
 * Intermediary tables are now being cleaned up (#174).
 
+* `update_snapshot()` now handles the given `timestamp` more consistently (#187).
+  Thanks to @kjakobse for discovering the issue.
+
 # SCDB 0.5.0
 
 ## New features
