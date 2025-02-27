@@ -2501,7 +2501,7 @@
     {
       "ref": "local::.",
       "package": "SCDB",
-      "version": "0.5.1",
+      "version": "0.5.1.9000",
       "type": "local",
       "direct": true,
       "binary": false,
@@ -2512,7 +2512,7 @@
         "RemoteType": "local"
       },
       "sources": "file:///home/runner/work/SCDB/SCDB",
-      "target": "src/contrib/SCDB_0.5.1.tar.gz",
+      "target": "src/contrib/SCDB_0.5.1.9000.tar.gz",
       "platform": "source",
       "rversion": "*",
       "directpkg": true,
