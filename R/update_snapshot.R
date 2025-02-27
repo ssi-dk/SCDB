@@ -309,35 +309,19 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
       dplyr::mutate("until_ts" = ifelse(.data$from_ts < .data$from_ts.p, .data$until_ts.p, .data$from_ts)) %>%
       dplyr::select(!tidyselect::ends_with(".p"))
 
-    if (inherits(conn, "duckdb_connection")) {
-      # For duckdb the lower level translation fails
-      # dbplyr 2.5.0, duckdb 0.10.2
-      consecutive_rows_fix <- dplyr::compute(consecutive_rows_fix)
-      defer_db_cleanup(consecutive_rows_fix)
-      n_consecutive <- nrow(consecutive_rows_fix) / 2
+    sql_fix_consecutive <- dbplyr::sql_query_upsert(
+      con = conn,
+      table = dbplyr::as.sql(db_table_id, con = conn),
+      from = dbplyr::sql_render(consecutive_rows_fix),
+      by =  c("checksum", "from_ts"),
+      update_cols = "until_ts"
+    )
 
-      dplyr::rows_update(
-        x = dplyr::tbl(conn, db_table_id),
-        y = consecutive_rows_fix,
-        by = c("checksum", "from_ts"),
-        unmatched = "ignore",
-        in_place = TRUE
-      )
+    # Commit changes to DB
+    rs_fix_consecutive <- DBI::dbSendQuery(conn, sql_fix_consecutive)
+    n_consecutive <- DBI::dbGetRowsAffected(rs_fix_consecutive) / 2
+    DBI::dbClearResult(rs_fix_consecutive)
 
-    } else {
-      sql_fix_consecutive <- dbplyr::sql_query_upsert(
-        con = conn,
-        table = dbplyr::as.sql(db_table_id, con = conn),
-        from = dbplyr::sql_render(consecutive_rows_fix),
-        by =  c("checksum", "from_ts"),
-        update_cols = "until_ts"
-      )
-
-      # Commit changes to DB
-      rs_fix_consecutive <- DBI::dbSendQuery(conn, sql_fix_consecutive)
-      n_consecutive <- DBI::dbGetRowsAffected(rs_fix_consecutive) / 2
-      DBI::dbClearResult(rs_fix_consecutive)
-    }
     logger$log_info("Doubly updated records removed:", n_consecutive)
   }
 

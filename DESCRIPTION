@@ -54,7 +54,7 @@ Suggests:
     callr,
     conflicted,
     devtools,
-    duckdb (>= 0.10.1),
+    duckdb,
     ggplot2,
     here,
     jsonlite,
