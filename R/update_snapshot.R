@@ -195,11 +195,11 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   ### Determine the next timestamp in the data (can be NA if none is found)
   next_timestamp <- min(
     db_table %>%
-      dplyr::filter(.data$from_ts  > timestamp) %>%
+      dplyr::filter(.data$from_ts > !!db_timestamp(timestamp, conn)) %>%
       dplyr::summarize(next_timestamp = min(.data$from_ts, na.rm = TRUE)) %>%
       dplyr::pull("next_timestamp"),
     db_table %>%
-      dplyr::filter(.data$until_ts > timestamp) %>%
+      dplyr::filter(.data$until_ts > !!db_timestamp(timestamp, conn)) %>%
       dplyr::summarize(next_timestamp = min(.data$until_ts, na.rm = TRUE)) %>%
       dplyr::pull("next_timestamp")
   ) %>%
@@ -209,7 +209,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
 
   ### Consider only records valid at timestamp (and apply the filter if present)
-  db_table <- slice_time(db_table, timestamp)
+  db_table <- slice_time(db_table, db_timestamp(timestamp, conn))
 
   # Apply filter to current records
   if (!is.null(filters) && !identical(dbplyr::remote_con(filters), conn)) {
