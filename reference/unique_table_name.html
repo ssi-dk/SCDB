@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">SCDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create a name for a temporary table</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ssi-dk/SCDB/blob/v0.5.0/R/helpers.R" class="external-link"><code>R/helpers.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ssi-dk/SCDB/blob/v0.5.1/R/helpers.R" class="external-link"><code>R/helpers.R</code></a></small>
       <div class="d-none name"><code>unique_table_name.Rd</code></div>
     </div>
 
@@ -64,14 +64,14 @@ A naming scope to generate the table name within.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">unique_table_name</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="co"># SCDB_&lt;10 alphanumerical letters&gt;</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SCDB_HcXq3OSn2e</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SCDB_n2eXl258Rg</span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">unique_table_name</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="co"># SCDB_&lt;10 alphanumerical letters&gt;</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SCDB_Xl258RgjzX</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SCDB_jzX6JVzH3Q</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">unique_table_name</span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span><span class="op">)</span> <span class="co"># test_&lt;10 alphanumerical letters&gt;</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> test_6JVzH3QNth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> test_NthByrdeDh</span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">unique_table_name</span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span><span class="op">)</span> <span class="co"># test_&lt;10 alphanumerical letters&gt;</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> test_ByrdeDhSCD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> test_SCD0ClxZl1</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

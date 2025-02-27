@@ -15,7 +15,7 @@ Logging to the database must match the fields in the log table."><meta property=
 
     <a class="navbar-brand me-2" href="../index.html">SCDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@ Logging to the database must match the fields in the log table."><meta property=
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Logger: Complete logging to console, file and database</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ssi-dk/SCDB/blob/v0.5.0/R/Logger.R" class="external-link"><code>R/Logger.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ssi-dk/SCDB/blob/v0.5.1/R/Logger.R" class="external-link"><code>R/Logger.R</code></a></small>
       <div class="d-none name"><code>Logger.Rd</code></div>
     </div>
 
@@ -101,7 +101,6 @@ The full path to the logger's log file. Read only.</p></dd>
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
 <ul><li><p><a href="#method-Logger-new"><code>Logger$new()</code></a></p></li>
-<li><p><a href="#method-Logger-finalize"><code>Logger$finalize()</code></a></p></li>
 <li><p><a href="#method-Logger-log_info"><code>Logger$log_info()</code></a></p></li>
 <li><p><a href="#method-Logger-log_warn"><code>Logger$log_warn()</code></a></p></li>
 <li><p><a href="#method-Logger-log_error"><code>Logger$log_error()</code></a></p></li>
@@ -170,18 +169,10 @@ Should a warning be produced if no logging will be done?</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-Logger-finalize"></a><div class="section">
-<h3 id="method-finalize-">Method <code>finalize()</code><a class="anchor" aria-label="anchor" href="#method-finalize-"></a></h3>
-<p>Remove generated <code>log_name</code> from database if not writing to a file.</p><div class="section">
-<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Logger</span><span class="op">$</span><span class="fu">finalize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-
 </div><p></p><hr><a id="method-Logger-log_info"></a><div class="section">
 <h3 id="method-log-info-">Method <code>log_info()</code><a class="anchor" aria-label="anchor" href="#method-log-info-"></a></h3>
 <p>Write a line to log (console / file).</p><div class="section">
-<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
+<h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Logger</span><span class="op">$</span><span class="fu">log_info</span><span class="op">(</span></span>
 <span>  <span class="va">...</span>,</span>
 <span>  tic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -228,7 +219,7 @@ The format of the timestamp used in the log message (parsable by <code><a href="
 </div><p></p><hr><a id="method-Logger-log_warn"></a><div class="section">
 <h3 id="method-log-warn-">Method <code>log_warn()</code><a class="anchor" aria-label="anchor" href="#method-log-warn-"></a></h3>
 <p>Write a warning to log file and generate warning.</p><div class="section">
-<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Logger</span><span class="op">$</span><span class="fu">log_warn</span><span class="op">(</span><span class="va">...</span>, log_type <span class="op">=</span> <span class="st">"WARNING"</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -250,7 +241,7 @@ The severity of the log message.</p></dd>
 </div><p></p><hr><a id="method-Logger-log_error"></a><div class="section">
 <h3 id="method-log-error-">Method <code>log_error()</code><a class="anchor" aria-label="anchor" href="#method-log-error-"></a></h3>
 <p>Write an error to log file and stop execution.</p><div class="section">
-<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Logger</span><span class="op">$</span><span class="fu">log_error</span><span class="op">(</span><span class="va">...</span>, log_type <span class="op">=</span> <span class="st">"ERROR"</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -272,7 +263,7 @@ The severity of the log message.</p></dd>
 </div><p></p><hr><a id="method-Logger-log_to_db"></a><div class="section">
 <h3 id="method-log-to-db-">Method <code>log_to_db()</code><a class="anchor" aria-label="anchor" href="#method-log-to-db-"></a></h3>
 <p>Write or update log table.</p><div class="section">
-<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
+<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Logger</span><span class="op">$</span><span class="fu">log_to_db</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -290,7 +281,7 @@ Structured data written to database log table. Name indicates column and value i
 <h3 id="method-finalize-db-entry-">Method <code>finalize_db_entry()</code><a class="anchor" aria-label="anchor" href="#method-finalize-db-entry-"></a></h3>
 <p>Auto-fills "end_time" and "duration" for the log entry and clears the "log_file" field if no
 file is being written.</p><div class="section">
-<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Logger</span><span class="op">$</span><span class="fu">finalize_db_entry</span><span class="op">(</span>end_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -307,7 +298,7 @@ The end time for the log entry.</p></dd>
 </div><p></p><hr><a id="method-Logger-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">Logger</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -334,14 +325,13 @@ The end time for the log entry.</p></dd>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="va">logger</span><span class="op">$</span><span class="fu">log_info</span><span class="op">(</span><span class="st">"This is an info message"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-02-03 13:45:00.552 - runner - INFO - This is an info message</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2025-02-27 13:10:19.014 - runner - INFO - This is an info message</span>
 <span class="r-in"><span>  <span class="va">logger</span><span class="op">$</span><span class="fu">log_to_db</span><span class="op">(</span>message <span class="op">=</span> <span class="st">"This is a message"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">logger</span><span class="op">$</span><span class="fu">log_warn</span><span class="op">(</span><span class="st">"This is a warning!"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>2025-02-03 13:45:00.554 - runner - WARNING - This is a warning!</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>2025-02-27 13:10:19.016 - runner - WARNING - This is a warning!</span>
 <span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">logger</span><span class="op">$</span><span class="fu">log_error</span><span class="op">(</span><span class="st">"This is an error!"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in logger$log_error("This is an error!") : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2025-02-03 13:45:00.554 - runner - ERROR - This is an error!</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error : 2025-02-27 13:10:19.017 - runner - ERROR - This is an error!</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

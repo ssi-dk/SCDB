@@ -9,7 +9,7 @@ Errors and warnings are still produced."><meta property="og:image" content="http
 
     <a class="navbar-brand me-2" href="../index.html">SCDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@ Errors and warnings are still produced."><meta property="og:image" content="http
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>LoggerNull: The no-logging Logger</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ssi-dk/SCDB/blob/v0.5.0/R/Logger.R" class="external-link"><code>R/Logger.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ssi-dk/SCDB/blob/v0.5.1/R/Logger.R" class="external-link"><code>R/Logger.R</code></a></small>
       <div class="d-none name"><code>LoggerNull.Rd</code></div>
     </div>
 
@@ -64,8 +64,7 @@ Errors and warnings are still produced.</p>
 <li><p><a href="#method-LoggerNull-log_to_db"><code>LoggerNull$log_to_db()</code></a></p></li>
 <li><p><a href="#method-LoggerNull-finalize_db_entry"><code>LoggerNull$finalize_db_entry()</code></a></p></li>
 <li><p><a href="#method-LoggerNull-clone"><code>LoggerNull$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="finalize"><a href="Logger.html#method-finalize"><code>SCDB::Logger$finalize()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_error"><a href="Logger.html#method-log_error"><code>SCDB::Logger$log_error()</code></a></span></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_error"><a href="Logger.html#method-log_error"><code>SCDB::Logger$log_error()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_info"><a href="Logger.html#method-log_info"><code>SCDB::Logger$log_info()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_warn"><a href="Logger.html#method-log_warn"><code>SCDB::Logger$log_warn()</code></a></span></li>
 </ul></details></p><hr><a id="method-LoggerNull-new"></a><div class="section">
@@ -143,10 +142,9 @@ Errors and warnings are still produced.</p>
 <span class="r-in"><span>  <span class="va">logger</span><span class="op">$</span><span class="fu">log_info</span><span class="op">(</span><span class="st">"This message will not print!"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="va">logger</span><span class="op">$</span><span class="fu">log_to_db</span><span class="op">(</span>message <span class="op">=</span> <span class="st">"This message will no be written in database!"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">logger</span><span class="op">$</span><span class="fu">log_warn</span><span class="op">(</span><span class="st">"This is a warning!"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>2025-02-03 13:45:01.191 - runner - WARNING - This is a warning!</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>2025-02-27 13:10:19.576 - runner - WARNING - This is a warning!</span>
 <span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">logger</span><span class="op">$</span><span class="fu">log_error</span><span class="op">(</span><span class="st">"This is an error!"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in logger$log_error("This is an error!") : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2025-02-03 13:45:01.192 - runner - ERROR - This is an error!</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error : 2025-02-27 13:10:19.577 - runner - ERROR - This is an error!</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

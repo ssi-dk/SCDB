@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">SCDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,11 +34,25 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/ssi-dk/SCDB/blob/v0.5.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/ssi-dk/SCDB/blob/v0.5.1/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.0" id="scdb-050">SCDB 0.5.0<a class="anchor" aria-label="anchor" href="#scdb-050"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.5.1" id="scdb-051">SCDB 0.5.1<a class="anchor" aria-label="anchor" href="#scdb-051"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-5-1">BREAKING CHANGES<a class="anchor" aria-label="anchor" href="#breaking-changes-0-5-1"></a></h3>
+<ul><li>
+<code><a href="../reference/update_snapshot.html">update_snapshot()</a></code> no longer collapses continuous records by default (<a href="https://github.com/ssi-dk/SCDB/issues/183" class="external-link">#183</a>, <a href="https://github.com/kjakobse" class="external-link">@kjakobse</a>). To preserve this behavior, use <code>collapse_continuous_records = TRUE</code>. In return, <code><a href="../reference/update_snapshot.html">update_snapshot()</a></code> is now faster by default.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="improvements-and-fixes-0-5-1">Improvements and Fixes<a class="anchor" aria-label="anchor" href="#improvements-and-fixes-0-5-1"></a></h3>
+<ul><li><p>Intermediary tables are now being cleaned up (<a href="https://github.com/ssi-dk/SCDB/issues/174" class="external-link">#174</a>).</p></li>
+<li><p><code><a href="../reference/update_snapshot.html">update_snapshot()</a></code> now handles the given <code>timestamp</code> more consistently (<a href="https://github.com/ssi-dk/SCDB/issues/187" class="external-link">#187</a>). Thanks to <a href="https://github.com/kjakobse" class="external-link">@kjakobse</a> for discovering the issue.</p></li>
+<li><p><code><a href=".{2}/reference/Logger.html#method-Logger-finalize">$finalize()</a></code> is now a private method (<a href="https://github.com/ssi-dk/SCDB/issues/180" class="external-link">#180</a>). Required as of <code>R6</code> v2.4.0.</p></li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.0" id="scdb-050">SCDB 0.5.0<a class="anchor" aria-label="anchor" href="#scdb-050"></a></h2><p class="text-muted">CRAN release: 2025-02-03</p>
 <div class="section level3">
 <h3 id="new-features-0-5-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-5-0"></a></h3>
 <ul><li>Added function <code><a href="../reference/create_index.html">create_index()</a></code> to allow easy creating of an index on a table (<a href="https://github.com/ssi-dk/SCDB/issues/137" class="external-link">#137</a>).</li>
@@ -77,7 +91,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="scdb-040">SCDB 0.4.0<a class="anchor" aria-label="anchor" href="#scdb-040"></a></h2><p class="text-muted">CRAN release: 2024-03-21</p>
 <div class="section level3">
-<h3 id="breaking-changes-0-4-0">BREAKING CHANGES:<a class="anchor" aria-label="anchor" href="#breaking-changes-0-4-0"></a></h3>
+<h3 id="breaking-changes-0-4-0">BREAKING CHANGES<a class="anchor" aria-label="anchor" href="#breaking-changes-0-4-0"></a></h3>
 <ul><li>
 <p>Table identification is now more specific (<a href="https://github.com/ssi-dk/SCDB/issues/93" class="external-link">#93</a>).</p>
 <p>Most SCDB functions allow for tables to be specified by a character representation of “[catalog].schema.table”.</p>

@@ -21,7 +21,7 @@ If no na_by argument is given is given, the function defaults to using dplyr::*_
 
     <a class="navbar-brand me-2" href="../index.html">SCDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@ If no na_by argument is given is given, the function defaults to using dplyr::*_
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>SQL Joins</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ssi-dk/SCDB/blob/v0.5.0/R/db_joins.R" class="external-link"><code>R/db_joins.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ssi-dk/SCDB/blob/v0.5.1/R/db_joins.R" class="external-link"><code>R/db_joins.R</code></a></small>
       <div class="d-none name"><code>joins.Rd</code></div>
     </div>
 
@@ -192,15 +192,15 @@ and return data to R.</p>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">db1</span>, <span class="va">db2</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html" class="external-link">show_query</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(x)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;SQL&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">SELECT</span> `dbplyr_iPlfS5HbOG`.`x`<span style="color: #0000BB;"> AS </span>`x`, `y`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">FROM</span> `dbplyr_iPlfS5HbOG`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">LEFT JOIN</span> `dbplyr_nPPoHufP8g`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">ON</span> (`dbplyr_iPlfS5HbOG`.`x` = `dbplyr_nPPoHufP8g`.`x`)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">SELECT</span> `dbplyr_OGqaBG4XIp`.`x`<span style="color: #0000BB;"> AS </span>`x`, `y`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">FROM</span> `dbplyr_OGqaBG4XIp`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">LEFT JOIN</span> `dbplyr_P8gLIJILJj`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">ON</span> (`dbplyr_OGqaBG4XIp`.`x` = `dbplyr_P8gLIJILJj`.`x`)</span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">db1</span>, <span class="va">db2</span>, sql_on <span class="op">=</span> <span class="st">"LHS.x &lt; RHS.x"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html" class="external-link">show_query</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;SQL&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">SELECT</span> `LHS`.`x`<span style="color: #0000BB;"> AS </span>`x.x`, `RHS`.`x`<span style="color: #0000BB;"> AS </span>`x.y`, `y`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">FROM</span> `dbplyr_iPlfS5HbOG`<span style="color: #0000BB;"> AS </span>`LHS`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">LEFT JOIN</span> `dbplyr_nPPoHufP8g`<span style="color: #0000BB;"> AS </span>`RHS`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">FROM</span> `dbplyr_OGqaBG4XIp`<span style="color: #0000BB;"> AS </span>`LHS`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">LEFT JOIN</span> `dbplyr_P8gLIJILJj`<span style="color: #0000BB;"> AS </span>`RHS`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">ON</span> (LHS.x &lt; RHS.x)</span>
 </code></pre></div>
     </div>

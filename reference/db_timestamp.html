@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">SCDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Determine the type of timestamps the database supports</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ssi-dk/SCDB/blob/v0.5.0/R/db_timestamp.R" class="external-link"><code>R/db_timestamp.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ssi-dk/SCDB/blob/v0.5.1/R/db_timestamp.R" class="external-link"><code>R/db_timestamp.R</code></a></small>
       <div class="d-none name"><code>db_timestamp.Rd</code></div>
     </div>
 
@@ -71,7 +71,7 @@ Connection object.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_connection.html">get_connection</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="fu">db_timestamp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">conn</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;SQL&gt; '2025-02-03 13:45:03'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;SQL&gt; '2025-02-27 13:10:21'</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="close_connection.html">close_connection</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span></span>
 </code></pre></div>
