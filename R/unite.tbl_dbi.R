@@ -6,7 +6,7 @@ utils::globalVariables(c("NULLIF", "CONCAT_WS"))
 #' @inherit tidyr::unite
 #' @return
 #'   A tbl_dbi with the specified columns united into a new column named according to "col".
-#' @examplesIf Sys.info()["sysname"] != "Darwin"
+#' @examples
 #'   library(tidyr, warn.conflicts = FALSE)
 #'
 #'   df <- expand_grid(x = c("a", NA), y = c("b", NA))
