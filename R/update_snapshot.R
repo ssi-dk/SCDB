@@ -229,7 +229,9 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   slice_ts <- db_timestamp(timestamp, conn)
 
   currently_valid_checksums <- db_table %>%
-    dplyr::select("checksum")
+    dplyr::select("checksum") %>%
+    dplyr::compute()
+  defer_db_cleanup(currently_valid_checksums)
 
 
   ## Deactivation
