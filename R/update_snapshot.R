@@ -191,6 +191,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   .data <- digest_to_checksum(.data, col = "checksum")
   if (!inherits(conn, "SQLiteConnection")) .data <- dplyr::compute(.data) # SQLite was computed in digest_to_checksum
   defer_db_cleanup(.data)
+  logger$log_info("Calculated checksums")
 
   ### Determine the next timestamp in the data (can be NA if none is found)
   next_timestamp <- min(
@@ -247,7 +248,6 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     by = "checksum",
     update_values = c("until_ts" = slice_ts)
   )
-  logger$log_info("After to_remove")
 
   # Commit changes to DB
   rs_deactivate <- DBI::dbSendQuery(conn, sql_deactivate)
@@ -278,7 +278,6 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     by = c("checksum", "from_ts"),
     conflict = "ignore"
   )
-  logger$log_info("After to_add")
 
   # Commit changes to DB
   rs_insert <- DBI::dbSendQuery(conn, sql_insert)
