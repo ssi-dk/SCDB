@@ -29,7 +29,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Lasse Engbo Christiansen \email{lsec@ssi.dk} (\href{https://orcid.org/0000-0001-5019-1931}{ORCID}) [reviewer]
+  \item Lasse Engbo Christiansen \email{lsec@ssi.dk} (\href{https://orcid.org/0000-0001-5019-1931}{ORCID}) [reviewer, contributor]
   \item Sofia Myrup Otero \email{smot@ssi.dk} [reviewer]
   \item Kim Daniel Jacobsen [contributor]
   \item Statens Serum Institut [copyright holder, funder]
