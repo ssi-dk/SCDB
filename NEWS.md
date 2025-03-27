@@ -1,5 +1,9 @@
 # SCDB (development version)
 
+## Improvements and Fixes
+
+* A bug was fixed in `update_snapshot()` where the process would unexpectedly hang (#192).
+
 # SCDB 0.5.1
 
 ## BREAKING CHANGES
