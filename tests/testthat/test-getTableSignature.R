@@ -285,10 +285,10 @@ for (conn in c(list(NULL), get_test_conns())) {
   if (inherits(conn, "Microsoft SQL Server")) {
     print(conn)
     data_random4 <- data.frame(datetime = Sys.time())
-    DBI::dbWriteTable(conn, "#testthis", value = data_random4, temporary =TRUE)
-    #dr_copy <- dplyr::copy_to(conn, data_random4)
-    print(tbl(conn, "#testthis"))
+    DBI::dbWriteTable(conn, "#testthis", value = data_random4, temporary = TRUE)
+    print(dplyr::tbl(conn, "#testthis"))
     print(conn)
+    dr_copy <- dplyr::copy_to(conn, data_random4)
     tt <- getTableSignature(dr_copy, conn)
     print(tt)
     test_that("getTableSignature() generates signature for random data on remote (Microsoft SQL Server)", {
