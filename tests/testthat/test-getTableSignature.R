@@ -285,18 +285,40 @@ for (conn in c(list(NULL), get_test_conns())) {
   if (inherits(conn, "Microsoft SQL Server")) {
     print(conn)
     data_random4 <- data.frame(datetime = Sys.time())
+
+    data_ok <- data.frame(
+      "Date"      = Sys.Date(),
+      "character" = "test",
+      "integer"   = 1L,
+      "numeric"   = 1,
+      "logical"   = TRUE
+    )
+
     DBI::dbWriteTable(conn, "#testthis", value = data_random4, temporary = TRUE)
     print(dplyr::tbl(conn, "#testthis"))
     print("testthis done")
+
     DBI::dbWriteTable(conn, "#testthis2", value = data_random, temporary = TRUE)
     print(dplyr::tbl(conn, "#testthis2"))
     print("testthis2 done")
+
+    DBI::dbWriteTable(conn, DBI::SQL("#testthis2A"), value = data_random, temporary = TRUE)
+    print(dplyr::tbl(conn, "#testthis2A"))
+    print("testthis2A done")
+
+    DBI::dbWriteTable(conn, DBI::SQL(dbplyr::as_table_path("#testthis2B0", conn)), value = data_ok, temporary = TRUE)
+    print(dplyr::tbl(conn, "#testthis2B0"))
+    print("testthis2B0 done")
+
+
     DBI::dbWriteTable(conn, DBI::SQL(dbplyr::as_table_path("#testthis2B", conn)), value = data_random, temporary = TRUE)
     print(dplyr::tbl(conn, "#testthis2B"))
     print("testthis2B done")
+
     dplyr::db_write_table(conn, dbplyr::as_table_path("#testthis3", conn), value = data_random, temporary = TRUE)
     print(dplyr::tbl(conn, "#testthis3"))
     print("testthis3 done")
+
     dbplyr::db_copy_to(conn, "#testthis4", value = data_random, temporary = TRUE)
     print("testthis4 done")
 
