@@ -302,13 +302,13 @@ for (conn in c(list(NULL), get_test_conns())) {
     print(dplyr::tbl(conn, "#testthis2"))
     print("testthis2 done")
 
-    DBI::dbWriteTable(conn, DBI::SQL("#testthis2A"), value = data_random, temporary = TRUE)
-    print(dplyr::tbl(conn, "#testthis2A"))
-    print("testthis2A done")
-
     DBI::dbWriteTable(conn, DBI::SQL(dbplyr::as_table_path("#testthis2B0", conn)), value = data_ok, temporary = TRUE)
     print(dplyr::tbl(conn, "#testthis2B0"))
     print("testthis2B0 done")
+
+    DBI::dbWriteTable(conn, DBI::SQL("#testthis2A"), value = data_random, temporary = TRUE)
+    print(dplyr::tbl(conn, "#testthis2A"))
+    print("testthis2A done")
 
 
     DBI::dbWriteTable(conn, DBI::SQL(dbplyr::as_table_path("#testthis2B", conn)), value = data_random, temporary = TRUE)
