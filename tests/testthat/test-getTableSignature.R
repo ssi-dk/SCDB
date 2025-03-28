@@ -283,9 +283,13 @@ for (conn in c(list(NULL), get_test_conns())) {
   }
 
   if (inherits(conn, "Microsoft SQL Server")) {
-      print(conn)
-      tt <- getTableSignature(dplyr::copy_to(conn, data_random), conn)
-      print(tt)
+    print(conn)
+    data_random2 <- data_random
+    dr_copy <- dplyr::copy_to(conn, data_random2)
+    print(dr_copy)
+    print(conn)
+    tt <- getTableSignature(dr_copy, conn)
+    print(tt)
     test_that("getTableSignature() generates signature for random data on remote (Microsoft SQL Server)", {
       expect_identical(
         tt,
