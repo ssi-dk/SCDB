@@ -284,13 +284,11 @@ for (conn in c(list(NULL), get_test_conns())) {
 
   if (inherits(conn, "Microsoft SQL Server")) {
     print(conn)
-    data_random2 <- data_random |> dplyr::select(Date, character, integer, numeric)
-    dr_copy <- dplyr::copy_to(conn, data_random2)
-    data_random3 <- data_random |> dplyr::select(Date, character, integer, numeric, logical)
-    dr_copy <- dplyr::copy_to(conn, data_random3)
-    print(dr_copy)
-    data_random4 <- data_random |> dplyr::select(Date, character, integer, numeric, POSIXct)
+    data_random4 <- data.frame(datetime = Sys.time())
     dr_copy <- dplyr::copy_to(conn, data_random4)
+    print(dr_copy)
+    data_random3 <- data_random |> dplyr::select(Date, character, integer, numeric, POSIXct)
+    dr_copy <- dplyr::copy_to(conn, data_random3)
     print(dr_copy)
     print(conn)
     tt <- getTableSignature(dr_copy, conn)
