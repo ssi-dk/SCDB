@@ -294,6 +294,9 @@ for (conn in c(list(NULL), get_test_conns())) {
       "logical"   = TRUE
     )
 
+    print(DBI::dbDataType(conn, data_random))
+    print(DBI::dbDataType(conn, data_ok))
+
     DBI::dbWriteTable(conn, "#testthis", value = data_random4, temporary = TRUE)
     print(dplyr::tbl(conn, "#testthis"))
     print("testthis done")
