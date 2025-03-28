@@ -21,18 +21,21 @@ jobs:
             echo "abort=true" >> "$GITHUB_OUTPUT"
           fi
 
-  # We call the reusable workflow that triggers all AEF-DDF workflows
-  run-all-AEF-DFF-workflows:
-    name: ⚙️ Dispatch
-    needs: context
-    if: needs.context.outputs.abort != 'true' || contains('main,master', github.ref_name)
-    uses: ssi-dk/AEF-DDF/.github/workflows/workflow-dispatcher.yaml@main
-    with:
-      # We pass information about the triggering event
-      event_name: ${{ github.event_name }}
-      run_id: ${{ github.run_id }}
+  name: Run only one test
+  run: Rscript -e 'testthat::test_file("tests/testthat/test-getTableSignature.R")'
 
-      # code-coverage creates data bases for the tests. Here you can specify the schemas you need for the workflow
-      schemas: test,test.one
-      check_postgres_logs: false
-    secrets: inherit
+  # We call the reusable workflow that triggers all AEF-DDF workflows
+  # run-all-AEF-DFF-workflows:
+  #   name: ⚙️ Dispatch
+  #   needs: context
+  #   if: needs.context.outputs.abort != 'true' || contains('main,master', github.ref_name)
+  #   uses: ssi-dk/AEF-DDF/.github/workflows/workflow-dispatcher.yaml@main
+  #   with:
+  #     # We pass information about the triggering event
+  #     event_name: ${{ github.event_name }}
+  #     run_id: ${{ github.run_id }}
+
+  #     # code-coverage creates data bases for the tests. Here you can specify the schemas you need for the workflow
+  #     schemas: test,test.one
+  #     check_postgres_logs: false
+  #   secrets: inherit
