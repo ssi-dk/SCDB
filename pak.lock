@@ -2277,7 +2277,7 @@
     {
       "ref": "jsonlite",
       "package": "jsonlite",
-      "version": "1.9.1",
+      "version": "2.0.0",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -2289,10 +2289,10 @@
         "RemoteRef": "jsonlite",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.9.1"
+        "RemoteSha": "2.0.0"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/jsonlite_1.9.1.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/jsonlite_1.9.1.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/jsonlite_2.0.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/jsonlite_2.0.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -2774,7 +2774,7 @@
     {
       "ref": "odbc",
       "package": "odbc",
-      "version": "1.6.0",
+      "version": "1.6.1",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -2786,10 +2786,10 @@
         "RemoteRef": "odbc",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.6.0"
+        "RemoteSha": "1.6.1"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/odbc_1.6.0.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/odbc_1.6.0.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/odbc_1.6.1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/odbc_1.6.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
@@ -4256,7 +4256,7 @@
     {
       "ref": "stringi",
       "package": "stringi",
-      "version": "1.8.4",
+      "version": "1.8.7",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -4268,10 +4268,10 @@
         "RemoteRef": "stringi",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.8.4"
+        "RemoteSha": "1.8.7"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/stringi_1.8.4.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/stringi_1.8.4.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/stringi_1.8.7.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/stringi_1.8.7.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
