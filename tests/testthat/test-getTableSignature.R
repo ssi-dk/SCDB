@@ -291,13 +291,14 @@ for (conn in c(list(NULL), get_test_conns())) {
     DBI::dbWriteTable(conn, "#testthis2", value = data_random, temporary = TRUE)
     print(dplyr::tbl(conn, "#testthis2"))
     print("testthis2 done")
-    dplyr::db_write_table(conn, "#testthis3", value = data_random, temporary = TRUE)
+    dplyr::db_write_table(conn, dbplyr::as_table_path("#testthis3", conn), value = data_random, temporary = TRUE)
     print(dplyr::tbl(conn, "#testthis3"))
     print("testthis3 done")
     dbplyr::db_copy_to(conn, "#testthis4", value = data_random, temporary = TRUE)
     print("testthis4 done")
 
     dr_copy <- dplyr::copy_to(conn, data_random4)
+    print(dr_copy)
     tt <- getTableSignature(dr_copy, conn)
     print(tt)
     test_that("getTableSignature() generates signature for random data on remote (Microsoft SQL Server)", {
