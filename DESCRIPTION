@@ -17,7 +17,7 @@ Authors@R:
         person(
             "Lasse Engbo", "Christiansen",
             email = "lsec@ssi.dk",
-            role = "rev",
+            role = c("rev", "ctb"),
             comment = c(ORCID = "0000-0001-5019-1931")
         ),
         person("Sofia Myrup", "Otero", , "smot@ssi.dk", role = "rev"),
