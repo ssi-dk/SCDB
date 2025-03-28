@@ -287,7 +287,7 @@ for (conn in c(list(NULL), get_test_conns())) {
     data_random4 <- data.frame(datetime = Sys.time())
     dr_copy <- dplyr::copy_to(conn, data_random4)
     print(dr_copy)
-    data_random3 <- data_random |> dplyr::select(Date, character, integer, numeric, POSIXct)
+    data_random3 <- dplyr::select(.data = data_random, Date, character, integer, numeric, POSIXct)
     dr_copy <- dplyr::copy_to(conn, data_random3)
     print(dr_copy)
     print(conn)
