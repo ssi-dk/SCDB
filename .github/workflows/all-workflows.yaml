@@ -21,8 +21,18 @@ jobs:
             echo "abort=true" >> "$GITHUB_OUTPUT"
           fi
 
-  name: Run only one test
-  run: Rscript -e 'testthat::test_file("tests/testthat/test-getTableSignature.R")'
+  run-single:
+      name: ⚙️ Dispatch
+      runs-on: ubuntu-latest
+      env:
+        GH_TOKEN: ${{ github.token }}
+      outputs:
+        abort: ${{ steps.pr_detect.outputs.abort }}
+      steps:
+        - name: Run one
+          if: github.event_name == 'push'
+          id: pr_detect
+          run: Rscript -e 'testthat::test_file("tests/testthat/test-getTableSignature.R")'
 
   # We call the reusable workflow that triggers all AEF-DDF workflows
   # run-all-AEF-DFF-workflows:
