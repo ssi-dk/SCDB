@@ -255,11 +255,11 @@
     {
       "ref": "broom",
       "package": "broom",
-      "version": "1.0.7",
+      "version": "1.0.8",
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["backports", "dplyr", "generics", "glue", "lifecycle", "purrr", "rlang", "stringr", "tibble", "tidyr"],
+      "dependencies": ["backports", "cli", "dplyr", "generics", "glue", "lifecycle", "purrr", "rlang", "stringr", "tibble", "tidyr"],
       "vignettes": false,
       "metadata": {
         "RemotePkgRef": "broom",
@@ -267,10 +267,10 @@
         "RemoteRef": "broom",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.0.7"
+        "RemoteSha": "1.0.8"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/broom_1.0.7.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/broom_1.0.7.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/broom_1.0.8.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/broom_1.0.8.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.4",
       "directpkg": false,
