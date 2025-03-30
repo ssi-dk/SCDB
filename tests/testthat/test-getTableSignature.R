@@ -286,11 +286,11 @@ for (conn in c(list(NULL), get_test_conns())) {
     print(conn)
     data_random4 <- data.frame(datetime = Sys.time())
     print("ODBC")
-    packageVersion("odbc")
+    print(packageVersion("odbc"))
     print("DBI")
-    packageVersion("DBI")
+    print(packageVersion("DBI"))
     print("dplyr")
-    packageVersion("dplyr")
+    print(packageVersion("dplyr"))
 
 
     # Making a minimal test
