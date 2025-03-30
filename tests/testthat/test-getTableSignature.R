@@ -291,6 +291,7 @@ for (conn in c(list(NULL), get_test_conns())) {
     print(packageVersion("DBI"))
     print("dplyr")
     print(packageVersion("dplyr"))
+    print(Sys.info())
 
 
     # Making a minimal test
