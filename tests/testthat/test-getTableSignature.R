@@ -286,6 +286,7 @@ for (conn in c(list(NULL), get_test_conns())) {
     print(conn)
     data_random4 <- data.frame(datetime = Sys.time())
 
+    # Making a minimal test
     data_ok <- data.frame(
       "Date"      = Sys.Date(),
       "character" = "test",
@@ -294,29 +295,29 @@ for (conn in c(list(NULL), get_test_conns())) {
       "logical"   = TRUE
     )
 
+    data_datetime <- data_ok
+    data_datetime$datetime <- Sys.time()
+
+    print(conn)
+    # Wanted to do
+    # my_copy <- dplyr::copy_to(conn, data_datetime)
+
+    DBI::dbWriteTable(conn, "#testthis", value = data_datetime, temporary = TRUE)
+    print("testthis done")
+
+    # dplyr::copy_to effectively calls SQL(as_table_path(<string>))
+    # First without a datatime column
+    DBI::dbWriteTable(conn, DBI::SQL(dbplyr::as_table_path("#testthis2A", conn)), value = data_ok, temporary = TRUE)
+    print("testthis2A done")
+
+    # Then with a datatime column
+    DBI::dbWriteTable(conn, DBI::SQL("#testthis2B"), value = data_datetime, temporary = TRUE)
+    print("testthis2B done")
+    # We never get here
+
     print(DBI::dbDataType(conn, data_random))
     print(DBI::dbDataType(conn, data_ok))
 
-    DBI::dbWriteTable(conn, "#testthis", value = data_random4, temporary = TRUE)
-    print(dplyr::tbl(conn, "#testthis"))
-    print("testthis done")
-
-    DBI::dbWriteTable(conn, "#testthis2", value = data_random, temporary = TRUE)
-    print(dplyr::tbl(conn, "#testthis2"))
-    print("testthis2 done")
-
-    DBI::dbWriteTable(conn, DBI::SQL(dbplyr::as_table_path("#testthis2B0", conn)), value = data_ok, temporary = TRUE)
-    print(dplyr::tbl(conn, "#testthis2B0"))
-    print("testthis2B0 done")
-
-    DBI::dbWriteTable(conn, DBI::SQL("#testthis2A"), value = data_random, temporary = TRUE)
-    print(dplyr::tbl(conn, "#testthis2A"))
-    print("testthis2A done")
-
-
-    DBI::dbWriteTable(conn, DBI::SQL(dbplyr::as_table_path("#testthis2B", conn)), value = data_random, temporary = TRUE)
-    print(dplyr::tbl(conn, "#testthis2B"))
-    print("testthis2B done")
 
     dplyr::db_write_table(conn, dbplyr::as_table_path("#testthis3", conn), value = data_random, temporary = TRUE)
     print(dplyr::tbl(conn, "#testthis3"))
