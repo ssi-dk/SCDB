@@ -285,6 +285,13 @@ for (conn in c(list(NULL), get_test_conns())) {
   if (inherits(conn, "Microsoft SQL Server")) {
     print(conn)
     data_random4 <- data.frame(datetime = Sys.time())
+    print("ODBC")
+    packageVersion("odbc")
+    print("DBI")
+    packageVersion("DBI")
+    print("dplyr")
+    packageVersion("dplyr")
+
 
     # Making a minimal test
     data_ok <- data.frame(
