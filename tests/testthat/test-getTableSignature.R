@@ -35,10 +35,7 @@ cat(paste0(unlist(packageVersion("odbc")), collapse = "."), "\n") # Delete this 
 cat(search(), "\n")
 #if (paste0(unlist(packageVersion("odbc")), collapse = ".") < "1.6.1.9000") {
 cat(" Installing ODBC \n")
-devtools::install_github(
-  repo = "detule/odbc",
-  ref = "fixup/columns_exact_propagation"
-)
+devtools::install_github(repo = "detule/odbc", ref = "fixup/columns_exact_propagation")
 #}
 cat("Installed: ", paste0(unlist(packageVersion("odbc")), collapse = "."), "\n")
 
@@ -298,6 +295,7 @@ for (conn in c(list(NULL), get_test_conns())) {
   }
 
   if (inherits(conn, "Microsoft SQL Server")) {
+    library(odbc)
     cat("ODBC ", paste0(unlist(packageVersion("odbc")), collapse = "."), "\n")
     data_random2 <- data_random
     dr_copy <- dplyr::copy_to(conn, data_random2)
