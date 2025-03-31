@@ -31,7 +31,19 @@ data_random <- data.frame(
   "logical"   = TRUE
 )
 
+cat(paste0(unlist(packageVersion("odbc")), collapse = "."), "\n") # Delete this block when ODBC is updated
+cat(search(), "\n")
+#if (paste0(unlist(packageVersion("odbc")), collapse = ".") < "1.6.1.9000") {
+cat(" Installing ODBC \n")
+devtools::install_github(repo = "detule/odbc", ref = "fixup/columns_exact_propagation")
+#}
+cat("Installed: ", paste0(unlist(packageVersion("odbc")), collapse = "."), "\n")
+
 for (conn in c(list(NULL), get_test_conns())) {
+
+  if (inherits(conn, "Microsoft SQL Server")) {
+    options("odbc.batch_rows" = 1000)
+  }
 
   if (is.null(conn)) {
     test_that("getTableSignature() generates signature for update_snapshot() (conn == NULL)", {
@@ -283,9 +295,14 @@ for (conn in c(list(NULL), get_test_conns())) {
   }
 
   if (inherits(conn, "Microsoft SQL Server")) {
+    library(odbc)
+    cat("ODBC ", paste0(unlist(packageVersion("odbc")), collapse = "."), "\n")
+    data_random2 <- data_random
+    dr_copy <- dplyr::copy_to(conn, data_random2)
+
     test_that("getTableSignature() generates signature for random data on remote (Microsoft SQL Server)", {
       expect_identical(
-        getTableSignature(dplyr::copy_to(conn, data_random), conn),
+        getTableSignature(dr_copy, conn),
         c(
           "Date"      = "DATE",
           "POSIXct"   = "DATETIME",
