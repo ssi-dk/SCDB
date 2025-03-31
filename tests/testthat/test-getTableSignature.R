@@ -31,8 +31,8 @@ data_random <- data.frame(
   "logical"   = TRUE
 )
 
-print(packageVersion("ODBC")) # Delete this block when ODBC is updated
-if (packageVersion("ODBC") <  '1.6.1.9000') {
+print(packageVersion("odbc")) # Delete this block when ODBC is updated
+if (packageVersion("odbc") <  '1.6.1.9000') {
   print("Installing ODBC")
   devtools::install_github(repo = "detule/odbc", ref = "fixup/columns_exact_propagation")
 }
