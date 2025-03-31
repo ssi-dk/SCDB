@@ -31,12 +31,17 @@ data_random <- data.frame(
   "logical"   = TRUE
 )
 
-print("Installing ODBC")
-devtools::install_github(repo = "detule/odbc", ref = "fixup/columns_exact_propagation")
-print("Done: Installing ODBC")
-
+print(packageVersion("ODBC")) # Delete this block when ODBC is updated
+if (packageVersion("ODBC") <  '1.6.1.9000') {
+  print("Installing ODBC")
+  devtools::install_github(repo = "detule/odbc", ref = "fixup/columns_exact_propagation")
+}
 
 for (conn in c(list(NULL), get_test_conns())) {
+
+    if (inherits(conn, "Microsoft SQL Server")) {
+      options("odbc.batch_rows" = 1000)
+    }
 
   if (is.null(conn)) {
     test_that("getTableSignature() generates signature for update_snapshot() (conn == NULL)", {
@@ -288,62 +293,11 @@ for (conn in c(list(NULL), get_test_conns())) {
   }
 
   if (inherits(conn, "Microsoft SQL Server")) {
-    selectMethod(odbc:::odbcConnectionColumns_, c("Microsoft SQL Server", "SQL"))
-    library(odbc)
-    print("New?")
-    selectMethod(odbc:::odbcConnectionColumns_, c("Microsoft SQL Server", "SQL"))
 
-    print(conn)
-    data_random4 <- data.frame(datetime = Sys.time())
-    print("ODBC")
-    print(packageVersion("odbc"))
-    print("DBI")
-    print(packageVersion("DBI"))
-    print("dplyr")
-    print(packageVersion("dplyr"))
-    print(Sys.info())
-
-
-    # Making a minimal test
-    data_ok <- data.frame(
-      "Date"      = Sys.Date(),
-      "character" = "test",
-      "integer"   = 1L,
-      "numeric"   = 1,
-      "logical"   = TRUE
-    )
-
-    data_datetime <- data_ok
-    data_datetime$datetime <- Sys.time()
-
-    print(conn)
-    # Wanted to do
-    # my_copy <- dplyr::copy_to(conn, data_datetime)
-
-    DBI::dbWriteTable(conn, "#testthis", value = data_datetime, temporary = TRUE)
-    print("testthis done")
-
-    # dplyr::copy_to effectively calls SQL(as_table_path(<string>))
-    # First without a datatime column
-    DBI::dbWriteTable(conn, DBI::SQL(dbplyr::as_table_path("#testthis2A", conn)), value = data_ok, temporary = TRUE)
-    print("testthis2A done")
-
-    # Then with a datatime column
-    DBI::dbWriteTable(conn, DBI::SQL("#testthis2B"), value = data_datetime, temporary = TRUE)
-    print("testthis2B done")
-    # We never get here
-
-    print(DBI::dbDataType(conn, data_random))
-    print(DBI::dbDataType(conn, data_ok))
-
-
-    dr_copy <- dplyr::copy_to(conn, data_random)
-    print(dr_copy)
-    tt <- getTableSignature(dr_copy, conn)
-    print(tt)
     test_that("getTableSignature() generates signature for random data on remote (Microsoft SQL Server)", {
+      dr_copy <- dplyr::copy_to(conn, data_random)
       expect_identical(
-        tt,
+        getTableSignature(dr_copy, conn),
         c(
           "Date"      = "DATE",
           "POSIXct"   = "DATETIME",
