@@ -31,7 +31,8 @@ data_random <- data.frame(
   "logical"   = TRUE
 )
 
-cat(paste0(unlist(packageVersion("odbc")), collapse = ".")) # Delete this block when ODBC is updated
+cat(paste0(unlist(packageVersion("odbc")), collapse = "."), "\n") # Delete this block when ODBC is updated
+cat(search(), "\n")
 if (paste0(unlist(packageVersion("odbc")), collapse = ".") < "1.6.1.9000") {
   cat(" Installing ODBC \n")
   devtools::install_github(
