@@ -31,10 +31,13 @@ data_random <- data.frame(
   "logical"   = TRUE
 )
 
-print(packageVersion("odbc")) # Delete this block when ODBC is updated
-if (packageVersion("odbc") <  '1.6.1.9000') {
-  print("Installing ODBC")
-  devtools::install_github(repo = "detule/odbc", ref = "fixup/columns_exact_propagation")
+cat(packageVersion("odbc")) # Delete this block when ODBC is updated
+if (packageVersion("odbc") < "1.6.1.9000") {
+  cat(" Installing ODBC \n")
+  devtools::install_github(
+    repo = "detule/odbc",
+    ref = "fixup/columns_exact_propagation"
+  )
 }
 
 for (conn in c(list(NULL), get_test_conns())) {
@@ -295,6 +298,7 @@ for (conn in c(list(NULL), get_test_conns())) {
   if (inherits(conn, "Microsoft SQL Server")) {
 
     test_that("getTableSignature() generates signature for random data on remote (Microsoft SQL Server)", {
+      cat("ODBC ", packageVersion("odbc"), "\n")
       dr_copy <- dplyr::copy_to(conn, data_random)
       expect_identical(
         getTableSignature(dr_copy, conn),
