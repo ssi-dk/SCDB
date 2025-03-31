@@ -298,10 +298,10 @@ for (conn in c(list(NULL), get_test_conns())) {
   }
 
   if (inherits(conn, "Microsoft SQL Server")) {
+    cat("ODBC ", paste0(unlist(packageVersion("odbc")), collapse = "."), "\n")
+    dr_copy <- dplyr::copy_to(conn, data_random)
 
     test_that("getTableSignature() generates signature for random data on remote (Microsoft SQL Server)", {
-      cat("ODBC ", paste0(unlist(packageVersion("odbc")), collapse = "."), "\n")
-      dr_copy <- dplyr::copy_to(conn, data_random)
       expect_identical(
         getTableSignature(dr_copy, conn),
         c(
