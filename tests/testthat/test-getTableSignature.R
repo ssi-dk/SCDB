@@ -33,13 +33,14 @@ data_random <- data.frame(
 
 cat(paste0(unlist(packageVersion("odbc")), collapse = "."), "\n") # Delete this block when ODBC is updated
 cat(search(), "\n")
-if (paste0(unlist(packageVersion("odbc")), collapse = ".") < "1.6.1.9000") {
-  cat(" Installing ODBC \n")
-  devtools::install_github(
-    repo = "detule/odbc",
-    ref = "fixup/columns_exact_propagation"
-  )
-}
+#if (paste0(unlist(packageVersion("odbc")), collapse = ".") < "1.6.1.9000") {
+cat(" Installing ODBC \n")
+devtools::install_github(
+  repo = "detule/odbc",
+  ref = "fixup/columns_exact_propagation"
+)
+#}
+cat(paste0(unlist(packageVersion("odbc")), collapse = "."), "\n") # Delete this block when ODBC is updated
 
 for (conn in c(list(NULL), get_test_conns())) {
 
