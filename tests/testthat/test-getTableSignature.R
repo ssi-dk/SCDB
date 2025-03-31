@@ -31,6 +31,11 @@ data_random <- data.frame(
   "logical"   = TRUE
 )
 
+print("Installing ODBC")
+devtools::install_github(repo = "detule/odbc", ref = "fixup/columns_exact_propagation")
+print("Done: Installing ODBC")
+
+
 for (conn in c(list(NULL), get_test_conns())) {
 
   if (is.null(conn)) {
@@ -283,6 +288,11 @@ for (conn in c(list(NULL), get_test_conns())) {
   }
 
   if (inherits(conn, "Microsoft SQL Server")) {
+    selectMethod(odbc:::odbcConnectionColumns_, c("Microsoft SQL Server", "SQL"))
+    library(odbc)
+    print("New?")
+    selectMethod(odbc:::odbcConnectionColumns_, c("Microsoft SQL Server", "SQL"))
+
     print(conn)
     data_random4 <- data.frame(datetime = Sys.time())
     print("ODBC")
