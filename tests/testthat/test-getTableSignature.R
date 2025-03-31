@@ -40,7 +40,7 @@ devtools::install_github(
   ref = "fixup/columns_exact_propagation"
 )
 #}
-cat(paste0(unlist(packageVersion("odbc")), collapse = "."), "\n") # Delete this block when ODBC is updated
+cat("Installed: ", paste0(unlist(packageVersion("odbc")), collapse = "."), "\n")
 
 for (conn in c(list(NULL), get_test_conns())) {
 
@@ -299,7 +299,8 @@ for (conn in c(list(NULL), get_test_conns())) {
 
   if (inherits(conn, "Microsoft SQL Server")) {
     cat("ODBC ", paste0(unlist(packageVersion("odbc")), collapse = "."), "\n")
-    dr_copy <- dplyr::copy_to(conn, data_random)
+    data_random2 <- data_random
+    dr_copy <- dplyr::copy_to(conn, data_random2)
 
     test_that("getTableSignature() generates signature for random data on remote (Microsoft SQL Server)", {
       expect_identical(
