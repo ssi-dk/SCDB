@@ -44,9 +44,9 @@ cat("Installed: ", paste0(unlist(packageVersion("odbc")), collapse = "."), "\n")
 
 for (conn in c(list(NULL), get_test_conns())) {
 
-    if (inherits(conn, "Microsoft SQL Server")) {
-      options("odbc.batch_rows" = 1000)
-    }
+  if (inherits(conn, "Microsoft SQL Server")) {
+    options("odbc.batch_rows" = 1000)
+  }
 
   if (is.null(conn)) {
     test_that("getTableSignature() generates signature for update_snapshot() (conn == NULL)", {
