@@ -20,7 +20,7 @@ TRUE if the given schema is found on \code{conn}.
 Test if a schema exists in given connection
 }
 \examples{
-\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) withAutoprint(\{ # examplesIf}
   conn <- get_connection()
 
   schema_exists(conn, "test")

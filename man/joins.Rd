@@ -72,7 +72,7 @@ efficiently match as if "na_matches = na".
 If no \code{na_by} argument is given is given, the function defaults to using \verb{dplyr::*_join}.
 }
 \examples{
-\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) withAutoprint(\{ # examplesIf}
   library(dplyr, warn.conflicts = FALSE)
   library(dbplyr, warn.conflicts = FALSE)
 

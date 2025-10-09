@@ -20,7 +20,7 @@ Invisibly returns the generated (or existing) log table.
 Create a table with the SCDB log structure if it does not exists
 }
 \examples{
-\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) withAutoprint(\{ # examplesIf}
   conn <- get_connection()
   log_table <- id("test.logs", conn = conn, allow_table_only = TRUE)
 

@@ -43,7 +43,7 @@ In this case, the lock needs to be removed manually by removing the record from 
 In addition, the error implies that a table may have partial updates that needs to be manually rolled back.
 }
 \examples{
-\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) withAutoprint(\{ # examplesIf}
   conn <- DBI::dbConnect(RSQLite::SQLite())
 
   lock_table(conn, "test_table") # TRUE

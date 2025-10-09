@@ -17,7 +17,7 @@ NULL (called for side effects)
 This function marks a table for deletion once the current function exits.
 }
 \examples{
-\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) withAutoprint(\{ # examplesIf}
   conn <- get_connection()
 
   mt <- dplyr::copy_to(conn, mtcars)

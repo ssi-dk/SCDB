@@ -25,7 +25,7 @@ If a character input is given, matching is done heuristically assuming a "schema
 If no schema is implied in this case, the default schema is assumed.
 }
 \examples{
-\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) withAutoprint(\{ # examplesIf}
   conn <- get_connection()
 
   dplyr::copy_to(conn, mtcars, name = "mtcars", temporary = FALSE)

@@ -17,7 +17,7 @@ The number of records in the object.
 nrow() but also works on remote tables
 }
 \examples{
-\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) withAutoprint(\{ # examplesIf}
   conn <- get_connection()
 
   m <- dplyr::copy_to(conn, mtcars)
