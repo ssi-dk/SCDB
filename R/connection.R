@@ -208,6 +208,46 @@ get_connection.duckdb_driver <- function(
 }
 
 #' @rdname get_connection
+#' @param driverClass (`character(1)`)\cr
+#'   The name of the JDBC driver to load.
+#' @param classPath (`character(1)`)\cr
+#'   The path to the JDBC driver.
+#' @param url (`character(1)`)\cr
+#'   The source to connect to.
+#' @seealso [RJDBC::JDBC]
+#' @export
+get_connection.JDBCDriver <- function(
+    drv,
+    driverClass = NULL,                                                                                                 # nolint: object_name_linter
+    classPath = NULL,                                                                                                   # nolint: object_name_linter
+    url = NULL,
+    user = NULL,
+    password = NULL,
+    ...) {
+
+  # Store the given arguments
+  args <- as.list(rlang::current_env()) %>%
+    utils::modifyList(list(...)) %>%
+    unlist()
+  args <- args[match(unique(names(args)), names(args))]
+
+  # Check arguments
+  coll <- checkmate::makeAssertCollection()
+  checkmate::assert_character(driverClass, null.ok = TRUE, add = coll)
+  checkmate::assert_character(classPath, null.ok = TRUE, add = coll)
+  checkmate::assert_character(url, null.ok = TRUE, add = coll)
+  checkmate::assert_character(user, null.ok = TRUE, add = coll)
+  checkmate::assert_character(password, null.ok = TRUE, add = coll)
+  checkmate::reportAssertions(coll)
+
+  # Check if connection can be established given these settings
+  status <- do.call(DBI::dbCanConnect, args = args)
+  if (!status) stop(attr(status, "reason"), call. = FALSE)
+
+  return(do.call(DBI::dbConnect, args = args))
+}
+
+#' @rdname get_connection
 #' @export
 #' @importFrom magrittr %>%
 get_connection.default <- function(drv, ...) {
