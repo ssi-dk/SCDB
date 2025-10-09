@@ -314,17 +314,37 @@ test_that("update_snapshot() works (holistic test 1)", {
     t2 <- dplyr::copy_to(conn, t2, name = id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE)
 
     logger <- LoggerNull$new()
-    update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01", logger = logger)
-    expect_identical(dplyr::collect(t0) %>% dplyr::arrange(col1),
-                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1))
+    update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01 08:00:00", logger = logger)
+    expect_identical(
+      dplyr::collect(t0) %>% dplyr::arrange(col1),
+      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1)
+    )
 
-    update_snapshot(t1, conn, "test.SCDB_tmp1", "2022-02-01", logger = logger)
-    expect_identical(dplyr::collect(t1) %>% dplyr::arrange(col1),
-                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1))
+    update_snapshot(
+      t1,
+      conn,
+      "test.SCDB_tmp1",
+      "2022-01-01 08:10:00",
+      logger = logger,
+      collapse_continuous_records = TRUE
+    )
+    expect_identical(
+      dplyr::collect(t1) %>% dplyr::arrange(col1),
+      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1)
+    )
 
-    update_snapshot(t2, conn, "test.SCDB_tmp1", "2022-02-01", logger = logger)
-    expect_identical(dplyr::collect(t2) %>% dplyr::arrange(col1),
-                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1))
+    update_snapshot(
+      t2,
+      conn,
+      "test.SCDB_tmp1",
+      "2022-01-01 08:10:00",
+      logger = logger,
+      collapse_continuous_records = TRUE
+    )
+    expect_identical(
+      dplyr::collect(t2) %>% dplyr::arrange(col1),
+      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1)
+    )
 
     t <- list(t0, t1, t2) %>%
       purrr::reduce(dplyr::union) %>%

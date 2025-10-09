@@ -1,9 +1,17 @@
 # SCDB (development version)
 
+## BREAKING CHANGES
+
+* `update_snapshot()` no longer collapses continuous records by default (#183, @kjakobse).
+  To preserve this behavior, use `collapse_continuous_records = TRUE`.
+  In return, `update_snapshot()` is now faster by default.
+
 ## Improvements and Fixes
 
 * Intermediary tables are now being cleaned up (#174).
 
+* `update_snapshot()` now handles the given `timestamp` more consistently (#187).
+  Thanks to @kjakobse for discovering the issue.
 
 # SCDB 0.5.0
 
@@ -50,7 +58,7 @@
 
 # SCDB 0.4.0
 
-## BREAKING CHANGES:
+## BREAKING CHANGES
 
 * Table identification is now more specific (#93).
 
