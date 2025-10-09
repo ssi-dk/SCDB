@@ -8,6 +8,7 @@
 #' @template conn
 #' @importFrom methods setGeneric
 #' @noRd
+#' @export
 methods::setGeneric("getTableSignature",
                     function(.data, conn = NULL) standardGeneric("getTableSignature"),
                     signature = "conn")
