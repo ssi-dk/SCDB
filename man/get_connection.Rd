@@ -23,8 +23,8 @@ get_connection(drv, ...)
   dbname = NULL,
   host = NULL,
   port = NULL,
-  password = NULL,
   user = NULL,
+  password = NULL,
   ...,
   bigint = c("integer", "bigint64", "numeric", "character"),
   check_interrupts = TRUE,
@@ -70,11 +70,11 @@ The ip of the host to connect to.}
 \item{port}{(\code{numeric(1)} or \code{character(1)})\cr
 Host port to connect to.}
 
-\item{password}{(\code{character(1)})\cr
-Password to login with.}
-
 \item{user}{(\code{character(1)})\cr
 Username to login with.}
+
+\item{password}{(\code{character(1)})\cr
+Password to login with.}
 
 \item{check_interrupts}{(\code{logical(1)})\cr
 Should user interrupts be checked during the query execution?}
