@@ -34,7 +34,7 @@ A tbl_dbi with the specified columns united into a new column named according to
 Convenience function to paste together multiple columns into one.
 }
 \examples{
-\dontshow{if (Sys.info()["sysname"] != "Darwin") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (Sys.info()["sysname"] != "Darwin") withAutoprint(\{ # examplesIf}
   library(tidyr, warn.conflicts = FALSE)
 
   df <- expand_grid(x = c("a", NA), y = c("b", NA))

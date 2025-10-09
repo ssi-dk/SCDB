@@ -1,7 +1,7 @@
 Package: SCDB
 Type: Package
 Title: Easily Access and Maintain Time-Based Versioned Data (Slowly-Changing-Dimension)
-Version: 0.5.0.9000
+Version: 0.5.1.9000
 Authors@R:
 	  c(person(
             "Rasmus Skytte", "Randl\U00F8v",
@@ -17,7 +17,7 @@ Authors@R:
         person(
             "Lasse Engbo", "Christiansen",
             email = "lsec@ssi.dk",
-            role = "rev",
+            role = c("rev", "ctb"),
             comment = c(ORCID = "0000-0001-5019-1931")
         ),
         person("Sofia Myrup", "Otero", , "smot@ssi.dk", role = "rev"),
@@ -29,7 +29,7 @@ Description: A collection of functions that enable easy access and updating of a
              For reference see Ralph Kimball and Margy Ross (2013, ISBN 9781118530801).
 License: GPL-3
 Encoding: UTF-8
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE, r6 = TRUE)
 Depends:
     R (>= 3.6.0)

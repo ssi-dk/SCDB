@@ -31,7 +31,7 @@ The function "interlaces" the queries and combines their validity time axes (val
 onto a single time axis.
 }
 \examples{
-\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) withAutoprint(\{ # examplesIf}
   conn <- get_connection()
 
   t1 <- data.frame(key = c("A", "A", "B"),

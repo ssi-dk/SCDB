@@ -17,7 +17,7 @@ Connection object.}
 Close connection to the database
 }
 \examples{
-\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) withAutoprint(\{ # examplesIf}
   conn <- get_connection()
 
   close_connection(conn)

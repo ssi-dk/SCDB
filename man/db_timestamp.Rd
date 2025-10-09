@@ -20,7 +20,7 @@ The given timestamp converted to a SQL-backend dependent timestamp.
 Determine the type of timestamps the database supports
 }
 \examples{
-\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) withAutoprint(\{ # examplesIf}
   conn <- get_connection()
 
   db_timestamp(Sys.time(), conn)

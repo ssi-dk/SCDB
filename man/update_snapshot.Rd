@@ -75,7 +75,7 @@ may end up with records where \code{from_ts} and \code{until_ts} are equal. Thes
 \code{get_table()} and you may want to prevent these records using \code{collapse_continuous_records = TRUE}.
 }
 \examples{
-\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) withAutoprint(\{ # examplesIf}
   conn <- get_connection()
 
   data <- dplyr::copy_to(conn, mtcars)

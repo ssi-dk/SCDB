@@ -1,5 +1,11 @@
 # SCDB (development version)
 
+## Improvements and Fixes
+
+* A bug was fixed in `update_snapshot()` where the process would unexpectedly hang (#192).
+
+# SCDB 0.5.1
+
 ## BREAKING CHANGES
 
 * `update_snapshot()` no longer collapses continuous records by default (#183, @kjakobse).
@@ -12,6 +18,10 @@
 
 * `update_snapshot()` now handles the given `timestamp` more consistently (#187).
   Thanks to @kjakobse for discovering the issue.
+
+* `?Logger$finalize()` is now a private method (#180).
+  Required as of `R6` v2.4.0.
+
 
 # SCDB 0.5.0
 

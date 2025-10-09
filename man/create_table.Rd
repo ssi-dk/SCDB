@@ -25,7 +25,7 @@ Invisibly returns the table as it looks on the destination (or locally if \code{
 Create a historical table from input data
 }
 \examples{
-\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("RSQLite", quietly = TRUE)) withAutoprint(\{ # examplesIf}
   conn <- get_connection()
 
   create_table(mtcars, conn = conn, db_table = "mtcars")
