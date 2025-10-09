@@ -7,15 +7,6 @@
 #'   Certain drivers may use credentials stored in a file, such as ~/.pgpass (PostgreSQL).
 #' @param drv (`DBIDriver(1)` or `DBIConnection(1)`)\cr
 #'   The driver for the connection (defaults to `SQLiteDriver`).
-#' @param dbname (`character(1)`)\cr
-#'   Name of the database located at the host.
-#' @param bigint (`character(1)`)\cr
-#'   The datatype to convert integers to.
-#'   Support depends on the database backend.
-#' @param timezone (`character(1)`)\cr
-#'   Sets the timezone of DBI::dbConnect(). Must be in [OlsonNames()].
-#' @param timezone_out (`character(1)`)\cr
-#'   Sets the timezone_out of DBI::dbConnect(). Must be in [OlsonNames()].
 #' @param ...
 #'  Additional parameters sent to DBI::dbConnect().
 #' @return
@@ -38,6 +29,11 @@ get_connection <- function(drv, ...) {
 }
 
 #' @rdname get_connection
+#' @param dbname (`character(1)`)\cr
+#'   Name of the database located at the host.
+#' @param bigint (`character(1)`)\cr
+#'   The datatype to convert integers to.
+#'   Support depends on the database backend.
 #' @seealso [RSQLite::SQLite]
 #' @export
 get_connection.SQLiteDriver <- function(
@@ -74,12 +70,16 @@ get_connection.SQLiteDriver <- function(
 #'   The ip of the host to connect to.
 #' @param port (`numeric(1)` or `character(1)`)\cr
 #'   Host port to connect to.
-#' @param password (`character(1)`)\cr
-#'   Password to login with.
 #' @param user (`character(1)`)\cr
 #'   Username to login with.
+#' @param password (`character(1)`)\cr
+#'   Password to login with.
 #' @param check_interrupts (`logical(1)`)\cr
 #'   Should user interrupts be checked during the query execution?
+#' @param timezone (`character(1)`)\cr
+#'   Sets the timezone of DBI::dbConnect(). Must be in [OlsonNames()].
+#' @param timezone_out (`character(1)`)\cr
+#'   Sets the timezone_out of DBI::dbConnect(). Must be in [OlsonNames()].
 #' @seealso [RPostgres::Postgres]
 #' @export
 get_connection.PqDriver <- function(
@@ -87,8 +87,8 @@ get_connection.PqDriver <- function(
     dbname = NULL,
     host = NULL,
     port = NULL,
-    password = NULL,
     user = NULL,
+    password = NULL,
     ...,
     bigint = c("integer", "bigint64", "numeric", "character"),
     check_interrupts = TRUE,
@@ -113,8 +113,8 @@ get_connection.PqDriver <- function(
     port <- as.numeric(port)
   }
   checkmate::assert_numeric(port, null.ok = TRUE, add = coll)
-  checkmate::assert_character(password, null.ok = TRUE, add = coll)
   checkmate::assert_character(user, null.ok = TRUE, add = coll)
+  checkmate::assert_character(password, null.ok = TRUE, add = coll)
   checkmate::assert_logical(check_interrupts, add = coll)
   checkmate::assert_choice(timezone, OlsonNames(), null.ok = TRUE, add = coll)
   checkmate::assert_choice(timezone_out, OlsonNames(), null.ok = TRUE, add = coll)
