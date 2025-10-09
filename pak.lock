@@ -3553,9 +3553,9 @@
         "RemoteSha": "1.0-11"
       },
       "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/rJava_1.0-11.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/rJava_1.0-11.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/rJava_1.0-11.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-      "rversion": "4.4",
+      "rversion": "4.5",
       "directpkg": false,
       "license": "LGPL-2.1",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
@@ -3597,9 +3597,9 @@
         "RemoteSha": "0.2-10"
       },
       "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/RJDBC_0.2-10.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.4/RJDBC_0.2-10.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/RJDBC_0.2-10.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-      "rversion": "4.4",
+      "rversion": "4.5",
       "directpkg": false,
       "license": "MIT + file LICENSE",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
@@ -5141,8 +5141,8 @@
     "version": "24.04",
     "url": {},
     "pre_install": "apt-get -y update",
-    "install_scripts": "apt-get -y install libx11-dev git libcurl4-openssl-dev libssl-dev xz-utils make libgit2-dev zlib1g-dev pandoc unixodbc-dev libfreetype6-dev libjpeg-dev libpng-dev libtiff-dev default-jdk libpq-dev libicu-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev libxml2-dev",
+    "install_scripts": "apt-get -y install libx11-dev git libcurl4-openssl-dev libssl-dev xz-utils make libgit2-dev zlib1g-dev pandoc unixodbc-dev libfreetype6-dev libjpeg-dev libpng-dev libtiff-dev libwebp-dev default-jdk libpq-dev libicu-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev libxml2-dev",
     "post_install": "R CMD javareconf",
-    "packages": ["libx11-dev", "git", "libcurl4-openssl-dev", "libssl-dev", "xz-utils", "make", "libgit2-dev", "zlib1g-dev", "pandoc", "unixodbc-dev", "libfreetype6-dev", "libjpeg-dev", "libpng-dev", "libtiff-dev", "default-jdk", "libpq-dev", "libicu-dev", "libfontconfig1-dev", "libfribidi-dev", "libharfbuzz-dev", "libxml2-dev"]
+    "packages": ["libx11-dev", "git", "libcurl4-openssl-dev", "libssl-dev", "xz-utils", "make", "libgit2-dev", "zlib1g-dev", "pandoc", "unixodbc-dev", "libfreetype6-dev", "libjpeg-dev", "libpng-dev", "libtiff-dev", "libwebp-dev", "default-jdk", "libpq-dev", "libicu-dev", "libfontconfig1-dev", "libfribidi-dev", "libharfbuzz-dev", "libxml2-dev"]
   }
 }
