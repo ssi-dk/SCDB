@@ -37,6 +37,14 @@ schema_exists.DBIConnection <- function(conn, schema) {
 }
 
 #' @export
+schema_exists.JDBCConnection <- function(conn, schema) {
+  query <- paste0("SELECT * FROM ALL_USERS WHERE USERNAME = '", schema, "'")
+  result <- DBI::dbGetQuery(conn, query)
+
+  return(nrow(result) == 1)
+}
+
+#' @export
 schema_exists.default <- function(conn, schema) {
 
   checkmate::assert_character(schema)
