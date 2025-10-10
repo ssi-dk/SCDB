@@ -3769,11 +3769,11 @@
     {
       "ref": "rversions",
       "package": "rversions",
-      "version": "2.1.2",
+      "version": "3.0.0",
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["curl", "xml2"],
+      "dependencies": "curl",
       "vignettes": false,
       "metadata": {
         "RemotePkgRef": "rversions",
@@ -3781,10 +3781,10 @@
         "RemoteRef": "rversions",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "2.1.2"
+        "RemoteSha": "3.0.0"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/rversions_2.1.2.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/rversions_2.1.2.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/rversions_3.0.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/rversions_3.0.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.5",
       "directpkg": false,
