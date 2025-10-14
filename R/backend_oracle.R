@@ -59,8 +59,10 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection"),
     if (is.character(x)) {
       x <- enc2utf8(x)
 
+      reserved_words <- c("date", "number")
+
       needs_escape <- !grepl("^[a-zA-Z_][a-zA-Z0-9_]*$", x) | tolower(x) %in%
-          conn@reserved_words
+          c(conn@reserved_words, reserved_words)
 
       x[needs_escape] <- paste0("\"", gsub("\"", "\"\"", x[needs_escape]),
           "\"")
