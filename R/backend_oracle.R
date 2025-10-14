@@ -66,6 +66,8 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection", "character"),
                      grepl("^[0-9]", x) |                # Starts with number
                      grepl("[a-z]", x)                   # Contains lowercase
 
+    needs_quoting <- FALSE
+
     quoted <- ifelse(needs_quoting,
                      paste0('"', gsub('"', '""', x), '"'),
                      x)
