@@ -42,10 +42,9 @@ NULL
 setMethod("dbQuoteIdentifier", signature("JDBCConnection"),
   function(conn, x, ...) {
 
-    # Return early if already SQL
-    if (is(x, "SQL")) {
-        return(x)
-    }
+    # Return early if no quoting needed
+    if (is.null(x)) return(x)
+    if (is(x, "SQL")) return(x)
 
     # For `Id`, run on each non-NA element
     if (is(x, "Id")) {
