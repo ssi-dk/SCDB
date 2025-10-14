@@ -27,3 +27,49 @@ setMethod("dbGetRowsAffected", "JDBCResult", function(res, ...) {
   }
   return(NA_integer_)
 })
+
+
+#' @importFrom DBI dbQuoteIdentifier
+NULL
+
+#' Quote identifiers for Oracle
+#'
+#' @param conn A JDBCConnection
+#' @param x Character vector of identifiers to quote
+#' @param ... Additional arguments (ignored)
+#' @return SQL object with quoted identifiers
+#' @exportMethod dbQuoteIdentifier
+setMethod("dbQuoteIdentifier", signature("JDBCConnection", "character"),
+  function(conn, x, ...) {
+    # Oracle reserved keywords (common ones - add more as needed)
+    oracle_reserved <- c(
+      "ACCESS", "ADD", "ALL", "ALTER", "AND", "ANY", "AS", "ASC", "AUDIT",
+      "BETWEEN", "BY", "CHAR", "CHECK", "CLUSTER", "COLUMN", "COMMENT",
+      "COMPRESS", "CONNECT", "CREATE", "CURRENT", "DATE", "DECIMAL", "DEFAULT",
+      "DELETE", "DESC", "DISTINCT", "DROP", "ELSE", "EXCLUSIVE", "EXISTS",
+      "FILE", "FLOAT", "FOR", "FROM", "GRANT", "GROUP", "HAVING", "IDENTIFIED",
+      "IMMEDIATE", "IN", "INCREMENT", "INDEX", "INITIAL", "INSERT", "INTEGER",
+      "INTERSECT", "INTO", "IS", "LEVEL", "LIKE", "LOCK", "LONG", "MAXEXTENTS",
+      "MINUS", "MLSLABEL", "MODE", "MODIFY", "NOAUDIT", "NOCOMPRESS", "NOT",
+      "NOWAIT", "NULL", "NUMBER", "OF", "OFFLINE", "ON", "ONLINE", "OPTION",
+      "OR", "ORDER", "PCTFREE", "PRIOR", "PRIVILEGES", "PUBLIC", "RAW",
+      "RENAME", "RESOURCE", "REVOKE", "ROW", "ROWID", "ROWNUM", "ROWS",
+      "SELECT", "SESSION", "SET", "SHARE", "SIZE", "SMALLINT", "START",
+      "SUCCESSFUL", "SYNONYM", "SYSDATE", "TABLE", "THEN", "TO", "TRIGGER",
+      "UID", "UNION", "UNIQUE", "UPDATE", "USER", "VALIDATE", "VALUES",
+      "VARCHAR", "VARCHAR2", "VIEW", "WHENEVER", "WHERE", "WITH"
+    )
+
+    # Check if identifier needs quoting
+    needs_quoting <- toupper(x) %in% oracle_reserved |  # Reserved word
+                     grepl("[^A-Z0-9_$#]", x) |          # Special characters
+                     grepl("^[0-9]", x) |                # Starts with number
+                     grepl("[a-z]", x)                   # Contains lowercase
+
+    quoted <- ifelse(needs_quoting,
+                     paste0('"', gsub('"', '""', x), '"'),
+                     x)
+
+    DBI::SQL(quoted, names = names(x))
+  }
+)
