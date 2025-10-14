@@ -244,7 +244,20 @@ get_connection.JDBCDriver <- function(
   status <- do.call(DBI::dbCanConnect, args = args)
   if (!status) stop(attr(status, "reason"), call. = FALSE)
 
-  return(do.call(DBI::dbConnect, args = args))
+  # Connect
+  conn <- do.call(DBI::dbConnect, args = args)
+
+  # Assume connection is to an Oracle data base
+  warning(
+    "Connections of class '", class(conn),
+    "' are assumed to be connections to Oracle data bases.",
+    call. = FALSE
+  )
+
+  class(conn) <- c("OracleConnection", class(conn))
+
+
+  return(conn)
 }
 
 #' @rdname get_connection
