@@ -11,8 +11,11 @@ sql_table_analyze.JDBCConnection <- function(con, table, ...) {
   )
 }
 
+#' @importFrom DBI dbGetRowsAffected
+NULL
+
 #' @importFrom rJava .jcall
-#' @export
+#' @exportMethod dbGetRowsAffected
 setMethod("dbGetRowsAffected", "JDBCResult", function(res, ...) {
   if (!is.null(res@stat)) {
     tryCatch({
