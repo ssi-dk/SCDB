@@ -254,9 +254,6 @@ get_connection.JDBCDriver <- function(
     call. = FALSE
   )
 
-  class(conn) <- c("OracleConnection", class(conn))
-
-
   return(conn)
 }
 
