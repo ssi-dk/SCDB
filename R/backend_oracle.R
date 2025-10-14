@@ -56,14 +56,18 @@ setMethod("dbQuoteIdentifier", signature("OracleConnection"),
         stop("Cannot pass NA to dbQuoteIdentifier()")
     }
 
-    x <- enc2utf8(x)
+    if (is.character(x)) {
+      x <- enc2utf8(x)
 
-    needs_escape <- !grepl("^[a-zA-Z_][a-zA-Z0-9_]*$", x) | tolower(x) %in%
-        conn@reserved_words
+      needs_escape <- !grepl("^[a-zA-Z_][a-zA-Z0-9_]*$", x) | tolower(x) %in%
+          conn@reserved_words
 
-    x[needs_escape] <- paste0("\"", gsub("\"", "\"\"", x[needs_escape]),
-        "\"")
+      x[needs_escape] <- paste0("\"", gsub("\"", "\"\"", x[needs_escape]),
+          "\"")
 
-    DBI::SQL(x, names = names(x))
+      DBI::SQL(x, names = names(x))
+    }
+
+    stop("Cannot quote object of class: ", class(x))
   }
 )
