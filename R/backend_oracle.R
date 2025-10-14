@@ -41,12 +41,15 @@ NULL
 #' @exportMethod dbQuoteIdentifier
 setMethod("dbQuoteIdentifier", signature("JDBCConnection"),
   function(conn, x, ...) {
+
+    # Return early if already SQL
     if (is(x, "SQL")) {
         return(x)
     }
 
+    # For `Id`, run on each non-NA element
     if (is(x, "Id")) {
-        return(DBI::SQL(paste0(dbQuoteIdentifier(conn, x@name), collapse = ".")))
+        return(DBI::SQL(paste0(dbQuoteIdentifier(conn, purrr::discard(x@name, is.na)), collapse = ".")))
     }
 
     if (any(is.na(x))) {
@@ -54,7 +57,6 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection"),
     }
 
     x <- enc2utf8(x)
-
 
     needs_escape <- !grepl("^[a-zA-Z_][a-zA-Z0-9_]*$", x) | tolower(x) %in%
         conn@reserved_words
