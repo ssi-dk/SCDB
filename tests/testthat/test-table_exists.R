@@ -103,7 +103,7 @@ test_that("table_exists() works when starting from empty", {
 
   expect_false(table_exists(conn, "mtcars"))
 
-  dplyr::copy_to(conn, mtcars, "mtcars", temporary = FALSE)
+  dplyr::copy_to(conn, mtcars, "mtcars", temporary = FALSE, analyze = FALSE)
 
   expect_true(table_exists(conn, "mtcars"))
 

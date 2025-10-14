@@ -21,9 +21,9 @@ test_that("interlace.tbl_sql() works", {
 
 
     # Copy t1, t2 and t_ref to conn
-    t1 <- dplyr::copy_to(conn, t1, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
-    t2 <- dplyr::copy_to(conn, t2, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
-    t_ref <- dplyr::copy_to(conn, t_ref, name = id("test.SCDB_tmp3", conn), overwrite = TRUE, temporary = FALSE)
+    t1 <- dplyr::copy_to(conn, t1, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE, analyze = FALSE)
+    t2 <- dplyr::copy_to(conn, t2, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE, analyze = FALSE)
+    t_ref <- dplyr::copy_to(conn, t_ref, name = id("test.SCDB_tmp3", conn), overwrite = TRUE, temporary = FALSE, analyze = FALSE)
 
 
     # Order of records may be different, so we arrange then check if they are identical

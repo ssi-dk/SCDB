@@ -243,7 +243,7 @@ for (conn in c(list(NULL), get_test_conns())) {
   if (inherits(conn, "SQLiteConnection")) {
     test_that("getTableSignature() generates signature for random data on remote (SQLiteConnection)", {
       expect_identical(
-        getTableSignature(dplyr::copy_to(conn, data_random), conn),
+        getTableSignature(dplyr::copy_to(conn, data_random, analyze = FALSE), conn),
         c(
           "Date"      = "DOUBLE",  # By copying to SQLite and back, information is changed by
           "POSIXct"   = "DOUBLE",  # dbplyr / DBI so data types are now similar, but different.
@@ -264,7 +264,7 @@ for (conn in c(list(NULL), get_test_conns())) {
   if (inherits(conn, "PqConnection")) {
     test_that("getTableSignature() generates signature for random data on remote (PqConnection)", {
       expect_identical(
-        getTableSignature(dplyr::copy_to(conn, data_random), conn),
+        getTableSignature(dplyr::copy_to(conn, data_random, analyze = FALSE), conn),
         c(
           "Date"      = "DATE",
           "POSIXct"   = "TIMESTAMPTZ",
@@ -285,7 +285,7 @@ for (conn in c(list(NULL), get_test_conns())) {
   if (inherits(conn, "Microsoft SQL Server")) {
     test_that("getTableSignature() generates signature for random data on remote (Microsoft SQL Server)", {
       expect_identical(
-        getTableSignature(dplyr::copy_to(conn, data_random), conn),
+        getTableSignature(dplyr::copy_to(conn, data_random, analyze = FALSE), conn),
         c(
           "Date"      = "DATE",
           "POSIXct"   = "DATETIME",
@@ -306,7 +306,7 @@ for (conn in c(list(NULL), get_test_conns())) {
   if (inherits(conn, "duckdb_connection")) {
     test_that("getTableSignature() generates signature for random data on remote (duckdb_connection)", {
       expect_identical(
-        getTableSignature(dplyr::copy_to(conn, data_random), conn),
+        getTableSignature(dplyr::copy_to(conn, data_random, analyze = FALSE), conn),
         c(
           "Date"      = "DATE",
           "POSIXct"   = "TIMESTAMP",
@@ -334,13 +334,15 @@ for (conn in c(list(NULL), get_test_conns())) {
         conn,
         data_random,
         name = "remote_data_1",
-        types = getTableSignature(data_random, conn)
+        types = getTableSignature(data_random, conn),
+        analyze = FALSE
       )
       remote_data_2 <- dplyr::copy_to(
         conn,
         remote_data_1,
         name = "remote_data_2",
-        types = getTableSignature(remote_data_1, conn)
+        types = getTableSignature(remote_data_1, conn),
+        analyze = FALSE
       )
 
       # The table signatures are not always the same (eg. SQLiteConnection).

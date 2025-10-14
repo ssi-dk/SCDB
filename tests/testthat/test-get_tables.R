@@ -79,7 +79,7 @@ test_that("get_tables() works with temporary tables", {
   for (conn in get_test_conns()) {
 
     # Create temporary table
-    tmp <- dplyr::copy_to(conn, mtcars, "__mtcars_2", temporary = TRUE)
+    tmp <- dplyr::copy_to(conn, mtcars, "__mtcars_2", temporary = TRUE, analyze = FALSE)
     tmp_id <- id(tmp)
     tmp_name <- paste(tmp_id@name["schema"], tmp_id@name["table"], sep = ".")
 
@@ -109,7 +109,7 @@ test_that("get_tables() works without temporary tables", {
   for (conn in get_test_conns()) {
 
     # Create temporary table
-    tmp <- dplyr::copy_to(conn, mtcars, "__mtcars_2", temporary = TRUE)
+    tmp <- dplyr::copy_to(conn, mtcars, "__mtcars_2", temporary = TRUE, analyze = FALSE)
     tmp_id <- id(tmp)
     tmp_name <- paste(tmp_id@name["schema"], tmp_id@name["table"], sep = ".")
 
@@ -140,7 +140,7 @@ test_that("get_tables() matches the pattern of SCDB::id", {
     # Test for both a permanent table and a temporary table
     permanent_table <- id("test.mtcars", conn = conn)
 
-    tmp <- dplyr::copy_to(conn, mtcars, "__mtcars_2", temporary = TRUE)
+    tmp <- dplyr::copy_to(conn, mtcars, "__mtcars_2", temporary = TRUE, analyze = FALSE)
     defer_db_cleanup(tmp)
     temporary_table <- id(tmp)
 

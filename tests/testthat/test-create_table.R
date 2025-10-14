@@ -16,7 +16,7 @@ test_that("create_table() can create temporary tables", {
     expect_identical(colnames(table), c(colnames(cars), "checksum", "from_ts", "until_ts"))
     expect_identical(
       dplyr::collect(dplyr::select(table, -tidyselect::all_of(c("checksum", "from_ts", "until_ts")))),
-      dplyr::collect(dplyr::copy_to(conn, cars, unique_table_name()) %>% utils::head(0))
+      dplyr::collect(dplyr::copy_to(conn, cars, unique_table_name(), analyze = FALSE) %>% utils::head(0))
     )
 
     connection_clean_up(conn)
@@ -33,7 +33,7 @@ test_that("create_table() can create tables in default schema", {
     expect_identical(colnames(table), c(colnames(cars), "checksum", "from_ts", "until_ts"))
     expect_identical(
       dplyr::collect(dplyr::select(table, -tidyselect::all_of(c("checksum", "from_ts", "until_ts")))),
-      dplyr::collect(dplyr::copy_to(conn, cars, unique_table_name()) %>% utils::head(0))
+      dplyr::collect(dplyr::copy_to(conn, cars, unique_table_name(), analyze = FALSE) %>% utils::head(0))
     )
 
     connection_clean_up(conn)
@@ -52,7 +52,7 @@ test_that("create_table() can create tables in non default schema", {
     expect_identical(colnames(table), c(colnames(cars), "checksum", "from_ts", "until_ts"))
     expect_identical(
       dplyr::collect(dplyr::select(table, -tidyselect::all_of(c("checksum", "from_ts", "until_ts")))),
-      dplyr::collect(dplyr::copy_to(conn, cars, unique_table_name()) %>% utils::head(0))
+      dplyr::collect(dplyr::copy_to(conn, cars, unique_table_name(), analyze = FALSE) %>% utils::head(0))
     )
 
     connection_clean_up(conn)
@@ -90,7 +90,7 @@ test_that("create_table() does not overwrite tables", {
 
     expect_identical(
       dplyr::collect(dplyr::select(table, -tidyselect::all_of(c("checksum", "from_ts", "until_ts")))),
-      dplyr::collect(dplyr::copy_to(conn, cars, unique_table_name()) %>% utils::head(0))
+      dplyr::collect(dplyr::copy_to(conn, cars, unique_table_name(), analyze = FALSE) %>% utils::head(0))
     )
 
     connection_clean_up(conn)

@@ -20,7 +20,7 @@ test_that("get_schema() and get_catalog() works for tbl_dbi", {
 
     # Check for temporary tables
     table_name <- unique_table_name()
-    table <- dplyr::copy_to(conn, mtcars, table_name, temporary = TRUE)
+    table <- dplyr::copy_to(conn, mtcars, table_name, temporary = TRUE, analyze = FALSE)
     expect_identical(get_schema(table), get_schema(conn, temporary = TRUE))
     expect_identical(get_catalog(table), get_catalog(conn, temporary = TRUE))
 
