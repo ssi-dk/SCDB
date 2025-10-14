@@ -39,6 +39,18 @@ for (conn in get_test_conns()) {
     )
   )
 
+
+  print(
+    purrr::map(
+      c(
+        "test.mtcars", "__mtcars", "__mtcars_historical", "test.mtcars_modified", "mtcars_modified",
+        "test.SCDB_logs", "test.SCDB_logger", "test.SCDB_tmp1", "test.SCDB_tmp2", "test.SCDB_tmp3",
+        "test.SCDB_t0", "test.SCDB_t1", "test.SCDB_t2"
+      ),
+      ~ DBI::dbQuoteIdentifier(id(., conn), conn = conn)
+    )
+  )
+
   # Start with some clean up
   purrr::walk(c("test.mtcars", "__mtcars", "__mtcars_historical", "test.mtcars_modified", "mtcars_modified",
                 "test.SCDB_logs", "test.SCDB_logger", "test.SCDB_tmp1", "test.SCDB_tmp2", "test.SCDB_tmp3",
