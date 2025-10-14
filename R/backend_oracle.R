@@ -5,14 +5,3 @@
 sql_table_analyze.JDBCConnection <- function(con, table, ...) {
   dbplyr::build_sql("ANALYZE TABLE ", dbplyr::as.sql(id(table, conn = con)), " COMPUTE STATISTICS", con = con)
 }
-
-#' @exportS3Method DBI::db_analyze
-db_analyze.JDBCConnection <- function(con, table, ...) {
-  # Oracle-specific ANALYZE syntax
-  table_name <- dbplyr::sql_table_name(con, table)
-  sql <- paste0("ANALYZE TABLE ", as.character(table_name), " COMPUTE STATISTICS")
-  tryCatch(
-    DBI::dbExecute(con, sql),
-    error = function(e) invisible(NULL)  # Silently skip on error
-  )
-}
