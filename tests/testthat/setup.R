@@ -10,13 +10,6 @@ for (conn_id in seq_along(conns)) {
     coll$push(glue::glue("Connection could not be made to backend ({names(conns)[[conn_id]]})."))
   }
 
-  # Check Oracle user permissions
-  if (inherits(conn, "JDBCConnection")) {
-    print(DBI::dbGetQuery(conn, "SELECT * FROM USER_SYS_PRIVS"))
-    print(DBI::dbGetQuery(conn, "SELECT * FROM USER_TAB_PRIVS"))
-    print(DBI::dbGetQuery(conn, "SELECT * FROM USER_ROLE_PRIVS"))
-  }
-
 
   # Check schemas are configured correctly
   if (!schema_exists(conn, "test") && names(conns)[conn_id] != "SQLite") {
