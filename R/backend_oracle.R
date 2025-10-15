@@ -49,7 +49,9 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection", "character"),
   function(conn, x, ...) {
     x <- enc2utf8(x)
 
-    needs_escape <- tolower(x) %in% conn@reserved_words
+    reserved_words <- c("DATE", "NUMBER", "VARCHAR")
+
+    needs_escape <- tolower(x) %in% reserved_words
 
     x[needs_escape] <- paste0("\"", gsub("\"", "\"\"", x[needs_escape]), "\"")
 
