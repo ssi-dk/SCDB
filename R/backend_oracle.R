@@ -88,7 +88,7 @@ NULL
 
 #' @exportMethod dbCreateTable
 #' @noRd
-setMethod("dbCreateTable", signature("JDBCConnection"),
+setMethod("dbCreateTable", signature("JDBCConnection", "Id"),
   function(conn, name, fields, ..., row.names = NULL, temporary = FALSE) {
     stopifnot(is.null(row.names))
     stopifnot(is.logical(temporary), length(temporary) == 1L)
