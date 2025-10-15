@@ -2,8 +2,7 @@ test_that("create_logs_if_missing() can create logs in default and test schema",
   for (conn in get_test_conns()) {
     for (schema in list(NULL, "test")) {
 
-      warning(class(conn))
-      warning(.class2(conn))
+      warning(toString(.class2(conn)))
 
       # Generate table in schema that does not exist
       k <- 0
@@ -49,8 +48,7 @@ test_that("create_logs_if_missing() can create logs in default and test schema",
           log_signature <- dplyr::select(log_signature, !"catalog")
         }
 
-        print(DBI::dbQuoteIdentifier(conn, names(log_signature)))
-        warning(DBI::dbQuoteIdentifier(conn, names(log_signature)))
+        warning(toString(DBI::dbQuoteIdentifier(conn, names(log_signature))))
 
         log_signature <- log_signature %>%
           dplyr::copy_to(conn, df = ., unique_table_name(), analyze = FALSE)
