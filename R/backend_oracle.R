@@ -91,6 +91,9 @@ setMethod("dbCreateTable", signature("JDBCConnection", "Id"),
 #' @importFrom DBI dbWriteTable
 NULL
 
+#' @importFrom odbc dbWriteTable
+NULL
+
 #' @exportMethod dbWriteTable
 #' @noRd
 setMethod("dbWriteTable", signature("JDBCConnection", "SQL", "data.frame"),
