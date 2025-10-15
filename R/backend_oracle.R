@@ -34,15 +34,34 @@ setMethod("dbGetRowsAffected", "JDBCResult", function(res, ...) {
 #' @importFrom DBI dbQuoteIdentifier
 NULL
 
+
 #' Quote identifiers for Oracle
 #'
+#' @name dbQuoteIdentifier
 #' @param conn A JDBCConnection
-#' @param x Character vector of identifiers to quote
+#' @param x Identifiers to quote
 #' @param ... Additional arguments (ignored)
 #' @return SQL object with quoted identifiers
+#' @importClassesFrom RJDBC JDBCConnection
 #' @exportMethod dbQuoteIdentifier
 #' @noRd
-setMethod("dbQuoteIdentifier", signature("JDBCConnection"),
+setMethod("dbQuoteIdentifier", signature("JDBCConnection", "character"),
+  function(conn, x, ...) {
+    x <- enc2utf8(x)
+
+    needs_escape <- tolower(x) %in% conn@reserved_words
+
+    x[needs_escape] <- paste0("\"", gsub("\"", "\"\"", x[needs_escape]), "\"")
+
+    return(DBI::SQL(x, names = names(x)))
+  }
+)
+
+
+#' @rdname dbQuoteIdentifier
+#' @exportMethod dbQuoteIdentifier
+#' @noRd
+setMethod("dbQuoteIdentifier", signature("JDBCConnection", "ANY"),
   function(conn, x, ...) {
 
     # Return early if no quoting needed
@@ -56,22 +75,6 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection"),
 
     if (any(is.na(x))) {
       stop("Cannot pass NA to dbQuoteIdentifier()")
-    }
-
-    if (is.character(x)) {
-      print(x)
-      x <- enc2utf8(x)
-
-      reserved_words <- c("date", "number")
-
-      needs_escape <- !grepl("^[a-zA-Z_][a-zA-Z0-9_]*$", x) | tolower(x) %in% c(conn@reserved_words, reserved_words)
-
-      x[needs_escape] <- paste0("\"", gsub("\"", "\"\"", x[needs_escape]), "\"")
-
-      print(x)
-      print("________________________")
-
-      return(DBI::SQL(x, names = names(x)))
     }
 
     stop("Cannot quote object of class: ", class(x))
