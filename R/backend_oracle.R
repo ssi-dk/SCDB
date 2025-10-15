@@ -51,14 +51,15 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection"),
 
     # For `Id`, run on each non-NA element
     if (is(x, "Id")) {
-        return(DBI::SQL(paste0(dbQuoteIdentifier(conn, purrr::discard(x@name, is.na)), collapse = ".")))
+      return(DBI::SQL(paste0(DBI::dbQuoteIdentifier(conn, purrr::discard(x@name, is.na)), collapse = ".")))
     }
 
     if (any(is.na(x))) {
-        stop("Cannot pass NA to dbQuoteIdentifier()")
+      stop("Cannot pass NA to dbQuoteIdentifier()")
     }
 
     if (is.character(x)) {
+      print(x)
       x <- enc2utf8(x)
 
       reserved_words <- c("date", "number")
@@ -67,7 +68,8 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection"),
 
       x[needs_escape] <- paste0("\"", gsub("\"", "\"\"", x[needs_escape]), "\"")
 
-      if (any(needs_escape)) print(x)
+      print(x)
+      print("________________________")
 
       return(DBI::SQL(x, names = names(x)))
     }
