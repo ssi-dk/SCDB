@@ -3,6 +3,7 @@ test_that("create_logs_if_missing() can create logs in default and test schema",
     for (schema in list(NULL, "test")) {
 
       warning(class(conn))
+      warning(.class2(conn))
 
       # Generate table in schema that does not exist
       k <- 0
@@ -14,6 +15,10 @@ test_that("create_logs_if_missing() can create logs in default and test schema",
       }
 
       if (k < 100) {
+
+
+        warning(logs_id)
+
 
         # We know table does not exists
         expect_false(table_exists(conn, logs_id))
@@ -40,7 +45,7 @@ test_that("create_logs_if_missing() can create logs in default and test schema",
           log_file = character(0)
         )
 
-        if (!checkmate::test_multi_class(conn, c("Microsoft SQL Server", "duckdb_connection"))) {
+        if (!checkmate::test_multi_class(conn, c("Microsoft SQL Server", "duckdb_connection", "JBDCConnection"))) {
           log_signature <- dplyr::select(log_signature, !"catalog")
         }
 
