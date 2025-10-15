@@ -67,7 +67,9 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection"),
 
       x[needs_escape] <- paste0("\"", gsub("\"", "\"\"", x[needs_escape]), "\"")
 
-      DBI::SQL(x, names = names(x))
+      if (any(needs_escape)) print(x)
+
+      return(DBI::SQL(x, names = names(x)))
     }
 
     stop("Cannot quote object of class: ", class(x))
