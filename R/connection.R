@@ -249,9 +249,9 @@ get_connection.JDBCDriver <- function(
 
   # Assume connection is to an Oracle data base
   rlang::warn(
-    "Connections of class '", class(conn),
-    "' are assumed to be connections to Oracle databases",
-    .frequency = "regularly", .frequency_id = "JDBC means Oracle warning",
+    message = paste0("Connections of class '", class(conn), "' are assumed to be connections to Oracle databases"),
+    .frequency = "regularly",
+    .frequency_id = "JDBC means Oracle warning",
     call. = FALSE
   )
 
