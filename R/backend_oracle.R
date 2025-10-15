@@ -63,23 +63,11 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection", "character"),
 #' @rdname dbQuoteIdentifier
 #' @exportMethod dbQuoteIdentifier
 #' @noRd
-setMethod("dbQuoteIdentifier", signature("JDBCConnection", "ANY"),
+setMethod("dbQuoteIdentifier", signature("DBIConnection", "Id"),
   function(conn, x, ...) {
 
-    # Return early if no quoting needed
-    if (is.null(x)) return(x)
-    if (is(x, "SQL")) return(x)
-
     # For `Id`, run on each non-NA element
-    if (is(x, "Id")) {
       return(DBI::SQL(paste0(DBI::dbQuoteIdentifier(conn, purrr::discard(x@name, is.na)), collapse = ".")))
-    }
-
-    if (any(is.na(x))) {
-      stop("Cannot pass NA to dbQuoteIdentifier()")
-    }
-
-    stop("Cannot quote object of class: ", class(x))
   }
 )
 
