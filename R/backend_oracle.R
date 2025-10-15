@@ -51,7 +51,7 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection", "character"),
 
     reserved_words <- c("DATE", "NUMBER", "VARCHAR")
 
-    needs_escape <- toupper(x) != x |  tolower(x) %in% reserved_words
+    needs_escape <- (grepl("^[a-zA-Z]", x) & toupper(x) != x) |  tolower(x) %in% reserved_words
 
     x[needs_escape] <- paste0("\"", gsub("\"", "\"\"", x[needs_escape]), "\"")
 
