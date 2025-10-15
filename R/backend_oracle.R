@@ -82,3 +82,20 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection", "ANY"),
     stop("Cannot quote object of class: ", class(x))
   }
 )
+
+#' @importFrom DBI dbCreateTable
+NULL
+
+#' @exportMethod dbCreateTable
+#' @noRd
+setMethod("dbCreateTable", signature("JDBCConnection"),
+  function(conn, name, fields, ..., row.names = NULL, temporary = FALSE) {
+    stopifnot(is.null(row.names))
+    stopifnot(is.logical(temporary), length(temporary) == 1L)
+    query <- DBI::sqlCreateTable(con = conn, table = name, fields = fields,
+        row.names = row.names, temporary = temporary, ...)
+    print(query)
+    DBI::dbExecute(conn, query)
+    invisible(TRUE)
+  }
+)
