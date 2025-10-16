@@ -1,5 +1,15 @@
 # dbplyr needs additional implementation for Oracle to work.
 
+#' @importFrom DBI dbExistsTable
+NULL
+
+#' @exportMethod dbExistsTable
+setMethod("dbExistsTable", signature("JDBCConnection", "Id"),
+  function(conn, name, ...) {
+    methods::callNextMethod() # Remove ambiguity
+  }
+)
+
 #' @importFrom DBI dbGetRowsAffected
 NULL
 
