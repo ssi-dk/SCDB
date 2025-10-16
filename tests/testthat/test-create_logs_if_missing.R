@@ -51,7 +51,7 @@ test_that("create_logs_if_missing() can create logs in default and test schema",
         warning(toString(DBI::dbQuoteIdentifier(conn, names(log_signature))))
 
         log_signature <- log_signature %>%
-          dplyr::copy_to(conn, df = ., unique_table_name(), analyze = FALSE)
+          dplyr::copy_to(conn, df = ., unique_table_name(), analyze = FALSE) %>%
           dplyr::collect()
 
         expect_identical(
