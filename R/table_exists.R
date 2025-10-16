@@ -51,6 +51,8 @@ table_exists <- function(conn, db_table) {
 table_exists.DBIConnection <- function(conn, db_table) {
   tables <- get_tables(conn, show_temporary = TRUE)
 
+  print(tables)
+
   if (inherits(db_table, "Id")) {
     db_table_id <- id(db_table, conn) # Ensure Id is fully qualified (has schema)
 
