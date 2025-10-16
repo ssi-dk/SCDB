@@ -64,6 +64,15 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection", "SQL"),
   }
 )
 
+#' @exportMethod dbQuoteIdentifier
+#' @noRd
+setMethod("dbQuoteIdentifier", signature("Oracle", "Id"),
+  function(conn, x, ...) {
+
+    # For `Id`, run on each non-NA element
+      return(DBI::SQL(paste0(DBI::dbQuoteIdentifier(conn, purrr::discard(x@name, is.na)), collapse = ".")))
+  }
+)
 
 #' @importFrom DBI dbWriteTable
 NULL
