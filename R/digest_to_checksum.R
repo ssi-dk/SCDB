@@ -57,7 +57,7 @@ digest_to_checksum <- function(.data, col = "checksum", exclude = NULL) {
     col = formals(digest_to_checksum)$col,
     exclude = formals(digest_to_checksum)$exclude) {
 
-  hash_cols <- dbplyr::ident(setdiff(colnames(.data), c(col, exclude)))
+  hash_cols <- DBI::dbQuoteIdentifier(.data$src$con, setdiff(colnames(.data), c(col, exclude)))
 
   .data <- dplyr::mutate(
     .data,
