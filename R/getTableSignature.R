@@ -40,7 +40,7 @@ methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
       from_ts  = "TIMESTAMP",
       until_ts = "TIMESTAMP"
     ),
-    "JDBCConnection" = c(
+    "Oracle" = c(
       checksum = "CHAR(32)",
       from_ts  = "TIMESTAMP",
       until_ts = "TIMESTAMP"

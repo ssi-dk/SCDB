@@ -103,7 +103,7 @@ get_schema.duckdb_connection <- function(obj,  ...) {
 }
 
 #' @export
-get_schema.JDBCConnection <- function(obj,  ...) {
+get_schema.Oracle <- function(obj,  ...) {
   return(DBI::dbGetQuery(obj, "SELECT user FROM dual")$USER)
 }
 

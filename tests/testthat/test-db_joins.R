@@ -16,7 +16,7 @@ test_that("*_join() works with character `by` and `na_by`", {
     y <- dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE, analyze = FALSE)
 
     # Check if Oracle supports "IS NOT DISTINCT FROM"
-    if (inherits(conn, "JDBCConnection")) {
+    if (inherits(conn, "Oracle")) {
       DBI::dbGetQuery(conn, "SELECT 1 FROM DUAL WHERE 1 IS NOT DISTINCT FROM 1;")
     }
 
