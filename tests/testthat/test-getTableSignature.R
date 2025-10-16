@@ -329,7 +329,8 @@ for (conn in c(list(NULL), get_test_conns())) {
     test_that(glue::glue("getTableSignature() generates consistent data types ({class(conn)})"), {
       # This tests that the data types are consistent when copying to a remote table with getTableSignature().
       # We first copy the data to a remote table, then copy that table to another remote table on the same connection.
-      # The
+      print("getTableSignature(data_random, conn)")
+      print(getTableSignature(data_random, conn))
       remote_data_1 <- dplyr::copy_to(
         conn,
         data_random,
