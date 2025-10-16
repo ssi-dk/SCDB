@@ -18,3 +18,23 @@ setMethod("dbGetRowsAffected", "JDBCResult", function(res, ...) {
   }
   return(NA_integer_)
 })
+
+#' @importFrom DBI dbWriteTable
+NULL
+
+#' @importFrom methods setMethod
+#' @exportMethod dbWriteTable
+#' @noRd
+setMethod("dbWriteTable", signature("JDBCConnection", "SQL", "data.frame"),
+  function(conn, name, value, ...) {
+
+    method <- getMethod(dbWriteTable, signature(conn = "JDBCConnection", name = "ANY", value = "ANY"))
+
+
+    # Manually quote column names
+    names(value) <- as.character(DBI::dbQuoteIdentifier(conn, names(value)))
+
+    method@.Data(conn, name, value, ...)
+
+  }
+)
