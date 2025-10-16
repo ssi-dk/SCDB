@@ -16,7 +16,7 @@ methods::setGeneric("getTableSignature",
 methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
 
   # Retrieve the translated data types
-  signature <- as.list(DBI::dbDataType(conn, dplyr::collect(utils::head(.data, 0))))
+  signature <- purrr::map(utils::head(.data, 0), ~ DBI::dbDataType(conn, .))
 
   # Define the column types to be updated based on backend class
   backend_coltypes <- list(
