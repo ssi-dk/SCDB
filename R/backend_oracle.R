@@ -86,6 +86,13 @@ methods::setMethod("dbCreateTable", methods::signature("Oracle", "Id"),
     query <- DBI::sqlCreateTable(con = conn, table = name, fields = fields,
         row.names = row.names, temporary = temporary, ...)
     print(query)
+
+    print("dbCreateTable - class(conn)")
+    print(class(conn))
+
+    print("selectMethod(DBI::sqlCreateTable, signature('Oracle'))")
+    print(selectMethod(DBI::sqlCreateTable, signature("Oracle")))
+
     DBI::dbExecute(conn, query)
     invisible(TRUE)
   }
