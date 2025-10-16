@@ -113,8 +113,29 @@ test_that("*_join() works with `dplyr::join_by()`", {
     y <- get_table(conn, "__mtcars") %>%
       dplyr::select(name, drat, wt, qsec)
 
+    print("dplyr::show_query(y)")
     print(dplyr::show_query(y))
+
+    print("dplyr::show_query(dplyr::left_join(x, y, by = dplyr::join_by(x$name == y$name)))")
     print(dplyr::show_query(dplyr::left_join(x, y, by = dplyr::join_by(x$name == y$name))))
+
+    print("dplyr::tbl_vars(y)")
+    print(dplyr::tbl_vars(y))
+
+    print("make_join_aliases")
+    print(dbplyr:::make_join_aliases(x$src$con, NULL, NULL, NULL, rlang::caller_env()))
+
+    print("join_inline_select")
+    by <- dplyr::join_by(x$name == y$name)
+    print(dbplyr:::join_inline_select(y$lazy_query, by$y, by$on))
+
+    print("y_lq")
+    print(inline_result$lq)
+
+    print("table_names_y")
+    print(dbplyr:::make_table_names(join_alias$y, y_lq))
+
+
 
     # Test the implemented joins
     q  <- dplyr::left_join(x, y, by = dplyr::join_by(x$name == y$name)) %>% dplyr::collect()
