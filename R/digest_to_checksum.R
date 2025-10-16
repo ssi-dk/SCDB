@@ -52,6 +52,24 @@ digest_to_checksum <- function(.data, col = "checksum", exclude = NULL) {
 }
 
 #' @export
+`digest_to_checksum.tbl_JDBCConnection` <- function(
+    .data,
+    col = formals(digest_to_checksum)$col,
+    exclude = formals(digest_to_checksum)$exclude) {
+
+  hash_cols <- dbplyr::ident(setdiff(colnames(.data), c(col, exclude)))
+
+  .data <- dplyr::mutate(
+    .data,
+    !!col := !!dplyr::sql(
+      glue::glue("RAWTOHEX(STANDARD_HASH({paste0(hash_cols, collapse = ' || ')}, 'SHA256'))")
+    )
+  )
+
+  return(.data)
+}
+
+#' @export
 digest_to_checksum.default <- function(
     .data,
     col = formals(digest_to_checksum)$col,
