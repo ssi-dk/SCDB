@@ -38,7 +38,7 @@ test_that("create_logs_if_missing() can create logs in default and test schema",
           log_file = character(0)
         )
 
-        if (!checkmate::test_multi_class(conn, c("Microsoft SQL Server", "duckdb_connection"))) {
+        if (!checkmate::test_multi_class(conn, c("Microsoft SQL Server", "duckdb_connection", "JBDCConnection"))) {
           log_signature <- dplyr::select(log_signature, !"catalog")
         }
 
