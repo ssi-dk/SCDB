@@ -8,7 +8,7 @@ test_that("update_snapshot() can handle first snapshot", {
 
     # Use unmodified mtcars as the initial snapshot
     .data <- mtcars %>%
-      dplyr::copy_to(conn, df = ., name = unique_table_name())
+      dplyr::copy_to(conn, df = ., name = unique_table_name(), analyze = FALSE)
 
     # Configure the logger for this update
     db_table <- "test.SCDB_tmp1"
@@ -109,7 +109,7 @@ test_that("update_snapshot() can add a new snapshot", {
     # Modify snapshot and run update step
     .data <- mtcars %>%
       dplyr::mutate(hp = dplyr::if_else(hp > 130, hp - 10, hp)) %>%
-      dplyr::copy_to(conn, df = ., name = unique_table_name())
+      dplyr::copy_to(conn, df = ., name = unique_table_name(), analyze = FALSE)
 
     # Configure the logger for this update
     db_table <- "test.SCDB_tmp1"
@@ -179,7 +179,7 @@ test_that("update_snapshot() can update a snapshot on an existing date", {
     # We now attempt to do another update on the same date
     .data <- mtcars %>%
       dplyr::mutate(hp = dplyr::if_else(hp > 100, hp - 10, hp)) %>%
-      dplyr::copy_to(conn, df = ., name = unique_table_name())
+      dplyr::copy_to(conn, df = ., name = unique_table_name(), analyze = FALSE)
 
     # Configure the logger for this update
     db_table <- "test.SCDB_tmp1"
@@ -248,7 +248,7 @@ test_that("update_snapshot() can insert a snapshot between existing dates", {
     # We now attempt to an update between these two updates
     .data <- mtcars %>%
       dplyr::mutate(hp = dplyr::if_else(hp > 150, hp - 10, hp)) %>%
-      dplyr::copy_to(conn, df = ., name = unique_table_name())
+      dplyr::copy_to(conn, df = ., name = unique_table_name(), analyze = FALSE)
 
     # This should fail if we do not specify "enforce_chronological_order = FALSE"
     expect_error(
@@ -309,9 +309,9 @@ test_that("update_snapshot() works (holistic test 1)", {
     t2 <- data.frame(col1 = c("A", "B", "C"), col2 = c(1,        2,        3))
 
     # Copy t0, t1, and t2 to conn
-    t0 <- dplyr::copy_to(conn, t0, name = id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE)
-    t1 <- dplyr::copy_to(conn, t1, name = id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE)
-    t2 <- dplyr::copy_to(conn, t2, name = id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE)
+    t0 <- dplyr::copy_to(conn, t0, name = id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE, analyze = FALSE)
+    t1 <- dplyr::copy_to(conn, t1, name = id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE, analyze = FALSE)
+    t2 <- dplyr::copy_to(conn, t2, name = id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE, analyze = FALSE)
 
     logger <- LoggerNull$new()
     update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01 08:00:00", logger = logger)
@@ -378,9 +378,9 @@ test_that("update_snapshot() works (holistic test 2)", {
     t2 <- data.frame(col1 = c("A", "B", "C"), col2 = c(1,        2,        3))
 
     # Copy t0, t1, and t2 to conn (and suppress check_from message)
-    t0 <- dplyr::copy_to(conn, t0, name = id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE)
-    t1 <- dplyr::copy_to(conn, t1, name = id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE)
-    t2 <- dplyr::copy_to(conn, t2, name = id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE)
+    t0 <- dplyr::copy_to(conn, t0, name = id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE, analyze = FALSE)
+    t1 <- dplyr::copy_to(conn, t1, name = id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE, analyze = FALSE)
+    t2 <- dplyr::copy_to(conn, t2, name = id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE, analyze = FALSE)
 
 
     # Check non-chronological insertion
@@ -431,7 +431,7 @@ test_that("update_snapshot() handles 'NULL' updates", {
 
     # Use mtcars as the test data set
     .data <- mtcars %>%
-      dplyr::copy_to(conn, df = ., name = unique_table_name())
+      dplyr::copy_to(conn, df = ., name = unique_table_name(), analyze = FALSE)
     defer_db_cleanup(.data)
 
     # This is a simple update where 23 rows are replaced with 23 new ones on the given date
@@ -489,7 +489,7 @@ test_that("update_snapshot() works with Id objects", {
     expect_no_error(
       mtcars %>%
         dplyr::mutate(disp = sample(mtcars$disp, nrow(mtcars))) %>%
-        dplyr::copy_to(dest = conn, df = ., name = unique_table_name()) %>%
+        dplyr::copy_to(dest = conn, df = ., name = unique_table_name(), analyze = FALSE) %>%
         update_snapshot(
           conn = conn,
           db_table = target_table,
@@ -518,7 +518,7 @@ test_that("update_snapshot() checks table formats", {
     )
 
     # Test columns not matching
-    broken_table <- dplyr::copy_to(conn, dplyr::select(mtcars, !"mpg"), name = "mtcars_broken", overwrite = TRUE)
+    broken_table <- dplyr::copy_to(conn, dplyr::select(mtcars, !"mpg"), name = "mtcars_broken", overwrite = TRUE, analyze = FALSE)
 
     expect_error(
       update_snapshot(
@@ -563,7 +563,7 @@ test_that("update_snapshot() works with across connection", {
     dplyr::mutate(name = rownames(mtcars))
 
   # Copy table to the source
-  .data <- dplyr::copy_to(dest = source_conn, df = mtcars_modified, name = unique_table_name())
+  .data <- dplyr::copy_to(dest = source_conn, df = mtcars_modified, name = unique_table_name(), analyze = FALSE)
 
   # For each conn, we test if update_snapshot preserves data types
   for (target_conn in get_test_conns()) {
@@ -612,7 +612,7 @@ test_that("update_snapshot() works with across connection", {
   # For each conn, we test if update_snapshot preserves data types
   for (source_conn in get_test_conns()) {
 
-    .data <- dplyr::copy_to(dest = source_conn, df = mtcars_modified, name = unique_table_name())
+    .data <- dplyr::copy_to(dest = source_conn, df = mtcars_modified, name = unique_table_name(), analyze = FALSE)
 
     target_table <- id("mtcars_modified", target_conn)
     if (DBI::dbExistsTable(target_conn, target_table)) DBI::dbRemoveTable(target_conn, target_table)
