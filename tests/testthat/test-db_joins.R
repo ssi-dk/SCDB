@@ -117,6 +117,7 @@ test_that("*_join() works with `dplyr::join_by()`", {
     y <- get_table(conn, "__mtcars") %>%
       dplyr::select(name, drat, wt, qsec)
 
+    print(dplyr::show_query(y))
 
     # Test the implemented joins
     q  <- dplyr::left_join(x, y, by = dplyr::join_by(x$name == y$name)) %>% dplyr::collect()
