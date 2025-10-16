@@ -175,8 +175,8 @@ get_tables.duckdb_connection <- function(conn, pattern = NULL, show_temporary = 
 get_tables.JDBCConnection <- function(conn, pattern = NULL, show_temporary = TRUE) {
   query <- paste(
     "SELECT",
-    "owner AS schema,",
-    "table_name AS table",
+    "owner AS \"schema\",",
+    "table_name AS \"table\"",
     "FROM all_tables",
     "WHERE owner NOT IN ('SYS', 'SYSTEM', 'SYSAUX', 'CTXSYS', 'MDSYS', 'OLAPSYS',",
     "'ORDDATA', 'ORDSYS', 'OUTLN', 'WMSYS', 'XDB', 'APEX_PUBLIC_USER',",
@@ -185,15 +185,15 @@ get_tables.JDBCConnection <- function(conn, pattern = NULL, show_temporary = TRU
     "'GSMCATUSER', 'MDDATA', 'SYSBACKUP', 'SYSDG', 'SYSKM', 'SYSMAN')",
     "UNION ALL",
     "SELECT",
-    "owner AS schema,",
-    "view_name AS table",
+    "owner AS \"schema\",",
+    "view_name AS \"table\"",
     "FROM all_views",
     "WHERE owner NOT IN ('SYS', 'SYSTEM', 'SYSAUX', 'CTXSYS', 'MDSYS', 'OLAPSYS',",
     "'ORDDATA', 'ORDSYS', 'OUTLN', 'WMSYS', 'XDB', 'APEX_PUBLIC_USER',",
     "'DBSNMP', 'DIP', 'GSMADMIN_INTERNAL', 'ORACLE_OCM', 'ORDS_METADATA',",
     "'ORDS_PUBLIC_USER', 'SPATIAL_CSW_DEBUG_USR', 'SPATIAL_WFS_DEBUG_USR',",
     "'GSMCATUSER', 'MDDATA', 'SYSBACKUP', 'SYSDG', 'SYSKM', 'SYSMAN')",
-    "ORDER BY schema, table"
+    "ORDER BY \"schema\", \"table\""
   )
 
   tables <- DBI::dbGetQuery(conn, query)
