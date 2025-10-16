@@ -96,6 +96,8 @@ NULL
 setMethod("dbWriteTable", signature("JDBCConnection", "SQL", "data.frame"),
   function(conn, name, value, ...) {
 
+    print("Succesfully redicrected to dbWriteTable.JDBCConnection")
+
     method <- getMethod(dbWriteTable, signature(conn = "JDBCConnection", name = "ANY", value = "ANY"))
     method@.Data(conn, name, value, ...)
 
