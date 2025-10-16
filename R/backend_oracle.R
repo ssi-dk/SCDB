@@ -49,6 +49,14 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection", "character"),
   }
 )
 
+#' @exportMethod dbQuoteIdentifier
+#' @noRd
+setMethod("dbQuoteIdentifier", signature("JDBCConnection", "SQL"),
+  function(conn, x, ...) {
+    return(x) # Remove ambiguity (also assume already quoted)
+  }
+)
+
 
 #' @importFrom DBI dbWriteTable
 NULL
