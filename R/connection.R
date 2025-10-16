@@ -208,12 +208,6 @@ get_connection.duckdb_driver <- function(
 }
 
 
-#' @importClassesFrom RJDBC JDBCConnection
-#' @export
-#' @noRd
-methods::setClass("Oracle", contains = "JDBCConnection")
-
-
 #' @rdname get_connection
 #' @param driverClass (`character(1)`)\cr
 #'   The name of the JDBC driver to load.

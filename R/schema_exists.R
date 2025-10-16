@@ -37,7 +37,7 @@ schema_exists.DBIConnection <- function(conn, schema) {
 }
 
 #' @export
-schema_exists.JDBCConnection <- function(conn, schema) {
+schema_exists.Oracle <- function(conn, schema) {
   query <- paste0("SELECT * FROM ALL_USERS WHERE USERNAME = '", schema, "'")
   result <- DBI::dbGetQuery(conn, query)
 

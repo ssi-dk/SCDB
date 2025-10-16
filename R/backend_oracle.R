@@ -1,5 +1,12 @@
 # dbplyr needs additional implementation for Oracle to work.
 
+#' @importClassesFrom RJDBC JDBCConnection
+#' @export
+#' @noRd
+methods::setClass("Oracle", contains = "JDBCConnection")
+
+
+
 #' @importFrom DBI dbExistsTable
 NULL
 

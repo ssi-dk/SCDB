@@ -172,7 +172,7 @@ get_tables.duckdb_connection <- function(conn, pattern = NULL, show_temporary = 
 
 #' @importFrom rlang .data
 #' @export
-get_tables.JDBCConnection <- function(conn, pattern = NULL, show_temporary = TRUE) {
+get_tables.Oracle <- function(conn, pattern = NULL, show_temporary = TRUE) {
   query <- paste(
     "SELECT",
     "owner AS \"schema\",",
