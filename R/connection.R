@@ -207,6 +207,12 @@ get_connection.duckdb_driver <- function(
   return(do.call(DBI::dbConnect, args = args))
 }
 
+
+#' @export
+#' @noRd
+methods::setClass("Oracle", contains = "JDBCConnection")
+
+
 #' @rdname get_connection
 #' @param driverClass (`character(1)`)\cr
 #'   The name of the JDBC driver to load.
@@ -253,6 +259,15 @@ get_connection.JDBCDriver <- function(
     .frequency = "regularly",
     .frequency_id = "JDBC means Oracle warning",
     call. = FALSE
+  )
+
+  # Cast to superclass
+  conn <- new(
+    "Oracle",
+    jc=conn@jc,
+    identifier.quote=conn@identifier.quote,
+    options=conn@options,
+    auto.commit=conn@auto.commit
   )
 
   return(conn)
