@@ -182,6 +182,7 @@ get_tables.JDBCConnection <- function(conn, pattern = NULL, show_temporary = TRU
     "'ORDDATA', 'ORDSYS', 'OUTLN', 'WMSYS', 'XDB', 'APEX_PUBLIC_USER',",
     "'DBSNMP', 'DIP', 'GSMADMIN_INTERNAL', 'ORACLE_OCM', 'ORDS_METADATA',",
     "'ORDS_PUBLIC_USER', 'SPATIAL_CSW_DEBUG_USR', 'SPATIAL_WFS_DEBUG_USR',",
+    "'APPQOSSYS', 'DBSFWUSER', 'LBACSYS',",
     "'GSMCATUSER', 'MDDATA', 'SYSBACKUP', 'SYSDG', 'SYSKM', 'SYSMAN')",
     "UNION ALL",
     "SELECT",
@@ -192,6 +193,7 @@ get_tables.JDBCConnection <- function(conn, pattern = NULL, show_temporary = TRU
     "'ORDDATA', 'ORDSYS', 'OUTLN', 'WMSYS', 'XDB', 'APEX_PUBLIC_USER',",
     "'DBSNMP', 'DIP', 'GSMADMIN_INTERNAL', 'ORACLE_OCM', 'ORDS_METADATA',",
     "'ORDS_PUBLIC_USER', 'SPATIAL_CSW_DEBUG_USR', 'SPATIAL_WFS_DEBUG_USR',",
+    "'APPQOSSYS', 'DBSFWUSER', 'LBACSYS',",
     "'GSMCATUSER', 'MDDATA', 'SYSBACKUP', 'SYSDG', 'SYSKM', 'SYSMAN')",
     "ORDER BY \"schema\", \"table\""
   )
