@@ -266,9 +266,7 @@ get_connection.JDBCDriver <- function(
   conn <- new(
     "Oracle",
     jc=conn@jc,
-    identifier.quote=conn@identifier.quote,
-    options=conn@options,
-    auto.commit=conn@auto.commit
+    identifier.quote=conn@identifier.quote
   )
 
   return(conn)
