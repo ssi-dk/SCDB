@@ -12,6 +12,8 @@ methods::setGeneric("getTableSignature",
                     function(.data, conn = NULL) standardGeneric("getTableSignature"),
                     signature = "conn")
 
+#' @importMethodsFrom RJDBC dbDataType
+#' @importMethodsFrom odbc dbDataType
 #' @importClassesFrom DBI DBIConnection
 methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
 
