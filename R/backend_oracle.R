@@ -99,6 +99,11 @@ setMethod("dbWriteTable", signature("JDBCConnection", "SQL", "data.frame"),
     print(glue::glue("Succesfully redicrected ({name}) to dbWriteTable.JDBCConnection"))
 
     method <- getMethod(dbWriteTable, signature(conn = "JDBCConnection", name = "ANY", value = "ANY"))
+
+
+    # Manually quote column names
+    names(value) <- as.character(DBI::dbQuoteIdentifier(conn, names(value)))
+
     method@.Data(conn, name, value, ...)
 
   }
