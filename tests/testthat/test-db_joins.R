@@ -11,9 +11,9 @@ test_that("*_join() works with character `by` and `na_by`", {
                     number = c(NA, "2", "1", "1"))
 
     # Copy x and y to conn
-    x <- dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+    x <- dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE, analyze = FALSE)
 
-    y <- dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
+    y <- dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE, analyze = FALSE)
 
 
     q  <- dplyr::left_join(x, y, na_by = "number") %>%
@@ -48,9 +48,9 @@ test_that("*_join() works with character `by` and `na_by`", {
                     n_add = 4)
 
     # Copy x and y to conn
-    x <- dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE)
+    x <- dplyr::copy_to(conn, x, name = id("test.SCDB_tmp1", conn), overwrite = TRUE, temporary = FALSE, analyze = FALSE)
 
-    y <- dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE)
+    y <- dplyr::copy_to(conn, y, name = id("test.SCDB_tmp2", conn), overwrite = TRUE, temporary = FALSE, analyze = FALSE)
 
 
     q  <- dplyr::full_join(x, y, by = "date", na_by = "region_id") %>%
