@@ -74,6 +74,23 @@ setMethod("dbQuoteIdentifier", signature("Oracle", "Id"),
   }
 )
 
+#' @importFrom DBI dbCreateTable
+NULL
+
+#' @exportMethod dbCreateTable
+#' @noRd
+methods::setMethod("dbCreateTable", methods::signature("Oracle", "Id"),
+  function(conn, name, fields, ..., row.names = NULL, temporary = FALSE) {
+    stopifnot(is.null(row.names))
+    stopifnot(is.logical(temporary), length(temporary) == 1L)
+    query <- DBI::sqlCreateTable(con = conn, table = name, fields = fields,
+        row.names = row.names, temporary = temporary, ...)
+    print(query)
+    DBI::dbExecute(conn, query)
+    invisible(TRUE)
+  }
+)
+
 #' @importFrom DBI dbWriteTable
 NULL
 
