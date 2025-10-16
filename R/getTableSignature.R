@@ -7,6 +7,8 @@
 #' @template .data
 #' @template conn
 #' @importFrom methods setGeneric
+#' @importMethodsFrom RJDBC dbDataType
+#' @importMethodsFrom odbc dbDataType
 #' @noRd
 methods::setGeneric("getTableSignature",
                     function(.data, conn = NULL) standardGeneric("getTableSignature"),
