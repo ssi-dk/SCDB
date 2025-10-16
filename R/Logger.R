@@ -190,7 +190,8 @@ Logger <- R6::R6Class(                                                          
           dest = private$log_conn,
           df = patch,
           name = unique_table_name("SCDB_logger_patch"),
-          temporary = TRUE
+          temporary = TRUE,
+          analyze = FALSE
         )
         defer_db_cleanup(patch) # Clean up on exit
 
@@ -341,7 +342,8 @@ Logger <- R6::R6Class(                                                          
         dest = private$log_conn,
         df = patch,
         name = unique_table_name("SCDB_logger_patch"),
-        temporary = TRUE
+        temporary = TRUE,
+        analyze = FALSE
       )
       defer_db_cleanup(patch) # Clean up on exit
 

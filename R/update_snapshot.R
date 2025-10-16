@@ -190,7 +190,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
   # Copy to the target connection if needed
   if (!identical(dbplyr::remote_con(.data), conn)) {
-    .data <- dplyr::copy_to(conn, .data, name = unique_table_name("SCDB_update_snapshot_input"))
+    .data <- dplyr::copy_to(conn, .data, name = unique_table_name("SCDB_update_snapshot_input"), analyze = FALSE)
     defer_db_cleanup(.data)
   }
 
@@ -221,7 +221,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
   # Apply filter to current records
   if (!is.null(filters) && !identical(dbplyr::remote_con(filters), conn)) {
-    filters <- dplyr::copy_to(conn, filters, name = unique_table_name("SCDB_update_snapshot_filter"))
+    filters <- dplyr::copy_to(conn, filters, name = unique_table_name("SCDB_update_snapshot_filter"), analyze = FALSE)
     defer_db_cleanup(filters)
   }
   db_table <- filter_keys(db_table, filters)
