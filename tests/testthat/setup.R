@@ -40,10 +40,10 @@ for (conn in get_test_conns()) {
 
   # Copy mtcars to conn
   dplyr::copy_to(conn, mtcars %>% dplyr::mutate(name = rownames(mtcars)),
-                 name = id("test.mtcars", conn), temporary = FALSE, overwrite = TRUE)
+                 name = id("test.mtcars", conn), temporary = FALSE, overwrite = TRUE, analyze = FALSE)
 
   dplyr::copy_to(conn, mtcars %>% dplyr::mutate(name = rownames(mtcars)),
-                 name = id("__mtcars", conn), temporary = FALSE, overwrite = TRUE)
+                 name = id("__mtcars", conn), temporary = FALSE, overwrite = TRUE, analyze = FALSE)
 
   dplyr::copy_to(conn,
                  mtcars %>%
@@ -51,7 +51,7 @@ for (conn in get_test_conns()) {
                    digest_to_checksum() %>%
                    dplyr::mutate(from_ts = as.POSIXct("2020-01-01 09:00:00"),
                                  until_ts = as.POSIXct(NA)),
-                 name = id("__mtcars_historical", conn), temporary = FALSE, overwrite = TRUE)
+                 name = id("__mtcars_historical", conn), temporary = FALSE, overwrite = TRUE, analyze = FALSE)
 
   DBI::dbDisconnect(conn)
 }
