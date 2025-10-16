@@ -19,6 +19,27 @@ setMethod("dbGetRowsAffected", "JDBCResult", function(res, ...) {
   return(NA_integer_)
 })
 
+
+#' @importFrom DBI dbQuoteIdentifier
+NULL
+
+#' @exportMethod dbQuoteIdentifier
+#' @noRd
+setMethod("dbQuoteIdentifier", signature("JDBCConnection", "character"),
+  function(conn, x, ...) {
+    x <- enc2utf8(x)
+
+    reserved_words <- c("DATE", "NUMBER", "VARCHAR")
+
+    needs_escape <- (grepl("^[a-zA-Z_]", x) & toupper(x) != x) |  tolower(x) %in% reserved_words
+
+    x[needs_escape] <- paste0("\"", gsub("\"", "\"\"", x[needs_escape]), "\"")
+
+    return(DBI::SQL(x, names = names(x)))
+  }
+)
+
+
 #' @importFrom DBI dbWriteTable
 NULL
 
