@@ -91,18 +91,13 @@ setMethod("dbCreateTable", signature("JDBCConnection", "Id"),
 #' @importFrom DBI dbWriteTable
 NULL
 
-#' @importFrom odbc dbWriteTable
-NULL
-
 #' @exportMethod dbWriteTable
 #' @noRd
 setMethod("dbWriteTable", signature("JDBCConnection", "SQL", "data.frame"),
   function(conn, name, value, ...) {
 
-    # Use the odbc method for JDBCConnections also
-    odbc_method <- getMethod(dbWriteTable, signature(conn = "OdbcConnection", name = "SQL", value = "data.frame"))
-
-    odbc_method@.Data(conn, name, value, ...)
+    method <- getMethod(dbWriteTable, signature(conn = "JDBCConnection", name = "ANY", value = "ANY"))
+    method@.Data(conn, name, value, ...)
 
   }
 )
