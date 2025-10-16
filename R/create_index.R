@@ -72,7 +72,8 @@ create_index.DBIConnection <- function(conn, db_table, columns) {
     stringr::str_replace_all(stringr::fixed("."), "_")
 
   query <- glue::glue(
-    "CREATE UNIQUE INDEX {index} ON {as.character(db_table, explicit = TRUE)} ({toString(columns)})"
+    "CREATE UNIQUE INDEX {index} ON {as.character(db_table, explicit = TRUE)} ",
+    "({toString(DBI::dbQuoteIdentifier(conn, columns))})"
   )
 
   DBI::dbExecute(conn, query)
