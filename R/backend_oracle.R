@@ -9,12 +9,6 @@
 NULL
 
 
-# Create Frankenstein class
-#' @importClassesFrom RJDBC JDBCConnection
-#' @export
-#' @noRd
-setClass("Oracle", slots=list(), contains = "JDBCConnection")
-
 #' @exportMethod dbWriteTable
 setMethod("dbWriteTable", signature("JDBCConnection", "character", "data.frame"),
           function(conn, name, value, ...) {
