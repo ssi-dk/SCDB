@@ -4,29 +4,23 @@
 #' @importMethodsFrom RJDBC dbExistsTable
 #' @importMethodsFrom DBI dbGetRowsAffected
 #' @importMethodsFrom DBI dbQuoteIdentifier
+#' @importMethodsFrom DBI dbWriteTable
 #' @importMethodsFrom RJDBC dbWriteTable
 NULL
 
 
-# Create Frankenstein class
-#' @importClassesFrom odbc Oracle
-#' @importClassesFrom RJDBC JDBCConnection
-#' @export
-#' @noRd
-methods::setClassUnion("Oracle_JDBC", c("Oracle", "JDBCConnection"))
-
 #' @exportMethod dbWriteTable
 setMethod("dbWriteTable", signature("JDBCConnection", "character", "data.frame"),
-  function(conn, name, value, ...) {
-    DBI::dbWriteTable(conn, id(conn, name), value, ...)
-  }
+          function(conn, name, value, ...) {
+            DBI::dbWriteTable(conn, id(conn, name), value, ...)
+          }
 )
 
 #' @exportMethod dbWriteTable
 setMethod("dbWriteTable", signature("JDBCConnection", "Id", "data.frame"),
-  function(conn, name, value, ...) {
-    DBI::dbWriteTable(conn, DBI::dbQuoteIdentifier(conn, name), value, ...)
-  }
+          function(conn, name, value, ...) {
+            DBI::dbWriteTable(conn, DBI::dbQuoteIdentifier(conn, name), value, ...)
+          }
 )
 
 
@@ -44,9 +38,9 @@ sql_table_analyze.Oracle <- function(con, table, ...) {
 
 #' @exportMethod dbExistsTable
 setMethod("dbExistsTable", signature("JDBCConnection", "Id"),
-  function(conn, name, ...) {
-    methods::callNextMethod() # Remove ambiguity
-  }
+          function(conn, name, ...) {
+            methods::callNextMethod() # Remove ambiguity
+          }
 )
 
 
@@ -69,35 +63,35 @@ setMethod("dbGetRowsAffected", "JDBCResult", function(res, ...) {
 #' @exportMethod dbQuoteIdentifier
 #' @noRd
 setMethod("dbQuoteIdentifier", signature("JDBCConnection", "character"),
-  function(conn, x, ...) {
-    x <- enc2utf8(x)
+          function(conn, x, ...) {
+            x <- enc2utf8(x)
 
-    reserved_words <- c("DATE", "NUMBER", "VARCHAR")
+            reserved_words <- c("DATE", "NUMBER", "VARCHAR")
 
-    needs_escape <- (grepl("^[a-zA-Z_]", x) & toupper(x) != x) |  tolower(x) %in% reserved_words
+            needs_escape <- (grepl("^[a-zA-Z_]", x) & toupper(x) != x) |  tolower(x) %in% reserved_words
 
-    x[needs_escape] <- paste0("\"", gsub("\"", "\"\"", x[needs_escape]), "\"")
+            x[needs_escape] <- paste0("\"", gsub("\"", "\"\"", x[needs_escape]), "\"")
 
-    return(DBI::SQL(x, names = names(x)))
-  }
+            return(DBI::SQL(x, names = names(x)))
+          }
 )
 
 #' @exportMethod dbQuoteIdentifier
 #' @noRd
 setMethod("dbQuoteIdentifier", signature("JDBCConnection", "SQL"),
-  function(conn, x, ...) {
-    return(x) # Remove ambiguity (also assume already quoted)
-  }
+          function(conn, x, ...) {
+            return(x) # Remove ambiguity (also assume already quoted)
+          }
 )
 
 #' @exportMethod dbQuoteIdentifier
 #' @noRd
 setMethod("dbQuoteIdentifier", signature("JDBCConnection", "Id"),
-  function(conn, x, ...) {
+          function(conn, x, ...) {
 
-    # For `Id`, run on each non-NA element
-      return(DBI::SQL(paste0(DBI::dbQuoteIdentifier(conn, purrr::discard(x@name, is.na)), collapse = ".")))
-  }
+            # For `Id`, run on each non-NA element
+            return(DBI::SQL(paste0(DBI::dbQuoteIdentifier(conn, purrr::discard(x@name, is.na)), collapse = ".")))
+          }
 )
 
 #' @importFrom methods setMethod
@@ -105,15 +99,15 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection", "Id"),
 #' @exportMethod dbWriteTable
 #' @noRd
 setMethod("dbWriteTable", signature("JDBCConnection", "SQL", "data.frame"),
-  function(conn, name, value, ...) {
+          function(conn, name, value, ...) {
 
-    method <- getMethod(dbWriteTable, signature(conn = "JDBCConnection", name = "ANY", value = "ANY"))
+            method <- getMethod(dbWriteTable, signature(conn = "JDBCConnection", name = "ANY", value = "ANY"))
 
 
-    # Manually quote column names
-    names(value) <- as.character(DBI::dbQuoteIdentifier(conn, names(value)))
+            # Manually quote column names
+            names(value) <- as.character(DBI::dbQuoteIdentifier(conn, names(value)))
 
-    method@.Data(conn, name, value, ...)
+            method@.Data(conn, name, value, ...)
 
-  }
+          }
 )
