@@ -14,6 +14,11 @@ test_that("get_table() returns list of tables if no table is requested", {
 test_that("get_table() works when tables/view exist", {
   for (conn in get_test_conns()) {
 
+    print('get_table(conn, "__mtcars")')
+    print(get_table(conn, "__mtcars"))
+    print('dplyr::collect(get_table(conn, "__mtcars"))')
+    print(dplyr::collect(get_table(conn, "__mtcars")))
+
     mtcars_t <- tibble::tibble(mtcars %>% dplyr::mutate(name = rownames(mtcars)))
 
     # Lets try different ways to read __mtcars (added during setup)
