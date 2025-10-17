@@ -12,7 +12,7 @@ NULL
 # Create Frankenstein class
 #' @export
 #' @noRd
-methods::setClass("Oracle", contains = "JDBCConnection")
+methods::setClassUnion("Oracle_JDBC", c("Oracle", "JDBCConnection"))
 
 #' @exportMethod dbWriteTable
 setMethod("dbWriteTable", signature("JDBCConnection", "character", "data.frame"),

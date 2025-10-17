@@ -262,7 +262,7 @@ get_connection.JDBCDriver <- function(
 
   # Cast to superclass
   conn <- new(
-    "Oracle",
+    "Oracle_JDBC",
     jc=conn@jc,
     identifier.quote=conn@identifier.quote
   )
