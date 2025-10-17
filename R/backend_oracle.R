@@ -1,6 +1,15 @@
 # dbplyr needs additional implementation for Oracle to work.
 
+#' @importMethodsFrom DBI dbExistsTable
+#' @importMethodsFrom RJDBC dbExistsTable
+#' @importMethodsFrom DBI dbGetRowsAffected
+#' @importMethodsFrom DBI dbQuoteIdentifier
+#' @importMethodsFrom RJDBC dbWriteTable
 #' @importClassesFrom RJDBC JDBCConnection
+NULL
+
+
+# Create Frankenstein class
 #' @export
 #' @noRd
 methods::setClass("Oracle", contains = "JDBCConnection")
@@ -18,9 +27,6 @@ sql_table_analyze.Oracle <- function(con, table, ...) {
   )
 }
 
-#' @importFrom DBI dbExistsTable
-NULL
-
 #' @exportMethod dbExistsTable
 setMethod("dbExistsTable", signature("JDBCConnection", "Id"),
   function(conn, name, ...) {
@@ -28,8 +34,6 @@ setMethod("dbExistsTable", signature("JDBCConnection", "Id"),
   }
 )
 
-#' @importFrom DBI dbGetRowsAffected
-NULL
 
 #' @importFrom rJava .jcall
 #' @importFrom methods setMethod
@@ -46,10 +50,6 @@ setMethod("dbGetRowsAffected", "JDBCResult", function(res, ...) {
   }
   return(NA_integer_)
 })
-
-
-#' @importFrom DBI dbQuoteIdentifier
-NULL
 
 #' @exportMethod dbQuoteIdentifier
 #' @noRd
@@ -84,9 +84,6 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection", "Id"),
       return(DBI::SQL(paste0(DBI::dbQuoteIdentifier(conn, purrr::discard(x@name, is.na)), collapse = ".")))
   }
 )
-
-#' @importFrom DBI dbWriteTable
-NULL
 
 #' @importFrom methods setMethod
 #' @importClassesFrom RJDBC JDBCConnection
