@@ -5,11 +5,12 @@
 #' @importMethodsFrom DBI dbGetRowsAffected
 #' @importMethodsFrom DBI dbQuoteIdentifier
 #' @importMethodsFrom RJDBC dbWriteTable
-#' @importClassesFrom RJDBC JDBCConnection
 NULL
 
 
 # Create Frankenstein class
+#' @importClassesFrom odbc Oracle
+#' @importClassesFrom RJDBC JDBCConnection
 #' @export
 #' @noRd
 methods::setClassUnion("Oracle_JDBC", c("Oracle", "JDBCConnection"))
