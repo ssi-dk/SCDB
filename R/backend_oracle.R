@@ -77,7 +77,7 @@ setMethod("dbQuoteIdentifier", signature("JDBCConnection", "SQL"),
 
 #' @exportMethod dbQuoteIdentifier
 #' @noRd
-setMethod("dbQuoteIdentifier", signature("Oracle", "Id"),
+setMethod("dbQuoteIdentifier", signature("JDBCConnection", "Id"),
   function(conn, x, ...) {
 
     # For `Id`, run on each non-NA element
