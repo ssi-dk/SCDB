@@ -37,7 +37,7 @@ for (conn in get_test_conns()) {
   purrr::walk(c(DBI::Id(schema = "test", table = "one.two"), DBI::Id(schema = "test.one", table = "two")),
               ~ if (schema_exists(conn, .@name[["schema"]]) && DBI::dbExistsTable(conn, .)) DBI::dbRemoveTable(conn, .))
 
-
+  print(showMethods(DBI::dbWriteTable))
   # Copy mtcars to conn
   dplyr::copy_to(conn, mtcars %>% dplyr::mutate(name = rownames(mtcars)),
                  name = id("test.mtcars", conn), temporary = FALSE, overwrite = TRUE, analyze = FALSE)
