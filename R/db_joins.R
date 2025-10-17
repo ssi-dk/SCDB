@@ -69,7 +69,7 @@ join_na_sql.tbl_dbi <- function(x, by, na_by) {
 }
 
 #' @noRd
-`join_na_sql.tbl_Oracle` <- function(x, by, na_by) {
+`join_na_sql.tbl_Oracle_JDBC` <- function(x, by, na_by) {
   return(join_na_not_null(by = by, na_by = na_by))
 }
 
