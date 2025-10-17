@@ -13,7 +13,7 @@ NULL
 #' @importClassesFrom RJDBC JDBCConnection
 #' @export
 #' @noRd
-methods::setClassUnion("Oracle_JDBC", c("Oracle", "JDBCConnection"))
+methods::setClass("Oracle_JDBC", contains = c("Oracle", "JDBCConnection"))
 
 #' @exportMethod dbWriteTable
 setMethod("dbWriteTable", signature("JDBCConnection", "character", "data.frame"),
