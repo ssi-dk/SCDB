@@ -23,6 +23,8 @@ quality-of-life improvements for working with SQL databases within R.
 To better understand what a slowly changing dimension is and how and
 this packages provides it, see `vignette("slowly-changing-dimension")`.
 
+test
+
 ## Installation
 
 ``` r
