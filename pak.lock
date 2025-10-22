@@ -3536,6 +3536,81 @@
       "repotype": "cran"
     },
     {
+      "ref": "rJava",
+      "package": "rJava",
+      "version": "1.0-11",
+      "type": "standard",
+      "direct": false,
+      "binary": true,
+      "dependencies": [],
+      "vignettes": false,
+      "metadata": {
+        "RemotePkgRef": "rJava",
+        "RemoteType": "standard",
+        "RemoteRef": "rJava",
+        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+        "RemoteSha": "1.0-11"
+      },
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/rJava_1.0-11.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/rJava_1.0-11.tar.gz",
+      "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+      "rversion": "4.5",
+      "directpkg": false,
+      "license": "LGPL-2.1",
+      "dep_types": ["Depends", "Imports", "LinkingTo"],
+      "params": [],
+      "install_args": "",
+      "sysreqs": "Java JDK 1.2 or higher (for JRI/REngine JDK 1.4 or\n        higher), GNU make",
+      "sysreqs_packages": [
+        {
+          "sysreq": "gnumake",
+          "packages": "make",
+          "pre_install": {},
+          "post_install": {}
+        },
+        {
+          "sysreq": "java",
+          "packages": "default-jdk",
+          "pre_install": {},
+          "post_install": "R CMD javareconf"
+        }
+      ],
+      "needscompilation": false,
+      "repotype": "cranlike"
+    },
+    {
+      "ref": "RJDBC",
+      "package": "RJDBC",
+      "version": "0.2-10",
+      "type": "standard",
+      "direct": false,
+      "binary": true,
+      "dependencies": ["DBI", "rJava"],
+      "vignettes": false,
+      "metadata": {
+        "RemotePkgRef": "RJDBC",
+        "RemoteType": "standard",
+        "RemoteRef": "RJDBC",
+        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+        "RemoteSha": "0.2-10"
+      },
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/RJDBC_0.2-10.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/RJDBC_0.2-10.tar.gz",
+      "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+      "rversion": "4.5",
+      "directpkg": false,
+      "license": "MIT + file LICENSE",
+      "dep_types": ["Depends", "Imports", "LinkingTo"],
+      "params": [],
+      "install_args": "",
+      "sysreqs": "",
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
+    },
+    {
       "ref": "rlang",
       "package": "rlang",
       "version": "1.1.6",
@@ -5066,8 +5141,8 @@
     "version": "24.04",
     "url": {},
     "pre_install": "apt-get -y update",
-    "install_scripts": "apt-get -y install libx11-dev git libcurl4-openssl-dev libssl-dev xz-utils make libgit2-dev zlib1g-dev pandoc unixodbc-dev libfreetype6-dev libjpeg-dev libpng-dev libtiff-dev libwebp-dev libpq-dev libicu-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev libxml2-dev",
-    "post_install": {},
-    "packages": ["libx11-dev", "git", "libcurl4-openssl-dev", "libssl-dev", "xz-utils", "make", "libgit2-dev", "zlib1g-dev", "pandoc", "unixodbc-dev", "libfreetype6-dev", "libjpeg-dev", "libpng-dev", "libtiff-dev", "libwebp-dev", "libpq-dev", "libicu-dev", "libfontconfig1-dev", "libfribidi-dev", "libharfbuzz-dev", "libxml2-dev"]
+    "install_scripts": "apt-get -y install libx11-dev git libcurl4-openssl-dev libssl-dev xz-utils make libgit2-dev zlib1g-dev pandoc unixodbc-dev libfreetype6-dev libjpeg-dev libpng-dev libtiff-dev libwebp-dev default-jdk libpq-dev libicu-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev libxml2-dev",
+    "post_install": "R CMD javareconf",
+    "packages": ["libx11-dev", "git", "libcurl4-openssl-dev", "libssl-dev", "xz-utils", "make", "libgit2-dev", "zlib1g-dev", "pandoc", "unixodbc-dev", "libfreetype6-dev", "libjpeg-dev", "libpng-dev", "libtiff-dev", "libwebp-dev", "default-jdk", "libpq-dev", "libicu-dev", "libfontconfig1-dev", "libfribidi-dev", "libharfbuzz-dev", "libxml2-dev"]
   }
 }
