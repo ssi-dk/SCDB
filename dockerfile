@@ -3,7 +3,10 @@ ENV TZ=Australia/Sydney
 RUN date
 
 # System dependencies (apt-get since r-base is debian based)
-RUN apt-get update; apt-get install -y libcurl4-gnutls-dev curl docker.io;
+RUN apt-get update
+RUN apt-get install -y libcurl4-gnutls-dev curl # curl files
+RUN apt-get install -y docker.io # docker interface
+RUN apt-get install -y gnupg2 # required to install odbc
 
 # Move pak.lock to the container
 COPY . /app/
