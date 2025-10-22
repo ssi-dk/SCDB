@@ -26,7 +26,7 @@ jobs:
     name: ⚙️ Dispatch
     needs: context
     if: needs.context.outputs.abort != 'true' || contains('main,master', github.ref_name)
-    uses: ssi-dk/AEF-DDF/.github/workflows/workflow-dispatcher.yaml@main
+    uses: ssi-dk/AEF-DDF/.github/workflows/workflow-dispatcher.yaml@dockerise-workflows
     with:
       # We pass information about the triggering event
       event_name: ${{ github.event_name }}
@@ -35,4 +35,5 @@ jobs:
       # code-coverage creates data bases for the tests. Here you can specify the schemas you need for the workflow
       schemas: test,test.one
       check_postgres_logs: false
+      skip: document,styler,render_readme,update_cache
     secrets: inherit
