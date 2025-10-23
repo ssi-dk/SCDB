@@ -34,6 +34,6 @@ jobs:
 
       # code-coverage creates data bases for the tests. Here you can specify the schemas you need for the workflow
       schemas: test,test.one
-      check_postgres_logs: false
+      check_postgres_logs: true
       skip: styler
     secrets: inherit
