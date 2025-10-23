@@ -184,3 +184,15 @@ setMethod(
     DBI::dbBegin(conn@jdbc_conn, ...)
   }
 )
+
+#' @importMethodsFrom DBI dbCommit
+#' @exportMethod dbCommit
+setMethod(
+  "dbCommit",
+  signature(
+    conn = "OracleConnection"
+  ),
+  function(conn, ...) {
+    DBI::dbCommit(conn@jdbc_conn, ...)
+  }
+)
