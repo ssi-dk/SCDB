@@ -262,7 +262,8 @@ get_connection.JDBCDriver <- function(
 
   conn <- new(
     "OracleJdbc",
-    jdbc_conn = conn
+    jdbc_conn = conn,
+    servername = url
   )
 
   return(conn)
