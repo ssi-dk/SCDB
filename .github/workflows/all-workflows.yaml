@@ -36,5 +36,4 @@ jobs:
       schemas: test,test.one
       check_postgres_logs: false
       skip: styler
-      use-containers: false
     secrets: inherit
