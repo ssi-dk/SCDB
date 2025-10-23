@@ -6,20 +6,22 @@
 #' @importMethodsFrom DBI dbQuoteIdentifier
 #' @importMethodsFrom DBI dbWriteTable
 #' @importMethodsFrom RJDBC dbWriteTable
-NULL
+#' @importClassesFrom RJDBC JDBCConnection
+#' @importClassesFrom odbc Oracle
+setClass("OracleConnection", slots = list(jdbc_conn = "JDBCConnection"), contains = "Oracle")
 
 
 #' @exportMethod dbWriteTable
 setMethod("dbWriteTable", signature("Oracle", "character", "data.frame"),
           function(conn, name, value, ...) {
-            DBI::dbWriteTable(conn@conn, id(conn@conn, name), value, ...)
+            DBI::dbWriteTable(conn@jdbc_conn, id(conn@jdbc_conn, name), value, ...)
           }
 )
 
 #' @exportMethod dbWriteTable
 setMethod("dbWriteTable", signature("Oracle", "Id", "data.frame"),
           function(conn, name, value, ...) {
-            DBI::dbWriteTable(conn, DBI::dbQuoteIdentifier(conn@conn, name), value, ...)
+            DBI::dbWriteTable(conn, DBI::dbQuoteIdentifier(conn@jdbc_conn, name), value, ...)
           }
 )
 
@@ -39,7 +41,7 @@ setMethod("dbWriteTable", signature("Oracle", "Id", "data.frame"),
 #' @exportMethod dbExistsTable
 setMethod("dbExistsTable", signature("dbExistsTable", "Id"),
           function(conn, name, ...) {
-            DBI::dbExistsTable(conn@conn, name, ...)
+            DBI::dbExistsTable(conn@jdbc_conn, name, ...)
           }
 )
 
@@ -100,8 +102,8 @@ setMethod("dbExistsTable", signature("dbExistsTable", "Id"),
 setMethod("dbWriteTable", signature("Oracle", "SQL", "data.frame"),
           function(conn, name, value, ...) {
 
-            names(value) <- as.character(DBI::dbQuoteIdentifier(conn@conn, names(value)))
+            names(value) <- as.character(DBI::dbQuoteIdentifier(conn@jdbc_conn, names(value)))
 
-            DBI::dbWriteTable(conn@conn, name, value)
+            DBI::dbWriteTable(conn@jdbc_conn, name, value)
   }
 )
