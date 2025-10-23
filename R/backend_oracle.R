@@ -157,9 +157,6 @@ setMethod(
     statement = "character"
   ),
   function(conn, statement, ...) {
-
-    names(value) <- as.character(DBI::dbQuoteIdentifier(conn@jdbc_conn, names(value)))
-
     DBI::dbWriteTable(conn@jdbc_conn, name, value)
   }
 )
