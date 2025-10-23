@@ -2,7 +2,7 @@
 
 #' @importClassesFrom RJDBC JDBCConnection
 #' @importClassesFrom odbc Oracle
-setClass("OracleJdbc", slots = list(jdbc_conn = "JDBCConnection"), contains = "Oracle")
+setClass("OracleJdbc", slots = list("jdbc_conn" = "JDBCConnection", "servername" = ""), contains = "Oracle")
 
 
 # DBI methods defined in RJDBC package
@@ -254,7 +254,8 @@ setMethod(
     dbObj = "OracleJdbc"
   ),
   function(dbObj, ...) {
-    DBI::dbGetInfo(dbObj@jdbc_conn, ...)
+    out <- DBI::dbGetInfo(dbObj@jdbc_conn, ...)
+    out$info <- list("servername" = dbObj@servername)
   }
 )
 
