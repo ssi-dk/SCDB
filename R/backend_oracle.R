@@ -185,6 +185,18 @@ setMethod(
   }
 )
 
+#' @importMethodsFrom DBI dbRollback
+#' @exportMethod dbRollback
+setMethod(
+  "dbRollback",
+  signature(
+    conn = "OracleJdbc"
+  ),
+  function(conn, ...) {
+    DBI::dbRollback(conn@jdbc_conn, ...)
+  }
+)
+
 #' @importMethodsFrom DBI dbCommit
 #' @exportMethod dbCommit
 setMethod(
