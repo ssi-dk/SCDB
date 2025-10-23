@@ -157,6 +157,6 @@ setMethod(
     statement = "character"
   ),
   function(conn, statement, ...) {
-    DBI::dbWriteTable(conn@jdbc_conn, name, value)
+    DBI::dbSendQuery(conn@jdbc_conn, statement)
   }
 )
