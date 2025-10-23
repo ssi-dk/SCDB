@@ -260,12 +260,9 @@ get_connection.JDBCDriver <- function(
     call. = FALSE
   )
 
-  # Cast to superclass
-  setClass("Oracle", slots=list(conn))
-
   conn <- new(
-    "Oracle",
-    conn = conn
+    "OracleConnection",
+    jdbc_conn = conn
   )
 
   return(conn)
