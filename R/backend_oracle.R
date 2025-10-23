@@ -121,17 +121,23 @@ setMethod(
 #' @importMethodsFrom DBI dbGetRowsAffected
 #' @exportMethod dbGetRowsAffected
 #' @noRd
-setMethod("dbGetRowsAffected", "JDBCResult", function(res, ...) {
-  if (!is.null(res@stat)) {
-    tryCatch({
-      cnt <- rJava::.jcall(res@stat, "I", "getUpdateCount")
-      return(if (cnt < 0) 0L else as.integer(cnt))
-    }, error = function(e) {
-      return(NA_integer_)
-    })
+setMethod(
+  "dbGetRowsAffected",
+  signature(
+    res = "JDBCResult"
+  ),
+  function(res, ...) {
+    if (!is.null(res@stat)) {
+      tryCatch({
+        cnt <- rJava::.jcall(res@stat, "I", "getUpdateCount")
+        return(if (cnt < 0) 0L else as.integer(cnt))
+      }, error = function(e) {
+        return(NA_integer_)
+      })
+    }
+    return(NA_integer_)
   }
-  return(NA_integer_)
-})
+)
 
 #' @importMethodsFrom DBI dbQuoteIdentifier
 #' @exportMethod dbQuoteIdentifier
@@ -256,6 +262,7 @@ setMethod(
   function(dbObj, ...) {
     out <- DBI::dbGetInfo(dbObj@jdbc_conn, ...)
     out$info <- list("servername" = dbObj@servername)
+    return(out)
   }
 )
 
