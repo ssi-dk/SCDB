@@ -96,39 +96,54 @@ setMethod(
 #   return(NA_integer_)
 # })
 
-# #' @exportMethod dbQuoteIdentifier
-# #' @noRd
-# setMethod("dbQuoteIdentifier", signature("OracleConnection", "character"),
-#           function(conn, x, ...) {
-#             x <- enc2utf8(x)
+#' @importMethodsFrom DBI dbQuoteIdentifier
+#' @exportMethod dbQuoteIdentifier
+setMethod(
+  "dbQuoteIdentifier",
+  signature(
+    conn = "OracleConnection",
+    x = "character"
+  ),
+  function(conn, x, ...) {
+    x <- enc2utf8(x)
 
-#             reserved_words <- c("DATE", "NUMBER", "VARCHAR")
+    reserved_words <- c("DATE", "NUMBER", "VARCHAR")
 
-#             needs_escape <- (grepl("^[a-zA-Z_]", x) & toupper(x) != x) |  tolower(x) %in% reserved_words
+    needs_escape <- (grepl("^[a-zA-Z_]", x) & toupper(x) != x) |  tolower(x) %in% reserved_words
 
-#             x[needs_escape] <- paste0("\"", gsub("\"", "\"\"", x[needs_escape]), "\"")
+    x[needs_escape] <- paste0("\"", gsub("\"", "\"\"", x[needs_escape]), "\"")
 
-#             return(DBI::SQL(x, names = names(x)))
-#           }
-# )
+    return(DBI::SQL(x, names = names(x)))
+  }
+)
 
-# #' @exportMethod dbQuoteIdentifier
-# #' @noRd
-# setMethod("dbQuoteIdentifier", signature("OracleConnection", "SQL"),
-#           function(conn, x, ...) {
-#             return(x) # Remove ambiguity (also assume already quoted)
-#           }
-# )
+#' @importMethodsFrom DBI dbQuoteIdentifier
+#' @exportMethod dbQuoteIdentifier
+setMethod(
+  "dbQuoteIdentifier",
+  signature(
+    conn = "OracleConnection",
+    x = "SQL"
+  ),
+  function(conn, x, ...) {
+    return(x) # Remove ambiguity (also assume already quoted)
+  }
+)
 
-# #' @exportMethod dbQuoteIdentifier
-# #' @noRd
-# setMethod("dbQuoteIdentifier", signature("OracleConnection", "Id"),
-#           function(conn, x, ...) {
+#' @importMethodsFrom DBI dbQuoteIdentifier
+#' @exportMethod dbQuoteIdentifier
+setMethod(
+  "dbQuoteIdentifier",
+  signature(
+    conn = "OracleConnection",
+    x = "Id"
+  ),
+  function(conn, x, ...) {
 
-#             # For `Id`, run on each non-NA element
-#             return(DBI::SQL(paste0(DBI::dbQuoteIdentifier(conn, purrr::discard(x@name, is.na)), collapse = ".")))
-#           }
-# )
+    # For `Id`, run on each non-NA element
+    return(DBI::SQL(paste0(DBI::dbQuoteIdentifier(conn@jdbc_conn, purrr::discard(x@name, is.na)), collapse = ".")))
+  }
+)
 
 
 
