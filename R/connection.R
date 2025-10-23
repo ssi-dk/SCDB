@@ -261,12 +261,11 @@ get_connection.JDBCDriver <- function(
   )
 
   # Cast to superclass
-  setClass("Oracle", slots=list(), contains = "JDBCConnection")
+  setClass("Oracle", slots=list(conn))
 
   conn <- new(
     "Oracle",
-    jc = slot(conn, "jc"),
-    identifier.quote = slot(conn, "identifier.quote")
+    conn = conn
   )
 
   return(conn)
