@@ -4,6 +4,42 @@
 #' @importClassesFrom odbc Oracle
 setClass("OracleJdbc", slots = list(jdbc_conn = "JDBCConnection"), contains = "Oracle")
 
+
+# DBI methods defined in RJDBC package
+# dbOption
+# dbListConnections
+# dbGetInfo
+# dbUnloadDriver
+# dbConnect
+# dbDisconnect
+# dbIsValid          - mapped
+# dbSendQuery        - mapped
+# dbSendUpdate
+# dbGetQuery
+# dbGetException
+# dbGetInfo
+# dbListResults
+# dbListTables
+# dbGetTables
+# dbExistsTable      - mapped
+# dbRemoveTable
+# dbListFields
+# dbGetFields
+# dbReadTable
+# dbReadTable
+# dbDataType
+# dbWriteTable       - mapped
+# dbCommit
+# dbRollback         - mapped
+# dbBegin            - mapped
+# dbClearResult
+# dbGetInfo          - mapped
+# dbHasCompleted
+# dbColumnInfo
+
+# Additonal implementations
+# dbQuoteIdentifier
+
 #' @importMethodsFrom DBI dbWriteTable
 #' @importMethodsFrom RJDBC dbWriteTable
 #' @exportMethod dbWriteTable
