@@ -196,3 +196,15 @@ setMethod(
     DBI::dbCommit(conn@jdbc_conn, ...)
   }
 )
+
+#' @importMethodsFrom DBI dbGetInfo
+#' @exportMethod dbGetInfo
+setMethod(
+  "dbGetInfo",
+  signature(
+    dbObj = "OracleJdbc"
+  ),
+  function(dbObj, ...) {
+    DBI::dbGetInfo(dbObj@jdbc_conn, ...)
+  }
+)
