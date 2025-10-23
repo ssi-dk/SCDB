@@ -39,6 +39,8 @@ setClass("OracleJdbc", slots = list(jdbc_conn = "JDBCConnection"), contains = "O
 
 # Additonal implementations
 # dbQuoteIdentifier
+# dbSendStatement
+
 
 #' @importMethodsFrom DBI dbWriteTable
 #' @importMethodsFrom RJDBC dbWriteTable
@@ -254,5 +256,18 @@ setMethod(
   ),
   function(dbObj, ...) {
     DBI::dbGetInfo(dbObj@jdbc_conn, ...)
+  }
+)
+
+#' @importMethodsFrom DBI dbSendStatement
+#' @exportMethod dbSendStatement
+setMethod(
+  "dbSendStatement",
+  signature(
+    conn = "OracleJdbc",
+    statement = "character"
+  ),
+  function(conn, statement, ...) {
+    DBI::dbSendQuery(conn@jdbc_conn, statement, ...)
   }
 )
