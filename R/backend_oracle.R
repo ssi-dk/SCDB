@@ -2,7 +2,7 @@
 
 #' @importClassesFrom RJDBC JDBCConnection
 #' @importClassesFrom odbc Oracle
-setClass("OracleConnection", slots = list(jdbc_conn = "JDBCConnection"), contains = "Oracle")
+setClass("OracleJdbc", slots = list(jdbc_conn = "JDBCConnection"), contains = "Oracle")
 
 #' @importMethodsFrom DBI dbWriteTable
 #' @importMethodsFrom RJDBC dbWriteTable
@@ -10,7 +10,7 @@ setClass("OracleConnection", slots = list(jdbc_conn = "JDBCConnection"), contain
 setMethod(
   "dbWriteTable",
   signature(
-    conn = "OracleConnection",
+    conn = "OracleJdbc",
     name = "character",
     value = "data.frame"
   ),
@@ -25,7 +25,7 @@ setMethod(
 setMethod(
   "dbWriteTable",
   signature(
-    conn = "OracleConnection",
+    conn = "OracleJdbc",
     name = "Id",
     value = "data.frame"
   ),
@@ -40,7 +40,7 @@ setMethod(
 setMethod(
   "dbWriteTable",
   signature(
-    conn = "OracleConnection",
+    conn = "OracleJdbc",
     name = "SQL",
     value = "data.frame"
   ),
@@ -71,7 +71,7 @@ setMethod(
 setMethod(
   "dbExistsTable",
   signature(
-    conn = "OracleConnection",
+    conn = "OracleJdbc",
     name = "Id"
   ),
   function(conn, name, ...) {
@@ -84,7 +84,7 @@ setMethod(
 # #' @importFrom methods setMethod
 # #' @exportMethod dbGetRowsAffected
 # #' @noRd
-# setMethod("dbGetRowsAffected", "OracleConnection", function(res, ...) {
+# setMethod("dbGetRowsAffected", "OracleJdbc", function(res, ...) {
 #   if (!is.null(res@stat)) {
 #     tryCatch({
 #       cnt <- rJava::.jcall(res@stat, "I", "getUpdateCount")
@@ -101,7 +101,7 @@ setMethod(
 setMethod(
   "dbQuoteIdentifier",
   signature(
-    conn = "OracleConnection",
+    conn = "OracleJdbc",
     x = "character"
   ),
   function(conn, x, ...) {
@@ -122,7 +122,7 @@ setMethod(
 setMethod(
   "dbQuoteIdentifier",
   signature(
-    conn = "OracleConnection",
+    conn = "OracleJdbc",
     x = "SQL"
   ),
   function(conn, x, ...) {
@@ -135,7 +135,7 @@ setMethod(
 setMethod(
   "dbQuoteIdentifier",
   signature(
-    conn = "OracleConnection",
+    conn = "OracleJdbc",
     x = "Id"
   ),
   function(conn, x, ...) {
@@ -153,7 +153,7 @@ setMethod(
 setMethod(
   "dbSendQuery",
   signature(
-    conn = "OracleConnection",
+    conn = "OracleJdbc",
     statement = "character"
   ),
   function(conn, statement, ...) {
@@ -166,7 +166,7 @@ setMethod(
 setMethod(
   "dbIsValid",
   signature(
-    dbObj = "OracleConnection"
+    dbObj = "OracleJdbc"
   ),
   function(dbObj, ...) {
     DBI::dbIsValid(dbObj@jdbc_conn, ...)
@@ -178,7 +178,7 @@ setMethod(
 setMethod(
   "dbBegin",
   signature(
-    conn = "OracleConnection"
+    conn = "OracleJdbc"
   ),
   function(conn, ...) {
     DBI::dbBegin(conn@jdbc_conn, ...)
@@ -190,7 +190,7 @@ setMethod(
 setMethod(
   "dbCommit",
   signature(
-    conn = "OracleConnection"
+    conn = "OracleJdbc"
   ),
   function(conn, ...) {
     DBI::dbCommit(conn@jdbc_conn, ...)
