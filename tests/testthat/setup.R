@@ -42,12 +42,6 @@ for (conn in get_test_conns()) {
     ~ if (schema_exists(conn, .@name[["schema"]]) && DBI::dbExistsTable(conn, .)) DBI::dbRemoveTable(conn, .)
   )
 
-  print(showMethods(DBI::dbWriteTable))
-  print(selectMethod(DBI::dbWriteTable, signature(class(conn), "Id", "data.frame")))
-
-  print(showMethods(DBI::sqlCreateTable))
-  print(selectMethod(DBI::sqlCreateTable, signature(class(conn), "Id")))
-
   # Copy mtcars to conn
   dplyr::copy_to(
     conn, mtcars %>% dplyr::mutate(name = rownames(mtcars)),
