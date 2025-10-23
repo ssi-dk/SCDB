@@ -160,3 +160,15 @@ setMethod(
     DBI::dbSendQuery(conn@jdbc_conn, statement)
   }
 )
+
+#' @importMethodsFrom DBI dbIsValid
+#' @exportMethod dbIsValid
+setMethod(
+  "dbIsValid",
+  signature(
+    dbObj = "OracleConnection"
+  ),
+  function(dbObj, ...) {
+    DBI::dbIsValid(dbObj@jdbc_conn, ...)
+  }
+)
