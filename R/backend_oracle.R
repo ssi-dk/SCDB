@@ -172,3 +172,15 @@ setMethod(
     DBI::dbIsValid(dbObj@jdbc_conn, ...)
   }
 )
+
+#' @importMethodsFrom DBI dbBegin
+#' @exportMethod dbBegin
+setMethod(
+  "dbBegin",
+  signature(
+    conn = "OracleConnection"
+  ),
+  function(conn, ...) {
+    DBI::dbBegin(conn@jdbc_conn, ...)
+  }
+)
