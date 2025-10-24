@@ -135,6 +135,9 @@ id.tbl_dbi <- function(db_table, ...) {
   matches <- get_tables(dbplyr::remote_con(db_table), show_temporary = TRUE) %>%
     dplyr::filter(.data$table == !!table)
 
+  print("matches:")
+  print(matches)
+
   if (!is.null(schema)) matches <- dplyr::filter(matches, .data$schema == !!schema)
   if (!is.null(catalog)) matches <- dplyr::filter(matches, .data$catalog == !!catalog)
 
