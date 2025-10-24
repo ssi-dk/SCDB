@@ -101,6 +101,7 @@ for (conn in get_test_conns()) {
   f <- getMethod("dbGetQuery", signature(conn="JDBCConnection", statement="character"))@.Data
   print('f("SELECT * FROM FROM MTCARS)')
   print(f(conn@jdbc_conn, "SELECT * FROM MTCARS"))
+  print(tibble::as_tibble(f(conn@jdbc_conn, "SELECT * FROM MTCARS")))
 
   print("??")
 
