@@ -74,6 +74,59 @@ for (conn in get_test_conns()) {
     analyze = FALSE
   )
 
+  dplyr::copy_to(
+    conn,
+    mtcars %>%
+      dplyr::mutate(name = rownames(mtcars)) %>%
+      digest_to_checksum() %>%
+      dplyr::mutate(
+        from_ts = as.POSIXct("2020-01-01 09:00:00"),
+        until_ts = as.POSIXct(NA)
+      ),
+    name = id("MTCARS", conn),
+    temporary = FALSE,
+    overwrite = TRUE,
+    analyze = FALSE
+  )
+
+  print('dplyr::show_query(get_table(conn, "MTCARS"))')
+  print(dplyr::show_query(get_table(conn, "MTCARS")))
+
+  print('get_table(conn, "MTCARS")')
+  print(get_table(conn, "MTCARS"))
+
+  print('dplyr::collect(get_table(conn, "MTCARS"))')
+  print(dplyr::collect(get_table(conn, "MTCARS")))
+
+  f <- getMethod("dbGetQuery", signature(conn="JDBCConnection", statement="character"))@.Data
+  print('f("SELECT * FROM FROM MTCARS)')
+  print(f(conn@jdbc_conn, "SELECT * FROM MTCARS"))
+  print(tibble::as_tibble(f(conn@jdbc_conn, "SELECT * FROM MTCARS")))
+
+  query <- paste(
+    "SELECT column_name,  data_type,  data_length,  data_precision,  data_scale,  nullable",
+    "FROM ALL_TAB_COLUMNS",
+    "WHERE table_name = 'MTCARS'"
+  )
+  print(f(conn@jdbc_conn, query))
+
+
+
+
+  sql <- DBI::SQL("SELECT * FROM MTCARS")
+
+  res <- DBI::dbSendQuery(conn, sql)
+  print("class(res)")
+  print(class(res))
+
+  print("dbFetch")
+  f <- DBI::dbFetch(res, n = Inf)
+  print(f)
+
+  print(tibble::tibble(f))
+
+  print("??")
+
   DBI::dbDisconnect(conn)
 }
 
