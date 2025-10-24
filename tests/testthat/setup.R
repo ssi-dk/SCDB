@@ -106,7 +106,7 @@ for (conn in get_test_conns()) {
   query <- paste(
     "SELECT column_name,  data_type,  data_length,  data_precision,  data_scale,  nullable",
     "FROM ALL_TAB_COLUMNS",
-    "WHERE table_name = 'MTCARS';"
+    "WHERE table_name = 'MTCARS'"
   )
   print(f(conn@jdbc_conn, query))
   print("??")
