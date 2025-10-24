@@ -74,6 +74,36 @@ for (conn in get_test_conns()) {
     analyze = FALSE
   )
 
+  dplyr::copy_to(
+    conn,
+    mtcars %>%
+      dplyr::mutate(name = rownames(mtcars)) %>%
+      digest_to_checksum() %>%
+      dplyr::mutate(
+        from_ts = as.POSIXct("2020-01-01 09:00:00"),
+        until_ts = as.POSIXct(NA)
+      ),
+    name = id("MTCARS", conn),
+    temporary = FALSE,
+    overwrite = TRUE,
+    analyze = FALSE
+  )
+
+  print('dplyr::show_query(get_table(conn, "MTCARS"))')
+  print(dplyr::show_query(get_table(conn, "MTCARS")))
+
+  print('get_table(conn, "MTCARS")')
+  print(get_table(conn, "MTCARS"))
+
+  print('dplyr::collect(get_table(conn, "MTCARS"))')
+  print(dplyr::collect(get_table(conn, "MTCARS")))
+
+  f <- getMethod("dbGetQuery", signature(conn="JDBCConnection", statement="character"))@.Data
+  print('f("SELECT * FROM FROM MTCARS;)')
+  print(f(conn@jdbc_conn, "SELECT * FROM MTCARS;"))
+
+  print("??")
+
   DBI::dbDisconnect(conn)
 }
 
