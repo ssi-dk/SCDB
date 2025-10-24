@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-      - name: Checkout Repository
+      - name: ⬇️ Checkout repository
         uses: actions/checkout@master
 
       - name: Check if sync.yaml exists
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-      - name: Checkout Repository
+      - name: ⬇️ Checkout repository
         uses: actions/checkout@master
 
       - name: Check if sync_reverse.yaml exists
