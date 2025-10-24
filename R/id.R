@@ -114,6 +114,11 @@ id.tbl_dbi <- function(db_table, ...) {
       stop("Unknown table specification", call. = FALSE)
     }
 
+    # Unquote table names for Oracle backend
+    if (inherits(table_conn, "OracleJdbc")) {
+      components <- stringr::str_remove_all(components, '\"')
+    }
+
     table <- purrr::pluck(components, 1)
     schema <- purrr::pluck(components, 2)
     catalog <- purrr::pluck(components, 3)
