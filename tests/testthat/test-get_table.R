@@ -27,6 +27,8 @@ test_that("get_table() works when tables/view exist", {
     print('f("SELECT * FROM FROM GITHUB_CI."__mtcars";)')
     print(f(conn@jdbc_conn, "SELECT * FROM FROM GITHUB_CI.\"__mtcars\";"))
 
+    print("??")
+
 
     mtcars_t <- tibble::tibble(mtcars %>% dplyr::mutate(name = rownames(mtcars)))
 
