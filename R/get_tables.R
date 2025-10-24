@@ -72,7 +72,7 @@ get_tables.PqConnection <- function(conn, pattern = NULL, show_temporary = TRUE)
     "UNION ALL",
     "SELECT schemaname, tablename, 1 AS is_temporary FROM pg_tables",
     "WHERE schemaname LIKE 'pg_temp_%'",
-    ")"
+    ") AS q01"
   )
 
   tables <- DBI::dbGetQuery(conn, query)
