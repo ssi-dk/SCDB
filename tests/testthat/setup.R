@@ -109,6 +109,12 @@ for (conn in get_test_conns()) {
     "WHERE table_name = 'MTCARS'"
   )
   print(f(conn@jdbc_conn, query))
+
+
+  sql <- DBI::SQL("SELECT * FROM MTCARS")
+  res <- DBI::dbSendQuery(conn, sql)
+  tibble::tibble(DBI::dbFetch(res, n = Inf))
+
   print("??")
 
   DBI::dbDisconnect(conn)
