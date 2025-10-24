@@ -995,7 +995,7 @@
     {
       "ref": "duckdb",
       "package": "duckdb",
-      "version": "1.4.0",
+      "version": "1.4.1",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -1007,10 +1007,10 @@
         "RemoteRef": "duckdb",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.4.0"
+        "RemoteSha": "1.4.1"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/duckdb_1.4.0.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/duckdb_1.4.0.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/duckdb_1.4.1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/duckdb_1.4.1.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.5",
       "directpkg": false,
@@ -1718,11 +1718,11 @@
     {
       "ref": "hms",
       "package": "hms",
-      "version": "1.1.3",
+      "version": "1.1.4",
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["lifecycle", "pkgconfig", "rlang", "vctrs"],
+      "dependencies": ["cli", "lifecycle", "pkgconfig", "rlang", "vctrs"],
       "vignettes": false,
       "metadata": {
         "RemotePkgRef": "hms",
@@ -1730,10 +1730,10 @@
         "RemoteRef": "hms",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.1.3"
+        "RemoteSha": "1.1.4"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/hms_1.1.3.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/hms_1.1.3.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/hms_1.1.4.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/hms_1.1.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.5",
       "directpkg": false,
@@ -2647,6 +2647,37 @@
       "repotype": "cranlike"
     },
     {
+      "ref": "otel",
+      "package": "otel",
+      "version": "0.2.0",
+      "type": "standard",
+      "direct": false,
+      "binary": true,
+      "dependencies": [],
+      "vignettes": false,
+      "metadata": {
+        "RemotePkgRef": "otel",
+        "RemoteType": "standard",
+        "RemoteRef": "otel",
+        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+        "RemoteSha": "0.2.0"
+      },
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/otel_0.2.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/otel_0.2.0.tar.gz",
+      "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+      "rversion": "4.5",
+      "directpkg": false,
+      "license": "MIT + file LICENSE",
+      "dep_types": ["Depends", "Imports", "LinkingTo"],
+      "params": [],
+      "install_args": "",
+      "sysreqs": "",
+      "sysreqs_packages": {},
+      "needscompilation": false,
+      "repotype": "cranlike"
+    },
+    {
       "ref": "pak",
       "package": "pak",
       "version": "0.9.0",
@@ -2997,11 +3028,11 @@
     {
       "ref": "promises",
       "package": "promises",
-      "version": "1.3.3",
+      "version": "1.4.0",
       "type": "standard",
       "direct": false,
       "binary": true,
-      "dependencies": ["fastmap", "later", "magrittr", "R6", "Rcpp", "rlang"],
+      "dependencies": ["fastmap", "later", "lifecycle", "magrittr", "otel", "R6", "rlang"],
       "vignettes": false,
       "metadata": {
         "RemotePkgRef": "promises",
@@ -3009,10 +3040,10 @@
         "RemoteRef": "promises",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.3.3"
+        "RemoteSha": "1.4.0"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/promises_1.3.3.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/promises_1.3.3.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/promises_1.4.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/promises_1.4.0.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.5",
       "directpkg": false,
@@ -4261,7 +4292,7 @@
     {
       "ref": "textshaping",
       "package": "textshaping",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "type": "standard",
       "direct": false,
       "binary": true,
@@ -4273,10 +4304,10 @@
         "RemoteRef": "textshaping",
         "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.0.3"
+        "RemoteSha": "1.0.4"
       },
-      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/textshaping_1.0.3.tar.gz",
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/textshaping_1.0.3.tar.gz",
+      "sources": "https://packagemanager.posit.co/cran/__linux__/noble/latest/src/contrib/textshaping_1.0.4.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/textshaping_1.0.4.tar.gz",
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "rversion": "4.5",
       "directpkg": false,
