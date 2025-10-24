@@ -99,8 +99,8 @@ for (conn in get_test_conns()) {
   print(dplyr::collect(get_table(conn, "MTCARS")))
 
   f <- getMethod("dbGetQuery", signature(conn="JDBCConnection", statement="character"))@.Data
-  print('f("SELECT * FROM FROM MTCARS;)')
-  print(f(conn@jdbc_conn, "SELECT * FROM MTCARS;"))
+  print('f("SELECT * FROM FROM MTCARS)')
+  print(f(conn@jdbc_conn, "SELECT * FROM MTCARS"))
 
   print("??")
 
