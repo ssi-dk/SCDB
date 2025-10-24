@@ -262,7 +262,10 @@ setMethod(
   function(dbObj, ...) {
     modifyList(
       DBI::dbGetInfo(dbObj@jdbc_conn, ...),
-      list("servername" = dbObj@servername)
+      list(
+        "servername" = dbObj@servername,
+        "port" = ""
+      )
     )
   }
 )
