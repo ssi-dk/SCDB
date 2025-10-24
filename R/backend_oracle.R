@@ -260,9 +260,10 @@ setMethod(
     dbObj = "OracleJdbc"
   ),
   function(dbObj, ...) {
-    out <- DBI::dbGetInfo(dbObj@jdbc_conn, ...)
-    out$info <- list("servername" = dbObj@servername)
-    return(out)
+    modifyList(
+      DBI::dbGetInfo(dbObj@jdbc_conn, ...),
+      list("servername" = dbObj@servername)
+    )
   }
 )
 
