@@ -40,6 +40,12 @@ setClass("OracleJdbc", slots = list("jdbc_conn" = "JDBCConnection", "servername"
 # Additonal implementations
 # dbQuoteIdentifier
 # dbSendStatement
+# dbCollect
+
+#' @export
+db_collect.OracleJdbc <- function(con, sql, n = -1, ...) {
+  dbGetQuery(con, sql, n, ...)
+}
 
 
 #' @importMethodsFrom DBI dbWriteTable
