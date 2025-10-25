@@ -111,6 +111,8 @@ for (conn in get_test_conns()) {
   print(f(conn@jdbc_conn, query))
 
 
+
+
   sql <- DBI::SQL("SELECT * FROM MTCARS")
 
   res <- DBI::dbSendQuery(conn, sql)
@@ -118,7 +120,10 @@ for (conn in get_test_conns()) {
   print(class(res))
 
   print("dbFetch")
-  print(tibble::tibble(DBI::dbFetch(res, n = Inf)))
+  f <- DBI::dbFetch(res, n = Inf)
+  print(f)
+
+  print(tibble::tibble(f))
 
   print("??")
 
