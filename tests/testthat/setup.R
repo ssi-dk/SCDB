@@ -89,14 +89,6 @@ for (conn in get_test_conns()) {
     analyze = FALSE
   )
 
-  print('dplyr::show_query(get_table(conn, "MTCARS"))')
-  print(dplyr::show_query(get_table(conn, "MTCARS")))
-
-  print('get_table(conn, "MTCARS")')
-  print(get_table(conn, "MTCARS"))
-
-  print('dplyr::collect(get_table(conn, "MTCARS"))')
-  print(dplyr::collect(get_table(conn, "MTCARS")))
 
   f <- getMethod("dbGetQuery", signature(conn="JDBCConnection", statement="character"))@.Data
   print('f("SELECT * FROM FROM MTCARS)')
@@ -113,19 +105,45 @@ for (conn in get_test_conns()) {
 
 
 
-  sql <- DBI::SQL("SELECT * FROM MTCARS")
+  #sql <- DBI::SQL("SELECT * FROM MTCARS")
 
-  res <- DBI::dbSendQuery(conn, sql)
-  print("class(res)")
-  print(class(res))
+  #res <- DBI::dbSendQuery(conn, sql)
+  #print("class(res)")
+  #print(class(res))
 
-  print("dbFetch")
-  f <- DBI::dbFetch(res, n = Inf)
-  print(f)
+  #print("dbFetch")
+  #foo <- DBI::dbFetch(res, n = Inf)
+  #print(foo)
 
-  print(tibble::tibble(f))
+  #print(tibble::tibble(foo))
 
   print("??")
+
+  print("DBI::dbWriteTable(conn@jdbc_conn, \"MTCARS2\", mtcars)")
+  print(DBI::dbWriteTable(conn@jdbc_conn, "MTCARS2", mtcars))
+
+  query <- paste(
+    "SELECT column_name,  data_type,  data_length,  data_precision,  data_scale,  nullable",
+    "FROM ALL_TAB_COLUMNS",
+    "WHERE table_name = 'MTCARS2'"
+  )
+  print(f(conn@jdbc_conn, query))
+
+  foo <- DBI::dbReadTable(conn@jdbc_conn, "MTCARS2")
+  print(foo)
+  print(tibble::tibble(foo))
+
+
+  res <- DBI::dbSendQuery(conn@jdbc_conn, "SELECT * FROM MTCARS2")
+  class("res")
+  class(res)
+
+  cts <- purrr::map(1:11, ~ rJava::.jcall(res@md, "I", "getColumnType", .))
+  print("cts")
+  print(cts)
+
+  DBI::dbClearResult(res)
+
 
   DBI::dbDisconnect(conn)
 }
