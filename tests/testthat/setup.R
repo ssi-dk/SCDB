@@ -115,7 +115,7 @@ for (conn in get_test_conns()) {
   #foo <- DBI::dbFetch(res, n = Inf)
   #print(foo)
 
-  print(tibble::tibble(foo))
+  #print(tibble::tibble(foo))
 
   print("??")
 
