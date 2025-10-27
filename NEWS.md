@@ -4,6 +4,9 @@
 
 * A bug was fixed in `update_snapshot()` where the process would unexpectedly hang (#192).
 
+* `filter_keys()` no longer fails if filter list has zero rows (#200).
+
+
 # SCDB 0.5.1
 
 ## BREAKING CHANGES
