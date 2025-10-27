@@ -138,7 +138,7 @@ for (conn in get_test_conns()) {
   class("res")
   class(res)
 
-  cts <- purrr::map(1:11, ~ rJava::.jcall(res@md, "I", "getColumnType", i))
+  cts <- purrr::map(1:11, ~ rJava::.jcall(res@md, "I", "getColumnType", .))
   print("cts")
   print(cts)
 
