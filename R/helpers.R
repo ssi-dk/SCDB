@@ -141,7 +141,7 @@ assert_timestamp_like <- function(timestamp, ..., add = NULL) {
 
 #' checkmate helper: Assert for "generic" db_table type
 #' @param db_table (`any(1)`)\cr
-#'   Object to test if is of class `tbl_dbi` or `character` on form "[catalog].schema.table".
+#'   Object to test if is of class `tbl_dbi` or `character` on form "\[catalog\].schema.table".
 #' @param ...
 #'   Parameters passed to checkmate::check_*.
 #' @template add
