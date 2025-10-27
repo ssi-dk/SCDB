@@ -12,11 +12,13 @@ methods::setGeneric("getTableSignature",
                     function(.data, conn = NULL) standardGeneric("getTableSignature"),
                     signature = "conn")
 
+#' @importMethodsFrom RJDBC dbDataType
+#' @importMethodsFrom odbc dbDataType
 #' @importClassesFrom DBI DBIConnection
 methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
 
   # Retrieve the translated data types
-  signature <- as.list(DBI::dbDataType(conn, dplyr::collect(utils::head(.data, 0))))
+  signature <- purrr::map(utils::head(.data, 0), ~ DBI::dbDataType(conn, .))
 
   # Define the column types to be updated based on backend class
   backend_coltypes <- list(
@@ -37,6 +39,11 @@ methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
     ),
     "duckdb_connection" = c(
       checksum = "char(32)",
+      from_ts  = "TIMESTAMP",
+      until_ts = "TIMESTAMP"
+    ),
+    "OracleJdbc" = c(
+      checksum = "CHAR(32)",
       from_ts  = "TIMESTAMP",
       until_ts = "TIMESTAMP"
     )

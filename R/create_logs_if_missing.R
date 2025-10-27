@@ -33,7 +33,7 @@ create_logs_if_missing <- function(conn, log_table) {
       log_file = character(0)
     )
 
-    if (!checkmate::test_multi_class(conn, c("Microsoft SQL Server", "duckdb_connection"))) {
+    if (!checkmate::test_multi_class(conn, c("Microsoft SQL Server", "duckdb_connection", "JBDCConnection"))) {
       log_signature <- dplyr::select(log_signature, !"catalog")
     }
 

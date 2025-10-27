@@ -1,0 +1,16 @@
+FROM r-base:latest
+
+# tex packages are installed in /root/bin so we have to make sure those
+# packages accessible by adding that directory to the PATH variable.
+ENV PATH="/opt/hostedtoolcache/pandoc/3.1.11/x64:/snap/bin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/root/bin"
+
+# system dependencies (apt-get since r-base is debian based)
+RUN apt-get update; \
+    apt-get install -y build-essential gfortran\
+    libapparmor-dev libboost-all-dev  libcairo2-dev libcurl4-gnutls-dev\
+    libfontconfig1-dev libgsl-dev libjpeg-dev liblapack-dev libpng-dev\
+    libproj-dev libsodium-dev libssl-dev libudunits2-dev libxml2-dev\
+    mesa-common-dev  libglu1-mesa-dev libharfbuzz-dev libfribidi-dev\
+    default-jre default-jdk pandoc git gnupg;
+
+RUN R -e 'install.packages(pak)'

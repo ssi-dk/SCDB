@@ -6,6 +6,7 @@
 \alias{get_connection.PqDriver}
 \alias{get_connection.OdbcDriver}
 \alias{get_connection.duckdb_driver}
+\alias{get_connection.JDBCDriver}
 \alias{get_connection.default}
 \title{Opens connection to the database}
 \usage{
@@ -23,8 +24,8 @@ get_connection(drv, ...)
   dbname = NULL,
   host = NULL,
   port = NULL,
-  password = NULL,
   user = NULL,
+  password = NULL,
   ...,
   bigint = c("integer", "bigint64", "numeric", "character"),
   check_interrupts = TRUE,
@@ -49,6 +50,16 @@ get_connection(drv, ...)
   timezone_out = Sys.timezone()
 )
 
+\method{get_connection}{JDBCDriver}(
+  drv,
+  driverClass = NULL,
+  classPath = NULL,
+  url = NULL,
+  user = NULL,
+  password = NULL,
+  ...
+)
+
 \method{get_connection}{default}(drv, ...)
 }
 \arguments{
@@ -70,11 +81,11 @@ The ip of the host to connect to.}
 \item{port}{(\code{numeric(1)} or \code{character(1)})\cr
 Host port to connect to.}
 
-\item{password}{(\code{character(1)})\cr
-Password to login with.}
-
 \item{user}{(\code{character(1)})\cr
 Username to login with.}
+
+\item{password}{(\code{character(1)})\cr
+Password to login with.}
 
 \item{check_interrupts}{(\code{logical(1)})\cr
 Should user interrupts be checked during the query execution?}
@@ -90,6 +101,15 @@ The data source name to connect to.}
 
 \item{dbdir}{(\code{character(1)})\cr
 The directory where the database is located.}
+
+\item{driverClass}{(\code{character(1)})\cr
+The name of the JDBC driver to load.}
+
+\item{classPath}{(\code{character(1)})\cr
+The path to the JDBC driver.}
+
+\item{url}{(\code{character(1)})\cr
+The source to connect to.}
 }
 \value{
 An object that inherits from \code{DBIConnection} driver specified in \code{drv}.
@@ -119,4 +139,6 @@ Certain drivers may use credentials stored in a file, such as ~/.pgpass (Postgre
 \link[odbc:dbConnect-OdbcDriver-method]{odbc::odbc}
 
 \link[duckdb:duckdb]{duckdb::duckdb}
+
+\link[RJDBC:JDBC]{RJDBC::JDBC}
 }

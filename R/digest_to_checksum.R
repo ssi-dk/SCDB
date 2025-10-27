@@ -52,6 +52,24 @@ digest_to_checksum <- function(.data, col = "checksum", exclude = NULL) {
 }
 
 #' @export
+`digest_to_checksum.tbl_Oracle` <- function(
+    .data,
+    col = formals(digest_to_checksum)$col,
+    exclude = formals(digest_to_checksum)$exclude) {
+
+  hash_cols <- DBI::dbQuoteIdentifier(.data$src$con, setdiff(colnames(.data), c(col, exclude)))
+
+  .data <- dplyr::mutate(
+    .data,
+    !!col := !!dplyr::sql(
+      glue::glue("RAWTOHEX(STANDARD_HASH({paste0(hash_cols, collapse = ' || ')}, 'SHA256'))")
+    )
+  )
+
+  return(.data)
+}
+
+#' @export
 digest_to_checksum.default <- function(
     .data,
     col = formals(digest_to_checksum)$col,
@@ -75,7 +93,7 @@ digest_to_checksum.default <- function(
       id__ = dplyr::row_number(),
       dplyr::across(tidyselect::all_of(col), openssl::md5)
     ) %>%
-    dplyr::copy_to(dbplyr::remote_con(.data), df = ., name = unique_table_name("SCDB_digest_to_checksum_helper"))
+    dplyr::copy_to(dbplyr::remote_con(.data), df = ., name = unique_table_name("SCDB_digest_to_checksum_helper"), analyze = FALSE)
   defer_db_cleanup(checksums)
 
   .data <- .data %>%
