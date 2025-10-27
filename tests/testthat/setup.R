@@ -134,6 +134,15 @@ for (conn in get_test_conns()) {
   print(tibble::tibble(foo))
 
 
+  res <- f(conn@jdbc_conn, "SELECT * FROM MTCARS2")
+  class("res")
+  class(res)
+
+  cts <- purrr::map(1:11, ~ rJava::.jcall(res@md, "I", "getColumnType", i))
+  print("cts")
+  print(cts)
+
+
   DBI::dbDisconnect(conn)
 }
 
