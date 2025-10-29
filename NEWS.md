@@ -4,6 +4,8 @@
 
 * A bug was fixed in `update_snapshot()` where the process would unexpectedly hang (#192).
 
+* A bug was fixed in `update_snapshot()` so that the filter is copied to both source and target connections if on different connections.
+
 # SCDB 0.5.1
 
 ## BREAKING CHANGES
