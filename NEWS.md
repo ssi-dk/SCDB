@@ -4,6 +4,8 @@
 
 * A bug was fixed in `update_snapshot()` where the process would unexpectedly hang (#192).
 
+* `get_tables()` no longer fails for some PostgresSQL configurations (#198).
+
 * `filter_keys()` no longer fails if filter list has zero rows (#200).
 
 
