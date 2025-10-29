@@ -6,6 +6,8 @@
 
 * `get_tables()` no longer fails for some PostgresSQL configurations (#198).
 
+* `filter_keys()` no longer fails if filter list has zero rows (#200).
+
 
 # SCDB 0.5.1
 
