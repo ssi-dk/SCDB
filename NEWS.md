@@ -2,7 +2,11 @@
 
 ## Improvements and Fixes
 
-* A bug was fixed in `update_snapshot()` where the process would unexpectedly hang (#192).
+* Bug fixes in `update_snapshot()`:
+
+  * Fixed a bug where the process would unexpectedly hang (#192).
+  
+  * `filter` is copied to _both_ source and target connections if on different connections (#201).
 
 * `get_tables()` no longer fails for some PostgresSQL configurations (#198).
 
