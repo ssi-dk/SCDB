@@ -38,6 +38,12 @@ test_that("filter_keys() works", {
     filter <- data.frame(vs = 0)
     expect_mapequal(filter_keys(m, filter), dplyr::filter(m, .data$vs == 0))
 
+    # Empty filter should result in no rows
+    expect_identical(
+      utils::head(x, 0),
+      x %>% filter_keys(data.frame(vs = numeric(0), am = numeric(0)))
+    )
+
     connection_clean_up(conn)
   }
 })

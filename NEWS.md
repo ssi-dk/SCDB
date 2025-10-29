@@ -2,9 +2,16 @@
 
 ## Improvements and Fixes
 
-* A bug was fixed in `update_snapshot()` where the process would unexpectedly hang (#192).
+* Bug fixes in `update_snapshot()`:
 
-* A bug was fixed in `update_snapshot()` so that the filter is copied to both source and target connections if on different connections.
+  * Fixed a bug where the process would unexpectedly hang (#192).
+  
+  * `filter` is copied to _both_ source and target connections if on different connections (#201).
+
+* `get_tables()` no longer fails for some PostgresSQL configurations (#198).
+
+* `filter_keys()` no longer fails if filter list has zero rows (#200).
+
 
 # SCDB 0.5.1
 

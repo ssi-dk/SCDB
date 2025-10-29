@@ -17,7 +17,7 @@
         "RemotePkgRef": "askpass",
         "RemoteType": "standard",
         "RemoteRef": "askpass",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.2.1"
       },
@@ -48,7 +48,7 @@
         "RemotePkgRef": "backports",
         "RemoteType": "standard",
         "RemoteRef": "backports",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.5.0"
       },
@@ -79,7 +79,7 @@
         "RemotePkgRef": "base64enc",
         "RemoteType": "standard",
         "RemoteRef": "base64enc",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.1-3"
       },
@@ -110,7 +110,7 @@
         "RemotePkgRef": "bit",
         "RemoteType": "standard",
         "RemoteRef": "bit",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "4.6.0"
       },
@@ -141,7 +141,7 @@
         "RemotePkgRef": "bit64",
         "RemoteType": "standard",
         "RemoteRef": "bit64",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "4.6.0-1"
       },
@@ -172,7 +172,7 @@
         "RemotePkgRef": "blob",
         "RemoteType": "standard",
         "RemoteRef": "blob",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.2.4"
       },
@@ -203,7 +203,7 @@
         "RemotePkgRef": "brew",
         "RemoteType": "standard",
         "RemoteRef": "brew",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.0-10"
       },
@@ -234,7 +234,7 @@
         "RemotePkgRef": "brio",
         "RemoteType": "standard",
         "RemoteRef": "brio",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.1.5"
       },
@@ -265,7 +265,7 @@
         "RemotePkgRef": "broom",
         "RemoteType": "standard",
         "RemoteRef": "broom",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.0.10"
       },
@@ -296,7 +296,7 @@
         "RemotePkgRef": "bslib",
         "RemoteType": "standard",
         "RemoteRef": "bslib",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.9.0"
       },
@@ -327,7 +327,7 @@
         "RemotePkgRef": "cachem",
         "RemoteType": "standard",
         "RemoteRef": "cachem",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.1.0"
       },
@@ -358,7 +358,7 @@
         "RemotePkgRef": "callr",
         "RemoteType": "standard",
         "RemoteRef": "callr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "3.7.6"
       },
@@ -389,7 +389,7 @@
         "RemotePkgRef": "cellranger",
         "RemoteType": "standard",
         "RemoteRef": "cellranger",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.1.0"
       },
@@ -420,7 +420,7 @@
         "RemotePkgRef": "checkmate",
         "RemoteType": "standard",
         "RemoteRef": "checkmate",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.3.3"
       },
@@ -451,7 +451,7 @@
         "RemotePkgRef": "cli",
         "RemoteType": "standard",
         "RemoteRef": "cli",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "3.6.5"
       },
@@ -482,7 +482,7 @@
         "RemotePkgRef": "clipr",
         "RemoteType": "standard",
         "RemoteRef": "clipr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.8.0"
       },
@@ -520,7 +520,7 @@
         "RemotePkgRef": "commonmark",
         "RemoteType": "standard",
         "RemoteRef": "commonmark",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.0.0"
       },
@@ -551,7 +551,7 @@
         "RemotePkgRef": "conflicted",
         "RemoteType": "standard",
         "RemoteRef": "conflicted",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.2.0"
       },
@@ -582,7 +582,7 @@
         "RemotePkgRef": "crayon",
         "RemoteType": "standard",
         "RemoteRef": "crayon",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.5.3"
       },
@@ -613,7 +613,7 @@
         "RemotePkgRef": "credentials",
         "RemoteType": "standard",
         "RemoteRef": "credentials",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.0.3"
       },
@@ -651,7 +651,7 @@
         "RemotePkgRef": "curl",
         "RemoteType": "standard",
         "RemoteRef": "curl",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "7.0.0"
       },
@@ -695,7 +695,7 @@
         "RemotePkgRef": "data.table",
         "RemoteType": "standard",
         "RemoteRef": "data.table",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.17.8"
       },
@@ -726,7 +726,7 @@
         "RemotePkgRef": "DBI",
         "RemoteType": "standard",
         "RemoteRef": "DBI",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.2.3"
       },
@@ -757,7 +757,7 @@
         "RemotePkgRef": "dbplyr",
         "RemoteType": "standard",
         "RemoteRef": "dbplyr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.5.1"
       },
@@ -788,7 +788,7 @@
         "RemotePkgRef": "desc",
         "RemoteType": "standard",
         "RemoteRef": "desc",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.4.3"
       },
@@ -819,7 +819,7 @@
         "RemotePkgRef": "devtools",
         "RemoteType": "standard",
         "RemoteRef": "devtools",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.4.6"
       },
@@ -850,7 +850,7 @@
         "RemotePkgRef": "diffobj",
         "RemoteType": "standard",
         "RemoteRef": "diffobj",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.3.6"
       },
@@ -881,7 +881,7 @@
         "RemotePkgRef": "digest",
         "RemoteType": "standard",
         "RemoteRef": "digest",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.6.37"
       },
@@ -912,7 +912,7 @@
         "RemotePkgRef": "downlit",
         "RemoteType": "standard",
         "RemoteRef": "downlit",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.4.4"
       },
@@ -943,7 +943,7 @@
         "RemotePkgRef": "dplyr",
         "RemoteType": "standard",
         "RemoteRef": "dplyr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.1.4"
       },
@@ -974,7 +974,7 @@
         "RemotePkgRef": "dtplyr",
         "RemoteType": "standard",
         "RemoteRef": "dtplyr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.3.2"
       },
@@ -1005,7 +1005,7 @@
         "RemotePkgRef": "duckdb",
         "RemoteType": "standard",
         "RemoteRef": "duckdb",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.4.1"
       },
@@ -1043,7 +1043,7 @@
         "RemotePkgRef": "ellipsis",
         "RemoteType": "standard",
         "RemoteRef": "ellipsis",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.3.2"
       },
@@ -1074,7 +1074,7 @@
         "RemotePkgRef": "evaluate",
         "RemoteType": "standard",
         "RemoteRef": "evaluate",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.0.5"
       },
@@ -1105,7 +1105,7 @@
         "RemotePkgRef": "fansi",
         "RemoteType": "standard",
         "RemoteRef": "fansi",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.0.6"
       },
@@ -1136,7 +1136,7 @@
         "RemotePkgRef": "farver",
         "RemoteType": "standard",
         "RemoteRef": "farver",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.1.2"
       },
@@ -1167,7 +1167,7 @@
         "RemotePkgRef": "fastmap",
         "RemoteType": "standard",
         "RemoteRef": "fastmap",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.2.0"
       },
@@ -1198,7 +1198,7 @@
         "RemotePkgRef": "fontawesome",
         "RemoteType": "standard",
         "RemoteRef": "fontawesome",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.5.3"
       },
@@ -1229,7 +1229,7 @@
         "RemotePkgRef": "forcats",
         "RemoteType": "standard",
         "RemoteRef": "forcats",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.0.1"
       },
@@ -1260,7 +1260,7 @@
         "RemotePkgRef": "fs",
         "RemoteType": "standard",
         "RemoteRef": "fs",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.6.6"
       },
@@ -1298,7 +1298,7 @@
         "RemotePkgRef": "gargle",
         "RemoteType": "standard",
         "RemoteRef": "gargle",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.6.0"
       },
@@ -1329,7 +1329,7 @@
         "RemotePkgRef": "generics",
         "RemoteType": "standard",
         "RemoteRef": "generics",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.1.4"
       },
@@ -1360,7 +1360,7 @@
         "RemotePkgRef": "gert",
         "RemoteType": "standard",
         "RemoteRef": "gert",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.1.5"
       },
@@ -1398,7 +1398,7 @@
         "RemotePkgRef": "ggplot2",
         "RemoteType": "standard",
         "RemoteRef": "ggplot2",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "4.0.0"
       },
@@ -1429,7 +1429,7 @@
         "RemotePkgRef": "gh",
         "RemoteType": "standard",
         "RemoteRef": "gh",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.5.0"
       },
@@ -1460,7 +1460,7 @@
         "RemotePkgRef": "gitcreds",
         "RemoteType": "standard",
         "RemoteRef": "gitcreds",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.1.2"
       },
@@ -1498,7 +1498,7 @@
         "RemotePkgRef": "glue",
         "RemoteType": "standard",
         "RemoteRef": "glue",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.8.0"
       },
@@ -1529,7 +1529,7 @@
         "RemotePkgRef": "googledrive",
         "RemoteType": "standard",
         "RemoteRef": "googledrive",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.1.2"
       },
@@ -1560,7 +1560,7 @@
         "RemotePkgRef": "googlesheets4",
         "RemoteType": "standard",
         "RemoteRef": "googlesheets4",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.1.2"
       },
@@ -1591,7 +1591,7 @@
         "RemotePkgRef": "gtable",
         "RemoteType": "standard",
         "RemoteRef": "gtable",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.3.6"
       },
@@ -1622,7 +1622,7 @@
         "RemotePkgRef": "haven",
         "RemoteType": "standard",
         "RemoteRef": "haven",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.5.5"
       },
@@ -1666,7 +1666,7 @@
         "RemotePkgRef": "here",
         "RemoteType": "standard",
         "RemoteRef": "here",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.0.2"
       },
@@ -1697,7 +1697,7 @@
         "RemotePkgRef": "highr",
         "RemoteType": "standard",
         "RemoteRef": "highr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.11"
       },
@@ -1728,7 +1728,7 @@
         "RemotePkgRef": "hms",
         "RemoteType": "standard",
         "RemoteRef": "hms",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.1.4"
       },
@@ -1759,7 +1759,7 @@
         "RemotePkgRef": "htmltools",
         "RemoteType": "standard",
         "RemoteRef": "htmltools",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.5.8.1"
       },
@@ -1790,7 +1790,7 @@
         "RemotePkgRef": "htmlwidgets",
         "RemoteType": "standard",
         "RemoteRef": "htmlwidgets",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.6.4"
       },
@@ -1821,7 +1821,7 @@
         "RemotePkgRef": "httpuv",
         "RemoteType": "standard",
         "RemoteRef": "httpuv",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.6.16"
       },
@@ -1865,7 +1865,7 @@
         "RemotePkgRef": "httr",
         "RemoteType": "standard",
         "RemoteRef": "httr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.4.7"
       },
@@ -1896,7 +1896,7 @@
         "RemotePkgRef": "httr2",
         "RemoteType": "standard",
         "RemoteRef": "httr2",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.2.1"
       },
@@ -1927,7 +1927,7 @@
         "RemotePkgRef": "hunspell",
         "RemoteType": "standard",
         "RemoteRef": "hunspell",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "3.0.6"
       },
@@ -1958,7 +1958,7 @@
         "RemotePkgRef": "ids",
         "RemoteType": "standard",
         "RemoteRef": "ids",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.0.1"
       },
@@ -1989,7 +1989,7 @@
         "RemotePkgRef": "ini",
         "RemoteType": "standard",
         "RemoteRef": "ini",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.3.1"
       },
@@ -2018,7 +2018,7 @@
       "install_args": "",
       "license": "GPL",
       "metadata": {
-        "RemotePkgRef": "installed::/opt/R/4.5.1/lib/R/library/codetools",
+        "RemotePkgRef": "installed::/usr/local/lib/R/library/codetools",
         "RemoteType": "installed",
         "RemotePkgPlatform": "*",
         "RemoteSha": "0.2-20"
@@ -2049,7 +2049,7 @@
         "RemotePkgRef": "isoband",
         "RemoteType": "standard",
         "RemoteRef": "isoband",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.2.7"
       },
@@ -2080,7 +2080,7 @@
         "RemotePkgRef": "jquerylib",
         "RemoteType": "standard",
         "RemoteRef": "jquerylib",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.1.4"
       },
@@ -2111,7 +2111,7 @@
         "RemotePkgRef": "jsonlite",
         "RemoteType": "standard",
         "RemoteRef": "jsonlite",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.0.0"
       },
@@ -2142,7 +2142,7 @@
         "RemotePkgRef": "knitr",
         "RemoteType": "standard",
         "RemoteRef": "knitr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.50"
       },
@@ -2180,7 +2180,7 @@
         "RemotePkgRef": "labeling",
         "RemoteType": "standard",
         "RemoteRef": "labeling",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.4.3"
       },
@@ -2211,7 +2211,7 @@
         "RemotePkgRef": "later",
         "RemoteType": "standard",
         "RemoteRef": "later",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.4.4"
       },
@@ -2242,7 +2242,7 @@
         "RemotePkgRef": "lazyeval",
         "RemoteType": "standard",
         "RemoteRef": "lazyeval",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.2.2"
       },
@@ -2273,7 +2273,7 @@
         "RemotePkgRef": "lifecycle",
         "RemoteType": "standard",
         "RemoteRef": "lifecycle",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.0.4"
       },
@@ -2304,7 +2304,7 @@
         "RemotePkgRef": "lintr",
         "RemoteType": "standard",
         "RemoteRef": "lintr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "3.2.0"
       },
@@ -2360,7 +2360,7 @@
         "RemotePkgRef": "lubridate",
         "RemoteType": "standard",
         "RemoteRef": "lubridate",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.9.4"
       },
@@ -2391,7 +2391,7 @@
         "RemotePkgRef": "magrittr",
         "RemoteType": "standard",
         "RemoteRef": "magrittr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.0.4"
       },
@@ -2422,7 +2422,7 @@
         "RemotePkgRef": "memoise",
         "RemoteType": "standard",
         "RemoteRef": "memoise",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.0.1"
       },
@@ -2453,7 +2453,7 @@
         "RemotePkgRef": "microbenchmark",
         "RemoteType": "standard",
         "RemoteRef": "microbenchmark",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.5.0"
       },
@@ -2484,7 +2484,7 @@
         "RemotePkgRef": "mime",
         "RemoteType": "standard",
         "RemoteRef": "mime",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.13"
       },
@@ -2515,7 +2515,7 @@
         "RemotePkgRef": "miniUI",
         "RemoteType": "standard",
         "RemoteRef": "miniUI",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.1.2"
       },
@@ -2546,7 +2546,7 @@
         "RemotePkgRef": "modelr",
         "RemoteType": "standard",
         "RemoteRef": "modelr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.1.11"
       },
@@ -2577,7 +2577,7 @@
         "RemotePkgRef": "odbc",
         "RemoteType": "standard",
         "RemoteRef": "odbc",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.6.3"
       },
@@ -2621,7 +2621,7 @@
         "RemotePkgRef": "openssl",
         "RemoteType": "standard",
         "RemoteRef": "openssl",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.3.4"
       },
@@ -2659,7 +2659,7 @@
         "RemotePkgRef": "otel",
         "RemoteType": "standard",
         "RemoteRef": "otel",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.2.0"
       },
@@ -2690,7 +2690,7 @@
         "RemotePkgRef": "pak",
         "RemoteType": "standard",
         "RemoteRef": "pak",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.9.0"
       },
@@ -2721,7 +2721,7 @@
         "RemotePkgRef": "parallelly",
         "RemoteType": "standard",
         "RemoteRef": "parallelly",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.45.1"
       },
@@ -2752,7 +2752,7 @@
         "RemotePkgRef": "pillar",
         "RemoteType": "standard",
         "RemoteRef": "pillar",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.11.1"
       },
@@ -2783,7 +2783,7 @@
         "RemotePkgRef": "pkgbuild",
         "RemoteType": "standard",
         "RemoteRef": "pkgbuild",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.4.8"
       },
@@ -2814,7 +2814,7 @@
         "RemotePkgRef": "pkgconfig",
         "RemoteType": "standard",
         "RemoteRef": "pkgconfig",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.0.3"
       },
@@ -2845,7 +2845,7 @@
         "RemotePkgRef": "pkgdown",
         "RemoteType": "standard",
         "RemoteRef": "pkgdown",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.1.3"
       },
@@ -2883,7 +2883,7 @@
         "RemotePkgRef": "pkgload",
         "RemoteType": "standard",
         "RemoteRef": "pkgload",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.4.1"
       },
@@ -2914,7 +2914,7 @@
         "RemotePkgRef": "praise",
         "RemoteType": "standard",
         "RemoteRef": "praise",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.0.0"
       },
@@ -2945,7 +2945,7 @@
         "RemotePkgRef": "prettyunits",
         "RemoteType": "standard",
         "RemoteRef": "prettyunits",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.2.0"
       },
@@ -2976,7 +2976,7 @@
         "RemotePkgRef": "processx",
         "RemoteType": "standard",
         "RemoteRef": "processx",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "3.8.6"
       },
@@ -3007,7 +3007,7 @@
         "RemotePkgRef": "profvis",
         "RemoteType": "standard",
         "RemoteRef": "profvis",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.4.0"
       },
@@ -3038,7 +3038,7 @@
         "RemotePkgRef": "promises",
         "RemoteType": "standard",
         "RemoteRef": "promises",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.4.0"
       },
@@ -3069,7 +3069,7 @@
         "RemotePkgRef": "ps",
         "RemoteType": "standard",
         "RemoteRef": "ps",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.9.1"
       },
@@ -3100,7 +3100,7 @@
         "RemotePkgRef": "purrr",
         "RemoteType": "standard",
         "RemoteRef": "purrr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.1.0"
       },
@@ -3131,7 +3131,7 @@
         "RemotePkgRef": "R6",
         "RemoteType": "standard",
         "RemoteRef": "R6",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.6.1"
       },
@@ -3162,7 +3162,7 @@
         "RemotePkgRef": "ragg",
         "RemoteType": "standard",
         "RemoteRef": "ragg",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.5.0"
       },
@@ -3224,7 +3224,7 @@
         "RemotePkgRef": "rappdirs",
         "RemoteType": "standard",
         "RemoteRef": "rappdirs",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.3.3"
       },
@@ -3255,7 +3255,7 @@
         "RemotePkgRef": "rcmdcheck",
         "RemoteType": "standard",
         "RemoteRef": "rcmdcheck",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.4.0"
       },
@@ -3286,7 +3286,7 @@
         "RemotePkgRef": "RColorBrewer",
         "RemoteType": "standard",
         "RemoteRef": "RColorBrewer",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.1-3"
       },
@@ -3317,7 +3317,7 @@
         "RemotePkgRef": "Rcpp",
         "RemoteType": "standard",
         "RemoteRef": "Rcpp",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.1.0"
       },
@@ -3348,7 +3348,7 @@
         "RemotePkgRef": "readr",
         "RemoteType": "standard",
         "RemoteRef": "readr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.1.5"
       },
@@ -3379,7 +3379,7 @@
         "RemotePkgRef": "readxl",
         "RemoteType": "standard",
         "RemoteRef": "readxl",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.4.5"
       },
@@ -3410,7 +3410,7 @@
         "RemotePkgRef": "rematch",
         "RemoteType": "standard",
         "RemoteRef": "rematch",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.0.0"
       },
@@ -3441,7 +3441,7 @@
         "RemotePkgRef": "rematch2",
         "RemoteType": "standard",
         "RemoteRef": "rematch2",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.1.2"
       },
@@ -3472,7 +3472,7 @@
         "RemotePkgRef": "remotes",
         "RemoteType": "standard",
         "RemoteRef": "remotes",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.5.0"
       },
@@ -3510,7 +3510,7 @@
         "RemotePkgRef": "reprex",
         "RemoteType": "standard",
         "RemoteRef": "reprex",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.1.1"
       },
@@ -3548,7 +3548,7 @@
         "RemotePkgRef": "rex",
         "RemoteType": "standard",
         "RemoteRef": "rex",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.2.1"
       },
@@ -3579,7 +3579,7 @@
         "RemotePkgRef": "rlang",
         "RemoteType": "standard",
         "RemoteRef": "rlang",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.1.6"
       },
@@ -3610,7 +3610,7 @@
         "RemotePkgRef": "rmarkdown",
         "RemoteType": "standard",
         "RemoteRef": "rmarkdown",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.30"
       },
@@ -3648,7 +3648,7 @@
         "RemotePkgRef": "roxygen2",
         "RemoteType": "standard",
         "RemoteRef": "roxygen2",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "7.3.3"
       },
@@ -3679,7 +3679,7 @@
         "RemotePkgRef": "RPostgres",
         "RemoteType": "standard",
         "RemoteRef": "RPostgres",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.4.8"
       },
@@ -3717,7 +3717,7 @@
         "RemotePkgRef": "rprojroot",
         "RemoteType": "standard",
         "RemoteRef": "rprojroot",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.1.1"
       },
@@ -3748,7 +3748,7 @@
         "RemotePkgRef": "RSQLite",
         "RemoteType": "standard",
         "RemoteRef": "RSQLite",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.4.3"
       },
@@ -3779,7 +3779,7 @@
         "RemotePkgRef": "rstudioapi",
         "RemoteType": "standard",
         "RemoteRef": "rstudioapi",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.17.1"
       },
@@ -3810,7 +3810,7 @@
         "RemotePkgRef": "rversions",
         "RemoteType": "standard",
         "RemoteRef": "rversions",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "3.0.0"
       },
@@ -3841,7 +3841,7 @@
         "RemotePkgRef": "rvest",
         "RemoteType": "standard",
         "RemoteRef": "rvest",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.0.5"
       },
@@ -3872,7 +3872,7 @@
         "RemotePkgRef": "S7",
         "RemoteType": "standard",
         "RemoteRef": "S7",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.2.0"
       },
@@ -3903,7 +3903,7 @@
         "RemotePkgRef": "sass",
         "RemoteType": "standard",
         "RemoteRef": "sass",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.4.10"
       },
@@ -3941,7 +3941,7 @@
         "RemotePkgRef": "scales",
         "RemoteType": "standard",
         "RemoteRef": "scales",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.4.0"
       },
@@ -3972,7 +3972,7 @@
         "RemotePkgRef": "selectr",
         "RemoteType": "standard",
         "RemoteRef": "selectr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.4-2"
       },
@@ -4003,7 +4003,7 @@
         "RemotePkgRef": "sessioninfo",
         "RemoteType": "standard",
         "RemoteRef": "sessioninfo",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.2.3"
       },
@@ -4034,7 +4034,7 @@
         "RemotePkgRef": "shiny",
         "RemoteType": "standard",
         "RemoteRef": "shiny",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.11.1"
       },
@@ -4065,7 +4065,7 @@
         "RemotePkgRef": "sourcetools",
         "RemoteType": "standard",
         "RemoteRef": "sourcetools",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.1.7-1"
       },
@@ -4096,7 +4096,7 @@
         "RemotePkgRef": "spelling",
         "RemoteType": "standard",
         "RemoteRef": "spelling",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.3.2"
       },
@@ -4127,7 +4127,7 @@
         "RemotePkgRef": "stringi",
         "RemoteType": "standard",
         "RemoteRef": "stringi",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.8.7"
       },
@@ -4165,7 +4165,7 @@
         "RemotePkgRef": "stringr",
         "RemoteType": "standard",
         "RemoteRef": "stringr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.5.2"
       },
@@ -4196,7 +4196,7 @@
         "RemotePkgRef": "sys",
         "RemoteType": "standard",
         "RemoteRef": "sys",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "3.4.3"
       },
@@ -4227,7 +4227,7 @@
         "RemotePkgRef": "systemfonts",
         "RemoteType": "standard",
         "RemoteRef": "systemfonts",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.3.1"
       },
@@ -4271,7 +4271,7 @@
         "RemotePkgRef": "testthat",
         "RemoteType": "standard",
         "RemoteRef": "testthat",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "3.2.3"
       },
@@ -4302,7 +4302,7 @@
         "RemotePkgRef": "textshaping",
         "RemoteType": "standard",
         "RemoteRef": "textshaping",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.0.4"
       },
@@ -4352,7 +4352,7 @@
         "RemotePkgRef": "tibble",
         "RemoteType": "standard",
         "RemoteRef": "tibble",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "3.3.0"
       },
@@ -4383,7 +4383,7 @@
         "RemotePkgRef": "tidyr",
         "RemoteType": "standard",
         "RemoteRef": "tidyr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.3.1"
       },
@@ -4414,7 +4414,7 @@
         "RemotePkgRef": "tidyselect",
         "RemoteType": "standard",
         "RemoteRef": "tidyselect",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.2.1"
       },
@@ -4445,7 +4445,7 @@
         "RemotePkgRef": "tidyverse",
         "RemoteType": "standard",
         "RemoteRef": "tidyverse",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.0.0"
       },
@@ -4476,7 +4476,7 @@
         "RemotePkgRef": "timechange",
         "RemoteType": "standard",
         "RemoteRef": "timechange",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.3.0"
       },
@@ -4507,7 +4507,7 @@
         "RemotePkgRef": "tinytex",
         "RemoteType": "standard",
         "RemoteRef": "tinytex",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.57"
       },
@@ -4538,7 +4538,7 @@
         "RemotePkgRef": "tzdb",
         "RemoteType": "standard",
         "RemoteRef": "tzdb",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.5.0"
       },
@@ -4569,7 +4569,7 @@
         "RemotePkgRef": "urlchecker",
         "RemoteType": "standard",
         "RemoteRef": "urlchecker",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.0.1"
       },
@@ -4600,7 +4600,7 @@
         "RemotePkgRef": "usethis",
         "RemoteType": "standard",
         "RemoteRef": "usethis",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "3.2.1"
       },
@@ -4631,7 +4631,7 @@
         "RemotePkgRef": "utf8",
         "RemoteType": "standard",
         "RemoteRef": "utf8",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.2.6"
       },
@@ -4662,7 +4662,7 @@
         "RemotePkgRef": "uuid",
         "RemoteType": "standard",
         "RemoteRef": "uuid",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.2-1"
       },
@@ -4693,7 +4693,7 @@
         "RemotePkgRef": "vctrs",
         "RemoteType": "standard",
         "RemoteRef": "vctrs",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.6.5"
       },
@@ -4724,7 +4724,7 @@
         "RemotePkgRef": "viridisLite",
         "RemoteType": "standard",
         "RemoteRef": "viridisLite",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.4.2"
       },
@@ -4755,7 +4755,7 @@
         "RemotePkgRef": "vroom",
         "RemoteType": "standard",
         "RemoteRef": "vroom",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.6.6"
       },
@@ -4786,7 +4786,7 @@
         "RemotePkgRef": "waldo",
         "RemoteType": "standard",
         "RemoteRef": "waldo",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.6.2"
       },
@@ -4817,7 +4817,7 @@
         "RemotePkgRef": "whisker",
         "RemoteType": "standard",
         "RemoteRef": "whisker",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.4.1"
       },
@@ -4848,7 +4848,7 @@
         "RemotePkgRef": "withr",
         "RemoteType": "standard",
         "RemoteRef": "withr",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "3.0.2"
       },
@@ -4879,7 +4879,7 @@
         "RemotePkgRef": "xfun",
         "RemoteType": "standard",
         "RemoteRef": "xfun",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "0.53"
       },
@@ -4910,7 +4910,7 @@
         "RemotePkgRef": "xml2",
         "RemoteType": "standard",
         "RemoteRef": "xml2",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.4.1"
       },
@@ -4948,7 +4948,7 @@
         "RemotePkgRef": "xmlparsedata",
         "RemoteType": "standard",
         "RemoteRef": "xmlparsedata",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.0.5"
       },
@@ -4979,7 +4979,7 @@
         "RemotePkgRef": "xopen",
         "RemoteType": "standard",
         "RemoteRef": "xopen",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.0.1"
       },
@@ -5010,7 +5010,7 @@
         "RemotePkgRef": "xtable",
         "RemoteType": "standard",
         "RemoteRef": "xtable",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "1.8-4"
       },
@@ -5041,7 +5041,7 @@
         "RemotePkgRef": "yaml",
         "RemoteType": "standard",
         "RemoteRef": "yaml",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.3.10"
       },
@@ -5072,7 +5072,7 @@
         "RemotePkgRef": "zip",
         "RemoteType": "standard",
         "RemoteRef": "zip",
-        "RemoteRepos": "https://packagemanager.posit.co/cran/__linux__/noble/latest",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
         "RemoteSha": "2.3.3"
       },

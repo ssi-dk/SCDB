@@ -30,8 +30,12 @@
 #' @importFrom rlang .data
 #' @export
 filter_keys <- function(.data, filters, by = NULL, na_by = NULL, ...) {
-  if (is.null(filters)) {
+  if (is.null(filters)) { # No filtering is requested
     return(.data)
+  }
+
+  if (nrow(filters) == 0) { # All rows should be filtered out
+    return(utils::head(.data, 0))
   }
 
   assert_data_like(.data)
