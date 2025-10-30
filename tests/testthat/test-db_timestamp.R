@@ -55,12 +55,16 @@ test_that("`db_timestamp()` maps identically for different inputs", {
     ) |>
       purrr::pmap_chr(~ glue::glue("{.x} / {.y}"))
 
-    names(test_results) <- labels
-
     # All db_timestamps should map to the same value
     expect_identical(
-      test_results,
-      stats::setNames(rep(TRUE, length(labels)), labels)
+      data.frame(
+        classes = labels,
+        results = test_results
+      ),
+      data.frame(
+        classes = labels,
+        results = rep(TRUE, length(labels))
+      )
     )
 
     connection_clean_up(conn)
