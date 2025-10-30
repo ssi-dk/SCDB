@@ -38,16 +38,13 @@ test_that("`db_timestamp()` maps identically for different inputs", {
   for (conn in get_test_conns()) {
 
     # Get all combinations and generate SQL
-    test_results <- tidyr::expand_grid(
+    queries <- tidyr::expand_grid(
       type_1 = slice_tss,
       type_2 = slice_tss
     ) |>
-      purrr::pmap_lgl(
-        ~ DBI::dbGetQuery(
-          conn,
-          DBI::SQL(glue::glue("SELECT {db_timestamp(..1, conn)} = {db_timestamp(..2, conn)}"))
-        )[[1]]
-      )
+      purrr::pmap(~ DBI::SQL(glue::glue("SELECT {db_timestamp(..1, conn)} = {db_timestamp(..2, conn)}")))
+
+    test_results <- purrr::map_lgl(queries, ~ DBI::dbGetQuery(conn, .)[[1]])
 
     labels <- tidyr::expand_grid(
       type_1 = names(slice_tss),
@@ -55,15 +52,17 @@ test_that("`db_timestamp()` maps identically for different inputs", {
     ) |>
       purrr::pmap_chr(~ glue::glue("{.x} / {.y}"))
 
+    failed <- purrr::discard(stats::setNames(test_results, labels), ~ .)
+
     # All db_timestamps should map to the same value
     expect_identical(
       data.frame(
-        classes = labels,
-        results = test_results
+        classes = labels[!test_results],
+        query = as.character(queries[!test_results])
       ),
       data.frame(
-        classes = labels,
-        results = rep(TRUE, length(labels))
+        classes = character(0),
+        query = character(0)
       )
     )
 
