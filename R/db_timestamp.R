@@ -42,7 +42,7 @@ db_timestamp.SQLiteConnection <- function(timestamp, conn) {
 #' @export
 db_timestamp.duckdb_connection <- function(timestamp, conn) {
   if (inherits(timestamp, "character") || inherits(timestamp, "Date")) {
-    timestamp <- as.POSIXct(timestamp, tz = Sys.timezone()) # Add local tz
+    timestamp <- as.POSIXct(timestamp, tz = "UTC") # duckdb only stores as UTC
   }
   return(dbplyr::translate_sql(!!as.POSIXct(timestamp, tz = "UTC"), con = conn)) # duckdb only stores as UTC
 }
