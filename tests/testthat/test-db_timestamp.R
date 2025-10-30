@@ -45,7 +45,7 @@ test_that("`db_timestamp()` maps identically for different inputs", {
       purrr::pmap_lgl(
         ~ DBI::dbGetQuery(
           conn,
-          glue::glue("SELECT {db_timestamp(..1, conn)} = {db_timestamp(..2, conn)}")
+          DBI::SQL(glue::glue("SELECT {db_timestamp(..1, conn)} = {db_timestamp(..2, conn)}"))
         )[[1]]
       )
 
