@@ -56,13 +56,7 @@ test_that("`db_timestamp()` maps identically for different inputs", {
         }
       )
 
-    test_results <- purrr::map_lgl(
-      queries,
-      \(query) {
-        DBI::dbGetQuery(conn, query)[[1]]
-        stop(query)
-      }
-    )
+    test_results <- purrr::map_lgl(queries, \(query)  DBI::dbGetQuery(conn, query)[[1]])
 
     labels <- tidyr::expand_grid(
       type_1 = names(slice_tss),
