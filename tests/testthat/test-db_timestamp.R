@@ -5,7 +5,10 @@ test_that("`db_timestamp()` produces consistent results", {
 
     expect_identical(
       db_timestamp(ts_posix, conn),
-      db_timestamp(ts_str, conn)
+      db_timestamp(ts_str, conn),
+      info = glue::glue(
+        "db_timestamp(ts_posix, conn) not equal to db_timestamp(ts_str, conn) on {class(conn)}"
+      )
     )
 
     expect_identical(
