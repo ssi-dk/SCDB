@@ -1,7 +1,7 @@
 test_that("`db_timestamp()` produces consistent results", {
   for (conn in get_test_conns()) {
     ts_posix <- Sys.time()
-    ts_str <- format(ts_posix)
+    ts_str <- as.character(ts_posix)
 
     expect_identical(
       db_timestamp(ts_posix, conn),
