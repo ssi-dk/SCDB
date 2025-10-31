@@ -198,9 +198,17 @@ test_that("Logger: logging to database works", {
     }
     expect_identical(dplyr::pull(log_table_id, "schema"), purrr::pluck(db_table_id, "name", "schema"))
     expect_identical(dplyr::pull(log_table_id, "table"), purrr::pluck(db_table_id, "name", "table"))
-    expect_identical( # Transferring start_time to database can have some loss of information that we need to match
-      format(as.POSIXct(dplyr::pull(log_table_id, "start_time")), "%F %R:%S"),
-      format(logger$start_time, "%F %R:%S"),
+
+
+    # Transferring start_time to database can have some loss of information that we need to match
+    if (inherits(conn, "duckdb_connection")) {
+      fmt <- "%F %R:%S" # No fractional seconds for dbplyr translation for duckdb
+    } else {
+      fmt <- "%F %R:%OS"
+    }
+    expect_identical(
+      strftime(dplyr::pull(log_table_id, "start_time"), format = "fmt", digits = 6),
+      strftime(logger$start_time, format = "fmt", digits = 6),
       info = glue::glue("log_table$start_time not set correctly on on {class(conn)}")
     )
 
