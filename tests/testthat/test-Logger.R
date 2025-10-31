@@ -188,7 +188,11 @@ test_that("Logger: logging to database works", {
 
     # Test Logger has pre-filled some information in the logs
     db_table_id <- id(db_table, conn)
-    expect_identical(as.character(dplyr::pull(log_table_id, "date")), timestamp)
+    expect_identical(
+      as.character(dplyr::pull(log_table_id, "date")),
+      timestamp,
+      info = glue::glue("log_table$date not set correctly on on {class(conn)}")
+    )
     if ("catalog" %in% purrr::pluck(db_table_id, "name", names)) {
       expect_identical(dplyr::pull(log_table_id, "catalog"), purrr::pluck(db_table_id, "name", "catalog"))
     }
@@ -196,7 +200,8 @@ test_that("Logger: logging to database works", {
     expect_identical(dplyr::pull(log_table_id, "table"), purrr::pluck(db_table_id, "name", "table"))
     expect_identical( # Transferring start_time to database can have some loss of information that we need to match
       format(as.POSIXct(dplyr::pull(log_table_id, "start_time")), "%F %R:%S"),
-      format(logger$start_time, "%F %R:%S")
+      format(logger$start_time, "%F %R:%S"),
+      info = glue::glue("log_table$start_time not set correctly on on {class(conn)}")
     )
 
 
