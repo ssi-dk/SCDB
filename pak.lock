@@ -1,7 +1,7 @@
 {
   "lockfile_version": 1,
   "os": "Ubuntu 24.04.3 LTS",
-  "r_version": "R version 4.5.1 (2025-06-13)",
+  "r_version": "R version 4.5.2 (2025-10-31)",
   "platform": "x86_64-pc-linux-gnu",
   "packages": [
     {
@@ -2010,7 +2010,7 @@
     {
       "ref": "installed::/usr/local/lib/R/library/codetools",
       "binary": true,
-      "built": "R 4.5.1; ; 2025-10-02 10:44:28 UTC; unix",
+      "built": "R 4.5.2; ; 2025-10-31 11:44:07 UTC; unix",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "dependencies": [],
       "direct": false,
@@ -2028,7 +2028,7 @@
       "params": [],
       "platform": "*",
       "repotype": "cran",
-      "rversion": "R 4.5.1",
+      "rversion": "R 4.5.2",
       "sources": [],
       "sysreqs_packages": {},
       "target": "src/contrib/codetools_0.2-20.tar.gz",
