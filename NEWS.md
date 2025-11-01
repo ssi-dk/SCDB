@@ -5,12 +5,14 @@
 * Bug fixes in `update_snapshot()`:
 
   * Fixed a bug where the process would unexpectedly hang (#192).
-  
+
   * `filter` is copied to _both_ source and target connections if on different connections (#201).
 
 * `get_tables()` no longer fails for some PostgresSQL configurations (#198).
 
 * `filter_keys()` no longer fails if filter list has zero rows (#200).
+
+* `db_timestamp()` now adds timezone information to `Date` inputs on `duckdb` backends (#202).
 
 
 # SCDB 0.5.1

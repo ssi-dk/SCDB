@@ -20,14 +20,13 @@ db_timestamp <- function(timestamp, conn = NULL) {
 
 #' @export
 db_timestamp.default <- function(timestamp, conn) {
-  if (inherits(timestamp, "POSIXt")) timestamp <- format(timestamp)
-  return(dbplyr::translate_sql(as.POSIXct(!!timestamp), con = conn))
+  # Wrap in `as.POSIXct()` call to trigger dbplyr translations
+  return(dbplyr::translate_sql(as.POSIXct(!!to_posix(timestamp)), con = conn))
 }
 
 #' @export
 db_timestamp.NULL <- function(timestamp, conn) {
-  if (inherits(timestamp, "POSIXt")) timestamp <- format(timestamp)
-  return(timestamp)
+  return(to_posix(timestamp))
 }
 
 #' @export
@@ -35,12 +34,21 @@ db_timestamp.SQLiteConnection <- function(timestamp, conn) {
   if (is.na(timestamp)) {
     return(dbplyr::translate_sql(NA_character_, con = conn))
   } else {
-    return(dbplyr::translate_sql(!!strftime(timestamp), con = conn))
+    return(dbplyr::translate_sql(!!as.character(to_posix(timestamp)), con = conn))
   }
 }
 
-#' @export
-db_timestamp.duckdb_connection <- function(timestamp, conn) {
-  if (inherits(timestamp, "character")) timestamp <- as.POSIXct(timestamp, tz = Sys.timezone()) # Add local tz
-  return(dbplyr::translate_sql(!!as.POSIXct(timestamp, tz = "UTC"), con = conn)) # duckdb only stores as UTC
+#' @noRd
+to_posix <- function(timestamp) {
+  # Cast to POSIXct with local timezone
+  lubridate::parse_date_time(
+    timestamp,
+    orders = c(
+      "ymdHMSOS",
+      "ymdHMS",
+      "ymdHM",
+      "ymd"
+    ),
+    tz = Sys.timezone()
+  )
 }

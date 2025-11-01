@@ -430,7 +430,7 @@ Logger <- R6::R6Class(                                                          
       start_format <- format(self$start_time, "%Y%m%d.%H%M")
       timestamp <- private$timestamp
 
-      if (is.character(timestamp)) timestamp <- as.Date(timestamp)
+      if (is.character(timestamp)) timestamp <- as.POSIXct(timestamp, tz = Sys.timezone())
       ts_format <- format(timestamp, "%Y_%m_%d")
       filename <- sprintf(
         "%s.%s.%s.log",
