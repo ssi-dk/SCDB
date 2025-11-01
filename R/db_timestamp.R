@@ -21,12 +21,7 @@ db_timestamp <- function(timestamp, conn = NULL) {
 #' @export
 db_timestamp.default <- function(timestamp, conn) {
   # Wrap in `as.POSIXct()` call to trigger dbplyr translations
-  return(
-    dbplyr::translate_sql(
-      as.POSIXct(!!to_posix(timestamp), tz = Sys.timezone()),
-      con = conn
-    )
-  )
+  return(dbplyr::translate_sql(as.POSIXct(!!to_posix(timestamp)), con = conn))
 }
 
 #' @export
