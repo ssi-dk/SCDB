@@ -12,7 +12,7 @@
 
 * `filter_keys()` no longer fails if filter list has zero rows (#200).
 
-* `db_timestamp()` now adds timezone information to `Date` inputs on `duckdb` backends (#202).
+* `db_timestamp()` now always casts to timestamp (#202).
 
 
 # SCDB 0.5.1
