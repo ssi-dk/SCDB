@@ -45,9 +45,18 @@ test_that("`db_timestamp()` maps identically for different inputs", {
       type_1 = slice_tss,
       type_2 = slice_tss
     ) |>
-      purrr::pmap(~ DBI::SQL(glue::glue("SELECT {db_timestamp(..1, conn)} = {db_timestamp(..2, conn)}")))
+      purrr::pmap(
+        ~ {
+          DBI::SQL(
+            paste0(
+              "SELECT ",
+              dbplyr::translate_sql(ifelse(!!db_timestamp(..1, conn) == !!db_timestamp(..2, conn), 1, 0), con = conn)
+            )
+          )
+        }
+      )
 
-    test_results <- purrr::map_lgl(queries, ~ DBI::dbGetQuery(conn, .)[[1]])
+    test_results <- purrr::map_lgl(queries, \(query)  DBI::dbGetQuery(conn, query)[[1]])
 
     labels <- tidyr::expand_grid(
       type_1 = names(slice_tss),
