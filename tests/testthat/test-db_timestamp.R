@@ -50,7 +50,7 @@ test_that("`db_timestamp()` maps identically for different inputs", {
           DBI::SQL(
             paste0(
               "SELECT ",
-              dbplyr::translate_sql(ifelse(!!db_timestamp(..1, conn) == !!db_timestamp(..2, conn), 1, 0), con = conn)
+              dbplyr::translate_sql(ifelse(!!db_timestamp(..1, conn) == !!db_timestamp(..2, conn), 1, 0), con = conn)   # nolint: redundant_ifelse_linter. We need to force SQL translation
             )
           )
         }
