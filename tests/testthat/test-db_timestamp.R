@@ -40,7 +40,7 @@ test_that("`db_timestamp()` maps identically for different inputs", {
 
   for (conn in get_test_conns()) {
 
-    # Get all combinations and generate SQL
+    # Get all combinations of slice_ts and generate SQL query to check for equivalence
     queries <- tidyr::expand_grid(
       type_1 = slice_tss,
       type_2 = slice_tss
@@ -56,6 +56,7 @@ test_that("`db_timestamp()` maps identically for different inputs", {
         }
       )
 
+    # Run queries
     test_results <- purrr::map_lgl(
       queries,
       function(query) {
@@ -63,6 +64,7 @@ test_that("`db_timestamp()` maps identically for different inputs", {
       }
     )
 
+    # Generate human-readable labels for each query for the test outputs
     labels <- tidyr::expand_grid(
       type_1 = names(slice_tss),
       type_2 = names(slice_tss)
