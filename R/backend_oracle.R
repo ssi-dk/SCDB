@@ -2,7 +2,15 @@
 
 #' @importClassesFrom RJDBC JDBCConnection
 #' @importClassesFrom odbc Oracle
-setClass("OracleJdbc", slots = list("jdbc_conn" = "JDBCConnection", "servername" = "character"), contains = "Oracle")
+setClass(
+  "OracleJdbc",
+  slots = list(
+    "jdbc_conn" = "JDBCConnection",
+    "servername" = "character",
+    "options" = "list"
+  ),
+  contains = "Oracle"
+)
 
 
 # DBI methods defined in RJDBC package
