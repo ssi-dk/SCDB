@@ -2326,7 +2326,7 @@
       "ref": "local::.",
       "binary": false,
       "dep_types": ["Depends", "Imports", "LinkingTo", "Suggests"],
-      "dependencies": ["checkmate", "DBI", "dbplyr", "dplyr", "glue", "openssl", "parallelly", "purrr", "rlang", "R6", "stringr", "tidyr", "tidyselect", "magrittr"],
+      "dependencies": ["checkmate", "DBI", "dbplyr", "dplyr", "glue", "openssl", "parallelly", "purrr", "rJava", "RJDBC", "rlang", "R6", "stringr", "tidyr", "tidyselect", "magrittr"],
       "direct": true,
       "directpkg": true,
       "install_args": "",
@@ -3564,6 +3564,81 @@
       "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/rex_1.2.1.tar.gz",
       "type": "standard",
       "version": "1.2.1",
+      "vignettes": false
+    },
+    {
+      "ref": "rJava",
+      "binary": true,
+      "dep_types": ["Depends", "Imports", "LinkingTo"],
+      "dependencies": [],
+      "direct": false,
+      "directpkg": false,
+      "install_args": "",
+      "license": "LGPL-2.1",
+      "metadata": {
+        "RemotePkgRef": "rJava",
+        "RemoteType": "standard",
+        "RemoteRef": "rJava",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
+        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+        "RemoteSha": "1.0-11"
+      },
+      "needscompilation": false,
+      "package": "rJava",
+      "params": [],
+      "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+      "repotype": "cran",
+      "rversion": "4.5",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/rJava_1.0-11.tar.gz",
+      "sysreqs": "Java JDK 1.2 or higher (for JRI/REngine JDK 1.4 or\n        higher), GNU make",
+      "sysreqs_packages": [
+        {
+          "sysreq": "gnumake",
+          "packages": "make",
+          "pre_install": {},
+          "post_install": {}
+        },
+        {
+          "sysreq": "java",
+          "packages": "default-jdk",
+          "pre_install": {},
+          "post_install": "R CMD javareconf"
+        }
+      ],
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/rJava_1.0-11.tar.gz",
+      "type": "standard",
+      "version": "1.0-11",
+      "vignettes": false
+    },
+    {
+      "ref": "RJDBC",
+      "binary": true,
+      "dep_types": ["Depends", "Imports", "LinkingTo"],
+      "dependencies": ["DBI", "rJava"],
+      "direct": false,
+      "directpkg": false,
+      "install_args": "",
+      "license": "MIT + file LICENSE",
+      "metadata": {
+        "RemotePkgRef": "RJDBC",
+        "RemoteType": "standard",
+        "RemoteRef": "RJDBC",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
+        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+        "RemoteSha": "0.2-10"
+      },
+      "needscompilation": false,
+      "package": "RJDBC",
+      "params": [],
+      "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+      "repotype": "cran",
+      "rversion": "4.5",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/RJDBC_0.2-10.tar.gz",
+      "sysreqs": "",
+      "sysreqs_packages": {},
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/RJDBC_0.2-10.tar.gz",
+      "type": "standard",
+      "version": "0.2-10",
       "vignettes": false
     },
     {
@@ -5097,8 +5172,8 @@
     "version": "24.04",
     "url": {},
     "pre_install": "apt-get -y update",
-    "install_scripts": "apt-get -y install libx11-dev git libcurl4-openssl-dev libssl-dev xz-utils make libgit2-dev zlib1g-dev pandoc unixodbc-dev libfreetype6-dev libjpeg-dev libpng-dev libtiff-dev libwebp-dev libpq-dev libicu-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev libxml2-dev",
-    "post_install": {},
-    "packages": ["libx11-dev", "git", "libcurl4-openssl-dev", "libssl-dev", "xz-utils", "make", "libgit2-dev", "zlib1g-dev", "pandoc", "unixodbc-dev", "libfreetype6-dev", "libjpeg-dev", "libpng-dev", "libtiff-dev", "libwebp-dev", "libpq-dev", "libicu-dev", "libfontconfig1-dev", "libfribidi-dev", "libharfbuzz-dev", "libxml2-dev"]
+    "install_scripts": "apt-get -y install libx11-dev git libcurl4-openssl-dev libssl-dev xz-utils make libgit2-dev zlib1g-dev pandoc unixodbc-dev libfreetype6-dev libjpeg-dev libpng-dev libtiff-dev libwebp-dev default-jdk libpq-dev libicu-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev libxml2-dev",
+    "post_install": "R CMD javareconf",
+    "packages": ["libx11-dev", "git", "libcurl4-openssl-dev", "libssl-dev", "xz-utils", "make", "libgit2-dev", "zlib1g-dev", "pandoc", "unixodbc-dev", "libfreetype6-dev", "libjpeg-dev", "libpng-dev", "libtiff-dev", "libwebp-dev", "default-jdk", "libpq-dev", "libicu-dev", "libfontconfig1-dev", "libfribidi-dev", "libharfbuzz-dev", "libxml2-dev"]
   }
 }
