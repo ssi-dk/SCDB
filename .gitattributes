@@ -1,0 +1,2 @@
+*.lock merge=ours
+*.rds merge=ours
