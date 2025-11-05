@@ -3040,7 +3040,7 @@
         "RemoteRef": "promises",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.4.0"
+        "RemoteSha": "1.5.0"
       },
       "needscompilation": false,
       "package": "promises",
@@ -3048,12 +3048,12 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/promises_1.4.0.tar.gz",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/promises_1.5.0.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/promises_1.4.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/promises_1.5.0.tar.gz",
       "type": "standard",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "vignettes": false
     },
     {
@@ -4881,7 +4881,7 @@
         "RemoteRef": "xfun",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "0.53"
+        "RemoteSha": "0.54"
       },
       "needscompilation": false,
       "package": "xfun",
@@ -4889,12 +4889,12 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/xfun_0.53.tar.gz",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/xfun_0.54.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/xfun_0.53.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/xfun_0.54.tar.gz",
       "type": "standard",
-      "version": "0.53",
+      "version": "0.54",
       "vignettes": false
     },
     {
