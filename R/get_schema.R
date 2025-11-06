@@ -108,6 +108,11 @@ get_schema.Oracle <- function(obj,  ...) {
 }
 
 #' @export
+get_schema.JDBCConnection <- function(obj,  ...) {
+  return(DBI::dbGetQuery(obj, "SELECT user FROM dual")$USER)
+}
+
+#' @export
 get_schema.NULL <- function(obj, ...) {
   return(NULL)
 }
