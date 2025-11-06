@@ -153,11 +153,16 @@ jobs:
 
             r <- DBI::dbSendQuery(conn, paste0("SELECT * FROM IRIS"))
 
-            print("RJDBC::dbOption(conn, \"fetch.lossy\", \"?\")")
-            print(RJDBC::dbOption(conn, "fetch.lossy", "?"))
+            #setGeneric("dbOption", function(dbo, name, default) default)
+            #setMethod("dbOption", "JDBCDriver", function(dbo, name, default) if (name %in% names(dbo@options)) dbo@options[[name]] else default)
+            #setMethod("dbOption", "JDBCConnection", function(dbo, name, default) if (name %in% names(dbo@options)) dbo@options[[name]] else default)
+            #setMethod("dbOption", "JDBCResult", function(dbo, name, default) dbOption(dbo@conn, name, default))
 
-            print("RJDBC::dbOption(r, \"fetch.lossy\", \"?\")")
-            print(RJDBC::dbOption(r, "fetch.lossy", "?"))
+            #print("dbOption(conn, \"fetch.lossy\", \"?\")")
+            #print(dbOption(conn, "fetch.lossy", "?"))
+
+            #print("dbOption(r, \"fetch.lossy\", \"?\")")
+            #print(dbOption(r, "fetch.lossy", "?"))
 
             out <- RJDBC::fetch(r, -1, block=2048L, use.label=TRUE, lossy=TRUE, tz="", posix.ts=TRUE)
             print(tibble::tibble(out))
@@ -169,11 +174,11 @@ jobs:
             devtools::load_all()
             # Try to connect
             conn <- tryCatch({
-              get_connection(
+              SCDB::get_connection(
                 drv,
-                "jdbc:oracle:thin:@${{ env.ORACLEHOST }}:1521/FREEPDB1",
-                "github_ci",
-                "github_ci"
+                url = "jdbc:oracle:thin:@${{ env.ORACLEHOST }}:1521/FREEPDB1",
+                user = "github_ci",
+                password = "github_ci"
               )
             }, error = function(e) {
               print(paste("Connection error:", e$message))
