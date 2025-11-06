@@ -12,6 +12,9 @@ setClass(
   contains = "Oracle"
 )
 
+#' @importClassesFrom RJDBC JDBCResult
+setClass("OracleJdbcResult", contains = "Oracle")
+
 
 # DBI methods defined in RJDBC package
 # dbOption
@@ -302,7 +305,7 @@ setMethod(
 setMethod(
   "dbFetch",
   signature(
-    res = "JDBCResult",
+    res = "OracleJdbcResult",
     n = "numeric"
   ),
   function(res, n, ...) {
@@ -315,10 +318,10 @@ setMethod(
 setMethod(
   "fetch",
   signature(
-    res = "JDBCResult"
+    res = "OracleJdbcResult"
   ),
   function(res, ...) {
-    rjdbc_fetch(res, n = -1, ...)
+    rjdbc_fetch(res, ...)
   }
 )
 
