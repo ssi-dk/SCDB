@@ -3102,7 +3102,7 @@
         "RemoteRef": "purrr",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.1.0"
+        "RemoteSha": "1.2.0"
       },
       "needscompilation": false,
       "package": "purrr",
@@ -3110,12 +3110,12 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/purrr_1.1.0.tar.gz",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/purrr_1.2.0.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/purrr_1.1.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/purrr_1.2.0.tar.gz",
       "type": "standard",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "vignettes": false
     },
     {
@@ -4242,7 +4242,7 @@
         "RemoteRef": "stringr",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.5.2"
+        "RemoteSha": "1.6.0"
       },
       "needscompilation": false,
       "package": "stringr",
@@ -4250,12 +4250,12 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/stringr_1.5.2.tar.gz",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/stringr_1.6.0.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/stringr_1.5.2.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/stringr_1.6.0.tar.gz",
       "type": "standard",
-      "version": "1.5.2",
+      "version": "1.6.0",
       "vignettes": false
     },
     {
