@@ -328,10 +328,10 @@ setMethod(
 
 # RJDBC has seemingly stopped active development but their latest version of
 # `fetch` is needed to retreive results from oracle in a meaningful manor.
-# We implement a minimal version of that function here
+# We implement a minimal (always lossy) version of that function here
 rjdbc_fetch <- function(
   res,
-  n,
+  n = -1,
   block = 2048L,
   ...
 ) {
@@ -365,21 +365,8 @@ rjdbc_fetch <- function(
       l[[i]] <- integer()
       rts[i] <- 2L
     } else if (ct == -5L || (ct >= 2L && ct <= 8L)) { ## BIGINT and various float/num types
-      ## some numeric types may exceed double precision (see #83)
-      ## those must be retrieved as strings
-      ##
-      ## check precision for NUMERIC/DECIMAL
-      cp <- switch(
-        as.character(ct),
-        `2`  = rJava::.jcall(res@md, "I", "getPrecision", i),
-        `3`  = rJava::.jcall(res@md, "I", "getPrecision", i),
-        `-5` = 20L, ## BIGINT
-        0L
-      )
-
       l[[i]] <- numeric()
       rts[i] <- 1L
-
     } else if (ct >= 91L && ct <= 93L) { ## DATE/TIME/TS
       l[[i]] <- as.POSIXct(numeric())
       rts[i] <- 3L
@@ -428,4 +415,6 @@ rjdbc_fetch <- function(
   # as.data.frame is expensive - create it on the fly from the list
   attr(l, "row.names") <- c(NA_integer_, length(l[[1]]))
   class(l) <- "data.frame"
+
+  return(l)
 }
