@@ -250,6 +250,47 @@ jobs:
             print("l")
             print(l)
 
+            rp <- res@env$pull
+            if (is.jnull(rp)) {
+              rp <- rJava::.jnew("info/urbanek/Rpackage/RJDBC/JDBCResultPull", rJava::.jcast(res@jr, "java/sql/ResultSet"), rJava::.jarray(as.integer(rts)))
+              res@env$pull <- rp
+            }
+            print("rp")
+            print(rp)
+
+            ret.fn <- list( ## retrieval functions for the different types
+                function(i) rJava::.jcall(rp, "[Ljava/lang/String;", "getStrings", i),
+                function(i) rJava::.jcall(rp, "[D", "getDoubles", i),
+                function(i) rJava::.jcall(rp, "[I", "getIntegers", i),
+                function(i) rJava::.jcall(rp, "[D", "getDoubles", i),
+                function(i) as.logical(rJava::.jcall(rp, "[I", "getIntegers", i)))
+
+            if (n < 0L) { ## infinite pull - collect (using pairlists) & join
+              stride <- 32768L  ## start fairly small to support tiny queries and increase later
+              while ((nrec <- rJava::.jcall(rp, "I", "fetch", stride, block)) > 0L) {
+                for (i in seq.int(cols))
+                  l[[i]] <- pairlist(l[[i]], ret.fn[[rts[i] + 1L]](i))
+                if (nrec < stride) break
+                stride <- 524288L # 512k
+              }
+              for (i in seq.int(cols)) l[[i]] <- unlist(l[[i]], TRUE, FALSE)
+            } else {
+              nrec <- rJava::.jcall(rp, "I", "fetch", as.integer(n), block)
+              for (i in seq.int(cols)) l[[i]] <- ret.fn[[rts[i] + 1L]](i)
+            }
+
+            print("l")
+            print(l)
+
+
+            ## unlisting can strip attrs so do POSIXct at the end for TSs
+            ts.col <- rts == 3L
+            if (any(ts.col)) for (i in which(ts.col)) l[[i]] <- .POSIXct(l[[i]], tz)
+            # as.data.frame is expensive - create it on the fly from the list
+            attr(l, "row.names") <- c(NA_integer_, length(l[[1]]))
+            class(l) <- "data.frame"
+            #.remap.types(l, cts)
+
 
             dbDisconnect(conn)
           '
