@@ -296,3 +296,16 @@ setMethod(
     DBI::dbSendQuery(conn@jdbc_conn, statement, ...)
   }
 )
+
+#' @importMethodsFrom DBI dbFetch
+#' @exportMethod dbFetch
+setMethod(
+  "dbFetch",
+  signature(
+    res = "JDBCResult",
+    n = "numeric"
+  ),
+  function(res, n, ...) {
+    RJDBC::fetch(res, n, ...)
+  }
+)
