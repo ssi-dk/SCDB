@@ -171,6 +171,8 @@ jobs:
             dbDisconnect(conn)
 
 
+            print(getMethod(RJDBC::fetch, signature(res = "JDBCResult", n = "numeric")))
+
             devtools::load_all()
             # Try to connect
             conn <- tryCatch({
