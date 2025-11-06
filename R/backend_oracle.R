@@ -67,7 +67,7 @@ setMethod(
     value = "data.frame"
   ),
   function(conn, name, value, ...) {
-    DBI::dbWriteTable(conn@jdbc_conn, id(conn@jdbc_conn, name), value, ...)
+    DBI::dbWriteTable(conn@jdbc_conn, id(name, conn@jdbc_conn), value, ...)
   }
 )
 
