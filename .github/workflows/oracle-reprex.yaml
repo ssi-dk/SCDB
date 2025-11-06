@@ -152,6 +152,13 @@ jobs:
 
 
             r <- DBI::dbSendQuery(conn, paste0("SELECT * FROM IRIS"))
+
+            print("RJDBC::dbOption(conn, \"fetch.lossy\", \"?\")")
+            print(RJDBC::dbOption(conn, "fetch.lossy", "?"))
+
+            print("RJDBC::dbOption(r, \"fetch.lossy\", \"?\")")
+            print(RJDBC::dbOption(r, "fetch.lossy", "?"))
+
             out <- RJDBC::fetch(r, -1, block=2048L, use.label=TRUE, lossy=TRUE, tz="", posix.ts=TRUE)
             print(tibble::tibble(out))
             DBI::dbClearResult(r)
