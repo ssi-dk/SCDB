@@ -13,7 +13,13 @@ setClass(
 )
 
 #' @importClassesFrom RJDBC JDBCResult
-setClass("OracleJdbcResult", contains = "Oracle")
+setClass(
+  "OracleJdbcResult",
+  slots = list(
+    "jdbc_result" = "JDBCResult"
+  ),
+  contains = "JDBCResult"
+)
 
 
 # DBI methods defined in RJDBC package
@@ -217,7 +223,14 @@ setMethod(
     statement = "character"
   ),
   function(conn, statement, ...) {
-    DBI::dbSendQuery(conn@jdbc_conn, statement)
+    res <- DBI::dbSendQuery(conn@jdbc_conn, statement)
+
+    result <- new(
+      "OracleJdbcResult",
+      jdbc_result = res
+    )
+
+    return(result)
   }
 )
 
@@ -296,7 +309,14 @@ setMethod(
     statement = "character"
   ),
   function(conn, statement, ...) {
-    DBI::dbSendQuery(conn@jdbc_conn, statement, ...)
+    res <- DBI::dbSendQuery(conn@jdbc_conn, statement, ...)
+
+    result <- new(
+      "OracleJdbcResult",
+      jdbc_result = res
+    )
+
+    return(result)
   }
 )
 
@@ -309,7 +329,7 @@ setMethod(
     n = "numeric"
   ),
   function(res, n, ...) {
-    rjdbc_fetch(res, n, ...)
+    rjdbc_fetch(res@jdbc_result, n, ...)
   }
 )
 
@@ -321,7 +341,7 @@ setMethod(
     res = "OracleJdbcResult"
   ),
   function(res, ...) {
-    rjdbc_fetch(res, ...)
+    rjdbc_fetch(res@jdbc_result, ...)
   }
 )
 
