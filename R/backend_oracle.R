@@ -318,8 +318,6 @@ setMethod(
     res = "JDBCResult"
   ),
   function(res, ...) {
-    stop(getMethod(RJDBC::fetch, signature(res = "JDBCResult", n = "numeric")))
-
     RJDBC::fetch(res, n = -1, ...)
   }
 )
