@@ -306,7 +306,7 @@ setMethod(
     n = "numeric"
   ),
   function(res, n, ...) {
-    RJDBC::fetch(res, n, ...)
+    rjdbc_fetch(res, n, ...)
   }
 )
 
@@ -318,6 +318,111 @@ setMethod(
     res = "JDBCResult"
   ),
   function(res, ...) {
-    RJDBC::fetch(res, n = -1, ...)
+    rjdbc_fetch(res, n = -1, ...)
   }
 )
+
+
+# RJDBC has seemingly stopped active development but their latest version of
+# `fetch` is needed to retreive results from oracle in a meaningful manor.
+# We implement a minimal version of that function here
+rjdbc_fetch <- function(
+  res,
+  n,
+  block = 2048L,
+  ...
+) {
+
+  cols <- rJava::.jcall(res@md, "I", "getColumnCount")
+  block <- as.integer(block)
+  if (length(block) != 1L) stop("invalid block size")
+  if (cols < 1L) return(NULL)
+  l <- vector("list", cols)
+  cts <- rep(0L, cols) ## column type (as per JDBC)
+  rts <- rep(0L, cols) ## retrieval types (0 = string, 1 = double, 2 = integer, 3 = POSIXct)
+  for (i in 1:cols) {
+    ## possible retrieval:
+    ## getDouble(), getTimestamp() and getString()
+    ## [NOTE: getBigDecimal() is native for all numeric() types]
+    ## could cehck java.sql.Timestamp which has .getTime() in millis
+    cts[i] <- ct <- rJava::.jcall(res@md, "I", "getColumnType", i)
+    l[[i]] <- character()
+    ## NOTE: this is also needed in dbColumnInfo() - see also JDBC.types
+    ## -7 BIT, -6 TINYINT, 5 SMALLINT, 4 INTEGER, -5 BIGINT
+    ## 6 FLOAT, 7 REAL, 8 DOUBLE, 2 NUMERIC, 3 DECIMAL
+    ## 1 CHAR, 12 VARCHAR, -1 LONGVARCHAR
+    ## 91 DATE, 92 TIME, 93 TIMESTAMP
+    ## -2 BINARY, -3 VARBINARY, -4 LONGVARBINARY
+    ## 0 NULL, 1111 OTHER, 2000 JAVA_OBJECT
+    ## 16 BOOLEAN, 1.8+: 2013 TIME_WITH_TIMEZONE,
+    ## 2014 TIMESTAMP_WITH_TIMEZONE
+    ##
+    ## integer-compatible typse
+    if (ct == 4L || ct == 5L || ct == -6L) {
+      l[[i]] <- integer()
+      rts[i] <- 2L
+    } else if (ct == -5L || (ct >= 2L && ct <= 8L)) { ## BIGINT and various float/num types
+      ## some numeric types may exceed double precision (see #83)
+      ## those must be retrieved as strings
+      ##
+      ## check precision for NUMERIC/DECIMAL
+      cp <- switch(
+        as.character(ct),
+        `2`  = rJava::.jcall(res@md, "I", "getPrecision", i),
+        `3`  = rJava::.jcall(res@md, "I", "getPrecision", i),
+        `-5` = 20L, ## BIGINT
+        0L
+      )
+
+      l[[i]] <- numeric()
+      rts[i] <- 1L
+
+    } else if (ct >= 91L && ct <= 93L) { ## DATE/TIME/TS
+      l[[i]] <- as.POSIXct(numeric())
+      rts[i] <- 3L
+    } else if (ct == -7L) { ## BIT
+      l[[i]] <- logical()
+      rts[i] <- 4L
+    }
+    names(l)[i] <- rJava::.jcall(res@md, "S", "getColumnLabel", i)
+  }
+
+  rp <- res@env$pull
+  if (rJava::is.jnull(rp)) {
+    rp <- rJava::.jnew(
+      "info/urbanek/Rpackage/RJDBC/JDBCResultPull",
+      rJava::.jcast(res@jr, "java/sql/ResultSet"),
+      rJava::.jarray(as.integer(rts))
+    )
+    res@env$pull <- rp
+  }
+
+  ret_fn <- list( ## retrieval functions for the different types
+    function(i) rJava::.jcall(rp, "[Ljava/lang/String;", "getStrings", i),
+    function(i) rJava::.jcall(rp, "[D", "getDoubles", i),
+    function(i) rJava::.jcall(rp, "[I", "getIntegers", i),
+    function(i) rJava::.jcall(rp, "[D", "getDoubles", i),
+    function(i) as.logical(rJava::.jcall(rp, "[I", "getIntegers", i))
+  )
+
+  if (n < 0L) { ## infinite pull - collect (using pairlists) & join
+    stride <- 32768L  ## start fairly small to support tiny queries and increase later
+    while ((nrec <- rJava::.jcall(rp, "I", "fetch", stride, block)) > 0L) {
+      for (i in seq.int(cols)) {
+        l[[i]] <- pairlist(l[[i]], ret_fn[[rts[i] + 1L]](i))
+      }
+      if (nrec < stride) break
+      stride <- 524288L # 512k
+    }
+    for (i in seq.int(cols)) l[[i]] <- unlist(l[[i]], TRUE, FALSE)
+  } else {
+    nrec <- rJava::.jcall(rp, "I", "fetch", as.integer(n), block)
+    for (i in seq.int(cols)) l[[i]] <- ret_fn[[rts[i] + 1L]](i)
+  }
+  ## unlisting can strip attrs so do POSIXct at the end for TSs
+  ts_col <- rts == 3L
+  if (any(ts_col)) for (i in which(ts_col)) l[[i]] <- as.POSIXct(l[[i]])
+  # as.data.frame is expensive - create it on the fly from the list
+  attr(l, "row.names") <- c(NA_integer_, length(l[[1]]))
+  class(l) <- "data.frame"
+}
