@@ -171,7 +171,6 @@ jobs:
             dbDisconnect(conn)
 
 
-            print(getMethod(RJDBC::fetch, signature(res = "JDBCResult", n = "numeric")))
 
             devtools::load_all()
             # Try to connect
@@ -198,6 +197,9 @@ jobs:
             print(tibble::tibble(DBI::dbReadTable(conn, "MTCARS")))
 
             r <- DBI::dbSendQuery(conn, paste0("SELECT * FROM MTCARS"))
+            print(getMethod(RJDBC::fetch, signature(res = class(r), n = "numeric")))
+
+
             out <- RJDBC::fetch(r)
             print(tibble::tibble(out))
             DBI::dbClearResult(r)
