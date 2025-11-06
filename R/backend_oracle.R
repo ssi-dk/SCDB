@@ -309,3 +309,15 @@ setMethod(
     RJDBC::fetch(res, n, ...)
   }
 )
+
+#' @importMethodsFrom DBI fetch
+#' @exportMethod fetch
+setMethod(
+  "fetch",
+  signature(
+    res = "JDBCResult"
+  ),
+  function(res, ...) {
+    RJDBC::fetch(res, n = -1, ...)
+  }
+)
