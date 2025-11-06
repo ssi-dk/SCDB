@@ -345,6 +345,19 @@ setMethod(
   }
 )
 
+#' @importMethodsFrom DBI dbClearResult
+#' @exportMethod dbClearResult
+setMethod(
+  "dbClearResult",
+  signature(
+    res = "OracleJdbcResult"
+  ),
+  function(res, ...) {
+    callNextMethod(res@jdbc_result, ...)
+  }
+)
+
+
 
 # RJDBC has seemingly stopped active development but their latest version of
 # `fetch` is needed to retreive results from oracle in a meaningful manor.
