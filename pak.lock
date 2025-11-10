@@ -2836,7 +2836,7 @@
       "ref": "pkgdown",
       "binary": true,
       "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "dependencies": ["bslib", "callr", "cli", "desc", "downlit", "fontawesome", "fs", "httr2", "jsonlite", "openssl", "purrr", "ragg", "rlang", "rmarkdown", "tibble", "whisker", "withr", "xml2", "yaml"],
+      "dependencies": ["bslib", "callr", "cli", "desc", "downlit", "fontawesome", "fs", "httr2", "jsonlite", "lifecycle", "openssl", "purrr", "ragg", "rlang", "rmarkdown", "tibble", "whisker", "withr", "xml2", "yaml"],
       "direct": false,
       "directpkg": false,
       "install_args": "",
@@ -2847,7 +2847,7 @@
         "RemoteRef": "pkgdown",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "2.1.3"
+        "RemoteSha": "2.2.0"
       },
       "needscompilation": false,
       "package": "pkgdown",
@@ -2855,7 +2855,7 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/pkgdown_2.1.3.tar.gz",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/pkgdown_2.2.0.tar.gz",
       "sysreqs": "pandoc",
       "sysreqs_packages": [
         {
@@ -2865,9 +2865,9 @@
           "post_install": {}
         }
       ],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/pkgdown_2.1.3.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/pkgdown_2.2.0.tar.gz",
       "type": "standard",
-      "version": "2.1.3",
+      "version": "2.2.0",
       "vignettes": false
     },
     {
