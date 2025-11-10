@@ -6,6 +6,7 @@ setClass(
   "OracleJdbc",
   slots = list(
     "jdbc_conn" = "JDBCConnection",
+    "jc" = "jobjRef",
     "servername" = "character",
     "options" = "list"
   ),
