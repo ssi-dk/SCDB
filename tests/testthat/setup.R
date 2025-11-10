@@ -1,32 +1,16 @@
-# Ensure the target connections are empty and configured correctly
-coll <- checkmate::makeAssertCollection()
-conns <- get_test_conns()
-for (conn_id in seq_along(conns)) {
-
-  conn <- conns[[conn_id]]
-
-  # Ensure connections are valid
-  if (is.null(conn) || !DBI::dbIsValid(conn)) {
-    coll$push(glue::glue("Connection could not be made to backend ({names(conns)[[conn_id]]})."))
-  }
-
-
-  # Check schemas are configured correctly
-  if (!schema_exists(conn, "test") && names(conns)[conn_id] != "SQLite") {
-    coll$push(glue::glue("Tests require the schema 'test' to exist in connection ({names(conns)[[conn_id]]})."))
-  }
-
-  if (!schema_exists(conn, "test.one") && names(conns)[conn_id] != "SQLite") {
-    coll$push(glue::glue("Tests require the schema 'test.one' to exist in connection ({names(conns)[[conn_id]]})."))
-  }
-
-  DBI::dbDisconnect(conn)
-}
-checkmate::reportAssertions(coll)
-
-
 # Configure the data bases
 for (conn in get_test_conns()) {
+
+  print("## Debug flag 1")
+
+  # Debug
+  purrr::map(
+    c("test.mtcars", "__mtcars", "__mtcars_historical", "test.mtcars_modified", "mtcars_modified",
+      "test.SCDB_logs", "test.SCDB_logger", "test.SCDB_tmp1", "test.SCDB_tmp2", "test.SCDB_tmp3",
+      "test.SCDB_t0", "test.SCDB_t1", "test.SCDB_t2"
+    ),
+    ~ id(., conn)
+  )
 
   # Start with some clean up
   purrr::walk(
@@ -37,11 +21,13 @@ for (conn in get_test_conns()) {
     ~ if (DBI::dbExistsTable(conn, id(., conn))) DBI::dbRemoveTable(conn, id(., conn))
   )
 
+  print("## Debug flag 2")
   purrr::walk(
     c(DBI::Id(schema = "test", table = "one.two"), DBI::Id(schema = "test.one", table = "two")),
     ~ if (schema_exists(conn, .@name[["schema"]]) && DBI::dbExistsTable(conn, .)) DBI::dbRemoveTable(conn, .)
   )
 
+  print("## Debug flag 3")
   # Copy mtcars to conn
   dplyr::copy_to(
     conn, mtcars %>% dplyr::mutate(name = rownames(mtcars)),
@@ -51,6 +37,7 @@ for (conn in get_test_conns()) {
     analyze = FALSE
   )
 
+  print("## Debug flag 4")
   dplyr::copy_to(
     conn, mtcars %>% dplyr::mutate(name = rownames(mtcars)),
     name = id("__mtcars", conn),
@@ -59,6 +46,7 @@ for (conn in get_test_conns()) {
     analyze = FALSE
   )
 
+  print("## Debug flag 5")
   dplyr::copy_to(
     conn,
     mtcars %>%
@@ -74,6 +62,7 @@ for (conn in get_test_conns()) {
     analyze = FALSE
   )
 
+  print("## Debug flag 6")
   dplyr::copy_to(
     conn,
     mtcars %>%
@@ -88,8 +77,10 @@ for (conn in get_test_conns()) {
     overwrite = TRUE,
     analyze = FALSE
   )
+  print("## Debug flag 7")
 
   DBI::dbDisconnect(conn)
+  print("## Debug flag 8")
 }
 
 

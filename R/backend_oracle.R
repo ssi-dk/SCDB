@@ -380,6 +380,7 @@ rjdbc_fetch <- function(
   l <- vector("list", cols)
   cts <- rep(0L, cols) ## column type (as per JDBC)
   rts <- rep(0L, cols) ## retrieval types (0 = string, 1 = double, 2 = integer, 3 = POSIXct)
+
   for (i in 1:cols) {
     ## possible retrieval:
     ## getDouble(), getTimestamp() and getString()
@@ -414,6 +415,9 @@ rjdbc_fetch <- function(
     names(l)[i] <- rJava::.jcall(res@md, "S", "getColumnLabel", i)
   }
 
+  print("rts")
+  print(rts)
+
   rp <- res@env$pull
   if (rJava::is.jnull(rp)) {
     rp <- rJava::.jnew(
@@ -436,6 +440,12 @@ rjdbc_fetch <- function(
     stride <- 32768L  ## start fairly small to support tiny queries and increase later
     while ((nrec <- rJava::.jcall(rp, "I", "fetch", stride, block)) > 0L) {
       for (i in seq.int(cols)) {
+        print("rts[i] + 1L")
+        print(rts[i] + 1L)
+
+        print("ret_fn[[rts[i] + 1L]]")
+        print(ret_fn[[rts[i] + 1L]])
+
         l[[i]] <- pairlist(l[[i]], ret_fn[[rts[i] + 1L]](i))
       }
       if (nrec < stride) break
