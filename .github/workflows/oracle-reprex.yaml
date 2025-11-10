@@ -114,95 +114,116 @@ jobs:
           echo 'Sys.setenv(JAVA_HOME = Sys.getenv("JAVA_HOME"))' > ~/.Rprofile
           echo 'Sys.setenv(CLASSPATH = "/usr/lib/oracle/ojdbc8.jar")' >> ~/.Rprofile
 
-          # Test the JDBC connection
-          Rscript -e '
-            library(RJDBC)
+      - name: Test Oracle conection
+        shell: Rscript {0}
+        run: |
+          library(RJDBC)
 
-            # Print Java version and classpath to debug
-            print(system("java -version", intern = TRUE))
-            print(Sys.getenv("CLASSPATH"))
-            print(Sys.getenv("JAVA_HOME"))
+          # Print Java version and classpath to debug
+          print(system("java -version", intern = TRUE))
+          print(Sys.getenv("CLASSPATH"))
+          print(Sys.getenv("JAVA_HOME"))
 
-            # Initialize the Oracle driver explicitly
-            drv <- JDBC("oracle.jdbc.OracleDriver", "/usr/lib/oracle/ojdbc8.jar")
-            print("JDBC driver initialized successfully")
-
-            # Try to connect
-            conn <- tryCatch({
-              dbConnect(
-                drv,
-                "jdbc:oracle:thin:@${{ env.ORACLEHOST }}:1521/FREEPDB1",
-                "github_ci",
-                "github_ci"
-              )
-            }, error = function(e) {
-              print(paste("Connection error:", e$message))
-              NULL
-            })
-
-            if (!is.null(conn)) {
-              print("Successfully connected to Oracle!")
-            }
-
-            data <- dplyr::rename_with(iris, ~ toupper(gsub(".", "_", .x, fixed = TRUE)))
-
-            DBI::dbWriteTable(conn, "IRIS", data)
-
-            print(tibble::tibble(DBI::dbReadTable(conn, "IRIS")))
+          # Initialize the Oracle driver explicitly
+          drv <- JDBC("oracle.jdbc.OracleDriver", "/usr/lib/oracle/ojdbc8.jar")
+          print("JDBC driver initialized successfully")
 
 
-            r <- DBI::dbSendQuery(conn, paste0("SELECT * FROM IRIS"))
+          devtools::load_all()
+          # Try to connect
+          conn <- tryCatch({
+            SCDB::get_connection(
+              drv,
+              url = "jdbc:oracle:thin:@${{ env.ORACLEHOST }}:1521/FREEPDB1",
+              user = "github_ci",
+              password = "github_ci"
+            )
+          }, error = function(e) {
+            print(paste("Connection error:", e$message))
+            NULL
+          })
 
-            #setGeneric("dbOption", function(dbo, name, default) default)
-            #setMethod("dbOption", "JDBCDriver", function(dbo, name, default) if (name %in% names(dbo@options)) dbo@options[[name]] else default)
-            #setMethod("dbOption", "JDBCConnection", function(dbo, name, default) if (name %in% names(dbo@options)) dbo@options[[name]] else default)
-            #setMethod("dbOption", "JDBCResult", function(dbo, name, default) dbOption(dbo@conn, name, default))
+          if (!is.null(conn)) {
+            print("Successfully connected to Oracle!")
+          }
 
-            #print("dbOption(conn, \"fetch.lossy\", \"?\")")
-            #print(dbOption(conn, "fetch.lossy", "?"))
+          print("class(conn)")
+          print(class(conn))
 
-            #print("dbOption(r, \"fetch.lossy\", \"?\")")
-            #print(dbOption(r, "fetch.lossy", "?"))
+          data <- dplyr::rename_with(iris, ~ toupper(gsub(".", "_", .x, fixed = TRUE)))
 
-            out <- RJDBC::fetch(r, -1, block=2048L, use.label=TRUE, lossy=TRUE, tz="", posix.ts=TRUE)
-            print(tibble::tibble(out))
-            DBI::dbClearResult(r)
+          DBI::dbWriteTable(conn, "IRIS", data)
 
-            dbDisconnect(conn)
+          print(tibble::tibble(DBI::dbReadTable(conn, "IRIS")))
 
+          r <- DBI::dbSendQuery(conn, paste0("SELECT * FROM IRIS"))
+          print("class(r)")
+          print(class(r))
 
-
-            devtools::load_all()
-            # Try to connect
-            conn <- tryCatch({
-              SCDB::get_connection(
-                drv,
-                url = "jdbc:oracle:thin:@${{ env.ORACLEHOST }}:1521/FREEPDB1",
-                user = "github_ci",
-                password = "github_ci"
-              )
-            }, error = function(e) {
-              print(paste("Connection error:", e$message))
-              NULL
-            })
-
-            if (!is.null(conn)) {
-              print("Successfully connected to Oracle!")
-            }
-
-            data <- dplyr::rename_with(mtcars, ~ toupper(gsub(".", "_", .x, fixed = TRUE)))
-
-            DBI::dbWriteTable(conn, "MTCARS", data)
-
-            print(tibble::tibble(DBI::dbReadTable(conn, "MTCARS")))
-
-            r <- DBI::dbSendQuery(conn, paste0("SELECT * FROM MTCARS"))
-            print(getMethod(RJDBC::fetch, signature(res = class(r), n = "numeric")))
+          out <- DBI::fetch(r)
+          print(tibble::tibble(out))
+          DBI::dbClearResult(r)
 
 
-            out <- RJDBC::fetch(r)
-            print(tibble::tibble(out))
-            DBI::dbClearResult(r)
+          # Start with some clean up
+          purrr::walk(
+            c("test.mtcars", "__mtcars", "__mtcars_historical", "test.mtcars_modified", "mtcars_modified",
+              "test.SCDB_logs", "test.SCDB_logger", "test.SCDB_tmp1", "test.SCDB_tmp2", "test.SCDB_tmp3",
+              "test.SCDB_t0", "test.SCDB_t1", "test.SCDB_t2"
+            ),
+            ~ if (DBI::dbExistsTable(conn, id(., conn))) DBI::dbRemoveTable(conn, id(., conn))
+          )
 
-            dbDisconnect(conn)
-          '
+          purrr::walk(
+            c(DBI::Id(schema = "test", table = "one.two"), DBI::Id(schema = "test.one", table = "two")),
+            ~ if (schema_exists(conn, .@name[["schema"]]) && DBI::dbExistsTable(conn, .)) DBI::dbRemoveTable(conn, .)
+          )
+
+          # Copy mtcars to conn
+          dplyr::copy_to(
+            conn, mtcars %>% dplyr::mutate(name = rownames(mtcars)),
+            name = id("test.mtcars", conn),
+            temporary = FALSE,
+            overwrite = TRUE,
+            analyze = FALSE
+          )
+
+          dplyr::copy_to(
+            conn, mtcars %>% dplyr::mutate(name = rownames(mtcars)),
+            name = id("__mtcars", conn),
+            temporary = FALSE,
+            overwrite = TRUE,
+            analyze = FALSE
+          )
+
+          dplyr::copy_to(
+            conn,
+            mtcars %>%
+              dplyr::mutate(name = rownames(mtcars)) %>%
+              digest_to_checksum() %>%
+              dplyr::mutate(
+                from_ts = as.POSIXct("2020-01-01 09:00:00"),
+                until_ts = as.POSIXct(NA)
+              ),
+            name = id("__mtcars_historical", conn),
+            temporary = FALSE,
+            overwrite = TRUE,
+            analyze = FALSE
+          )
+
+          dplyr::copy_to(
+            conn,
+            mtcars %>%
+              dplyr::mutate(name = rownames(mtcars)) %>%
+              digest_to_checksum() %>%
+              dplyr::mutate(
+                from_ts = as.POSIXct("2020-01-01 09:00:00"),
+                until_ts = as.POSIXct(NA)
+              ),
+            name = id("MTCARS", conn),
+            temporary = FALSE,
+            overwrite = TRUE,
+            analyze = FALSE
+          )
+
+          dbDisconnect(conn)
