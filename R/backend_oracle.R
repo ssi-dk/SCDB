@@ -225,10 +225,11 @@ setMethod(
   function(conn, statement, ...) {
     res <- DBI::dbSendQuery(conn@jdbc_conn, statement)
 
-    result <- new(
-      "OracleJdbcResult",
-      jdbc_result = res
-    )
+    result <- new("OracleJdbcResult")
+
+    for (slot_name in slotNames(res)) {
+      slot(result, slot_name) <- slot(res, slot_name)
+    }
 
     return(result)
   }
@@ -311,10 +312,11 @@ setMethod(
   function(conn, statement, ...) {
     res <- DBI::dbSendQuery(conn@jdbc_conn, statement, ...)
 
-    result <- new(
-      "OracleJdbcResult",
-      jdbc_result = res
-    )
+    result <- new("OracleJdbcResult")
+
+    for (slot_name in slotNames(res)) {
+      slot(result, slot_name) <- slot(res, slot_name)
+    }
 
     return(result)
   }
@@ -329,7 +331,20 @@ setMethod(
     n = "numeric"
   ),
   function(res, n, ...) {
-    rjdbc_fetch(res@jdbc_result, n, ...)
+    rjdbc_fetch(res, n, ...)
+  }
+)
+
+#' @importMethodsFrom DBI fetch
+#' @exportMethod fetch
+setMethod(
+  "fetch",
+  signature(
+    res = "OracleJdbcResult",
+    n = "numeric"
+  ),
+  function(res, n, ...) {
+    rjdbc_fetch(res, n, ...)
   }
 )
 
@@ -341,9 +356,10 @@ setMethod(
     res = "OracleJdbcResult"
   ),
   function(res, ...) {
-    rjdbc_fetch(res@jdbc_result, ...)
+    rjdbc_fetch(res, n = -1, ...)
   }
 )
+
 
 #' @importMethodsFrom DBI dbClearResult
 #' @exportMethod dbClearResult
@@ -353,14 +369,14 @@ setMethod(
     res = "OracleJdbcResult"
   ),
   function(res, ...) {
-    callNextMethod(res@jdbc_result, ...)
+    callNextMethod(res, ...)
   }
 )
 
 
 
 # RJDBC has seemingly stopped active development but their latest version of
-# `fetch` is needed to retreive results from oracle in a meaningful manor.
+# `fetch` is needed to retrieve results from oracle in a meaningful manor.
 # We implement a minimal (always lossy) version of that function here
 rjdbc_fetch <- function(
   res,
@@ -380,7 +396,7 @@ rjdbc_fetch <- function(
     ## possible retrieval:
     ## getDouble(), getTimestamp() and getString()
     ## [NOTE: getBigDecimal() is native for all numeric() types]
-    ## could cehck java.sql.Timestamp which has .getTime() in millis
+    ## could check java.sql.Timestamp which has .getTime() in millis
     cts[i] <- ct <- rJava::.jcall(res@md, "I", "getColumnType", i)
     l[[i]] <- character()
     ## NOTE: this is also needed in dbColumnInfo() - see also JDBC.types
@@ -393,7 +409,7 @@ rjdbc_fetch <- function(
     ## 16 BOOLEAN, 1.8+: 2013 TIME_WITH_TIMEZONE,
     ## 2014 TIMESTAMP_WITH_TIMEZONE
     ##
-    ## integer-compatible typse
+    ## integer-compatible types
     if (ct == 4L || ct == 5L || ct == -6L) {
       l[[i]] <- integer()
       rts[i] <- 2L
