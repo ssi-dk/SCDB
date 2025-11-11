@@ -323,19 +323,6 @@ setMethod(
   }
 )
 
-#' @importMethodsFrom DBI dbFetch
-#' @exportMethod dbFetch
-setMethod(
-  "dbFetch",
-  signature(
-    res = "OracleJdbcResult",
-    n = "numeric"
-  ),
-  function(res, n, ...) {
-    rjdbc_fetch(res, n, ...)
-  }
-)
-
 #' @importMethodsFrom DBI fetch
 #' @exportMethod fetch
 setMethod(
