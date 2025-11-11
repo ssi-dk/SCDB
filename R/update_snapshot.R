@@ -177,7 +177,11 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
   ### Filter and compute checksums for incoming data
   if (!is.null(filters) && !identical(dbplyr::remote_con(filters), dbplyr::remote_con(.data))) {
-    filters_src <- dplyr::copy_to(dbplyr::remote_con(.data), filters, name = unique_table_name("SCDB_update_snapshot_filter"))
+    filters_src <- dplyr::copy_to(
+      dbplyr::remote_con(.data),
+      filters,
+      name = unique_table_name("SCDB_update_snapshot_filter")
+    )
     defer_db_cleanup(filters_src)
   } else {
     filters_src <- filters
