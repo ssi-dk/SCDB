@@ -71,8 +71,6 @@ test_that("`db_timestamp()` maps identically for different inputs", {
     ) %>%
       purrr::pmap_chr(~ glue::glue("{.x} / {.y}"))
 
-    failed <- purrr::discard(stats::setNames(test_results, labels), ~ .)
-
     # All db_timestamps should map to the same value
     expect_identical(
       data.frame(
