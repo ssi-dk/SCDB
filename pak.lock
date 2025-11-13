@@ -3825,7 +3825,7 @@
         "RemoteRef": "RSQLite",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "2.4.3"
+        "RemoteSha": "2.4.4"
       },
       "needscompilation": false,
       "package": "RSQLite",
@@ -3833,12 +3833,12 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/RSQLite_2.4.3.tar.gz",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/RSQLite_2.4.4.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/RSQLite_2.4.3.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/RSQLite_2.4.4.tar.gz",
       "type": "standard",
-      "version": "2.4.3",
+      "version": "2.4.4",
       "vignettes": false
     },
     {
