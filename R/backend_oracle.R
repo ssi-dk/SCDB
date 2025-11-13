@@ -432,7 +432,7 @@ rjdbc_fetch <- function(
     function(i) rJava::.jcall(rp, "[Ljava/lang/String;", "getStrings", i),
     function(i) rJava::.jcall(rp, "[D", "getDoubles", i),
     function(i) rJava::.jcall(rp, "[I", "getIntegers", i),
-    function(i) rJava::.jcall(rp, "[D", "getDoubles", i),
+    function(i) rJava::.jcall(rp, "[Ljava/lang/String;", "getStrings", i),
     function(i) as.logical(rJava::.jcall(rp, "[I", "getIntegers", i))
   )
 
