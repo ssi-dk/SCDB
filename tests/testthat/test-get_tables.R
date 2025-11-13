@@ -101,13 +101,6 @@ test_that("get_tables() works with temporary tables", {
     checkmate::expect_subset(c(table_1, table_2, tmp_name), db_table_names)
 
     connection_clean_up(conn)
-
-    print("DBI::dbIsValid(conn)")
-    print(DBI::dbIsValid(conn))
-    print("DBI::dbExistsTable(conn, tmp_id)")
-    print(DBI::dbExistsTable(conn, tmp_id))
-    print("DBI::dbRemoveTable(conn, tmp_id)")
-    print(DBI::dbRemoveTable(conn, tmp_id))
   }
 })
 
