@@ -62,7 +62,7 @@ setClass(
 
 #' @export
 db_collect.OracleJdbc <- function(con, sql, n = -1, ...) {
-  dbGetQuery(con, sql, n, ...)
+  DBI::dbGetQuery(con, sql, n, ...)
 }
 
 
