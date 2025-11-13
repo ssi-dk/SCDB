@@ -164,7 +164,6 @@ jobs:
           print(tibble::tibble(out))
           DBI::dbClearResult(r)
 
-          print("## Debug flag 1")
 
           # Start with some clean up
           purrr::walk(
@@ -175,13 +174,11 @@ jobs:
             ~ if (DBI::dbExistsTable(conn, id(., conn))) DBI::dbRemoveTable(conn, id(., conn))
           )
 
-          print("## Debug flag 2")
           purrr::walk(
             c(DBI::Id(schema = "test", table = "one.two"), DBI::Id(schema = "test.one", table = "two")),
             ~ if (schema_exists(conn, .@name[["schema"]]) && DBI::dbExistsTable(conn, .)) DBI::dbRemoveTable(conn, .)
           )
 
-          print("## Debug flag 3")
           # Copy mtcars to conn
           dplyr::copy_to(
             conn, mtcars %>% dplyr::mutate(name = rownames(mtcars)),
@@ -191,7 +188,6 @@ jobs:
             analyze = FALSE
           )
 
-          print("## Debug flag 4")
           dplyr::copy_to(
             conn, mtcars %>% dplyr::mutate(name = rownames(mtcars)),
             name = id("__mtcars", conn),
@@ -200,7 +196,6 @@ jobs:
             analyze = FALSE
           )
 
-          print("## Debug flag 5")
           dplyr::copy_to(
             conn,
             mtcars %>%
@@ -216,7 +211,6 @@ jobs:
             analyze = FALSE
           )
 
-          print("## Debug flag 6")
           dplyr::copy_to(
             conn,
             mtcars %>%
@@ -231,7 +225,5 @@ jobs:
             overwrite = TRUE,
             analyze = FALSE
           )
-          print("## Debug flag 7")
 
           DBI::dbDisconnect(conn)
-          print("## Debug flag 8")
