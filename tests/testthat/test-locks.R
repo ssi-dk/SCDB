@@ -5,7 +5,7 @@ test_that("lock helpers works in default and test schema", {
       # Define the testing tables
       test_table_id <- id(paste(c(schema, "mtcars"), collapse = "."), conn)
       lock_table_id <- id(paste(c(schema, "locks"), collapse = "."), conn)
-
+      stop(lock_table_id)
 
       ## Check we can add locks
       expect_true(lock_table(conn, db_table = test_table_id, schema = schema))
