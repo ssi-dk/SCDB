@@ -5,6 +5,7 @@ test_that("`defer_db_cleanup()` deletes tables", {
     stop(table_id)
 
     # Table exists
+    expect_true(DBI::dbExistsTable(conn, "__mtcars_defer_db_cleanup"))
     expect_true(DBI::dbExistsTable(conn, table_id))
 
     # Marking for deletion does not delete the table
