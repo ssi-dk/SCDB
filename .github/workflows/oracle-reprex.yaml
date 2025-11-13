@@ -1,0 +1,229 @@
+on:
+  push
+
+
+jobs:
+  code-coverage-oracle:
+    name: "🧪 Tests: Oracle Database (Experimental)"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    services:
+      oracledb:
+        image: gvenzl/oracle-free:latest
+        env:
+          APP_USER: "github_ci"
+          APP_USER_PASSWORD: "github_ci"
+          ORACLE_PASSWORD: "github_ci"
+        ports:
+          - 1521:1521
+        options: >-
+          --health-cmd healthcheck.sh
+          --health-interval 20s
+          --health-timeout 10s
+          --health-retries 10
+
+    env:
+      BACKEND: Oracle
+      BACKEND_DRV: RJDBC::JDBC
+      BACKEND_ARGS: ''
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: 🔧 Set environment variables
+        run: |
+          ORACLEHOST=localhost
+
+          echo "ORACLEHOST=${ORACLEHOST}" >> $GITHUB_ENV
+
+          CONN_ARGS_JSON="{
+            \"Oracle\": {
+              \"driverClass\": \"oracle.jdbc.OracleDriver\",
+              \"classPath\": \"/usr/lib/oracle/ojdbc8.jar\",
+              \"url\": \"jdbc:oracle:thin:@${ORACLEHOST}:1521/FREEPDB1\",
+              \"user\": \"github_ci\",
+              \"password\": \"github_ci\"
+            }
+          }"
+
+          echo "CONN_ARGS_JSON<<EOF" >> $GITHUB_ENV
+          echo $CONN_ARGS_JSON >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+
+      - name: 🔧 Install Oracle JDBC driver
+        run: |
+          sudo apt-get update
+          # Create directory for the driver with sudo
+          sudo mkdir -p /usr/lib/oracle
+
+          # Download the Oracle JDBC driver directly from Maven Central with sudo
+          sudo curl -o /usr/lib/oracle/ojdbc8.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc8/21.5.0.0/ojdbc8-21.5.0.0.jar
+
+          # Verify the driver was downloaded successfully
+          if sudo test -f "/usr/lib/oracle/ojdbc8.jar"; then
+            echo "Oracle JDBC driver downloaded successfully"
+            sudo ls -la /usr/lib/oracle/
+            # Make the JAR file readable by everyone
+            sudo chmod 644 /usr/lib/oracle/ojdbc8.jar
+          else
+            echo "Failed to download Oracle JDBC driver"
+            exit 1
+          fi
+
+      - name: 🔧 Set up Oracle JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: oracle
+          java-version: 25
+
+      - name: 🔧 Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+          use-public-rspm: true
+
+      - name: 🔧 Install R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            local::.
+            any::pak
+            any::jsonlite
+            any::rcmdcheck
+            any::devtools
+            any::lintr
+            any::covr
+            any::roxygen2
+            any::pkgdown
+            any::rmarkdown
+            any::styler
+          needs: build, check, coverage, roxygen2, lint, website
+
+      - name: 🔧 Configure Java for R
+        run: |
+          # Create .Rprofile to automatically set Java classpath
+          echo 'Sys.setenv(JAVA_HOME = Sys.getenv("JAVA_HOME"))' > ~/.Rprofile
+          echo 'Sys.setenv(CLASSPATH = "/usr/lib/oracle/ojdbc8.jar")' >> ~/.Rprofile
+
+      - name: Test Oracle conection
+        shell: Rscript {0}
+        run: |
+          library(RJDBC)
+
+          # Print Java version and classpath to debug
+          print(system("java -version", intern = TRUE))
+          print(Sys.getenv("CLASSPATH"))
+          print(Sys.getenv("JAVA_HOME"))
+
+          # Initialize the Oracle driver explicitly
+          drv <- JDBC("oracle.jdbc.OracleDriver", "/usr/lib/oracle/ojdbc8.jar")
+          print("JDBC driver initialized successfully")
+
+
+          devtools::load_all()
+          # Try to connect
+          conn <- tryCatch({
+            SCDB::get_connection(
+              drv,
+              url = "jdbc:oracle:thin:@${{ env.ORACLEHOST }}:1521/FREEPDB1",
+              user = "github_ci",
+              password = "github_ci"
+            )
+          }, error = function(e) {
+            print(paste("Connection error:", e$message))
+            NULL
+          })
+
+          if (!is.null(conn)) {
+            print("Successfully connected to Oracle!")
+          }
+
+          print("class(conn)")
+          print(class(conn))
+
+          data <- dplyr::rename_with(iris, ~ toupper(gsub(".", "_", .x, fixed = TRUE)))
+
+          DBI::dbWriteTable(conn, "IRIS", data)
+
+          print(tibble::tibble(DBI::dbReadTable(conn, "IRIS")))
+
+          r <- DBI::dbSendQuery(conn, paste0("SELECT * FROM IRIS"))
+          print("class(r)")
+          print(class(r))
+
+          out <- DBI::fetch(r)
+          print(tibble::tibble(out))
+          DBI::dbClearResult(r)
+
+
+          # Start with some clean up
+          purrr::walk(
+            c("test.mtcars", "__mtcars", "__mtcars_historical", "test.mtcars_modified", "mtcars_modified",
+              "test.SCDB_logs", "test.SCDB_logger", "test.SCDB_tmp1", "test.SCDB_tmp2", "test.SCDB_tmp3",
+              "test.SCDB_t0", "test.SCDB_t1", "test.SCDB_t2"
+            ),
+            ~ if (DBI::dbExistsTable(conn, id(., conn))) DBI::dbRemoveTable(conn, id(., conn))
+          )
+
+          purrr::walk(
+            c(DBI::Id(schema = "test", table = "one.two"), DBI::Id(schema = "test.one", table = "two")),
+            ~ if (schema_exists(conn, .@name[["schema"]]) && DBI::dbExistsTable(conn, .)) DBI::dbRemoveTable(conn, .)
+          )
+
+          # Copy mtcars to conn
+          dplyr::copy_to(
+            conn, mtcars %>% dplyr::mutate(name = rownames(mtcars)),
+            name = id("test.mtcars", conn),
+            temporary = FALSE,
+            overwrite = TRUE,
+            analyze = FALSE
+          )
+
+          dplyr::copy_to(
+            conn, mtcars %>% dplyr::mutate(name = rownames(mtcars)),
+            name = id("__mtcars", conn),
+            temporary = FALSE,
+            overwrite = TRUE,
+            analyze = FALSE
+          )
+
+          dplyr::copy_to(
+            conn,
+            mtcars %>%
+              dplyr::mutate(name = rownames(mtcars)) %>%
+              digest_to_checksum() %>%
+              dplyr::mutate(
+                from_ts = as.POSIXct("2020-01-01 09:00:00"),
+                until_ts = as.POSIXct(NA)
+              ),
+            name = id("__mtcars_historical", conn),
+            temporary = FALSE,
+            overwrite = TRUE,
+            analyze = FALSE
+          )
+
+          dplyr::copy_to(
+            conn,
+            mtcars %>%
+              dplyr::mutate(name = rownames(mtcars)) %>%
+              digest_to_checksum() %>%
+              dplyr::mutate(
+                from_ts = as.POSIXct("2020-01-01 09:00:00"),
+                until_ts = as.POSIXct(NA)
+              ),
+            name = id("MTCARS", conn),
+            temporary = FALSE,
+            overwrite = TRUE,
+            analyze = FALSE
+          )
+
+          DBI::dbDisconnect(conn)

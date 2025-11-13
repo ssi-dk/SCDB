@@ -7,15 +7,6 @@
 #'   Certain drivers may use credentials stored in a file, such as ~/.pgpass (PostgreSQL).
 #' @param drv (`DBIDriver(1)` or `DBIConnection(1)`)\cr
 #'   The driver for the connection (defaults to `SQLiteDriver`).
-#' @param dbname (`character(1)`)\cr
-#'   Name of the database located at the host.
-#' @param bigint (`character(1)`)\cr
-#'   The datatype to convert integers to.
-#'   Support depends on the database backend.
-#' @param timezone (`character(1)`)\cr
-#'   Sets the timezone of DBI::dbConnect(). Must be in [OlsonNames()].
-#' @param timezone_out (`character(1)`)\cr
-#'   Sets the timezone_out of DBI::dbConnect(). Must be in [OlsonNames()].
 #' @param ...
 #'  Additional parameters sent to DBI::dbConnect().
 #' @return
@@ -38,6 +29,11 @@ get_connection <- function(drv, ...) {
 }
 
 #' @rdname get_connection
+#' @param dbname (`character(1)`)\cr
+#'   Name of the database located at the host.
+#' @param bigint (`character(1)`)\cr
+#'   The datatype to convert integers to.
+#'   Support depends on the database backend.
 #' @seealso [RSQLite::SQLite]
 #' @export
 get_connection.SQLiteDriver <- function(
@@ -74,12 +70,16 @@ get_connection.SQLiteDriver <- function(
 #'   The ip of the host to connect to.
 #' @param port (`numeric(1)` or `character(1)`)\cr
 #'   Host port to connect to.
-#' @param password (`character(1)`)\cr
-#'   Password to login with.
 #' @param user (`character(1)`)\cr
 #'   Username to login with.
+#' @param password (`character(1)`)\cr
+#'   Password to login with.
 #' @param check_interrupts (`logical(1)`)\cr
 #'   Should user interrupts be checked during the query execution?
+#' @param timezone (`character(1)`)\cr
+#'   Sets the timezone of DBI::dbConnect(). Must be in [OlsonNames()].
+#' @param timezone_out (`character(1)`)\cr
+#'   Sets the timezone_out of DBI::dbConnect(). Must be in [OlsonNames()].
 #' @seealso [RPostgres::Postgres]
 #' @export
 get_connection.PqDriver <- function(
@@ -87,8 +87,8 @@ get_connection.PqDriver <- function(
     dbname = NULL,
     host = NULL,
     port = NULL,
-    password = NULL,
     user = NULL,
+    password = NULL,
     ...,
     bigint = c("integer", "bigint64", "numeric", "character"),
     check_interrupts = TRUE,
@@ -113,8 +113,8 @@ get_connection.PqDriver <- function(
     port <- as.numeric(port)
   }
   checkmate::assert_numeric(port, null.ok = TRUE, add = coll)
-  checkmate::assert_character(password, null.ok = TRUE, add = coll)
   checkmate::assert_character(user, null.ok = TRUE, add = coll)
+  checkmate::assert_character(password, null.ok = TRUE, add = coll)
   checkmate::assert_logical(check_interrupts, add = coll)
   checkmate::assert_choice(timezone, OlsonNames(), null.ok = TRUE, add = coll)
   checkmate::assert_choice(timezone_out, OlsonNames(), null.ok = TRUE, add = coll)
@@ -205,6 +205,70 @@ get_connection.duckdb_driver <- function(
   # Connect, don't check if connection can be established
   # (we are getting errors when testing for connectability first)
   return(do.call(DBI::dbConnect, args = args))
+}
+
+
+#' @rdname get_connection
+#' @param driverClass (`character(1)`)\cr
+#'   The name of the JDBC driver to load.
+#' @param classPath (`character(1)`)\cr
+#'   The path to the JDBC driver.
+#' @param url (`character(1)`)\cr
+#'   The source to connect to.
+#' @seealso [RJDBC::JDBC]
+#' @export
+get_connection.JDBCDriver <- function(
+    drv,
+    driverClass = NULL,                                                                                                 # nolint: object_name_linter
+    classPath = NULL,                                                                                                   # nolint: object_name_linter
+    url = NULL,
+    user = NULL,
+    password = NULL,
+    ...) {
+
+  # Store the given arguments
+  args <- as.list(rlang::current_env()) %>%
+    utils::modifyList(list(...)) %>%
+    unlist()
+  args <- args[match(unique(names(args)), names(args))]
+
+  # Check arguments
+  coll <- checkmate::makeAssertCollection()
+  checkmate::assert_character(driverClass, null.ok = TRUE, add = coll)
+  checkmate::assert_character(classPath, null.ok = TRUE, add = coll)
+  checkmate::assert_character(url, null.ok = TRUE, add = coll)
+  checkmate::assert_character(user, null.ok = TRUE, add = coll)
+  checkmate::assert_character(password, null.ok = TRUE, add = coll)
+  checkmate::reportAssertions(coll)
+
+  # Check if connection can be established given these settings
+  status <- do.call(DBI::dbCanConnect, args = args)
+  if (!status) stop(attr(status, "reason"), call. = FALSE)
+
+  # Connect
+  conn <- do.call(DBI::dbConnect, args = args)
+
+  # Assume connection is to an Oracle data base
+  rlang::warn(
+    message = paste0(
+      "Connections of class '",
+      class(conn),
+      "' are experimental and are assumed to be connections to Oracle databases"
+    ),
+    .frequency = "regularly",
+    .frequency_id = "JDBC means Oracle warning",
+    call. = FALSE
+  )
+
+  conn <- new(
+    "OracleJdbc",
+    jdbc_conn = conn,
+    jc = conn@jc,
+    servername = url,
+    options = list("fetch.lossy" = TRUE)
+  )
+
+  return(conn)
 }
 
 #' @rdname get_connection

@@ -2326,7 +2326,7 @@
       "ref": "local::.",
       "binary": false,
       "dep_types": ["Depends", "Imports", "LinkingTo", "Suggests"],
-      "dependencies": ["checkmate", "DBI", "dbplyr", "dplyr", "glue", "openssl", "parallelly", "purrr", "rlang", "R6", "stringr", "tidyr", "tidyselect", "magrittr"],
+      "dependencies": ["checkmate", "DBI", "dbplyr", "dplyr", "glue", "openssl", "parallelly", "purrr", "rJava", "RJDBC", "rlang", "R6", "stringr", "tidyr", "tidyselect", "magrittr"],
       "direct": true,
       "directpkg": true,
       "install_args": "",
@@ -2836,7 +2836,7 @@
       "ref": "pkgdown",
       "binary": true,
       "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "dependencies": ["bslib", "callr", "cli", "desc", "downlit", "fontawesome", "fs", "httr2", "jsonlite", "openssl", "purrr", "ragg", "rlang", "rmarkdown", "tibble", "whisker", "withr", "xml2", "yaml"],
+      "dependencies": ["bslib", "callr", "cli", "desc", "downlit", "fontawesome", "fs", "httr2", "jsonlite", "lifecycle", "openssl", "purrr", "ragg", "rlang", "rmarkdown", "tibble", "whisker", "withr", "xml2", "yaml"],
       "direct": false,
       "directpkg": false,
       "install_args": "",
@@ -2847,7 +2847,7 @@
         "RemoteRef": "pkgdown",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "2.1.3"
+        "RemoteSha": "2.2.0"
       },
       "needscompilation": false,
       "package": "pkgdown",
@@ -2855,7 +2855,7 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/pkgdown_2.1.3.tar.gz",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/pkgdown_2.2.0.tar.gz",
       "sysreqs": "pandoc",
       "sysreqs_packages": [
         {
@@ -2865,9 +2865,9 @@
           "post_install": {}
         }
       ],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/pkgdown_2.1.3.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/pkgdown_2.2.0.tar.gz",
       "type": "standard",
-      "version": "2.1.3",
+      "version": "2.2.0",
       "vignettes": false
     },
     {
@@ -3102,7 +3102,7 @@
         "RemoteRef": "purrr",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.1.0"
+        "RemoteSha": "1.2.0"
       },
       "needscompilation": false,
       "package": "purrr",
@@ -3110,12 +3110,12 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/purrr_1.1.0.tar.gz",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/purrr_1.2.0.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/purrr_1.1.0.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/purrr_1.2.0.tar.gz",
       "type": "standard",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "vignettes": false
     },
     {
@@ -3567,6 +3567,81 @@
       "vignettes": false
     },
     {
+      "ref": "rJava",
+      "binary": true,
+      "dep_types": ["Depends", "Imports", "LinkingTo"],
+      "dependencies": [],
+      "direct": false,
+      "directpkg": false,
+      "install_args": "",
+      "license": "LGPL-2.1",
+      "metadata": {
+        "RemotePkgRef": "rJava",
+        "RemoteType": "standard",
+        "RemoteRef": "rJava",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
+        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+        "RemoteSha": "1.0-11"
+      },
+      "needscompilation": false,
+      "package": "rJava",
+      "params": [],
+      "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+      "repotype": "cran",
+      "rversion": "4.5",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/rJava_1.0-11.tar.gz",
+      "sysreqs": "Java JDK 1.2 or higher (for JRI/REngine JDK 1.4 or\n        higher), GNU make",
+      "sysreqs_packages": [
+        {
+          "sysreq": "gnumake",
+          "packages": "make",
+          "pre_install": {},
+          "post_install": {}
+        },
+        {
+          "sysreq": "java",
+          "packages": "default-jdk",
+          "pre_install": {},
+          "post_install": "R CMD javareconf"
+        }
+      ],
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/rJava_1.0-11.tar.gz",
+      "type": "standard",
+      "version": "1.0-11",
+      "vignettes": false
+    },
+    {
+      "ref": "RJDBC",
+      "binary": true,
+      "dep_types": ["Depends", "Imports", "LinkingTo"],
+      "dependencies": ["DBI", "rJava"],
+      "direct": false,
+      "directpkg": false,
+      "install_args": "",
+      "license": "MIT + file LICENSE",
+      "metadata": {
+        "RemotePkgRef": "RJDBC",
+        "RemoteType": "standard",
+        "RemoteRef": "RJDBC",
+        "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
+        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+        "RemoteSha": "0.2-10"
+      },
+      "needscompilation": false,
+      "package": "RJDBC",
+      "params": [],
+      "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+      "repotype": "cran",
+      "rversion": "4.5",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/RJDBC_0.2-10.tar.gz",
+      "sysreqs": "",
+      "sysreqs_packages": {},
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/RJDBC_0.2-10.tar.gz",
+      "type": "standard",
+      "version": "0.2-10",
+      "vignettes": false
+    },
+    {
       "ref": "rlang",
       "binary": true,
       "dep_types": ["Depends", "Imports", "LinkingTo"],
@@ -3750,7 +3825,7 @@
         "RemoteRef": "RSQLite",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "2.4.3"
+        "RemoteSha": "2.4.4"
       },
       "needscompilation": false,
       "package": "RSQLite",
@@ -3758,12 +3833,12 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/RSQLite_2.4.3.tar.gz",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/RSQLite_2.4.4.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/RSQLite_2.4.3.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/RSQLite_2.4.4.tar.gz",
       "type": "standard",
-      "version": "2.4.3",
+      "version": "2.4.4",
       "vignettes": false
     },
     {
@@ -4167,7 +4242,7 @@
         "RemoteRef": "stringr",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.5.2"
+        "RemoteSha": "1.6.0"
       },
       "needscompilation": false,
       "package": "stringr",
@@ -4175,12 +4250,12 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/stringr_1.5.2.tar.gz",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/stringr_1.6.0.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/stringr_1.5.2.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/stringr_1.6.0.tar.gz",
       "type": "standard",
-      "version": "1.5.2",
+      "version": "1.6.0",
       "vignettes": false
     },
     {
@@ -5097,8 +5172,8 @@
     "version": "24.04",
     "url": {},
     "pre_install": "apt-get -y update",
-    "install_scripts": "apt-get -y install libx11-dev git libcurl4-openssl-dev libssl-dev xz-utils make libgit2-dev zlib1g-dev pandoc unixodbc-dev libfreetype6-dev libjpeg-dev libpng-dev libtiff-dev libwebp-dev libpq-dev libicu-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev libxml2-dev",
-    "post_install": {},
-    "packages": ["libx11-dev", "git", "libcurl4-openssl-dev", "libssl-dev", "xz-utils", "make", "libgit2-dev", "zlib1g-dev", "pandoc", "unixodbc-dev", "libfreetype6-dev", "libjpeg-dev", "libpng-dev", "libtiff-dev", "libwebp-dev", "libpq-dev", "libicu-dev", "libfontconfig1-dev", "libfribidi-dev", "libharfbuzz-dev", "libxml2-dev"]
+    "install_scripts": "apt-get -y install libx11-dev git libcurl4-openssl-dev libssl-dev xz-utils make libgit2-dev zlib1g-dev pandoc unixodbc-dev libfreetype6-dev libjpeg-dev libpng-dev libtiff-dev libwebp-dev default-jdk libpq-dev libicu-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev libxml2-dev",
+    "post_install": "R CMD javareconf",
+    "packages": ["libx11-dev", "git", "libcurl4-openssl-dev", "libssl-dev", "xz-utils", "make", "libgit2-dev", "zlib1g-dev", "pandoc", "unixodbc-dev", "libfreetype6-dev", "libjpeg-dev", "libpng-dev", "libtiff-dev", "libwebp-dev", "default-jdk", "libpq-dev", "libicu-dev", "libfontconfig1-dev", "libfribidi-dev", "libharfbuzz-dev", "libxml2-dev"]
   }
 }

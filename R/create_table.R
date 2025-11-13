@@ -13,6 +13,7 @@
 #'   create_table(mtcars, conn = conn, db_table = "mtcars")
 #'
 #'   close_connection(conn)
+#' @importMethodsFrom odbc sqlCreateTable
 #' @export
 create_table <- function(.data, conn = NULL, db_table, ...) {                                                           # nolint: function_argument_linter
 

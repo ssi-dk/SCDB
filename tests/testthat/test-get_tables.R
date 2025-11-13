@@ -80,6 +80,7 @@ test_that("get_tables() works with temporary tables", {
 
     # Create temporary table
     tmp <- dplyr::copy_to(conn, mtcars, "__mtcars_2", temporary = TRUE)
+    defer_db_cleanup(tmp)
     tmp_id <- id(tmp)
     tmp_name <- paste(tmp_id@name["schema"], tmp_id@name["table"], sep = ".")
 
@@ -110,6 +111,7 @@ test_that("get_tables() works without temporary tables", {
 
     # Create temporary table
     tmp <- dplyr::copy_to(conn, mtcars, "__mtcars_2", temporary = TRUE)
+    defer_db_cleanup(tmp)
     tmp_id <- id(tmp)
     tmp_name <- paste(tmp_id@name["schema"], tmp_id@name["table"], sep = ".")
 

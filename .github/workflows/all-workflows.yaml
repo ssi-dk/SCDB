@@ -31,9 +31,10 @@ jobs:
       # We pass information about the triggering event
       event_name: ${{ github.event_name }}
       run_id: ${{ github.run_id }}
-      backend_exclude: oracle
 
       # code-coverage creates data bases for the tests. Here you can specify the schemas you need for the workflow
+      backend_exclude: sqlite,duckdb,postgres,mssql
       schemas: test,test.one
       check_postgres_logs: false
+      skip: R-CMD-check,styler,render-readme,pkgdown,update-lockfile,update-cache
     secrets: inherit

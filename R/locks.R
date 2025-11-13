@@ -58,7 +58,8 @@ lock_table <- function(conn, db_table, schema = NULL) {
         "pid" = numeric(0)
       ),
       db_lock_table_id,
-      temporary = FALSE
+      temporary = FALSE,
+      analyze = FALSE
     )
 
     if (inherits(conn, "PqConnection")) { # PostgreSQL needs an index for rows_insert
@@ -89,7 +90,8 @@ lock_table <- function(conn, db_table, schema = NULL) {
           "pid" = Sys.getpid(),
           "lock_start" = as.numeric(Sys.time())
         ),
-        name = unique_table_name("SCDB_lock")
+        name = unique_table_name("SCDB_lock"),
+        analyze = FALSE
       )
       defer_db_cleanup(lock)
 
@@ -174,7 +176,8 @@ unlock_table <- function(conn, db_table, schema = NULL, pid = Sys.getpid()) {
           "table" = purrr::pluck(db_table_id, "name", "table"),
           "pid" = pid
         ),
-        name = unique_table_name("SCDB_lock")
+        name = unique_table_name("SCDB_lock"),
+        analyze = FALSE
       )
       defer_db_cleanup(lock)
 
