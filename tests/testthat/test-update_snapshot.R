@@ -599,7 +599,7 @@ test_that("update_snapshot() works with across connection", {
     DBI::dbRemoveTable(target_conn, target_table)
     connection_clean_up(target_conn)
     rm(logger)
-    invisible(gc())
+    expect_no_warning(invisible(gc()))
   }
   connection_clean_up(source_conn)
 
@@ -644,7 +644,7 @@ test_that("update_snapshot() works with across connection", {
 
     connection_clean_up(source_conn)
     rm(logger)
-    invisible(gc())
+    expect_no_warning(invisible(gc()))
   }
   connection_clean_up(target_conn)
 })

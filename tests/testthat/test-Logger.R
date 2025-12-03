@@ -28,7 +28,7 @@ test_that("Logger: logging to console works", {
 
   # Clean up
   rm(logger)
-  invisible(gc())
+  expect_no_warning(invisible(gc()))
 })
 
 
@@ -46,7 +46,7 @@ test_that("Logger: all (non-warning, non-error) logging to console can be disabl
 
   # Clean up
   rm(logger)
-  invisible(gc())
+  expect_no_warning(invisible(gc()))
 })
 
 
@@ -66,7 +66,7 @@ test_that("Logger: logging to file works", {
       expect_identical(logger$log_path, "local/path")
 
       rm(logger)
-      invisible(gc())
+      expect_no_warning(invisible(gc()))
     }
   )
 
@@ -108,7 +108,7 @@ test_that("Logger: logging to file works", {
 
   file.remove(logger$log_realpath)
   rm(logger)
-  invisible(gc())
+  expect_no_warning(invisible(gc()))
 
 
   # Create logger and test configuration
@@ -146,7 +146,7 @@ test_that("Logger: logging to file works", {
   # Clean up
   file.remove(logger$log_realpath)
   rm(logger)
-  invisible(gc())
+  expect_no_warning(invisible(gc()))
 })
 
 
@@ -164,7 +164,7 @@ test_that("Logger: log_tbl is not set when conn = NULL", {
 
   # Clean up
   rm(logger)
-  invisible(gc())
+  expect_no_warning(invisible(gc()))
 })
 
 
@@ -212,7 +212,7 @@ test_that("Logger: logging to database works", {
 
     # Clean up
     rm(logger)
-    invisible(gc())
+    expect_no_warning(invisible(gc()))
 
     connection_clean_up(conn)
   }
@@ -282,7 +282,7 @@ test_that("Logger: all logging simultaneously works", {
     # Clean up
     file.remove(logger$log_realpath)
     rm(logger)
-    invisible(gc())
+    expect_no_warning(invisible(gc()))
 
     connection_clean_up(conn)
   }
@@ -334,7 +334,7 @@ test_that("Logger: file logging stops if file exists", {
   # Clean up
   file.remove(logger1$log_realpath)
   rm(logger1, logger2)
-  invisible(gc())
+  expect_no_warning(invisible(gc()))
 })
 
 
@@ -407,7 +407,7 @@ test_that("Logger: log_file is NULL in database if not writing to file", {
 
     # Clean up
     rm(logger)
-    invisible(gc())
+    expect_no_warning(invisible(gc()))
 
     connection_clean_up(conn)
   }
@@ -432,7 +432,7 @@ test_that("Logger: $finalize() handles log table is at some point deleted", {
 
     # Clean up
     rm(logger)
-    invisible(gc())
+    expect_no_warning(invisible(gc()))
 
     connection_clean_up(conn)
   }
@@ -468,7 +468,7 @@ test_that("Logger: custom timestamp_format works", {
 
   # Clean up
   rm(logger)
-  invisible(gc())
+  expect_no_warning(invisible(gc()))
 })
 
 
@@ -496,7 +496,7 @@ test_that("LoggerNull: no console logging occurs", {
 
   # Clean up
   rm(logger)
-  invisible(gc())
+  expect_no_warning(invisible(gc()))
 })
 
 
@@ -511,7 +511,7 @@ test_that("LoggerNull: no file logging occurs", {
 
   # Clean up
   rm(logger)
-  invisible(gc())
+  expect_no_warning(invisible(gc()))
 })
 
 
@@ -537,7 +537,7 @@ test_that("LoggerNull: no database logging occurs", {
 
     # Clean up
     rm(logger)
-    invisible(gc())
+    expect_no_warning(invisible(gc()))
 
     close_connection(conn)
   }
