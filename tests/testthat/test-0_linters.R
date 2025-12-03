@@ -61,7 +61,8 @@ test_that("param_and_field_linter works", {
 test_that("documentation_template_linter works", {
   skip_if_not_installed("lintr")
   skip_if_not_installed("devtools")
-  skip_if(!interactive(), "Skip if running in R_check")
+  skip_if(!interactive(), "Skip if running in non-interactive mode")
+  skip_if(testthat::testing_package() == "SCDB", "Documentation templates not in SCDB")
   skip_on_cran()
 
   lintr::expect_lint(
