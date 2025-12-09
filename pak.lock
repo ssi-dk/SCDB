@@ -267,7 +267,7 @@
         "RemoteRef": "broom",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.0.10"
+        "RemoteSha": "1.0.11"
       },
       "needscompilation": false,
       "package": "broom",
@@ -275,12 +275,12 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/broom_1.0.10.tar.gz",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/broom_1.0.11.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/broom_1.0.10.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/broom_1.0.11.tar.gz",
       "type": "standard",
-      "version": "1.0.10",
+      "version": "1.0.11",
       "vignettes": false
     },
     {
@@ -1761,7 +1761,7 @@
         "RemoteRef": "htmltools",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "0.5.8.1"
+        "RemoteSha": "0.5.9"
       },
       "needscompilation": false,
       "package": "htmltools",
@@ -1769,12 +1769,12 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/htmltools_0.5.8.1.tar.gz",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/htmltools_0.5.9.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/htmltools_0.5.8.1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/htmltools_0.5.9.tar.gz",
       "type": "standard",
-      "version": "0.5.8.1",
+      "version": "0.5.9",
       "vignettes": false
     },
     {
@@ -1810,11 +1810,12 @@
     },
     {
       "ref": "httpuv",
-      "binary": true,
+      "binary": false,
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "dependencies": ["later", "promises", "R6", "Rcpp"],
       "direct": false,
       "directpkg": false,
+      "filesize": 1890033,
       "install_args": "",
       "license": "GPL (>= 2) | file LICENSE",
       "metadata": {
@@ -1822,15 +1823,16 @@
         "RemoteType": "standard",
         "RemoteRef": "httpuv",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
-        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+        "RemotePkgPlatform": "source",
         "RemoteSha": "1.6.16"
       },
-      "needscompilation": false,
+      "needscompilation": true,
       "package": "httpuv",
       "params": [],
-      "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+      "platform": "source",
       "repotype": "cran",
-      "rversion": "4.5",
+      "rversion": "*",
+      "sha256": "51f341aef9499411b4c446205c87d56dcd9e03e5e9ca2a54b33f70a67bed2f64",
       "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/httpuv_1.6.16.tar.gz",
       "sysreqs": "GNU make, zlib",
       "sysreqs_packages": [
@@ -1847,7 +1849,7 @@
           "post_install": {}
         }
       ],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/httpuv_1.6.16.tar.gz",
+      "target": "src/contrib/httpuv_1.6.16.tar.gz",
       "type": "standard",
       "version": "1.6.16",
       "vignettes": false
@@ -1898,7 +1900,7 @@
         "RemoteRef": "httr2",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.2.1"
+        "RemoteSha": "1.2.2"
       },
       "needscompilation": false,
       "package": "httr2",
@@ -1906,21 +1908,22 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/httr2_1.2.1.tar.gz",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/httr2_1.2.2.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/httr2_1.2.1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/httr2_1.2.2.tar.gz",
       "type": "standard",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "vignettes": false
     },
     {
       "ref": "hunspell",
-      "binary": true,
+      "binary": false,
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "dependencies": ["digest", "Rcpp"],
       "direct": false,
       "directpkg": false,
+      "filesize": 3214078,
       "install_args": "",
       "license": "GPL-2 | LGPL-2.1 | MPL-1.1",
       "metadata": {
@@ -1928,19 +1931,20 @@
         "RemoteType": "standard",
         "RemoteRef": "hunspell",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
-        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+        "RemotePkgPlatform": "source",
         "RemoteSha": "3.0.6"
       },
-      "needscompilation": false,
+      "needscompilation": true,
       "package": "hunspell",
       "params": [],
-      "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+      "platform": "source",
       "repotype": "cran",
-      "rversion": "4.5",
+      "rversion": "*",
+      "sha256": "4023df2eef4e081eac52efa1ecccc4b31f7941439ce276f4094b9d5a02787535",
       "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/hunspell_3.0.6.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/hunspell_3.0.6.tar.gz",
+      "target": "src/contrib/hunspell_3.0.6.tar.gz",
       "type": "standard",
       "version": "3.0.6",
       "vignettes": false
@@ -2040,7 +2044,7 @@
       "ref": "isoband",
       "binary": true,
       "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "dependencies": [],
+      "dependencies": ["cli", "rlang"],
       "direct": false,
       "directpkg": false,
       "install_args": "",
@@ -2051,7 +2055,7 @@
         "RemoteRef": "isoband",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "0.2.7"
+        "RemoteSha": "0.3.0"
       },
       "needscompilation": false,
       "package": "isoband",
@@ -2059,12 +2063,12 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/isoband_0.2.7.tar.gz",
-      "sysreqs": "C++11",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/isoband_0.3.0.tar.gz",
+      "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/isoband_0.2.7.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/isoband_0.3.0.tar.gz",
       "type": "standard",
-      "version": "0.2.7",
+      "version": "0.3.0",
       "vignettes": false
     },
     {
@@ -2200,11 +2204,12 @@
     },
     {
       "ref": "later",
-      "binary": true,
+      "binary": false,
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "dependencies": ["Rcpp", "rlang"],
       "direct": false,
       "directpkg": false,
+      "filesize": 70679,
       "install_args": "",
       "license": "MIT + file LICENSE",
       "metadata": {
@@ -2212,19 +2217,20 @@
         "RemoteType": "standard",
         "RemoteRef": "later",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
-        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+        "RemotePkgPlatform": "source",
         "RemoteSha": "1.4.4"
       },
-      "needscompilation": false,
+      "needscompilation": true,
       "package": "later",
       "params": [],
-      "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+      "platform": "source",
       "repotype": "cran",
-      "rversion": "4.5",
+      "rversion": "*",
+      "sha256": "18cec083cdbc3e5e9a491fa10af5cfcabb9cd91231e4e8a18e58e8651da7aa80",
       "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/later_1.4.4.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/later_1.4.4.tar.gz",
+      "target": "src/contrib/later_1.4.4.tar.gz",
       "type": "standard",
       "version": "1.4.4",
       "vignettes": false
@@ -2566,11 +2572,12 @@
     },
     {
       "ref": "odbc",
-      "binary": true,
+      "binary": false,
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "dependencies": ["bit64", "blob", "cli", "DBI", "hms", "lifecycle", "Rcpp", "rlang"],
       "direct": false,
       "directpkg": false,
+      "filesize": 359848,
       "install_args": "",
       "license": "MIT + file LICENSE",
       "metadata": {
@@ -2578,16 +2585,17 @@
         "RemoteType": "standard",
         "RemoteRef": "odbc",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
-        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.6.3"
+        "RemotePkgPlatform": "source",
+        "RemoteSha": "1.6.4"
       },
-      "needscompilation": false,
+      "needscompilation": true,
       "package": "odbc",
       "params": [],
-      "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+      "platform": "source",
       "repotype": "cran",
-      "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/odbc_1.6.3.tar.gz",
+      "rversion": "*",
+      "sha256": "317a577b6ec27de6b9880faf42a5284cb35a5933d9438fc8f156091c96683d6f",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/odbc_1.6.4.tar.gz",
       "sysreqs": "GNU make, An ODBC3 driver manager and drivers.",
       "sysreqs_packages": [
         {
@@ -2603,9 +2611,9 @@
           "post_install": {}
         }
       ],
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/odbc_1.6.3.tar.gz",
+      "target": "src/contrib/odbc_1.6.4.tar.gz",
       "type": "standard",
-      "version": "1.6.3",
+      "version": "1.6.4",
       "vignettes": false
     },
     {
@@ -3306,11 +3314,12 @@
     },
     {
       "ref": "Rcpp",
-      "binary": true,
+      "binary": false,
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "dependencies": [],
       "direct": false,
       "directpkg": false,
+      "filesize": 3107035,
       "install_args": "",
       "license": "GPL (>= 2)",
       "metadata": {
@@ -3318,19 +3327,20 @@
         "RemoteType": "standard",
         "RemoteRef": "Rcpp",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
-        "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+        "RemotePkgPlatform": "source",
         "RemoteSha": "1.1.0"
       },
-      "needscompilation": false,
+      "needscompilation": true,
       "package": "Rcpp",
       "params": [],
-      "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
+      "platform": "source",
       "repotype": "cran",
-      "rversion": "4.5",
+      "rversion": "*",
+      "sha256": "84211c2520ba68c839b2e75761e97afc90baeebccbaf216ac8534fa2076cfb4d",
       "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/Rcpp_1.1.0.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/Rcpp_1.1.0.tar.gz",
+      "target": "src/contrib/Rcpp_1.1.0.tar.gz",
       "type": "standard",
       "version": "1.1.0",
       "vignettes": false
@@ -4025,7 +4035,7 @@
       "ref": "shiny",
       "binary": true,
       "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "dependencies": ["bslib", "cachem", "cli", "commonmark", "fastmap", "fontawesome", "glue", "htmltools", "httpuv", "jsonlite", "later", "lifecycle", "mime", "promises", "R6", "rlang", "sourcetools", "withr", "xtable"],
+      "dependencies": ["bslib", "cachem", "cli", "commonmark", "fastmap", "fontawesome", "glue", "htmltools", "httpuv", "jsonlite", "later", "lifecycle", "mime", "otel", "promises", "R6", "rlang", "sourcetools", "withr", "xtable"],
       "direct": false,
       "directpkg": false,
       "install_args": "",
@@ -4036,7 +4046,7 @@
         "RemoteRef": "shiny",
         "RemoteRepos": "https://p3m.dev/cran/__linux__/noble/latest",
         "RemotePkgPlatform": "x86_64-pc-linux-gnu-ubuntu-24.04",
-        "RemoteSha": "1.11.1"
+        "RemoteSha": "1.12.0"
       },
       "needscompilation": false,
       "package": "shiny",
@@ -4044,12 +4054,12 @@
       "platform": "x86_64-pc-linux-gnu-ubuntu-24.04",
       "repotype": "cran",
       "rversion": "4.5",
-      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/shiny_1.11.1.tar.gz",
+      "sources": "https://p3m.dev/cran/__linux__/noble/latest/src/contrib/shiny_1.12.0.tar.gz",
       "sysreqs": "",
       "sysreqs_packages": {},
-      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/shiny_1.11.1.tar.gz",
+      "target": "src/contrib/x86_64-pc-linux-gnu-ubuntu-24.04/4.5/shiny_1.12.0.tar.gz",
       "type": "standard",
-      "version": "1.11.1",
+      "version": "1.12.0",
       "vignettes": false
     },
     {
