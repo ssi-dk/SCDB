@@ -84,7 +84,7 @@ nolint_position_linter <- function(length = 80L) {
       nolint_info <- purrr::imap(nolint_info, ~ dplyr::mutate(as.data.frame(.x), line_number = .y)) |>
         purrr::reduce(rbind) |>
         dplyr::filter(!is.na(.data$start)) |>
-        dplyr::filter(.data$start <= length)
+        dplyr::filter(.data$start != (length + 1))
 
       purrr::pmap(
         nolint_info,
