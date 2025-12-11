@@ -20,37 +20,48 @@ methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
   # Retrieve the translated data types
   signature <- as.list(DBI::dbDataType(conn, dplyr::collect(utils::head(.data, 0))))
 
+  # Early return if there is no possibility of our special columns existing
+  if (length(.data) < 3) {
+    return(unlist(signature))
+  }
+
   # Define the column types to be updated based on backend class
   backend_coltypes <- list(
-    "SQLiteConnection" = c(
+    "SQLiteConnection" = list(
       checksum = "TEXT",
-      from_ts  = "TIMESTAMP", # Stored internally as TEXT
-      until_ts = "TIMESTAMP"  # Stored internally as TEXT
-    ),
-    "PqConnection" = c(
-      checksum = "CHAR(32)",
       from_ts  = "TIMESTAMP",
       until_ts = "TIMESTAMP"
     ),
-    "Microsoft SQL Server" = c(
-      checksum = "CHAR(64)",
-      from_ts  = "DATETIME",
-      until_ts = "DATETIME"
+    "PqConnection" = list(
+      checksum = "CHAR(32)"
     ),
-    "duckdb_connection" = c(
-      checksum = "char(32)",
-      from_ts  = "TIMESTAMP",
-      until_ts = "TIMESTAMP"
+    "Microsoft SQL Server" = list(
+      checksum = "CHAR(64)"
+    ),
+    "duckdb_connection" = list(
+      checksum = "char(32)"
     )
   )
 
   checkmate::assert_choice(class(conn), names(backend_coltypes))
 
-  # Replace elements in signature with backend-specific types if names match
-  special_cols <- backend_coltypes[[class(conn)]]
-  if (identical(colnames(.data)[(length(.data) - 2):length(.data)], names(special_cols))) {
-    signature[(length(.data) - 2):length(.data)] <- special_cols
-  }
+
+  # Determine the signature of the special columns
+  special_cols_signature <- utils::modifyList(
+    list(
+      "checksum" = "", # Placeholder to set element as first in list
+      "from_ts" = DBI::dbDataType(conn, as.POSIXct(character(0))),
+      "until_ts" = DBI::dbDataType(conn, as.POSIXct(character(0)))
+    ),
+    backend_coltypes[[class(conn)]]
+  )
+
+
+  # Use the signatures of the special columns
+  signature <- c(
+    utils::head(signature, -3), # Our special columns must be in the last three
+    utils::head(utils::modifyList(utils::tail(signature, 3), special_cols_signature), 3)
+  )
 
   return(unlist(signature))
 })
@@ -61,16 +72,17 @@ methods::setMethod("getTableSignature", "NULL", function(.data, conn) {
   stats::setNames(signature, colnames(.data))
 
   # Update columns with indices instead of names to avoid conflicts
-  special_cols <- c(
+  special_cols <- list(
     checksum = "character",
     from_ts  = "POSIXct",
     until_ts = "POSIXct"
   )
 
-  # Replace elements in signature with backend-specific types if names match
-  if (identical(colnames(.data)[(length(.data) - 2):length(.data)], names(special_cols))) {
-    signature[(length(.data) - 2):length(.data)] <- special_cols
-  }
+  # Use the signatures of the special columns
+  signature <- c(
+    utils::head(signature, -3), # Our special columns must be in the last three
+    utils::head(utils::modifyList(utils::tail(signature, 3), special_cols), 3)
+  )
 
   return(unlist(signature))
 })

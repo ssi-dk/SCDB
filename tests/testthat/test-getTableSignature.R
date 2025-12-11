@@ -86,8 +86,8 @@ for (conn in c(list(NULL), get_test_conns())) {
           "logical"   = "BOOLEAN",
           # ..
           "checksum"  = "CHAR(32)",
-          "from_ts"   = "TIMESTAMP",
-          "until_ts"  = "TIMESTAMP"
+          "from_ts"   = "TIMESTAMPTZ",
+          "until_ts"  = "TIMESTAMPTZ"
         )
       )
     })
