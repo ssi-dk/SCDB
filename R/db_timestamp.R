@@ -55,6 +55,12 @@ db_timestamp.duckdb_connection <- function(timestamp, conn) {
 
 #' @noRd
 to_posix <- function(timestamp) {
+
+  # Convert all timezones to local timezone
+  if (inherits(timestamp, "POSIXct")) {
+    timestamp <- lubridate::with_tz(timestamp, tz = Sys.timezone())
+  }
+
   # Cast to POSIXct with local timezone
   lubridate::parse_date_time(
     timestamp,
