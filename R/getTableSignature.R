@@ -8,9 +8,11 @@
 #' @template conn
 #' @importFrom methods setGeneric
 #' @noRd
-methods::setGeneric("getTableSignature",
-                    function(.data, conn = NULL) standardGeneric("getTableSignature"),
-                    signature = "conn")
+methods::setGeneric(
+  "getTableSignature",                                                                                                  # nolint: object_name_linter
+  function(.data, conn = NULL) standardGeneric("getTableSignature"),
+  signature = "conn"
+)
 
 #' @importClassesFrom DBI DBIConnection
 methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
