@@ -2,6 +2,7 @@
 #' @noRd
 release_bullets <- function() {
   return(
-    "Update the benchmarks"
+    "Update the benchmarks",
+    "Run `revdepcheck::revdep_check()`"
   )
 }
