@@ -1,6 +1,6 @@
 
-#' Export a data-chunk with history from historical data
-#'
+#' Import and export a data-chunk with history from historical data
+#' @name delta_loading
 #' @description
 #'   `delta_export` exports data from tables created with `update_snapshot()` in
 #'   chunks to allow for faster migration of data between sources.
@@ -17,7 +17,7 @@
 #' @return
 #'   The lazy-query containing the data (and history) in the source to be used
 #'   in conjunction with `delta_load()`.
-#' @seealso update_snapshot, delta_load
+#' @seealso update_snapshot
 #' @importFrom rlang .data
 #' @export
 delta_export <- function(
@@ -59,4 +59,48 @@ delta_export <- function(
   }
 
   return(out)
+}
+
+
+#' @rdname delta_loading
+#' @param delta .data (`data.frame(1)`, `tibble(1)`, `data.table(1)`, or `tbl_dbi(1)`)\cr
+#'   "Delta" exported from `delta_export()` to load.
+#' @export
+delta_export <- function(
+  conn,
+  db_table,
+  delta
+) {
+
+  # Check arguments
+  coll <- checkmate::makeAssertCollection()
+  checkmate::assert_class(conn, "DBIConnection", len = 1, add = coll)
+  assert_dbtable_like(db_table, len = 1, add = coll)
+  assert_data_like(delta, add = coll)
+  checkmate::reportAssertions(coll)
+
+  # Get a reference to the table to update
+  target_table <- dplyr::tbl(conn, id(db_table, conn))
+
+  # Check if the target and delta share connection
+  if (!identical(dbplyr::remote_con(target_table), dbplyr::remote_con(delta))) {
+
+    # Copy delta to target (if needed)
+    delta_src <- dplyr::copy_to(
+      dbplyr::remote_con(target_table),
+      delta,
+      name = unique_table_name("SCDB_delta")
+    )
+    defer_db_cleanup(delta_src)
+
+    # Recompute checksums on new connection
+    delta_src <- digest_to_checksum(
+      delta_src,
+      col = "checksum",
+      exclude = c("checksum", "from_ts", "until_ts")
+    )
+  }
+
+
+
 }
