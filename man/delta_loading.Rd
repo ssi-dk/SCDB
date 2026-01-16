@@ -3,11 +3,12 @@
 \name{delta_loading}
 \alias{delta_loading}
 \alias{delta_export}
+\alias{delta_load}
 \title{Import and export a data-chunk with history from historical data}
 \usage{
-delta_export(conn, db_table, delta)
+delta_export(conn, db_table, timestamp_from, timestamp_until = NA)
 
-delta_export(conn, db_table, delta)
+delta_load(conn, db_table, delta)
 }
 \arguments{
 \item{conn}{(\code{DBIConnection(1)})\cr
@@ -16,25 +17,25 @@ Connection object.}
 \item{db_table}{(\verb{id-like object(1)})\cr
 A table specification (coercible by \code{id()}).}
 
-\item{delta}{.data (\code{data.frame(1)}, \code{tibble(1)}, \code{data.table(1)}, or \code{tbl_dbi(1)})\cr
-"Delta" exported from \code{delta_export()} to load.}
-
 \item{timestamp_from}{(\code{POSIXct(1)}, \code{Date(1)}, or \code{character(1)})\cr
 The timestamp describing the start of the export (including).}
 
 \item{timestamp_until}{(\code{POSIXct(1)}, \code{Date(1)}, or \code{character(1)})\cr
 The timestamp describing the end of the export (including).}
 
-\item{collapse_continuous_records}{(\code{logical(1)})\cr
-Check for records where from/until time stamps are equal and delete?}
+\item{delta}{.data (\code{data.frame(1)}, \code{tibble(1)}, \code{data.table(1)}, or \code{tbl_dbi(1)})\cr
+A "delta" exported from \code{delta_export()} to load.}
 }
 \value{
 The lazy-query containing the data (and history) in the source to be used
 in conjunction with \code{delta_load()}.
 }
 \description{
-\code{delta_export} exports data from tables created with \code{update_snapshot()} in
-chunks to allow for faster migration of data between sources.
+\code{delta_export()} exports data from tables created with \code{update_snapshot()}
+in chunks to allow for faster migration of data between sources.
+
+\code{delta_load()} import deltas created by \code{delta_export()} to rebuild a
+historical table.
 
 See \code{vignette("delta-loading")} for further introduction to the function.
 }

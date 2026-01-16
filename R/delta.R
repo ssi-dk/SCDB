@@ -2,8 +2,11 @@
 #' Import and export a data-chunk with history from historical data
 #' @name delta_loading
 #' @description
-#'   `delta_export` exports data from tables created with `update_snapshot()` in
-#'   chunks to allow for faster migration of data between sources.
+#'   `delta_export()` exports data from tables created with `update_snapshot()`
+#'   in chunks to allow for faster migration of data between sources.
+#'
+#'   `delta_load()` import deltas created by `delta_export()` to rebuild a
+#'   historical table.
 #'
 #'   See `vignette("delta-loading")` for further introduction to the function.
 #' @template conn
@@ -12,8 +15,6 @@
 #'   The timestamp describing the start of the export (including).
 #' @param timestamp_until (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
 #'   The timestamp describing the end of the export (including).
-#' @param collapse_continuous_records (`logical(1)`)\cr
-#'   Check for records where from/until time stamps are equal and delete?
 #' @return
 #'   The lazy-query containing the data (and history) in the source to be used
 #'   in conjunction with `delta_load()`.
@@ -24,38 +25,106 @@ delta_export <- function(
   conn,
   db_table,
   timestamp_from,
-  timestamp_until,
-  collapse_continuous_records = FALSE
+  timestamp_until = NA
 ) {
 
   # Check arguments
   coll <- checkmate::makeAssertCollection()
-  checkmate::assert_class(conn, "DBIConnection", len = 1, add = coll)
+  checkmate::assert_class(conn, "DBIConnection", add = coll)
   assert_dbtable_like(db_table, len = 1, add = coll)
   assert_timestamp_like(timestamp_from, len = 1, add = coll)
   assert_timestamp_like(timestamp_until, any.missing = TRUE, len = 1, add = coll)
-  checkmate::assert_logical(collapse_continuous_records, len = 1, add = coll)
   checkmate::reportAssertions(coll)
 
   # Slice the table on the timestamps
-  # (We export any change that occurs within the timespan)
-  out <- get_table(conn, db_table, slice_ts = NULL) |>
+  # If no `timestamp_until` is supplied, all history after `timestamp_from` is
+  # exported.
+  # If a `timestamp_until` is supplied, the exported history should only allow
+  # the user to restore the data up until that point.
+
+  # We take all records created or closed within the interval
+
+  # Any future `until_ts` (i.e. greater than `timestamp_until`) is removed.
+
+  # Consider this example data to illustrate the thought process:
+  # (col, checksum,   from_ts, until_ts)
+  # [NA,  <checksum>, 1,       2 ]
+  # [A,   <checksum>, 2,       3 ]
+  # [NA,  <checksum>, 3,       NA]
+
+  # Lets apply `delta_export()` to each timestamp in the data which gets us
+  # three deltas
+  # delta_1:
+  # [NA,  <checksum>, 1, NA] # added at ts = 1
+  # delta_2:
+  # [NA,  <checksum>, 1, 2 ] # closed at ts = 2
+  # [A,   <checksum>, 2, NA] # added at ts = 2
+  # delta_3:
+  # [A,   <checksum>, 2, 3 ] # closed at ts = 3
+  # [NA,  <checksum>, 3, NA] # added at ts = 3
+
+  # If we apply in order
+  # (dplyr::rows_patch() and rows_append() matched by checksum and from_ts),
+  # we get the following
+  # Applied: delta_1
+  # [NA,  <checksum>, 1,  NA]
+  # Applied: delta_1, delta_2
+  # [NA,  <checksum>, 1,  2 ]
+  # [A,   <checksum>, 2,  NA]
+  # Applied: delta_1, delta_2, delta_3
+  # [NA,  <checksum>, 1,  2 ]
+  # [A,   <checksum>, 2,  3 ]
+  # [NA,  <checksum>, 3, NA ]
+
+  # If we apply out of order (starting from delta_2)
+  # (dplyr::rows_patch() and rows_append() matched by checksum and from_ts),
+  # Applied: delta_2
+  # [NA,  <checksum>, 1,  2 ]
+  # [A,   <checksum>, 2,  NA]
+  # Now, we can apply either delta_1 or delta_3
+
+  # Applied: delta_2, delta_1
+  # [NA,  <checksum>, 1,  2 ]
+  # [A,   <checksum>, 2,  NA]
+
+  # Now we can apply delta_3
+  # [NA,  <checksum>, 1,  2 ]
+  # [A,   <checksum>, 2,  3 ]
+  # [NA,  <checksum>, 3,  NA]
+
+
+  # Alternatively, we can apply delta_3 after delta_2 instead of delta_1
+  # Applied: delta_2, delta_3
+  # [NA,  <checksum>, 1,  2 ]
+  # [A,   <checksum>, 2,  3 ]
+  # [NA,  <checksum>, 3,  NA]
+
+  # And we can now finally apply delta_1
+  # Applied: delta_2, delta_3, delta_1
+  # [NA,  <checksum>, 1,  2 ]
+  # [A,   <checksum>, 2,  3 ]
+  # [NA,  <checksum>, 3, NA ]
+
+
+  # Starting from the full table,
+  out <- get_table(conn, db_table, slice_ts = NULL) %>%
     dplyr::filter(
-       # Inserted at or after timestamp_from or deactivated at or after timestamp_from
-      !!timestamp_from  <= .data$from_ts | (!!timestamp_from  <= .data$until_ts & is.na(.data$until_ts))
+      # ..any data created within the interval gets exported
+      ((!!timestamp_from <= .data$from_ts) & (is.na(!!timestamp_until) | .data$from_ts <= !!timestamp_until)) |
+        # and any data that expires within the interval gets exported
+        ((!!timestamp_from <= .data$until_ts) & (is.na(!!timestamp_until) | .data$until_ts <= !!timestamp_until))
     )
 
+  # Censor future until_ts values when in "batch" mode
   if (!is.na(timestamp_until)) {
-    out <- out |>
-      dplyr::filter(
-        # Inserted at or before timestamp_from or deactivated at or before timestamp_from
-        !!timestamp_until >= .data$from_ts | (!!timestamp_until >= .data$until_ts & is.na(.data$until_ts))
+    out <- out %>%
+      dplyr::mutate(
+        "until_ts" = dplyr::if_else(
+          condition = !is.na(.data$until_ts) & !!timestamp_until < .data$until_ts,
+          true = NA,
+          false = .data$until_ts
+        )
       )
-  }
-
-  # Collapse continuous records
-  if (collapse_continuous_records) {
-    out <- dplyr::filter(out, is.na(.data$until_ts) | .data$from_ts != .data$until_ts)
   }
 
   return(out)
@@ -64,9 +133,9 @@ delta_export <- function(
 
 #' @rdname delta_loading
 #' @param delta .data (`data.frame(1)`, `tibble(1)`, `data.table(1)`, or `tbl_dbi(1)`)\cr
-#'   "Delta" exported from `delta_export()` to load.
+#'   A "delta" exported from `delta_export()` to load.
 #' @export
-delta_export <- function(
+delta_load <- function(
   conn,
   db_table,
   delta
@@ -74,20 +143,20 @@ delta_export <- function(
 
   # Check arguments
   coll <- checkmate::makeAssertCollection()
-  checkmate::assert_class(conn, "DBIConnection", len = 1, add = coll)
+  checkmate::assert_class(conn, "DBIConnection", add = coll)
   assert_dbtable_like(db_table, len = 1, add = coll)
-  assert_data_like(delta, add = coll)
+  checkmate::assert_multi_class(logger, "Logger", null.ok = TRUE, add = coll)
   checkmate::reportAssertions(coll)
 
-  # Get a reference to the table to update
-  target_table <- dplyr::tbl(conn, id(db_table, conn))
+  # Mark the current time
+  tic <- Sys.time()
 
   # Check if the target and delta share connection
-  if (!identical(dbplyr::remote_con(target_table), dbplyr::remote_con(delta))) {
+  if (!identical(conn, dbplyr::remote_con(delta))) {
 
     # Copy delta to target (if needed)
     delta_src <- dplyr::copy_to(
-      dbplyr::remote_con(target_table),
+      conn,
       delta,
       name = unique_table_name("SCDB_delta")
     )
@@ -97,10 +166,54 @@ delta_export <- function(
     delta_src <- digest_to_checksum(
       delta_src,
       col = "checksum",
-      exclude = c("checksum", "from_ts", "until_ts")
+      exclude = c("checksum", "from_ts", "until_ts"),
+      warn = FALSE
     )
   }
 
+  # Construct id for target table
+  db_table_id <- id(db_table, conn)
 
+  # Apply the delta to the target table
+  if (!table_exists(conn, db_table_id)) {
 
+    # Create table and apply delta
+    delta_src %>%
+      utils::head(0) %>%
+      dplyr::collect() %>%
+      dplyr::select(!c("checksum", "from_ts", "until_ts")) %>%
+      create_table(conn = conn, db_table = db_table_id)
+
+  }
+
+  #print(dplyr::tbl(conn, db_table_id))
+
+  # Identify existing records
+  existing <- dplyr::tbl(conn, db_table_id) |>
+    dplyr::select(dplyr::all_of((c("checksum", "from_ts")))) |>
+    dplyr::compute(name = unique_table_name("SCDB_delta_existing"))
+  defer_db_cleanup(existing)
+
+  # Patch existing records
+  dplyr::rows_patch(
+    x = dplyr::tbl(conn, db_table_id),
+    y = dplyr::inner_join(
+      x = existing,
+      y = delta_src,
+      by = c("checksum", "from_ts")
+    ),
+    by = c("checksum", "from_ts"),
+    in_place = TRUE,
+    unmatched = "ignore"
+  )
+
+  # Add new records
+  dplyr::rows_append(
+    x = dplyr::tbl(conn, db_table_id),
+    y = dplyr::anti_join(delta_src, existing, by = c("checksum", "from_ts")),
+    in_place = TRUE
+  )
+
+  # Update the logs
+  #log_tbl <- create_logs_if_missing(conn, log_table_id)
 }
