@@ -126,6 +126,25 @@ for (conn in get_test_conns()) {
         dplyr::arrange(col1, col2)
     )
 
+    ## Round 2.5 ############################################################
+
+    # Re-apply the second delta
+    delta_load(
+      target_conn,
+      db_table = "test_incremental",
+      delta = delta_2
+    )
+
+    # Check transfer success
+    expect_identical(
+      get_table(target_conn, "test_incremental", slice_ts = NULL) %>%
+        dplyr::collect() %>%
+        dplyr::arrange(col1, col2),
+      get_table(target_conn, "test_reference", slice_ts = NULL) %>%
+        dplyr::collect() %>%
+        dplyr::arrange(col1, col2)
+    )
+
     ## Round 3 ##############################################################
 
     # Export third timestamp
