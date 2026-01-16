@@ -146,7 +146,6 @@ delta_load <- function(
   coll <- checkmate::makeAssertCollection()
   checkmate::assert_class(conn, "DBIConnection", add = coll)
   assert_dbtable_like(db_table, len = 1, add = coll)
-  checkmate::assert_multi_class(logger, "Logger", null.ok = TRUE, add = coll)
   checkmate::reportAssertions(coll)
 
   # Mark the current time
