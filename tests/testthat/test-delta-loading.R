@@ -7,6 +7,9 @@ for (conn in get_test_conns()) {
   if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
   expect_false(table_exists(conn, "test.SCDB_tmp1"))
 
+  if (DBI::dbExistsTable(conn, id("test.SCDB_tmp2", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp2", conn))
+  expect_false(table_exists(conn, "test.SCDB_tmp2"))
+
   # We create a data set for the tests in SCDB_tmp1 (!)
   t0 <- data.frame(col1 = c("A", "B"),      col2 = c(NA_real_, NA_real_))
   t1 <- data.frame(col1 = c("A", "B", "C"), col2 = c(1,        NA_real_, NA_real_))
@@ -20,9 +23,11 @@ for (conn in get_test_conns()) {
   logger <- LoggerNull$new()
 
 
-  test_that("delta loading works", {
+  test_that("delta loading works for incremental backups", {
 
     # Build state on test connection
+
+    # Update 1
     update_snapshot(
       .data = t0,
       conn = conn,
@@ -31,6 +36,15 @@ for (conn in get_test_conns()) {
       logger = logger
     )
 
+    delta_1 <- delta_export(
+      conn = conn,
+      db_table = "test.SCDB_tmp1",
+      timestamp_from  = "2022-01-01 08:00:00"
+    ) %>%
+      dplyr::compute(unique_table_name("SCDB_delta_test"))
+    defer_db_cleanup(delta_1)
+
+    # Update 2
     update_snapshot(
       .data = t1,
       conn = conn,
@@ -39,6 +53,15 @@ for (conn in get_test_conns()) {
       logger = logger
     )
 
+    delta_2 <- delta_export(
+      conn = conn,
+      db_table = "test.SCDB_tmp1",
+      timestamp_from  = "2022-01-01 08:10:00"
+    ) %>%
+      dplyr::compute(unique_table_name("SCDB_delta_test"))
+    defer_db_cleanup(delta_2)
+
+    # Update 3
     update_snapshot(
       .data = t2,
       conn = conn,
@@ -46,6 +69,34 @@ for (conn in get_test_conns()) {
       timestamp = "2022-01-01 08:20:00",
       logger = logger
     )
+
+    delta_3 <- delta_export(
+      conn = conn,
+      db_table = "test.SCDB_tmp1",
+      timestamp_from  = "2022-01-01 08:20:00"
+    ) %>%
+      dplyr::compute(unique_table_name("SCDB_delta_test"))
+    defer_db_cleanup(delta_3)
+
+
+    # Replay deltas
+    delta_load(conn, db_table = "test.SCDB_tmp2", delta = delta_1)
+    delta_load(conn, db_table = "test.SCDB_tmp2", delta = delta_2)
+    delta_load(conn, db_table = "test.SCDB_tmp2", delta = delta_3)
+
+    # Check transfer success
+    expect_identical(
+      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
+        dplyr::collect() %>%
+        dplyr::arrange(col1, col2),
+      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
+        dplyr::collect() %>%
+        dplyr::arrange(col1, col2)
+    )
+  })
+
+
+  test_that("delta loading works to migrate data", {
 
     ## Round 1 ##############################################################
 
