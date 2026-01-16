@@ -90,6 +90,25 @@ for (conn in get_test_conns()) {
         dplyr::collect() %>%
         dplyr::arrange(col1, col2)
     )
+
+    # Replay out of order
+    if (DBI::dbExistsTable(conn, id("test.SCDB_tmp2", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp2", conn))
+    expect_false(table_exists(conn, "test.SCDB_tmp2"))
+
+    # Replay deltas
+    delta_load(conn, db_table = "test.SCDB_tmp2", delta = delta_1)
+    delta_load(conn, db_table = "test.SCDB_tmp2", delta = delta_3)
+    delta_load(conn, db_table = "test.SCDB_tmp2", delta = delta_2)
+
+    # Check transfer success
+    expect_identical(
+      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
+        dplyr::collect() %>%
+        dplyr::arrange(col1, col2),
+      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
+        dplyr::collect() %>%
+        dplyr::arrange(col1, col2)
+    )
   })
 
 
