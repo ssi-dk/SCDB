@@ -181,6 +181,9 @@ delta_load <- function(
   # Construct id for target table
   db_table_id <- id(db_table, conn)
 
+  # Lock the table
+  lock_table(conn, db_table_id)
+
   # Apply the delta to the target table
   if (!table_exists(conn, db_table_id)) {
 
@@ -220,6 +223,9 @@ delta_load <- function(
     y = dplyr::anti_join(delta_src, existing, by = c("checksum", "from_ts")),
     in_place = TRUE
   )
+
+  # Release the lock
+  unlock_table(conn, db_table_id)
 
   # Update the logs
   #log_tbl <- create_logs_if_missing(conn, log_table_id)
