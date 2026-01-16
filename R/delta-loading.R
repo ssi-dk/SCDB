@@ -9,6 +9,20 @@
 #'   historical table.
 #'
 #'   See `vignette("delta-loading")` for further introduction to the function.
+#' @details
+#'   This pair of functions is designed to facilitate easy migration or
+#'   incremental backups of a historical table (created by `update_snapshot()`).
+#'
+#'   To construct the basis of incremental backups, `delta_export()` can be
+#'   called with only `timestamp_from` at the desired frequency (weekly etc.)
+#'
+#'   To migrate a historical table in chunks, `delta_export()` can be
+#'   called with `timestamp_until` to constrain the size of the delta.
+#'
+#'   In either case, the table can then be re-constructed by "replaying" the
+#'   deltas with `delta_load()`.
+#'   The order the deltas are replayed does not matter, but all have to be
+#'   replayed to achieve the same state as the source table.
 #' @template conn
 #' @template db_table
 #' @param timestamp_from (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr

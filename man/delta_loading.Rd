@@ -41,6 +41,21 @@ historical table.
 
 See \code{vignette("delta-loading")} for further introduction to the function.
 }
+\details{
+This pair of functions is designed to facilitate easy migration or
+incremental backups of a historical table (created by \code{update_snapshot()}).
+
+To construct the basis of incremental backups, \code{delta_export()} can be
+called with only \code{timestamp_from} at the desired frequency (weekly etc.)
+
+To migrate a historical table in chunks, \code{delta_export()} can be
+called with \code{timestamp_until} to constrain the size of the delta.
+
+In either case, the table can then be re-constructed by "replaying" the
+deltas with \code{delta_load()}.
+The order the deltas are replayed does not matter, but all have to be
+replayed to achieve the same state as the source table.
+}
 \seealso{
 update_snapshot
 }
