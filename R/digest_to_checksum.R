@@ -86,6 +86,7 @@ digest_to_checksum.default <- function(
 
   .data <- .data %>%
     dplyr::mutate(id__ = dplyr::row_number()) %>%
+    dplyr::select(!dplyr::any_of(col)) %>% # Remove checksum column if it already exists
     dplyr::left_join(checksums, by = "id__") %>%
     dplyr::select(!"id__") %>%
     dplyr::compute(unique_table_name("SCDB_digest_to_checksum"))
