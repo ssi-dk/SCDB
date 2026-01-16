@@ -135,12 +135,19 @@ delta_export <- function(
 #' @rdname delta_loading
 #' @param delta .data (`data.frame(1)`, `tibble(1)`, `data.table(1)`, or `tbl_dbi(1)`)\cr
 #'   A "delta" exported from `delta_export()` to load.
+#'
+#'   A list of deltas can also be supplied to be applied.
 #' @export
 delta_load <- function(
   conn,
   db_table,
   delta
 ) {
+
+  # If a list of deltas is given, load each element
+  if (inherits(delta, "list")) {
+    purrr::walk(delta, ~ delta_load(conn, db_table, delta = .))
+  }
 
   # Check arguments
   coll <- checkmate::makeAssertCollection()

@@ -26,7 +26,9 @@ The timestamp describing the end of the export (including).
 If \code{NULL} (default), all history after \code{timestamp_from} is exported.}
 
 \item{delta}{.data (\code{data.frame(1)}, \code{tibble(1)}, \code{data.table(1)}, or \code{tbl_dbi(1)})\cr
-A "delta" exported from \code{delta_export()} to load.}
+A "delta" exported from \code{delta_export()} to load.
+
+A list of deltas can also be supplied to be applied.}
 }
 \value{
 The lazy-query containing the data (and history) in the source to be used
