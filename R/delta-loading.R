@@ -156,6 +156,12 @@ delta_load <- function(
       exclude = c("checksum", "from_ts", "until_ts"),
       warn = FALSE
     )
+
+  } else {
+
+    # On the same connection, we use to input as is
+    delta_src <- delta
+
   }
 
   # Construct id for target table
