@@ -67,43 +67,28 @@ delta_export <- function(
   # (dplyr::rows_patch() and rows_append() matched by checksum and from_ts),
   # we get the following
   # Applied: delta_1
-  # [NA,  <checksum>, 1,  NA]
+  # [NA,  <checksum>, 1, NA]
   # Applied: delta_1, delta_2
-  # [NA,  <checksum>, 1,  2 ]
-  # [A,   <checksum>, 2,  NA]
+  # [NA,  <checksum>, 1, 2 ]
+  # [A,   <checksum>, 2, NA]
   # Applied: delta_1, delta_2, delta_3
-  # [NA,  <checksum>, 1,  2 ]
-  # [A,   <checksum>, 2,  3 ]
-  # [NA,  <checksum>, 3, NA ]
+  # [NA,  <checksum>, 1, 2 ]
+  # [A,   <checksum>, 2, 3 ]
+  # [NA,  <checksum>, 3, NA]
 
-  # If we apply out of order (starting from delta_2)
+  # If we apply out of order (starting from delta_1)
   # (dplyr::rows_patch() and rows_append() matched by checksum and from_ts),
-  # Applied: delta_2
-  # [NA,  <checksum>, 1,  2 ]
-  # [A,   <checksum>, 2,  NA]
-  # Now, we can apply either delta_1 or delta_3
+  # Applied: delta_1
+  # [NA,  <checksum>, 1, NA]
+  # Applied: delta_1, delta_3
+  # [NA,  <checksum>, 1, NA] # Notice that we are currently in a broken state
+  # [A,   <checksum>, 2, 3 ]
+  # [NA,  <checksum>, 3, NA]
 
-  # Applied: delta_2, delta_1
-  # [NA,  <checksum>, 1,  2 ]
-  # [A,   <checksum>, 2,  NA]
-
-  # Now we can apply delta_3
-  # [NA,  <checksum>, 1,  2 ]
-  # [A,   <checksum>, 2,  3 ]
-  # [NA,  <checksum>, 3,  NA]
-
-
-  # Alternatively, we can apply delta_3 after delta_2 instead of delta_1
-  # Applied: delta_2, delta_3
-  # [NA,  <checksum>, 1,  2 ]
-  # [A,   <checksum>, 2,  3 ]
-  # [NA,  <checksum>, 3,  NA]
-
-  # And we can now finally apply delta_1
-  # Applied: delta_2, delta_3, delta_1
-  # [NA,  <checksum>, 1,  2 ]
-  # [A,   <checksum>, 2,  3 ]
-  # [NA,  <checksum>, 3, NA ]
+  # Applied: delta_1, delta_3, delta_2
+  # [NA,  <checksum>, 1, 2 ] # Now we recover a working state
+  # [A,   <checksum>, 2, 3 ]
+  # [NA,  <checksum>, 3, NA]
 
 
   # Starting from the full table,
