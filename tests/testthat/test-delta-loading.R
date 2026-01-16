@@ -1,6 +1,3 @@
-# devtools::load_all()
-# conn <- DBI::dbConnect(RSQLite::SQLite())
-
 for (conn in get_test_conns()) {
 
   # Ensure test tables are ready
@@ -98,7 +95,7 @@ for (conn in get_test_conns()) {
 
   test_that("delta loading works to migrate data", {
 
-    ## Round 1 ##############################################################
+    ## Test 1 ##############################################################
 
     # Export first timestamp
     delta_1 <- delta_export(
@@ -139,7 +136,7 @@ for (conn in get_test_conns()) {
         dplyr::arrange(col1, col2)
     )
 
-    ## Round 2 ##############################################################
+    ## Test 2 ##############################################################
 
     # Export second timestamp
     delta_2 <- delta_export(
@@ -177,7 +174,7 @@ for (conn in get_test_conns()) {
         dplyr::arrange(col1, col2)
     )
 
-    ## Round 2.5 ############################################################
+    ## Test 2.5 ############################################################
 
     # Re-apply the second delta
     delta_load(
@@ -196,7 +193,7 @@ for (conn in get_test_conns()) {
         dplyr::arrange(col1, col2)
     )
 
-    ## Round 3 ##############################################################
+    ## Test 3 ##############################################################
 
     # Export third timestamp
     delta_3 <- delta_export(
@@ -234,7 +231,7 @@ for (conn in get_test_conns()) {
         dplyr::arrange(col1, col2)
     )
 
-    ## Round 4 ##############################################################
+    ## Test 4 ##############################################################
 
     # Run a single batch update
     delta_batch <- delta_export(
@@ -263,7 +260,7 @@ for (conn in get_test_conns()) {
         dplyr::arrange(col1, col2)
     )
 
-    ## Round 4 ##############################################################
+    ## Test 4 ##############################################################
 
     # Run a single batch update (no timestamp_until)
     delta_batch_open_ended <- delta_export(
@@ -300,7 +297,7 @@ for (conn in get_test_conns()) {
         dplyr::arrange(col1, col2)
     )
 
-    ## Round 5 ##############################################################
+    ## Test 5 ##############################################################
 
     # Out of order application
     delta_load(
