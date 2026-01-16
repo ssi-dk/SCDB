@@ -15,6 +15,8 @@
 #'   The timestamp describing the start of the export (including).
 #' @param timestamp_until (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
 #'   The timestamp describing the end of the export (including).
+#'
+#'   If `NULL` (default), all history after `timestamp_from` is exported.
 #' @return
 #'   The lazy-query containing the data (and history) in the source to be used
 #'   in conjunction with `delta_load()`.
@@ -25,7 +27,7 @@ delta_export <- function(
   conn,
   db_table,
   timestamp_from,
-  timestamp_until = NA
+  timestamp_until = NULL
 ) {
 
   # Check arguments
@@ -33,7 +35,7 @@ delta_export <- function(
   checkmate::assert_class(conn, "DBIConnection", add = coll)
   assert_dbtable_like(db_table, len = 1, add = coll)
   assert_timestamp_like(timestamp_from, len = 1, add = coll)
-  assert_timestamp_like(timestamp_until, any.missing = TRUE, len = 1, add = coll)
+  assert_timestamp_like(timestamp_until, null.ok = TRUE, len = 1, add = coll)
   checkmate::reportAssertions(coll)
 
   # Slice the table on the timestamps
@@ -95,13 +97,13 @@ delta_export <- function(
   out <- get_table(conn, db_table, slice_ts = NULL) %>%
     dplyr::filter(
       # ..any data created within the interval gets exported
-      ((!!timestamp_from <= .data$from_ts) & (is.na(!!timestamp_until) | .data$from_ts <= !!timestamp_until)) |
+      ((!!timestamp_from <= .data$from_ts) & (!!is.null(timestamp_until) | .data$from_ts <= !!timestamp_until)) |
         # and any data that expires within the interval gets exported
-        ((!!timestamp_from <= .data$until_ts) & (is.na(!!timestamp_until) | .data$until_ts <= !!timestamp_until))
+        ((!!timestamp_from <= .data$until_ts) & (!!is.null(timestamp_until) | .data$until_ts <= !!timestamp_until))
     )
 
   # Censor future until_ts values when in "batch" mode
-  if (!is.na(timestamp_until)) {
+  if (!is.null(timestamp_until)) {
     out <- out %>%
       dplyr::mutate(
         "until_ts" = dplyr::if_else(
