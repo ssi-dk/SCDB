@@ -106,6 +106,8 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
       timestamp = timestamp,
       start_time = tic
     )
+  } else {
+    logger$set_timestamp(timestamp) # Set the timestamp being processed
   }
 
   logger$log_info("Started", tic = tic) # Use input time in log

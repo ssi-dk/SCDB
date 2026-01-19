@@ -81,7 +81,6 @@ Logger <- R6::R6Class(                                                          
       }
 
       # Store the inputs
-      self$set_timestamp(timestamp)
       private$.output_to_console <- output_to_console
       private$log_conn <- log_conn
       private$.log_path <- log_path
@@ -93,8 +92,8 @@ Logger <- R6::R6Class(                                                          
         private$.log_tbl <- create_logs_if_missing(log_conn, private$log_table_id)
       }
 
-      # Create a line in log database for Logger
-      private$generate_db_entry()
+      # Set the timestamp (also updates paths and log db targets)
+      if (!is.null(timestamp)) self$set_timestamp(timestamp)
 
       # Warn if no logging will be done
       if (warn && is.null(self$log_path) && is.null(self$log_tbl)) {
@@ -118,6 +117,9 @@ Logger <- R6::R6Class(                                                          
 
       # .. and set the log entry as not finalized
       private$finalized <- FALSE
+
+      # Create a line in log database for Loggers current state
+      private$generate_db_entry()
     },
 
 
