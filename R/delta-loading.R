@@ -206,27 +206,35 @@ delta_load <- function(
 
     # Identify existing records
     existing <- dplyr::tbl(conn, db_table_id) %>%
-      dplyr::select(dplyr::all_of((c("checksum", "from_ts")))) %>%
+      dplyr::select(dplyr::all_of((c("checksum", "from_ts", "until_ts")))) %>%
       dplyr::compute(name = unique_table_name("SCDB_delta_existing"))
     defer_db_cleanup(existing)
 
     # Patch existing records
+    deactivations <- dplyr::anti_join(
+      x = dplyr::filter(delta_src, !is.na(.data$until_ts)),
+      y = existing,
+      by = c("checksum", "from_ts", "until_ts")
+    )
+
     dplyr::rows_patch(
       x = dplyr::tbl(conn, db_table_id),
-      y = dplyr::inner_join(
-        x = existing,
-        y = delta_src,
-        by = c("checksum", "from_ts")
-      ),
+      y = deactivations,
       by = c("checksum", "from_ts"),
       in_place = TRUE,
       unmatched = "ignore"
     )
 
     # Add new records
+    insertions <- dplyr::anti_join(
+      delta_src,
+      existing,
+      by = c("checksum", "from_ts")
+    )
+
     dplyr::rows_append(
       x = dplyr::tbl(conn, db_table_id),
-      y = dplyr::anti_join(delta_src, existing, by = c("checksum", "from_ts")),
+      y = insertions,
       in_place = TRUE
     )
 
@@ -236,11 +244,10 @@ delta_load <- function(
     if (!is.null(logger)) {
 
       # Compute insertions and deactivations
-      insertions <- delta_src %>%
-        dplyr::filter(.data$from_ts <= !!attr(delta, "timestamp_from")) %>%
+      insertions <- insertions %>%
         dplyr::count("ts" = .data$from_ts, name = "n_insertions")
 
-      deactivations <- delta_src %>%
+      deactivations <- deactivations %>%
         dplyr::filter(!is.na(.data$until_ts)) %>%
         dplyr::count("ts" = .data$until_ts, name = "n_deactivations")
 
@@ -248,18 +255,20 @@ delta_load <- function(
         insertions,
         deactivations,
         by = "ts"
-      ) |>
+      ) %>%
         dplyr::collect()
 
       # Update the logs
       updates %>%
-        purrr::pmap(
+        purrr::pwalk(
           \(ts, n_insertions, n_deactivations) {
             logger$set_timestamp(ts)
             logger$log_to_db(
-              n_insertions = !!n_insertions,
-              n_deactivations = !!n_deactivations,
-              message = "Update via delta load"
+              n_insertions = !!ifelse(is.na(n_insertions), 0, n_insertions),
+              n_deactivations = !!ifelse(is.na(n_deactivations), 0, n_deactivations),
+              message = !!glue::glue(
+                "Update via delta load (timestamp_from = {attr(delta, \"timestamp_from\")})"
+              )
             )
             logger$finalize_db_entry()
           }

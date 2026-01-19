@@ -17,7 +17,7 @@ for (conn in get_test_conns()) {
   t1 <- dplyr::copy_to(conn, t1, name = id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE)
   t2 <- dplyr::copy_to(conn, t2, name = id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE)
 
-  logger <- LoggerNull$new()
+  logger_null <- LoggerNull$new()
 
 
   test_that("delta loading works for incremental backups", {
@@ -30,7 +30,7 @@ for (conn in get_test_conns()) {
       conn = conn,
       db_table = "test.SCDB_tmp1",
       timestamp = "2022-01-01 08:00:00",
-      logger = logger
+      logger = logger_null
     )
 
     delta_1 <- delta_export(
@@ -60,7 +60,7 @@ for (conn in get_test_conns()) {
       conn = conn,
       db_table = "test.SCDB_tmp1",
       timestamp = "2022-01-01 08:10:00",
-      logger = logger
+      logger = logger_null
     )
 
     delta_2 <- delta_export(
@@ -90,7 +90,7 @@ for (conn in get_test_conns()) {
       conn = conn,
       db_table = "test.SCDB_tmp1",
       timestamp = "2022-01-01 08:20:00",
-      logger = logger
+      logger = logger_null
     )
 
     delta_3 <- delta_export(
@@ -164,7 +164,7 @@ for (conn in get_test_conns()) {
       conn = source_conn,
       db_table = "source",
       timestamp = "2022-01-01 08:00:00",
-      logger = logger
+      logger = logger_null
     )
 
     # Update 2
@@ -173,7 +173,7 @@ for (conn in get_test_conns()) {
       conn = source_conn,
       db_table = "source",
       timestamp = "2022-01-01 08:10:00",
-      logger = logger
+      logger = logger_null
     )
 
     # Update 3
@@ -182,7 +182,7 @@ for (conn in get_test_conns()) {
       conn = source_conn,
       db_table = "source",
       timestamp = "2022-01-01 08:20:00",
-      logger = logger
+      logger = logger_null
     )
 
 
@@ -217,7 +217,7 @@ for (conn in get_test_conns()) {
       conn = conn,
       db_table = "test.SCDB_tmp2",
       timestamp = "2022-01-01 08:00:00",
-      logger = logger
+      logger = logger_null
     )
 
     # Check transfer success
@@ -254,7 +254,7 @@ for (conn in get_test_conns()) {
       conn = conn,
       db_table = "test.SCDB_tmp2",
       timestamp = "2022-01-01 08:10:00",
-      logger = logger
+      logger = logger_null
     )
 
     # Check transfer success
@@ -310,7 +310,7 @@ for (conn in get_test_conns()) {
       conn = conn,
       db_table = "test.SCDB_tmp2",
       timestamp = "2022-01-01 08:20:00",
-      logger = logger
+      logger = logger_null
     )
 
     # Check transfer success (now until_ts should also match)
@@ -375,7 +375,7 @@ for (conn in get_test_conns()) {
       conn = conn,
       db_table = "test.SCDB_tmp1",
       timestamp = "2022-01-01 08:00:00",
-      logger = logger
+      logger = logger_null
     )
 
     # Add delta to the partial state on target connection
@@ -428,6 +428,114 @@ for (conn in get_test_conns()) {
       get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
         dplyr::collect() %>%
         dplyr::arrange(col1, col2)
+    )
+  })
+
+
+  test_that("delta loading writes logs as expected", {
+
+    # Clear and run all deltas
+    if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
+    expect_false(table_exists(conn, "test.SCDB_tmp1"))
+
+    if (DBI::dbExistsTable(conn, id("test.SCDB_tmp2", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp2", conn))
+    expect_false(table_exists(conn, "test.SCDB_tmp2"))
+
+    if (DBI::dbExistsTable(conn, id("test.SCDB_logs", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_logs", conn))
+    expect_false(table_exists(conn, "test.SCDB_logs"))
+
+    # Configure a logger for the normal update steps
+    logger_1 <- Logger$new(
+      db_table = "test.SCDB_tmp1",
+      log_table_id = "test.SCDB_logs",
+      log_conn = conn,
+      output_to_console = FALSE
+    )
+
+    # Build a test state
+    # Update 1
+    update_snapshot(
+      .data = t0,
+      conn = conn,
+      db_table = "test.SCDB_tmp1",
+      timestamp = "2022-01-01 08:00:00",
+      logger = logger_1
+    )
+
+    delta_1 <- delta_export(
+      conn = conn,
+      db_table = "test.SCDB_tmp1",
+      timestamp_from  = "2022-01-01 08:00:00"
+    )
+    defer_db_cleanup(delta_1)
+
+    # Update 2
+    update_snapshot(
+      .data = t1,
+      conn = conn,
+      db_table = "test.SCDB_tmp1",
+      timestamp = "2022-01-01 08:10:00",
+      logger = logger_1
+    )
+
+    delta_2 <- delta_export(
+      conn = conn,
+      db_table = "test.SCDB_tmp1",
+      timestamp_from  = "2022-01-01 08:10:00"
+    )
+    defer_db_cleanup(delta_2)
+
+    # Update 3
+    update_snapshot(
+      .data = t2,
+      conn = conn,
+      db_table = "test.SCDB_tmp1",
+      timestamp = "2022-01-01 08:20:00",
+      logger = logger_1
+    )
+
+    delta_3 <- delta_export(
+      conn = conn,
+      db_table = "test.SCDB_tmp1",
+      timestamp_from  = "2022-01-01 08:20:00"
+    )
+    defer_db_cleanup(delta_3)
+
+
+    # Configure a logger for the delta load
+    logger_2 <- Logger$new(
+      db_table = "test.SCDB_tmp2",
+      log_table_id = "test.SCDB_logs",
+      log_conn = conn
+    )
+
+    # Replay deltas
+    delta_load(conn, db_table = "test.SCDB_tmp2", delta = delta_1, logger = logger_2)
+    delta_load(conn, db_table = "test.SCDB_tmp2", delta = delta_2, logger = logger_2)
+    delta_load(conn, db_table = "test.SCDB_tmp2", delta = delta_3, logger = logger_2)
+
+    # Check transfer success
+    expect_identical(
+      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
+        dplyr::collect() %>%
+        dplyr::arrange(col1, col2),
+      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
+        dplyr::collect() %>%
+        dplyr::arrange(col1, col2)
+    )
+
+    # Check logs match insertions and deactivations
+    expect_identical(
+      dplyr::tbl(conn, id("test.SCDB_logs", conn)) %>%
+        dplyr::filter(!is.na(.data$message)) %>% # delta_load() logs
+        dplyr::select("date", "n_insertions", "n_deactivations") %>%
+        dplyr::collect() %>%
+        dplyr::arrange(.data$date),
+      dplyr::tbl(conn, id("test.SCDB_logs", conn)) %>%
+        dplyr::filter(is.na(.data$message)) %>% # update_snapshot() logs
+        dplyr::select("date", "n_insertions", "n_deactivations") %>%
+        dplyr::collect() %>%
+        dplyr::arrange(.data$date)
     )
   })
 
