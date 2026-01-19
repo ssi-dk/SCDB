@@ -238,45 +238,38 @@ delta_load <- function(
     # Release the lock
     unlock_table(conn, db_table_id)
 
-    # Compute insertions and deactivations
-    insertions <- delta_src %>%
-      dplyr::filter(.data$from_ts <= attr(delta, "timestamp_from")) %>%
-      dplyr::count("ts" = .data$from_ts, name = "n_insertions")
+    if (!is.null(logger)) {
 
-    deactivations <- delta_src %>%
-      dplyr::filter(!is.na(.data$until_ts)) %>%
-      dplyr::count("ts" = .data$until_ts, name = "n_deactivations")
+      # Compute insertions and deactivations
+      insertions <- delta_src %>%
+        dplyr::filter(.data$from_ts <= !!attr(delta, "timestamp_from")) %>%
+        dplyr::count("ts" = .data$from_ts, name = "n_insertions")
 
-    updates <- dplyr::full_join(
-      insertions,
-      deactivations,
-      by = "ts"
-    )
+      deactivations <- delta_src %>%
+        dplyr::filter(!is.na(.data$until_ts)) %>%
+        dplyr::count("ts" = .data$until_ts, name = "n_deactivations")
 
-    # Prepare the logger
-    if (is.null(logger)) {
-      logger <- Logger$new(
-        db_table = db_table_id,
-        log_conn = conn,
-        timestamp = NULL,
-        start_time = tic
-      )
+      updates <- dplyr::full_join(
+        insertions,
+        deactivations,
+        by = "ts"
+      ) |>
+        dplyr::collect()
+
+      # Update the logs
+      updates %>%
+        purrr::pmap(
+          \(ts, n_insertions, n_deactivations) {
+            logger$set_timestamp(ts)
+            logger$log_to_db(
+              n_insertions = !!n_insertions,
+              n_deactivations = !!n_deactivations,
+              message = "Update via delta load"
+            )
+            logger$finalize_db_entry()
+          }
+        )
     }
-
-    # Update the logs
-    updates %>%
-      purrr::pmap(
-        \(ts, n_insertions, n_deactivations) {
-          logger$set_timestamp(ts)
-          logger$log_to_db(
-            n_insertions = !!n_insertions,
-            n_deactivations = !!n_deactivations,
-            message = "Update via delta load"
-          )
-          logger$finalize_db_entry()
-        }
-      )
-
   }
 
   #log_tbl <- create_logs_if_missing(conn, log_table_id)
