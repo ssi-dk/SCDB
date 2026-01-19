@@ -8,7 +8,7 @@
 \usage{
 delta_export(conn, db_table, timestamp_from, timestamp_until = NULL)
 
-delta_load(conn, db_table, delta)
+delta_load(conn, db_table, delta, logger = NULL)
 }
 \arguments{
 \item{conn}{(\code{DBIConnection(1)})\cr
@@ -29,10 +29,15 @@ If \code{NULL} (default), all history after \code{timestamp_from} is exported.}
 A "delta" exported from \code{delta_export()} to load.
 
 A list of deltas can also be supplied to be applied.}
+
+\item{logger}{(\code{Logger(1)})\cr
+A configured logging object. If none is given, one is initialized with default arguments.}
 }
 \value{
 The lazy-query containing the data (and history) in the source to be used
 in conjunction with \code{delta_load()}.
+
+This table is a temporary table that may need cleaning up.
 }
 \description{
 \code{delta_export()} exports data from tables created with \code{update_snapshot()}

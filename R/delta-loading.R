@@ -145,11 +145,13 @@ delta_export <- function(
 #'   A "delta" exported from `delta_export()` to load.
 #'
 #'   A list of deltas can also be supplied to be applied.
+#' @template logger
 #' @export
 delta_load <- function(
   conn,
   db_table,
-  delta
+  delta,
+  logger = NULL
 ) {
 
   # If a list of deltas is given, load each element
@@ -161,6 +163,7 @@ delta_load <- function(
   coll <- checkmate::makeAssertCollection()
   checkmate::assert_class(conn, "DBIConnection", add = coll)
   assert_dbtable_like(db_table, len = 1, add = coll)
+  checkmate::assert_multi_class(logger, "Logger", null.ok = TRUE, add = coll)
   checkmate::reportAssertions(coll)
 
   # Mark the current time
@@ -241,8 +244,45 @@ delta_load <- function(
   # Release the lock
   unlock_table(conn, db_table_id)
 
+  # Compute insertions and deactivations
+  insertions <- delta_src %>%
+    dplyr::filter(.data$from_ts <= attr(delta, "timestamp_from")) %>%
+    dplyr::count("ts" = .data$from_ts, name = "n_insertions")
+
+  deactivations <- delta_src %>%
+    dplyr::filter(!is.na(.data$until_ts)) %>%
+    dplyr::count("ts" = .data$until_ts, name = "n_deactivations")
+
+  updates <- dplyr::full_join(
+    insertions,
+    deactivations,
+    by = "ts"
+  )
+
+  # Prepare the logger
+  if (is.null(logger)) {
+    logger <- Logger$new(
+      db_table = db_table_id,
+      log_conn = conn,
+      timestamp = NULL,
+      start_time = tic
+    )
+  }
+
   # Update the logs
-  delta_src |>
-    dplyr::count(.data$from_ts, .data$until_ts)
+  updates %>%
+    purrr::pmap(
+      \(ts, n_insertions, n_deactivations) {
+        logger$set_timestamp(ts)
+        logger$log_to_db(
+          n_insertions = !!n_insertions,
+          n_deactivations = !!n_deactivations,
+          message = "Update via delta load"
+        )
+        logger$finalize_db_entry()
+      }
+    )
+
+
   #log_tbl <- create_logs_if_missing(conn, log_table_id)
 }
