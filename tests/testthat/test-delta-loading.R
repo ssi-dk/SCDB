@@ -37,8 +37,7 @@ for (conn in get_test_conns()) {
       conn = conn,
       db_table = "test.SCDB_tmp1",
       timestamp_from  = "2022-01-01 08:00:00"
-    ) %>%
-      dplyr::compute(unique_table_name("SCDB_delta_test"))
+    )
     defer_db_cleanup(delta_1)
 
     # Update 2
@@ -54,8 +53,7 @@ for (conn in get_test_conns()) {
       conn = conn,
       db_table = "test.SCDB_tmp1",
       timestamp_from  = "2022-01-01 08:10:00"
-    ) %>%
-      dplyr::compute(unique_table_name("SCDB_delta_test"))
+    )
     defer_db_cleanup(delta_2)
 
     # Update 3
@@ -71,8 +69,7 @@ for (conn in get_test_conns()) {
       conn = conn,
       db_table = "test.SCDB_tmp1",
       timestamp_from  = "2022-01-01 08:20:00"
-    ) %>%
-      dplyr::compute(unique_table_name("SCDB_delta_test"))
+    )
     defer_db_cleanup(delta_3)
 
 
@@ -122,8 +119,7 @@ for (conn in get_test_conns()) {
       db_table = "test.SCDB_tmp1",
       timestamp_from  = "2022-01-01 08:00:00",
       timestamp_until = "2022-01-01 08:00:00"
-    ) %>%
-      dplyr::compute(unique_table_name("SCDB_delta_test"))
+    )
     defer_db_cleanup(delta_1)
 
     # Re-build the table on another connection
@@ -163,8 +159,7 @@ for (conn in get_test_conns()) {
       db_table = "test.SCDB_tmp1",
       timestamp_from  = "2022-01-01 08:10:00",
       timestamp_until = "2022-01-01 08:10:00"
-    ) %>%
-      dplyr::compute(unique_table_name("SCDB_delta_test"))
+    )
     defer_db_cleanup(delta_2)
 
     # .. add to existing state
@@ -220,8 +215,7 @@ for (conn in get_test_conns()) {
       db_table = "test.SCDB_tmp1",
       timestamp_from  = "2022-01-01 08:20:00",
       timestamp_until = "2022-01-01 08:20:00"
-    ) %>%
-      dplyr::compute(unique_table_name("SCDB_delta_test"))
+    )
     defer_db_cleanup(delta_3)
 
     # .. add to existing state
@@ -258,8 +252,7 @@ for (conn in get_test_conns()) {
       db_table = "test.SCDB_tmp1",
       timestamp_from  = "2022-01-01 08:00:00",
       timestamp_until = "2022-01-01 08:20:00"
-    ) %>%
-      dplyr::compute(unique_table_name("SCDB_delta_test"))
+    )
     defer_db_cleanup(delta_batch)
 
     # Add delta to the target connection
@@ -286,8 +279,7 @@ for (conn in get_test_conns()) {
       conn = conn,
       db_table = "test.SCDB_tmp1",
       timestamp_from  = "2022-01-01 08:10:00" # From second update
-    ) %>%
-      dplyr::compute(unique_table_name("SCDB_delta_test"))
+    )
     defer_db_cleanup(delta_batch_open_ended)
 
     # Generate partial state on the other connection

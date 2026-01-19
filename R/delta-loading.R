@@ -34,6 +34,8 @@
 #' @return
 #'   The lazy-query containing the data (and history) in the source to be used
 #'   in conjunction with `delta_load()`.
+#'
+#'   This table is a temporary table that may need cleaning up.
 #' @seealso update_snapshot
 #' @importFrom rlang .data
 #' @export
@@ -127,6 +129,9 @@ delta_export <- function(
         )
       )
   }
+
+  # Store the computation
+  out <- dplyr::compute(out, name = unique_table_name("SCDB_delta"))
 
   return(out)
 }
@@ -234,5 +239,7 @@ delta_load <- function(
   unlock_table(conn, db_table_id)
 
   # Update the logs
+  delta_src |>
+    dplyr::count(.data$from_ts, .data$until_ts)
   #log_tbl <- create_logs_if_missing(conn, log_table_id)
 }
