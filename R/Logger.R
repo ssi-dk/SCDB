@@ -112,6 +112,12 @@ Logger <- R6::R6Class(                                                          
     #'   A timestamp describing the data being processed (not the current time).
     set_timestamp = function(timestamp) {
       private$timestamp <- timestamp
+
+      # Changing the timestamp invalidates the filename
+      private$.log_filename <- NULL
+
+      # .. and set the log entry as not finalized
+      private$finalized <- FALSE
     },
 
 
