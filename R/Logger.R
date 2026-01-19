@@ -79,23 +79,19 @@ Logger <- R6::R6Class(                                                          
       if (!is.null(db_table)) {
         private$db_table <- id(db_table, log_conn)
       }
-      private$timestamp <- timestamp
 
-      # Store console log information
+      # Store the inputs
+      self$set_timestamp(timestamp)
       private$.output_to_console <- output_to_console
+      private$log_conn <- log_conn
+      private$.log_path <- log_path
+      private$.start_time <- start_time
 
       # Store database log information
       if (!is.null(log_table_id)) {
         private$log_table_id <- id(log_table_id, log_conn)
         private$.log_tbl <- create_logs_if_missing(log_conn, private$log_table_id)
       }
-      private$log_conn <- log_conn
-
-      # Store file log information
-      private$.log_path <- log_path
-
-      # Store Logger information
-      private$.start_time <- start_time
 
       # Create a line in log database for Logger
       private$generate_db_entry()
@@ -108,6 +104,14 @@ Logger <- R6::R6Class(                                                          
           call. = FALSE
         )
       }
+    },
+
+    #' @description
+    #'   Update the timestamp being logged
+    #' @param timestamp (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
+    #'   A timestamp describing the data being processed (not the current time).
+    set_timestamp = function(timestamp) {
+      private$timestamp <- timestamp
     },
 
 

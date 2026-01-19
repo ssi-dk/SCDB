@@ -55,6 +55,7 @@ The full path to the logger's log file. Read only.}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Logger-new}{\code{Logger$new()}}
+\item \href{#method-Logger-set_timestamp}{\code{Logger$set_timestamp()}}
 \item \href{#method-Logger-log_info}{\code{Logger$log_info()}}
 \item \href{#method-Logger-log_warn}{\code{Logger$log_warn()}}
 \item \href{#method-Logger-log_error}{\code{Logger$log_error()}}
@@ -108,6 +109,24 @@ The time at which data processing was started (defaults to \code{\link[=Sys.time
 
 \item{\code{warn}}{(\code{logical(1)})\cr
 Should a warning be produced if no logging will be done?}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Logger-set_timestamp"></a>}}
+\if{latex}{\out{\hypertarget{method-Logger-set_timestamp}{}}}
+\subsection{Method \code{set_timestamp()}}{
+Update the timestamp being logged
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Logger$set_timestamp(timestamp)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{timestamp}}{(\code{POSIXct(1)}, \code{Date(1)}, or \code{character(1)})\cr
+A timestamp describing the data being processed (not the current time).}
 }
 \if{html}{\out{</div>}}
 }
