@@ -133,6 +133,9 @@ delta_export <- function(
   # Store the computation
   out <- dplyr::compute(out, name = unique_table_name("SCDB_delta"))
 
+  # Store meta data on the delta
+  attr(out, "timestamp_from")  <- timestamp_from
+
   return(out)
 }
 
