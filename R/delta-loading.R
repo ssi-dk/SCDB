@@ -1,4 +1,3 @@
-
 #' Import and export a data-chunk with history from historical data
 #' @name delta_loading
 #' @description
@@ -118,7 +117,7 @@ delta_export <- function(
         ((!!timestamp_from <= .data$until_ts) & (!!is.null(timestamp_until) | .data$until_ts <= !!timestamp_until))
     )
 
-  # Censor future until_ts values when in "batch" mode
+  # Censor future until_ts values
   if (!is.null(timestamp_until)) {
     out <- out %>%
       dplyr::mutate(
@@ -133,7 +132,7 @@ delta_export <- function(
   # Store the computation
   out <- dplyr::compute(out, name = unique_table_name("SCDB_delta"))
 
-  # Store meta data on the delta
+  # Store metadata on the delta
   attr(out, "timestamp_from")  <- timestamp_from
 
   return(out)
@@ -212,7 +211,7 @@ delta_load <- function(
 
     # Patch existing records
     deactivations <- dplyr::anti_join(
-      x = dplyr::filter(delta_src, !is.na(.data$until_ts)),
+      x = dplyr::filter(delta_src, !is.na(.data$until_ts)), # deactivations must have until_ts
       y = existing,
       by = c("checksum", "from_ts", "until_ts")
     )
