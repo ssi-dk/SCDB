@@ -35,6 +35,46 @@
 #'   in conjunction with `delta_load()`.
 #'
 #'   This table is a temporary table that may need cleaning up.
+#' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
+#'   conn <- get_connection()
+#'
+#'   data <- dplyr::copy_to(conn, mtcars)
+#'
+#'   # Copy the first 3 records
+#'   update_snapshot(
+#'     head(data, 3),
+#'     conn = conn,
+#'     db_table = "test.mtcars",
+#'     timestamp = "2020-01-01"
+#'   )
+#'
+#'   # Create a delta with the current state
+#'   delta <- delta_export(
+#'     conn,
+#'     db_table = "test.mtcars",
+#'     timestamp_from = "2020-01-01"
+#'   )
+#'
+#'   # Update with the first 5 records
+#'   update_snapshot(
+#'     head(data, 5),
+#'     conn = conn,
+#'     db_table = "test.mtcars",
+#'     timestamp = "2021-01-01"
+#'   )
+#'
+#'   dplyr::tbl(conn, "test.mtcars")
+#'
+#'   # Create a backup using the delta
+#'   delta_load(
+#'     conn = conn,
+#'     db_table = "test.mtcars_backup",
+#'     delta = delta
+#'   )
+#'
+#'   dplyr::tbl(conn, "test.mtcars_backup")
+#'
+#'   close_connection(conn)
 #' @seealso update_snapshot
 #' @importFrom rlang .data
 #' @export
