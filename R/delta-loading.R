@@ -191,90 +191,93 @@ delta_load <- function(
   db_table_id <- id(db_table, conn)
 
   # Lock the table
-  lock_table(conn, db_table_id)
+  if (!lock_table(conn, db_table_id)) {
+    stop(glue::glue("Failed to achieve lock on table ({db_table_id}) -- delta not applied!"))
+  } else {
 
-  # Apply the delta to the target table
-  if (!table_exists(conn, db_table_id)) {
+    # Apply the delta to the target table
+    if (!table_exists(conn, db_table_id)) {
 
-    # Create table and apply delta
-    delta_src %>%
-      utils::head(0) %>%
-      dplyr::collect() %>%
-      dplyr::select(!c("checksum", "from_ts", "until_ts")) %>%
-      create_table(conn = conn, db_table = db_table_id)
+      # Create table and apply delta
+      delta_src %>%
+        utils::head(0) %>%
+        dplyr::collect() %>%
+        dplyr::select(!c("checksum", "from_ts", "until_ts")) %>%
+        create_table(conn = conn, db_table = db_table_id)
 
-  }
+    }
 
-  #print(dplyr::tbl(conn, db_table_id))
+    #print(dplyr::tbl(conn, db_table_id))
 
-  # Identify existing records
-  existing <- dplyr::tbl(conn, db_table_id) %>%
-    dplyr::select(dplyr::all_of((c("checksum", "from_ts")))) %>%
-    dplyr::compute(name = unique_table_name("SCDB_delta_existing"))
-  defer_db_cleanup(existing)
+    # Identify existing records
+    existing <- dplyr::tbl(conn, db_table_id) %>%
+      dplyr::select(dplyr::all_of((c("checksum", "from_ts")))) %>%
+      dplyr::compute(name = unique_table_name("SCDB_delta_existing"))
+    defer_db_cleanup(existing)
 
-  # Patch existing records
-  dplyr::rows_patch(
-    x = dplyr::tbl(conn, db_table_id),
-    y = dplyr::inner_join(
-      x = existing,
-      y = delta_src,
-      by = c("checksum", "from_ts")
-    ),
-    by = c("checksum", "from_ts"),
-    in_place = TRUE,
-    unmatched = "ignore"
-  )
-
-  # Add new records
-  dplyr::rows_append(
-    x = dplyr::tbl(conn, db_table_id),
-    y = dplyr::anti_join(delta_src, existing, by = c("checksum", "from_ts")),
-    in_place = TRUE
-  )
-
-  # Release the lock
-  unlock_table(conn, db_table_id)
-
-  # Compute insertions and deactivations
-  insertions <- delta_src %>%
-    dplyr::filter(.data$from_ts <= attr(delta, "timestamp_from")) %>%
-    dplyr::count("ts" = .data$from_ts, name = "n_insertions")
-
-  deactivations <- delta_src %>%
-    dplyr::filter(!is.na(.data$until_ts)) %>%
-    dplyr::count("ts" = .data$until_ts, name = "n_deactivations")
-
-  updates <- dplyr::full_join(
-    insertions,
-    deactivations,
-    by = "ts"
-  )
-
-  # Prepare the logger
-  if (is.null(logger)) {
-    logger <- Logger$new(
-      db_table = db_table_id,
-      log_conn = conn,
-      timestamp = NULL,
-      start_time = tic
-    )
-  }
-
-  # Update the logs
-  updates %>%
-    purrr::pmap(
-      \(ts, n_insertions, n_deactivations) {
-        logger$set_timestamp(ts)
-        logger$log_to_db(
-          n_insertions = !!n_insertions,
-          n_deactivations = !!n_deactivations,
-          message = "Update via delta load"
-        )
-        logger$finalize_db_entry()
-      }
+    # Patch existing records
+    dplyr::rows_patch(
+      x = dplyr::tbl(conn, db_table_id),
+      y = dplyr::inner_join(
+        x = existing,
+        y = delta_src,
+        by = c("checksum", "from_ts")
+      ),
+      by = c("checksum", "from_ts"),
+      in_place = TRUE,
+      unmatched = "ignore"
     )
 
+    # Add new records
+    dplyr::rows_append(
+      x = dplyr::tbl(conn, db_table_id),
+      y = dplyr::anti_join(delta_src, existing, by = c("checksum", "from_ts")),
+      in_place = TRUE
+    )
+
+    # Release the lock
+    unlock_table(conn, db_table_id)
+
+    # Compute insertions and deactivations
+    insertions <- delta_src %>%
+      dplyr::filter(.data$from_ts <= attr(delta, "timestamp_from")) %>%
+      dplyr::count("ts" = .data$from_ts, name = "n_insertions")
+
+    deactivations <- delta_src %>%
+      dplyr::filter(!is.na(.data$until_ts)) %>%
+      dplyr::count("ts" = .data$until_ts, name = "n_deactivations")
+
+    updates <- dplyr::full_join(
+      insertions,
+      deactivations,
+      by = "ts"
+    )
+
+    # Prepare the logger
+    if (is.null(logger)) {
+      logger <- Logger$new(
+        db_table = db_table_id,
+        log_conn = conn,
+        timestamp = NULL,
+        start_time = tic
+      )
+    }
+
+    # Update the logs
+    updates %>%
+      purrr::pmap(
+        \(ts, n_insertions, n_deactivations) {
+          logger$set_timestamp(ts)
+          logger$log_to_db(
+            n_insertions = !!n_insertions,
+            n_deactivations = !!n_deactivations,
+            message = "Update via delta load"
+          )
+          logger$finalize_db_entry()
+        }
+      )
+
+  }
 
   #log_tbl <- create_logs_if_missing(conn, log_table_id)
 }
