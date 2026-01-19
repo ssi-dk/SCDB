@@ -496,7 +496,7 @@
     },
     {
       "package": "rappdirs",
-      "version": "0.3.3",
+      "version": "0.3.4",
       "binary": true
     },
     {
@@ -581,7 +581,7 @@
     },
     {
       "package": "rstudioapi",
-      "version": "0.17.1",
+      "version": "0.18.0",
       "binary": true
     },
     {
@@ -726,7 +726,7 @@
     },
     {
       "package": "vctrs",
-      "version": "0.6.5",
+      "version": "0.7.0",
       "binary": true
     },
     {
@@ -756,12 +756,12 @@
     },
     {
       "package": "xfun",
-      "version": "0.55",
+      "version": "0.56",
       "binary": true
     },
     {
       "package": "xml2",
-      "version": "1.5.1",
+      "version": "1.5.2",
       "binary": true
     },
     {
