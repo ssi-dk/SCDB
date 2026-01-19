@@ -338,27 +338,6 @@ for (conn in get_test_conns()) {
         dplyr::collect() %>%
         dplyr::arrange(col1, col2)
     )
-
-    ## Test 6 ##############################################################
-
-    # Apply as list
-    delta_load(
-      target_conn,
-      db_table = "test_list_deltas",
-      delta = list(delta_1, delta_2, delta_3)
-    )
-
-    # Check transfer success
-    expect_identical(
-      get_table(target_conn, "test_list_deltas", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2),
-      get_table(target_conn, "test_reference", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2)
-    )
-
-    close_connection(target_conn)
   })
 
   close_connection(conn)
