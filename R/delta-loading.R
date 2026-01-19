@@ -205,8 +205,8 @@ delta_load <- function(
   #print(dplyr::tbl(conn, db_table_id))
 
   # Identify existing records
-  existing <- dplyr::tbl(conn, db_table_id) |>
-    dplyr::select(dplyr::all_of((c("checksum", "from_ts")))) |>
+  existing <- dplyr::tbl(conn, db_table_id) %>%
+    dplyr::select(dplyr::all_of((c("checksum", "from_ts")))) %>%
     dplyr::compute(name = unique_table_name("SCDB_delta_existing"))
   defer_db_cleanup(existing)
 
