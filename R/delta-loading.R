@@ -158,7 +158,11 @@ delta_load <- function(
   checkmate::reportAssertions(coll)
 
   # Check if the target and delta share connection
-  if (!identical(conn, dbplyr::remote_con(delta))) {
+  if (identical(conn, dbplyr::remote_con(delta))) {
+
+    delta_src <- delta # On the same connection, we use to input as is
+
+  } else {
 
     # Copy delta to target (if needed)
     delta_src <- dplyr::copy_to(
@@ -175,21 +179,13 @@ delta_load <- function(
       exclude = c("checksum", "from_ts", "until_ts"),
       warn = FALSE
     )
-
-  } else {
-
-    # On the same connection, we use to input as is
-    delta_src <- delta
-
   }
 
   # Construct id for target table
   db_table_id <- id(db_table, conn)
 
   # Lock the table
-  if (!lock_table(conn, db_table_id)) {
-    stop(glue::glue("Failed to achieve lock on table ({db_table_id}) -- delta not applied!"))
-  } else {
+  if (lock_table(conn, db_table_id)) {
 
     # Apply the delta to the target table
     if (!table_exists(conn, db_table_id)) {
@@ -273,5 +269,10 @@ delta_load <- function(
           }
         )
     }
+
+  } else {
+
+    stop(glue::glue("Failed to achieve lock on table ({db_table_id}) -- delta not applied!"))
+
   }
 }
