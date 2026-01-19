@@ -158,9 +158,6 @@ delta_load <- function(
   checkmate::assert_multi_class(logger, "Logger", null.ok = TRUE, add = coll)
   checkmate::reportAssertions(coll)
 
-  # Mark the current time
-  tic <- Sys.time()
-
   # Check if the target and delta share connection
   if (!identical(conn, dbplyr::remote_con(delta))) {
 
@@ -206,8 +203,6 @@ delta_load <- function(
         create_table(conn = conn, db_table = db_table_id)
 
     }
-
-    #print(dplyr::tbl(conn, db_table_id))
 
     # Identify existing records
     existing <- dplyr::tbl(conn, db_table_id) %>%
@@ -271,6 +266,4 @@ delta_load <- function(
         )
     }
   }
-
-  #log_tbl <- create_logs_if_missing(conn, log_table_id)
 }
