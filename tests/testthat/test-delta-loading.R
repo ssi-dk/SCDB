@@ -156,279 +156,288 @@ for (conn in get_test_conns()) {
   test_that("delta loading works to migrate data", {
 
     # Re-build the table on another connection
-    source_conn <- DBI::dbConnect(RSQLite::SQLite(), dbname = ":memory:")
-
-    # Update 1
-    update_snapshot(
-      .data = t0,
-      conn = source_conn,
-      db_table = "source",
-      timestamp = "2022-01-01 08:00:00",
-      logger = logger_null
+    # (one with date-time (duckdb) and one without (sqlite))
+    source_conns <- list(
+      "SQLite" = get_connection(RSQLite::SQLite(), dbname = ":memory:"),
+      "DuckDB" = get_connection(duckdb::duckdb(), dbdir = ":memory:")
     )
 
-    # Update 2
-    update_snapshot(
-      .data = t1,
-      conn = source_conn,
-      db_table = "source",
-      timestamp = "2022-01-01 08:10:00",
-      logger = logger_null
-    )
+    for (source_conn in source_conns) {
 
-    # Update 3
-    update_snapshot(
-      .data = t2,
-      conn = source_conn,
-      db_table = "source",
-      timestamp = "2022-01-01 08:20:00",
-      logger = logger_null
-    )
+      # Update 1
+      update_snapshot(
+        .data = t0,
+        conn = source_conn,
+        db_table = "source",
+        timestamp = "2022-01-01 08:00:00",
+        logger = logger_null
+      )
+
+      # Update 2
+      update_snapshot(
+        .data = t1,
+        conn = source_conn,
+        db_table = "source",
+        timestamp = "2022-01-01 08:10:00",
+        logger = logger_null
+      )
+
+      # Update 3
+      update_snapshot(
+        .data = t2,
+        conn = source_conn,
+        db_table = "source",
+        timestamp = "2022-01-01 08:20:00",
+        logger = logger_null
+      )
 
 
-    ## Test 1 ##############################################################
+      ## Test 1 ##############################################################
 
-    # Clear test tables on connection
-    if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
-    expect_false(table_exists(conn, "test.SCDB_tmp1"))
+      # Clear test tables on connection
+      if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
+      expect_false(table_exists(conn, "test.SCDB_tmp1"))
 
-    if (DBI::dbExistsTable(conn, id("test.SCDB_tmp2", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp2", conn))
-    expect_false(table_exists(conn, "test.SCDB_tmp2"))
+      if (DBI::dbExistsTable(conn, id("test.SCDB_tmp2", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp2", conn))
+      expect_false(table_exists(conn, "test.SCDB_tmp2"))
 
-    # Export first timestamp
-    delta_1 <- delta_export(
-      conn = source_conn,
-      db_table = "source",
-      timestamp_from  = "2022-01-01 08:00:00",
-      timestamp_until = "2022-01-01 08:00:00"
-    )
-    defer_db_cleanup(delta_1)
+      # Export first timestamp
+      delta_1 <- delta_export(
+        conn = source_conn,
+        db_table = "source",
+        timestamp_from  = "2022-01-01 08:00:00",
+        timestamp_until = "2022-01-01 08:00:00"
+      )
+      defer_db_cleanup(delta_1)
 
-    # .. and load from a fresh state
-    delta_load(
-      conn,
-      db_table = "test.SCDB_tmp1",
-      delta = delta_1
-    )
+      # .. and load from a fresh state
+      delta_load(
+        conn,
+        db_table = "test.SCDB_tmp1",
+        delta = delta_1
+      )
 
-    # Generate equivalent state on the connection
-    update_snapshot(
-      .data = t0,
-      conn = conn,
-      db_table = "test.SCDB_tmp2",
-      timestamp = "2022-01-01 08:00:00",
-      logger = logger_null
-    )
+      # Generate equivalent state on the connection
+      update_snapshot(
+        .data = t0,
+        conn = conn,
+        db_table = "test.SCDB_tmp2",
+        timestamp = "2022-01-01 08:00:00",
+        logger = logger_null
+      )
 
-    # Check transfer success
-    expect_identical(
-      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2),
-      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2)
-    )
+      # Check transfer success
+      expect_identical(
+        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
+          dplyr::collect() %>%
+          dplyr::arrange(col1, col2),
+        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
+          dplyr::collect() %>%
+          dplyr::arrange(col1, col2)
+      )
 
-    ## Test 2 ##############################################################
+      ## Test 2 ##############################################################
 
-    # Export second timestamp
-    delta_2 <- delta_export(
-      conn = source_conn,
-      db_table = "source",
-      timestamp_from  = "2022-01-01 08:10:00",
-      timestamp_until = "2022-01-01 08:10:00"
-    )
-    defer_db_cleanup(delta_2)
+      # Export second timestamp
+      delta_2 <- delta_export(
+        conn = source_conn,
+        db_table = "source",
+        timestamp_from  = "2022-01-01 08:10:00",
+        timestamp_until = "2022-01-01 08:10:00"
+      )
+      defer_db_cleanup(delta_2)
 
-    # .. add to existing state
-    delta_load(
-      conn,
-      db_table = "test.SCDB_tmp1",
-      delta = delta_2
-    )
+      # .. add to existing state
+      delta_load(
+        conn,
+        db_table = "test.SCDB_tmp1",
+        delta = delta_2
+      )
 
-    # Generate equivalent state on the other connection
-    update_snapshot(
-      .data = t1,
-      conn = conn,
-      db_table = "test.SCDB_tmp2",
-      timestamp = "2022-01-01 08:10:00",
-      logger = logger_null
-    )
+      # Generate equivalent state on the other connection
+      update_snapshot(
+        .data = t1,
+        conn = conn,
+        db_table = "test.SCDB_tmp2",
+        timestamp = "2022-01-01 08:10:00",
+        logger = logger_null
+      )
 
-    # Check transfer success
-    expect_identical(
-      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2),
-      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2)
-    )
+      # Check transfer success
+      expect_identical(
+        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
+          dplyr::collect() %>%
+          dplyr::arrange(col1, col2),
+        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
+          dplyr::collect() %>%
+          dplyr::arrange(col1, col2)
+      )
 
-    ## Test 2.5 ############################################################
+      ## Test 2.5 ############################################################
 
-    # Re-apply the second delta
-    delta_load(
-      conn,
-      db_table = "test.SCDB_tmp1",
-      delta = delta_2
-    )
+      # Re-apply the second delta
+      delta_load(
+        conn,
+        db_table = "test.SCDB_tmp1",
+        delta = delta_2
+      )
 
-    # Check transfer success
-    expect_identical(
-      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2),
-      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2)
-    )
+      # Check transfer success
+      expect_identical(
+        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
+          dplyr::collect() %>%
+          dplyr::arrange(col1, col2),
+        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
+          dplyr::collect() %>%
+          dplyr::arrange(col1, col2)
+      )
 
-    ## Test 3 ##############################################################
+      ## Test 3 ##############################################################
 
-    # Export third timestamp
-    delta_3 <- delta_export(
-      conn = source_conn,
-      db_table = "source",
-      timestamp_from  = "2022-01-01 08:20:00",
-      timestamp_until = "2022-01-01 08:20:00"
-    )
-    defer_db_cleanup(delta_3)
+      # Export third timestamp
+      delta_3 <- delta_export(
+        conn = source_conn,
+        db_table = "source",
+        timestamp_from  = "2022-01-01 08:20:00",
+        timestamp_until = "2022-01-01 08:20:00"
+      )
+      defer_db_cleanup(delta_3)
 
-    # .. add to existing state
-    delta_load(
-      conn,
-      db_table = "test.SCDB_tmp1",
-      delta = delta_3
-    )
+      # .. add to existing state
+      delta_load(
+        conn,
+        db_table = "test.SCDB_tmp1",
+        delta = delta_3
+      )
 
-    # Generate equivalent state on the other connection
-    update_snapshot(
-      .data = t2,
-      conn = conn,
-      db_table = "test.SCDB_tmp2",
-      timestamp = "2022-01-01 08:20:00",
-      logger = logger_null
-    )
+      # Generate equivalent state on the other connection
+      update_snapshot(
+        .data = t2,
+        conn = conn,
+        db_table = "test.SCDB_tmp2",
+        timestamp = "2022-01-01 08:20:00",
+        logger = logger_null
+      )
 
-    # Check transfer success (now until_ts should also match)
-    expect_identical(
-      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2),
-      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2)
-    )
+      # Check transfer success (now until_ts should also match)
+      expect_identical(
+        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
+          dplyr::collect() %>%
+          dplyr::arrange(col1, col2),
+        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
+          dplyr::collect() %>%
+          dplyr::arrange(col1, col2)
+      )
 
-    ## Test 4 ##############################################################
+      ## Test 4 ##############################################################
 
-    # Clear test tables on connection
-    if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
-    expect_false(table_exists(conn, "test.SCDB_tmp1"))
+      # Clear test tables on connection
+      if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
+      expect_false(table_exists(conn, "test.SCDB_tmp1"))
 
-    # Run a single batch update
-    delta_batch <- delta_export(
-      conn = source_conn,
-      db_table = "source",
-      timestamp_from  = "2022-01-01 08:00:00",
-      timestamp_until = "2022-01-01 08:20:00"
-    )
-    defer_db_cleanup(delta_batch)
+      # Run a single batch update
+      delta_batch <- delta_export(
+        conn = source_conn,
+        db_table = "source",
+        timestamp_from  = "2022-01-01 08:00:00",
+        timestamp_until = "2022-01-01 08:20:00"
+      )
+      defer_db_cleanup(delta_batch)
 
-    # Add delta to the target connection
-    delta_load(
-      conn,
-      db_table = "test.SCDB_tmp1",
-      delta = delta_batch
-    )
+      # Add delta to the target connection
+      delta_load(
+        conn,
+        db_table = "test.SCDB_tmp1",
+        delta = delta_batch
+      )
 
-    # Check transfer success
-    expect_identical(
-      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2),
-      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2)
-    )
+      # Check transfer success
+      expect_identical(
+        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
+          dplyr::collect() %>%
+          dplyr::arrange(col1, col2),
+        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
+          dplyr::collect() %>%
+          dplyr::arrange(col1, col2)
+      )
 
-    ## Test 4 ##############################################################
+      ## Test 4 ##############################################################
 
-    # Clear test tables on connection
-    if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
-    expect_false(table_exists(conn, "test.SCDB_tmp1"))
+      # Clear test tables on connection
+      if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
+      expect_false(table_exists(conn, "test.SCDB_tmp1"))
 
-    # Run a single batch update (no timestamp_until)
-    delta_batch_open_ended <- delta_export(
-      conn = source_conn,
-      db_table = "source",
-      timestamp_from  = "2022-01-01 08:10:00" # From second update
-    )
-    defer_db_cleanup(delta_batch_open_ended)
+      # Run a single batch update (no timestamp_until)
+      delta_batch_open_ended <- delta_export(
+        conn = source_conn,
+        db_table = "source",
+        timestamp_from  = "2022-01-01 08:10:00" # From second update
+      )
+      defer_db_cleanup(delta_batch_open_ended)
 
-    # Generate partial state on the other connection
-    update_snapshot(
-      .data = t0,
-      conn = conn,
-      db_table = "test.SCDB_tmp1",
-      timestamp = "2022-01-01 08:00:00",
-      logger = logger_null
-    )
+      # Generate partial state on the other connection
+      update_snapshot(
+        .data = t0,
+        conn = conn,
+        db_table = "test.SCDB_tmp1",
+        timestamp = "2022-01-01 08:00:00",
+        logger = logger_null
+      )
 
-    # Add delta to the partial state on target connection
-    delta_load(
-      conn,
-      db_table = "test.SCDB_tmp1",
-      delta = delta_batch_open_ended
-    )
+      # Add delta to the partial state on target connection
+      delta_load(
+        conn,
+        db_table = "test.SCDB_tmp1",
+        delta = delta_batch_open_ended
+      )
 
-    # Check transfer success
-    expect_identical(
-      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2),
-      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2)
-    )
+      # Check transfer success
+      expect_identical(
+        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
+          dplyr::collect() %>%
+          dplyr::arrange(col1, col2),
+        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
+          dplyr::collect() %>%
+          dplyr::arrange(col1, col2)
+      )
 
-    ## Test 5 ##############################################################
+      ## Test 5 ##############################################################
 
-    # Clear test tables on connection
-    if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
-    expect_false(table_exists(conn, "test.SCDB_tmp1"))
+      # Clear test tables on connection
+      if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
+      expect_false(table_exists(conn, "test.SCDB_tmp1"))
 
-    # Out of order application
-    delta_load(
-      conn,
-      db_table = "test.SCDB_tmp1",
-      delta = delta_2
-    )
+      # Out of order application
+      delta_load(
+        conn,
+        db_table = "test.SCDB_tmp1",
+        delta = delta_2
+      )
 
-    delta_load(
-      conn,
-      db_table = "test.SCDB_tmp1",
-      delta = delta_3
-    )
+      delta_load(
+        conn,
+        db_table = "test.SCDB_tmp1",
+        delta = delta_3
+      )
 
-    delta_load(
-      conn,
-      db_table = "test.SCDB_tmp1",
-      delta = delta_1
-    )
+      delta_load(
+        conn,
+        db_table = "test.SCDB_tmp1",
+        delta = delta_1
+      )
 
-    # Check transfer success
-    expect_identical(
-      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2),
-      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-        dplyr::collect() %>%
-        dplyr::arrange(col1, col2)
-    )
+      # Check transfer success
+      expect_identical(
+        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
+          dplyr::collect() %>%
+          dplyr::arrange(col1, col2),
+        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
+          dplyr::collect() %>%
+          dplyr::arrange(col1, col2)
+      )
+
+      close_connection(source_conn)
+    }
   })
 
 
