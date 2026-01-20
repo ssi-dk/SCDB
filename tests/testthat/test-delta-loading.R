@@ -214,13 +214,12 @@ for (conn in get_test_conns()) {
       defer_db_cleanup(delta_1)
 
       # .. and load from a fresh state
-      pkgcond::suppress_messages(
+      suppressMessages(
         delta_load(
           conn,
           db_table = "test.SCDB_tmp1",
           delta = delta_1
-        ),
-        pattern = "Source table has non-POSIXct"
+        )
       )
 
       # Generate equivalent state on the connection
@@ -254,13 +253,12 @@ for (conn in get_test_conns()) {
       defer_db_cleanup(delta_2)
 
       # .. add to existing state
-      pkgcond::suppress_messages(
+      suppressMessages(
         delta_load(
           conn,
           db_table = "test.SCDB_tmp1",
           delta = delta_2
-        ),
-        pattern = "Source table has non-POSIXct"
+        )
       )
 
       # Generate equivalent state on the other connection
@@ -285,13 +283,12 @@ for (conn in get_test_conns()) {
       ## Test 2.5 ############################################################
 
       # Re-apply the second delta
-      pkgcond::suppress_messages(
+      suppressMessages(
         delta_load(
           conn,
           db_table = "test.SCDB_tmp1",
           delta = delta_2
-        ),
-        pattern = "Source table has non-POSIXct"
+        )
       )
 
       # Check transfer success
@@ -316,13 +313,12 @@ for (conn in get_test_conns()) {
       defer_db_cleanup(delta_3)
 
       # .. add to existing state
-      pkgcond::suppress_messages(
+      suppressMessages(
         delta_load(
           conn,
           db_table = "test.SCDB_tmp1",
           delta = delta_3
-        ),
-        pattern = "Source table has non-POSIXct"
+        )
       )
 
       # Generate equivalent state on the other connection
@@ -360,13 +356,12 @@ for (conn in get_test_conns()) {
       defer_db_cleanup(delta_batch)
 
       # Add delta to the target connection
-      pkgcond::suppress_messages(
+      suppressMessages(
         delta_load(
           conn,
           db_table = "test.SCDB_tmp1",
           delta = delta_batch
-        ),
-        pattern = "Source table has non-POSIXct"
+        )
       )
 
       # Check transfer success
@@ -403,13 +398,12 @@ for (conn in get_test_conns()) {
       )
 
       # Add delta to the partial state on target connection
-      pkgcond::suppress_messages(
+      suppressMessages(
         delta_load(
           conn,
           db_table = "test.SCDB_tmp1",
           delta = delta_batch_open_ended
-        ),
-        pattern = "Source table has non-POSIXct"
+        )
       )
 
       # Check transfer success
@@ -429,31 +423,28 @@ for (conn in get_test_conns()) {
       expect_false(table_exists(conn, "test.SCDB_tmp1"))
 
       # Out of order application
-      pkgcond::suppress_messages(
+      suppressMessages(
         delta_load(
           conn,
           db_table = "test.SCDB_tmp1",
           delta = delta_1
-        ),
-        pattern = "Source table has non-POSIXct"
+        )
       )
 
-      pkgcond::suppress_messages(
+      suppressMessages(
         delta_load(
           conn,
           db_table = "test.SCDB_tmp1",
           delta = delta_3
-        ),
-        pattern = "Source table has non-POSIXct"
+        )
       )
 
-      pkgcond::suppress_messages(
+      suppressMessages(
         delta_load(
           conn,
           db_table = "test.SCDB_tmp1",
           delta = delta_2
-        ),
-        pattern = "Source table has non-POSIXct"
+        )
       )
 
       # Check transfer success

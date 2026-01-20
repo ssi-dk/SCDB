@@ -234,7 +234,7 @@ delta_load <- function(
     # If not correctly formatted, we need to convert locally
     if (!purrr::reduce(posix_time_keeping, all)) {
 
-      pkgcond::pkg_message(
+      message(
         paste(
           "Source table has non-POSIXct `from_ts` and/or `until_ts` columns!",
           "Converting data types locally -- may be slow."
