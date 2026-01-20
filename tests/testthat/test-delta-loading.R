@@ -48,10 +48,10 @@ for (conn in get_test_conns()) {
     expect_identical(
       get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
         dplyr::collect() %>%
-        dplyr::arrange(col1, col2),
+        dplyr::arrange(col1, col2, from_ts),
       get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
         dplyr::collect() %>%
-        dplyr::arrange(col1, col2)
+        dplyr::arrange(col1, col2, from_ts)
     )
 
 
@@ -79,10 +79,10 @@ for (conn in get_test_conns()) {
     expect_identical(
       get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
         dplyr::collect() %>%
-        dplyr::arrange(col1, col2),
+        dplyr::arrange(col1, col2, from_ts),
       get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
         dplyr::collect() %>%
-        dplyr::arrange(col1, col2)
+        dplyr::arrange(col1, col2, from_ts)
     )
 
 
@@ -110,10 +110,10 @@ for (conn in get_test_conns()) {
     expect_identical(
       get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
         dplyr::collect() %>%
-        dplyr::arrange(col1, col2),
+        dplyr::arrange(col1, col2, from_ts),
       get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
         dplyr::collect() %>%
-        dplyr::arrange(col1, col2)
+        dplyr::arrange(col1, col2, from_ts)
     )
 
     # Clear and run all deltas
@@ -129,10 +129,10 @@ for (conn in get_test_conns()) {
     expect_identical(
       get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
         dplyr::collect() %>%
-        dplyr::arrange(col1, col2),
+        dplyr::arrange(col1, col2, from_ts),
       get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
         dplyr::collect() %>%
-        dplyr::arrange(col1, col2)
+        dplyr::arrange(col1, col2, from_ts)
     )
 
     # Replay out of order
@@ -148,10 +148,10 @@ for (conn in get_test_conns()) {
     expect_identical(
       get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
         dplyr::collect() %>%
-        dplyr::arrange(col1, col2),
+        dplyr::arrange(col1, col2, from_ts),
       get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
         dplyr::collect() %>%
-        dplyr::arrange(col1, col2)
+        dplyr::arrange(col1, col2, from_ts)
     )
   })
 
@@ -235,10 +235,10 @@ for (conn in get_test_conns()) {
       expect_identical(
         get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
           dplyr::collect() %>%
-          dplyr::arrange(col1, col2),
+          dplyr::arrange(col1, col2, from_ts),
         get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
           dplyr::collect() %>%
-          dplyr::arrange(col1, col2)
+          dplyr::arrange(col1, col2, from_ts)
       )
 
       ## Test 2 ##############################################################
@@ -274,10 +274,10 @@ for (conn in get_test_conns()) {
       expect_identical(
         get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
           dplyr::collect() %>%
-          dplyr::arrange(col1, col2),
+          dplyr::arrange(col1, col2, from_ts),
         get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
           dplyr::collect() %>%
-          dplyr::arrange(col1, col2)
+          dplyr::arrange(col1, col2, from_ts)
       )
 
       ## Test 2.5 ############################################################
@@ -295,10 +295,10 @@ for (conn in get_test_conns()) {
       expect_identical(
         get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
           dplyr::collect() %>%
-          dplyr::arrange(col1, col2),
+          dplyr::arrange(col1, col2, from_ts),
         get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
           dplyr::collect() %>%
-          dplyr::arrange(col1, col2)
+          dplyr::arrange(col1, col2, from_ts)
       )
 
       ## Test 3 ##############################################################
@@ -334,10 +334,10 @@ for (conn in get_test_conns()) {
       expect_identical(
         get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
           dplyr::collect() %>%
-          dplyr::arrange(col1, col2),
+          dplyr::arrange(col1, col2, from_ts),
         get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
           dplyr::collect() %>%
-          dplyr::arrange(col1, col2)
+          dplyr::arrange(col1, col2, from_ts)
       )
 
       ## Test 4 ##############################################################
@@ -368,10 +368,10 @@ for (conn in get_test_conns()) {
       expect_identical(
         get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
           dplyr::collect() %>%
-          dplyr::arrange(col1, col2),
+          dplyr::arrange(col1, col2, from_ts),
         get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
           dplyr::collect() %>%
-          dplyr::arrange(col1, col2)
+          dplyr::arrange(col1, col2, from_ts)
       )
 
       ## Test 4 ##############################################################
@@ -410,10 +410,10 @@ for (conn in get_test_conns()) {
       expect_identical(
         get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
           dplyr::collect() %>%
-          dplyr::arrange(col1, col2),
+          dplyr::arrange(col1, col2, from_ts),
         get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
           dplyr::collect() %>%
-          dplyr::arrange(col1, col2)
+          dplyr::arrange(col1, col2, from_ts)
       )
 
       ## Test 5 ##############################################################
@@ -451,10 +451,10 @@ for (conn in get_test_conns()) {
       expect_identical(
         get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
           dplyr::collect() %>%
-          dplyr::arrange(col1, col2),
+          dplyr::arrange(col1, col2, from_ts),
         get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
           dplyr::collect() %>%
-          dplyr::arrange(col1, col2)
+          dplyr::arrange(col1, col2, from_ts)
       )
 
       close_connection(source_conn)
@@ -548,10 +548,10 @@ for (conn in get_test_conns()) {
     expect_identical(
       get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
         dplyr::collect() %>%
-        dplyr::arrange(col1, col2),
+        dplyr::arrange(col1, col2, from_ts),
       get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
         dplyr::collect() %>%
-        dplyr::arrange(col1, col2)
+        dplyr::arrange(col1, col2, from_ts)
     )
 
     # Check logs match insertions and deactivations
