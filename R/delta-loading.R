@@ -149,13 +149,31 @@ delta_export <- function(
 
 
   # Starting from the full table,
-  out <- get_table(conn, db_table, slice_ts = NULL) %>%
-    dplyr::filter(
-      # ..any data created within the interval gets exported
-      ((!!timestamp_from <= .data$from_ts) & (!!is.null(timestamp_until) | .data$from_ts <= !!timestamp_until)) |
-        # and any data that expires within the interval gets exported
-        ((!!timestamp_from <= .data$until_ts) & (!!is.null(timestamp_until) | .data$until_ts <= !!timestamp_until))
-    )
+  if (is.null(timestamp_until)) {
+    out <- get_table(conn, db_table, slice_ts = NULL) %>%
+      dplyr::filter(
+        (
+          # ..any data created within the interval gets exported
+          !!db_timestamp(timestamp_from, conn) <= .data$from_ts
+        ) | (
+          # and any data that expires within the interval gets exported
+          !!db_timestamp(timestamp_from, conn) <= .data$until_ts
+        )
+      )
+  } else {
+    out <- get_table(conn, db_table, slice_ts = NULL) %>%
+      dplyr::filter(
+        (
+          # ..any data created within the interval gets exported
+          (!!db_timestamp(timestamp_from, conn) <= .data$from_ts) &
+            (.data$from_ts <= !!db_timestamp(timestamp_until, conn))
+        ) | (
+          # and any data that expires within the interval gets exported
+          (!!db_timestamp(timestamp_from, conn) <= .data$until_ts) &
+            (.data$until_ts <= !!db_timestamp(timestamp_until, conn))
+        )
+      )
+  }
 
   # Censor future until_ts values
   if (!is.null(timestamp_until)) {
