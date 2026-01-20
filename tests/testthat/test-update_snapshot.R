@@ -311,8 +311,6 @@ test_that("update_snapshot() correctly deactivates records", {
     t3 <- data.frame(col1 = "A", col2 = 1)
     t4 <- data.frame(col1 = "A", col2 = 2)
 
-    t_ref <- tibble::tibble(purrr::reduce(list(t0, t1, t2, t3, t4), rbind))
-
     # Copy t0, t1, and t2 to conn
     t0 <- dplyr::copy_to(conn, t0, name = id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE)
     t1 <- dplyr::copy_to(conn, t1, name = id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE)
@@ -341,7 +339,10 @@ test_that("update_snapshot() correctly deactivates records", {
     # Ensure data is the same
     expect_identical(
       dplyr::select(t, c("col1", "col2")),
-      t_ref
+      tibble::tibble(
+        "col1" = rep("A", 5),
+        "col2" = c(2, 1, 2, 1, 2)
+      )
     )
 
     close_connection(conn)
