@@ -208,6 +208,7 @@ delta_load <- function(
   delta,
   logger = NULL
 ) {
+
   # Check arguments
   coll <- checkmate::makeAssertCollection()
   checkmate::assert_class(conn, "DBIConnection", add = coll)
