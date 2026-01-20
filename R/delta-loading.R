@@ -223,6 +223,8 @@ delta_load <- function(
 
   } else {
 
+    delta <- dplyr::collect(delta)
+
     # Ensure our time-keeping columns have the correct data type
     posix_time_keeping <- delta %>%
       utils::head(1) %>%
@@ -241,9 +243,6 @@ delta_load <- function(
         )
       )
 
-      delta <- dplyr::collect(delta)
-
-
       if (!posix_time_keeping$from_ts) {
         delta <- dplyr::mutate(delta, "from_ts" = to_posix(.data$from_ts)
         )
@@ -255,6 +254,16 @@ delta_load <- function(
       }
     }
 
+    # Handle SQLite case
+    if (inherits(conn, "SQLiteConnection")) {
+      delta <- delta %>%
+        dplyr::mutate(
+          dplyr::across(
+            .cols = c("from_ts", "until_ts"),
+            .fns = as.character
+          )
+        )
+    }
 
     # Copy delta to target
     delta_src <- dplyr::copy_to(
