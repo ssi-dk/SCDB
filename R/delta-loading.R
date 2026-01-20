@@ -180,7 +180,7 @@ delta_export <- function(
     out <- out %>%
       dplyr::mutate(
         "until_ts" = dplyr::if_else(
-          condition = !is.na(.data$until_ts) & !!timestamp_until < .data$until_ts,
+          condition = !is.na(.data$until_ts) & !!db_timestamp(timestamp_until, conn) < .data$until_ts,
           true = NA,
           false = .data$until_ts
         )
