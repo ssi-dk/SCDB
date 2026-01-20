@@ -222,11 +222,44 @@ delta_load <- function(
 
   } else {
 
-    # Copy delta to target (if needed)
+    # Ensure our time-keeping columns have the correct data type
+    posix_time_keeping <- delta %>%
+      utils::head(1) %>%
+      dplyr::select("from_ts", "until_ts") %>%
+      dplyr::collect() %>%
+      as.list() %>%
+      purrr::map(~ inherits(., "POSIXct"))
+
+    # If not correctly formatted, we need to convert locally
+    if (!purrr::reduce(posix_time_keeping, all)) {
+
+      pkgcond::pkg_message(
+        paste(
+          "Source table has non-POSIXct `from_ts` and/or `until_ts` columns!",
+          "Converting data types locally -- may be slow."
+        )
+      )
+
+      delta <- dplyr::collect(delta)
+
+
+      if (!posix_time_keeping$from_ts) {
+        delta <- dplyr::mutate(delta, "from_ts" = to_posix(.data$from_ts)
+        )
+      }
+
+      if (!posix_time_keeping$until_ts) {
+        delta <- dplyr::mutate(delta, "until_ts" = to_posix(.data$until_ts)
+        )
+      }
+    }
+
+
+    # Copy delta to target
     delta_src <- dplyr::copy_to(
       conn,
       delta,
-      name = unique_table_name("SCDB_delta")
+      name = unique_table_name("SCDB_delta_src")
     )
     defer_db_cleanup(delta_src)
 
