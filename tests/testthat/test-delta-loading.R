@@ -10,7 +10,7 @@ for (conn in get_test_conns()) {
   # We create a data set for the tests in SCDB_tmp1 (!)
   t0 <- data.frame(col1 = c("A", "B"),      col2 = c(NA_real_, NA_real_))
   t1 <- data.frame(col1 = c("A", "B", "C"), col2 = c(1,        NA_real_, NA_real_))
-  t2 <- data.frame(col1 = c("A", "B", "C"), col2 = c(1,        2,        3))
+  t2 <- data.frame(col1 = c("A", "B", "C"), col2 = c(NA_real_,        2,        3))
 
   # Copy t0, t1, and t2 to conn
   t0 <- dplyr::copy_to(conn, t0, name = id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE)
@@ -101,7 +101,7 @@ for (conn in get_test_conns()) {
       timestamp_from  = "2022-01-01 08:20:00"
     )
     defer_db_cleanup(delta_3)
-    expect_identical(nrow(delta_3), 4L)
+    expect_identical(nrow(delta_3), 6L)
 
     # Replay delta on another table
     delta_load(conn, db_table = "test.SCDB_tmp2", delta = delta_3)
@@ -433,7 +433,7 @@ for (conn in get_test_conns()) {
         delta_load(
           conn,
           db_table = "test.SCDB_tmp1",
-          delta = delta_2
+          delta = delta_1
         ),
         pattern = "Source table has non-POSIXct"
       )
@@ -451,7 +451,7 @@ for (conn in get_test_conns()) {
         delta_load(
           conn,
           db_table = "test.SCDB_tmp1",
-          delta = delta_1
+          delta = delta_2
         ),
         pattern = "Source table has non-POSIXct"
       )
