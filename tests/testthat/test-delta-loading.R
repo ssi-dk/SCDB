@@ -39,6 +39,7 @@ for (conn in get_test_conns()) {
       timestamp_from  = "2022-01-01 08:00:00"
     )
     defer_db_cleanup(delta_1)
+    expect_identical(nrow(delta_1), 2L)
 
     # Replay delta on another table
     delta_load(conn, db_table = "test.SCDB_tmp2", delta = delta_1)
@@ -69,6 +70,7 @@ for (conn in get_test_conns()) {
       timestamp_from  = "2022-01-01 08:10:00"
     )
     defer_db_cleanup(delta_2)
+    expect_identical(nrow(delta_2), 3L)
 
     # Replay delta on another table
     delta_load(conn, db_table = "test.SCDB_tmp2", delta = delta_2)
@@ -99,6 +101,7 @@ for (conn in get_test_conns()) {
       timestamp_from  = "2022-01-01 08:20:00"
     )
     defer_db_cleanup(delta_3)
+    expect_identical(nrow(delta_3), 4L)
 
     # Replay delta on another table
     delta_load(conn, db_table = "test.SCDB_tmp2", delta = delta_3)
