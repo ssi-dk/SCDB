@@ -237,10 +237,8 @@ delta_load <- function(
     if (!purrr::reduce(posix_time_keeping, all)) {
 
       message(
-        paste(
-          "Source table has non-POSIXct `from_ts` and/or `until_ts` columns!",
-          "Converting data types locally -- may be slow."
-        )
+        "Source table has non-POSIXct `from_ts` and/or `until_ts` columns!",
+        "Converting data types locally -- may be slow."
       )
 
       if (!posix_time_keeping$from_ts) {
