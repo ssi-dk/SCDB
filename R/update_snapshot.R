@@ -200,7 +200,9 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
   # Once we ensure snapshot is on the same connection as the target, we compute the checksums
   snapshot <- digest_to_checksum(snapshot, col = "checksum")
-  if (!inherits(conn, "SQLiteConnection")) snapshot <- dplyr::compute(snapshot) # SQLite was computed in digest_to_checksum
+  if (!inherits(conn, "SQLiteConnection")) {
+    snapshot <- dplyr::compute(snapshot) # SQLite was computed in digest_to_checksum
+  }
   defer_db_cleanup(snapshot)
   logger$log_info("Calculated checksums")
 
