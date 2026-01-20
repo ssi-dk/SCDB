@@ -304,13 +304,15 @@ delta_load <- function(
       by = c("checksum", "from_ts", "until_ts")
     )
 
-    dplyr::rows_patch(
-      x = dplyr::tbl(conn, db_table_id),
-      y = deactivations,
-      by = c("checksum", "from_ts"),
-      in_place = TRUE,
-      unmatched = "ignore"
-    )
+    if (nrow(deactivations) > 0) {
+      dplyr::rows_patch(
+        x = dplyr::tbl(conn, db_table_id),
+        y = deactivations,
+        by = c("checksum", "from_ts"),
+        in_place = TRUE,
+        unmatched = "ignore"
+      )
+    }
 
     # Add new records
     insertions <- dplyr::anti_join(
