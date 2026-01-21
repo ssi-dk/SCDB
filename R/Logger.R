@@ -110,6 +110,11 @@ Logger <- R6::R6Class(                                                          
     #' @param timestamp (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
     #'   A timestamp describing the data being processed (not the current time).
     set_timestamp = function(timestamp) {
+      timestamp <- to_posix(timestamp)
+
+      # Return early if that timestamp is already set
+      if (private$timestamp == timestamp) return()
+      
       private$timestamp <- timestamp
 
       # Changing the timestamp invalidates the filename
