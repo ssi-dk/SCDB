@@ -29,10 +29,12 @@
 #'
 #'   If `NULL` (default), all history after `timestamp_from` is exported.
 #' @return
-#'   The lazy-query containing the data (and history) in the source to be used
-#'   in conjunction with `delta_load()`.
+#'   `delta_export()` returns a lazy-query containing the data (and history)
+#'   in the source to be used in conjunction with `delta_load()`.
 #'
 #'   This table is a temporary table that may need cleaning up.
+#'
+#'   `delta_load()` returns NULL (called for side effects).
 #' @examplesIf requireNamespace("RSQLite", quietly = TRUE)
 #'   conn <- get_connection()
 #'

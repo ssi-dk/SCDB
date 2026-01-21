@@ -32,10 +32,12 @@ A "delta" exported from \code{delta_export()} to load.}
 A configured logging object. If none is given, one is initialized with default arguments.}
 }
 \value{
-The lazy-query containing the data (and history) in the source to be used
-in conjunction with \code{delta_load()}.
+\code{delta_export()} returns a lazy-query containing the data (and history)
+in the source to be used in conjunction with \code{delta_load()}.
 
 This table is a temporary table that may need cleaning up.
+
+\code{delta_load()} returns NULL (called for side effects).
 }
 \description{
 \code{delta_export()} exports data from tables created with \code{update_snapshot()}
