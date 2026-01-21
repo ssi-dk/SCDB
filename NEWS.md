@@ -1,5 +1,12 @@
 # SCDB (development version)
 
+## Improvements and Fixes
+
+* Bug fixes in `update_snapshot()`:
+
+  * Fixed a bug records were being incorrectly deactivated (#214).
+
+
 # SCDB 0.5.2
 
 ## Improvements and Fixes
