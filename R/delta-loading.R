@@ -6,8 +6,6 @@
 #'
 #'   `delta_load()` import deltas created by `delta_export()` to rebuild a
 #'   historical table.
-#'
-#'   See `vignette("delta-loading")` for further introduction to the function.
 #' @details
 #'   This pair of functions is designed to facilitate easy migration or
 #'   incremental backups of a historical table (created by `update_snapshot()`).

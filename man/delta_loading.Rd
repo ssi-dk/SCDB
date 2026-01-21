@@ -43,8 +43,6 @@ in chunks to allow for faster migration of data between sources.
 
 \code{delta_load()} import deltas created by \code{delta_export()} to rebuild a
 historical table.
-
-See \code{vignette("delta-loading")} for further introduction to the function.
 }
 \details{
 This pair of functions is designed to facilitate easy migration or
