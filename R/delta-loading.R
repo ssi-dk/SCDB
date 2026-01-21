@@ -192,6 +192,7 @@ delta_export <- function(
 
   # Store metadata on the delta
   attr(out, "timestamp_from")  <- timestamp_from
+  attr(out, "timestamp_until")  <- timestamp_until
 
   return(out)
 }
@@ -363,7 +364,14 @@ delta_load <- function(
               n_insertions = !!ifelse(is.na(n_insertions), 0, n_insertions),
               n_deactivations = !!ifelse(is.na(n_deactivations), 0, n_deactivations),
               message = !!glue::glue(
-                "Update via delta load (timestamp_from = {attr(delta, \"timestamp_from\")})"
+                "Update via delta load (",
+                "timestamp_from = {attr(delta, \"timestamp_from\")}",
+                switch(
+                  is.null(attr(delta, "timestamp_until")) + 1,
+                  " and timestamp_until = {attr(delta, \"timestamp_until\")}",
+                  ""
+                ),
+                ")"
               )
             )
             logger$finalize_db_entry()
