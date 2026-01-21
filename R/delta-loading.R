@@ -290,7 +290,7 @@ delta_load <- function(
     # Apply the delta to the target table
     if (!table_exists(conn, db_table_id)) {
 
-      # Create table and apply delta
+      # Create table if missing
       delta_src %>%
         utils::head(0) %>%
         dplyr::collect() %>%
