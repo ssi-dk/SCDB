@@ -187,21 +187,23 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     filters_src <- filters
   }
 
-  .data <- .data %>%
+  snapshot <- .data %>%
     dplyr::ungroup() %>%
     filter_keys(filters_src) %>%
     dplyr::select(colnames(dplyr::select(db_table, !tidyselect::any_of(c("checksum", "from_ts", "until_ts")))))
 
   # Copy to the target connection if needed
-  if (!identical(dbplyr::remote_con(.data), conn)) {
-    .data <- dplyr::copy_to(conn, .data, name = unique_table_name("SCDB_update_snapshot_input"))
-    defer_db_cleanup(.data)
+  if (!identical(dbplyr::remote_con(snapshot), conn)) {
+    snapshot <- dplyr::copy_to(conn, snapshot, name = unique_table_name("SCDB_update_snapshot_input"))
+    defer_db_cleanup(snapshot)
   }
 
-  # Once we ensure .data is on the same connection as the target, we compute the checksums
-  .data <- digest_to_checksum(.data, col = "checksum")
-  if (!inherits(conn, "SQLiteConnection")) .data <- dplyr::compute(.data) # SQLite was computed in digest_to_checksum
-  defer_db_cleanup(.data)
+  # Once we ensure snapshot is on the same connection as the target, we compute the checksums
+  snapshot <- digest_to_checksum(snapshot, col = "checksum")
+  if (!inherits(conn, "SQLiteConnection")) {
+    snapshot <- dplyr::compute(snapshot) # SQLite was computed in digest_to_checksum
+  }
+  defer_db_cleanup(snapshot)
   logger$log_info("Calculated checksums")
 
   ### Determine the next timestamp in the data (can be NA if none is found)
@@ -240,23 +242,41 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
   # Generate SQL at lower level than tidyverse to get the affected rows without computing.
   slice_ts <- db_timestamp(timestamp, conn)
 
-  currently_valid_checksums <- db_table %>%
-    dplyr::select("checksum") %>%
+  scdb_columns <- db_table %>%
+    dplyr::select("checksum", "from_ts", "until_ts") %>%
     dplyr::compute()
-  defer_db_cleanup(currently_valid_checksums)
+  defer_db_cleanup(scdb_columns)
 
 
   ## Deactivation
   logger$log_info("Deactivating records")
 
 
-  checksums_to_deactivate <- dplyr::setdiff(currently_valid_checksums, dplyr::select(.data, "checksum"))
+  checksums_to_deactivate <- dplyr::setdiff(
+    dplyr::select(scdb_columns, "checksum"),
+    dplyr::select(snapshot, "checksum")
+  )
+
+  # Detect latest earlier record to deactivate for each checksum
+  records_to_deactivate <- dplyr::inner_join(
+    scdb_columns,
+    checksums_to_deactivate,
+    by = "checksum"
+  )
+
+  if (!enforce_chronological_order) {
+    records_to_deactivate <- dplyr::filter(records_to_deactivate, .data$from_ts < slice_ts)
+  }
+
+  records_to_deactivate <- records_to_deactivate %>%
+    dplyr::slice_max(.data$from_ts, by = "checksum")
+
 
   sql_deactivate <- dbplyr::sql_query_update_from(
     con = conn,
     table = dbplyr::as.sql(db_table_id, con = conn),
-    from = dbplyr::sql_render(checksums_to_deactivate),
-    by = "checksum",
+    from = dbplyr::sql_render(records_to_deactivate),
+    by = c("checksum", "from_ts"),
     update_values = c("until_ts" = slice_ts)
   )
 
@@ -276,16 +296,16 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     con = conn,
     "SELECT *, ", db_timestamp(timestamp, conn), " AS ", dbplyr::ident("from_ts"), ", ",
     db_timestamp(next_timestamp, conn), " AS ", dbplyr::ident("until_ts"),
-    " FROM ", dbplyr::remote_table(.data),
-    " WHERE ", dbplyr::remote_table(.data), ".", dbplyr::ident("checksum"),
-    " NOT IN (", dbplyr::sql_render(currently_valid_checksums), ")"
+    " FROM ", dbplyr::remote_table(snapshot),
+    " WHERE ", dbplyr::remote_table(snapshot), ".", dbplyr::ident("checksum"),
+    " NOT IN (", dbplyr::sql_render(dplyr::select(scdb_columns, "checksum")), ")"
   )
 
   sql_insert <- dbplyr::sql_query_insert(
     con = conn,
     table = dbplyr::as.sql(db_table_id, con = conn),
     from = records_to_insert,
-    insert_cols = c(colnames(.data), "from_ts", "until_ts"),
+    insert_cols = c(colnames(snapshot), "from_ts", "until_ts"),
     by = c("checksum", "from_ts"),
     conflict = "ignore"
   )

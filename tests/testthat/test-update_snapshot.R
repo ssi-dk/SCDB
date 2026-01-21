@@ -294,6 +294,60 @@ test_that("update_snapshot() can insert a snapshot between existing dates", {
   }
 })
 
+test_that("update_snapshot() correctly deactivates records", {
+  for (conn in get_test_conns()) {
+
+    # In this test we have a single value that flips back and forth, trying
+    # to confuse SCDB
+
+    if (DBI::dbExistsTable(conn, id("test.SCDB_tmp1", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_tmp1", conn))
+    expect_false(table_exists(conn, "test.SCDB_tmp1"))
+
+
+    # Create test data for the test
+    t0 <- data.frame(col1 = "A", col2 = 2)
+    t1 <- data.frame(col1 = "A", col2 = 1)
+    t2 <- data.frame(col1 = "A", col2 = 2)
+    t3 <- data.frame(col1 = "A", col2 = 1)
+    t4 <- data.frame(col1 = "A", col2 = 2)
+
+    # Copy t0, t1, and t2 to conn
+    t0 <- dplyr::copy_to(conn, t0, name = id("test.SCDB_t0", conn), overwrite = TRUE, temporary = FALSE)
+    t1 <- dplyr::copy_to(conn, t1, name = id("test.SCDB_t1", conn), overwrite = TRUE, temporary = FALSE)
+    t2 <- dplyr::copy_to(conn, t2, name = id("test.SCDB_t2", conn), overwrite = TRUE, temporary = FALSE)
+    t3 <- dplyr::copy_to(conn, t3, name = id("test.SCDB_t3", conn), overwrite = TRUE, temporary = FALSE)
+    t4 <- dplyr::copy_to(conn, t4, name = id("test.SCDB_t4", conn), overwrite = TRUE, temporary = FALSE)
+
+    logger <- LoggerNull$new()
+    update_snapshot(t0, conn, "test.SCDB_tmp1", "2000-01-01", logger = logger)
+    update_snapshot(t1, conn, "test.SCDB_tmp1", "2010-01-01", logger = logger)
+    update_snapshot(t2, conn, "test.SCDB_tmp1", "2020-01-01", logger = logger)
+    update_snapshot(t3, conn, "test.SCDB_tmp1", "2030-01-01", logger = logger)
+    update_snapshot(t4, conn, "test.SCDB_tmp1", "2040-01-01", logger = logger)
+
+    t <- get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
+      dplyr::arrange(.data$from_ts) %>%
+      dplyr::collect()
+
+    # If the updates have been applied correctly, the until_ts values should
+    # be the previous from_ts
+    expect_identical(
+      t$from_ts[2:5],
+      t$until_ts[1:4]
+    )
+
+    # Ensure data is the same
+    expect_identical(
+      dplyr::select(t, c("col1", "col2")),
+      tibble::tibble(
+        "col1" = rep("A", 5),
+        "col2" = c(2, 1, 2, 1, 2)
+      )
+    )
+
+    close_connection(conn)
+  }
+})
 
 
 test_that("update_snapshot() works (holistic test 1)", {
