@@ -99,7 +99,7 @@ delta_export <- function(
   # If a `timestamp_until` is supplied, the exported history should only allow
   # the user to restore the data up until that point.
 
-  # We take all records created or closed within the interval
+  # We export all records created or closed within the interval.
 
   # Any future `until_ts` (i.e. greater than `timestamp_until`) is removed.
 
