@@ -68,6 +68,7 @@ Our example data is `datasets::mtcars` reduced to only two columns: row names co
 conn_primary   <- get_connection(...)
 conn_secondary <- get_connection(...)
 ```
+
 ```{r example_data_hidden, eval = rlang::is_installed("duckdb")}
 example_data <- dplyr::tbl(conn_primary, DBI::Id(table = "example_data"))
 example_data
@@ -171,6 +172,8 @@ delta_2 <- delta_export(
   db_table = "mtcars",
   timestamp_from = "2020-01-03 13:00:00"
 )
+
+delta_2
 ```
 
 We then use `delta_load()` to apply these changes in the secondary database.
