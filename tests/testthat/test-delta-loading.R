@@ -209,7 +209,7 @@ for (conn in get_test_conns()) {
         conn = source_conn,
         db_table = "source",
         timestamp_from  = "2022-01-01 08:00:00",
-        timestamp_until = "2022-01-01 08:00:00"
+        timestamp_until = "2022-01-01 08:00:01" # Some future point in time
       )
       defer_db_cleanup(delta_1)
 
@@ -248,7 +248,7 @@ for (conn in get_test_conns()) {
         conn = source_conn,
         db_table = "source",
         timestamp_from  = "2022-01-01 08:10:00",
-        timestamp_until = "2022-01-01 08:10:00"
+        timestamp_until = "2022-01-01 08:10:01" # Some future point in time
       )
       defer_db_cleanup(delta_2)
 
@@ -308,7 +308,7 @@ for (conn in get_test_conns()) {
         conn = source_conn,
         db_table = "source",
         timestamp_from  = "2022-01-01 08:20:00",
-        timestamp_until = "2022-01-01 08:20:00"
+        timestamp_until = "2022-01-01 08:20:01" # Some future point in time
       )
       defer_db_cleanup(delta_3)
 
@@ -351,7 +351,7 @@ for (conn in get_test_conns()) {
         conn = source_conn,
         db_table = "source",
         timestamp_from  = "2022-01-01 08:00:00",
-        timestamp_until = "2022-01-01 08:20:00"
+        timestamp_until = "2022-01-01 08:20:01"  # Some future point in time
       )
       defer_db_cleanup(delta_batch)
 

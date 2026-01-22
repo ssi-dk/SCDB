@@ -25,7 +25,7 @@
 #' @param timestamp_from (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
 #'   The timestamp describing the start of the export (including).
 #' @param timestamp_until (`POSIXct(1)`, `Date(1)`, or `character(1)`)\cr
-#'   The timestamp describing the end of the export (including).
+#'   The timestamp describing the end of the export (not-including).
 #'
 #'   If `NULL` (default), all history after `timestamp_from` is exported.
 #' @return
@@ -166,11 +166,11 @@ delta_export <- function(
         (
           # ..any data created within the interval gets exported
           (!!db_timestamp(timestamp_from, conn) <= .data$from_ts) &
-            (.data$from_ts <= !!db_timestamp(timestamp_until, conn))
+            (.data$from_ts < !!db_timestamp(timestamp_until, conn))
         ) | (
           # and any data that expires within the interval gets exported
           (!!db_timestamp(timestamp_from, conn) <= .data$until_ts) &
-            (.data$until_ts <= !!db_timestamp(timestamp_until, conn))
+            (.data$until_ts < !!db_timestamp(timestamp_until, conn))
         )
       )
   }

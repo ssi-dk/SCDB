@@ -21,7 +21,7 @@ A table specification (coercible by \code{id()}).}
 The timestamp describing the start of the export (including).}
 
 \item{timestamp_until}{(\code{POSIXct(1)}, \code{Date(1)}, or \code{character(1)})\cr
-The timestamp describing the end of the export (including).
+The timestamp describing the end of the export (not-including).
 
 If \code{NULL} (default), all history after \code{timestamp_from} is exported.}
 

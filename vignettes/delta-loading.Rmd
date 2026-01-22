@@ -200,14 +200,13 @@ delta_batch_1 <- delta_export(
   conn = conn_primary,
   db_table = "mtcars",
   timestamp_from  = "2020-01-01 11:00:00",
-  timestamp_until = "2020-01-02 12:00:00"
+  timestamp_until = "2020-01-03 13:00:00"
 )
 
 delta_batch_2 <- delta_export(
   conn = conn_primary,
   db_table = "mtcars",
-  timestamp_from  = "2020-01-03 13:00:00",
-  timestamp_until = "2020-01-04 14:00:00"
+  timestamp_from  = "2020-01-03 13:00:00"
 )
 ```
 
