@@ -557,12 +557,14 @@ for (conn in get_test_conns()) {
     # Check logs match insertions and deactivations
     expect_identical(
       dplyr::tbl(conn, id("test.SCDB_logs", conn)) %>%
-        dplyr::filter(!is.na(.data$message)) %>% # delta_load() logs
+        tidyr::unite("db_table_name", dplyr::any_of(c("catalog", "schema", "table")), sep = ".") %>%
+        dplyr::filter(.data$db_table_name == !!as.character(id("test.SCDB_tmp2", conn))) %>% # delta_load() logs
         dplyr::select("date", "n_insertions", "n_deactivations") %>%
         dplyr::collect() %>%
         dplyr::arrange(.data$date),
       dplyr::tbl(conn, id("test.SCDB_logs", conn)) %>%
-        dplyr::filter(is.na(.data$message)) %>% # update_snapshot() logs
+        tidyr::unite("db_table_name", dplyr::any_of(c("catalog", "schema", "table")), sep = ".") %>%
+        dplyr::filter(.data$db_table_name == !!as.character(id("test.SCDB_tmp1", conn))) %>% # update_snapshot() logs
         dplyr::select("date", "n_insertions", "n_deactivations") %>%
         dplyr::collect() %>%
         dplyr::arrange(.data$date)
