@@ -41,12 +41,12 @@ example_data <- dplyr::copy_to(
 ```
 
 SCDB provides a simple implementation of the concept known as "delta-loading" or "incremental-loading" in the form
-of the pair of functions `delta_export()` and `delta_import()`.
+of the pair of functions `delta_export()` and `delta_load()`.
 
 As the names suggest, these functions are used in tandem to export a delta from a table and to load this delta onto
 (another) table.
 
-A "delta" is a table containing the changes after a given point in time which can be used for use-cases such as
+A "delta" is a table containing the changes in a given time period which can be used for use-cases such as
 migration of data and incremental backups.
 
 # Intermittent data migration
