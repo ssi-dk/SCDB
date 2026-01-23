@@ -389,6 +389,8 @@ delta_load <- function(
         )
     }
 
+    return(NULL)
+
   } else {
 
     stop(glue::glue("Failed to achieve lock on table ({db_table_id}) -- delta not applied!"))
