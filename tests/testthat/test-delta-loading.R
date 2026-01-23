@@ -165,7 +165,7 @@ for (conn in get_test_conns()) {
       source_conns <- list("SQLite" = get_connection(RSQLite::SQLite(), dbname = ":memory:"))
     }
 
-    if (rlang::is_installed("duckdb") && R.version$major >= "4") { # # DuckDB requires R >= 4.0.0 to run in memory
+    if (rlang::is_installed("duckdb") && R.version$major >= "4") { # DuckDB requires R >= 4.0.0 to run in memory
       source_conns <- c(
         source_conns,
         "DuckDB" = get_connection(duckdb::duckdb(), dbdir = ":memory:")
