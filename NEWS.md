@@ -165,18 +165,18 @@
 
 * Improvements for `create_table()` (#93):
 
-  - now writes the table if a remote connection is given. Before, it would only create the
+  * now writes the table if a remote connection is given. Before, it would only create the
   table with corresponding columns.
 
-  - can now create temporary tables for Microsoft SQL Server.
+  * can now create temporary tables for Microsoft SQL Server.
 
 * Improved checks on `get_connection()` (#83):
 
-  - If given, `host` does not need to look like an IP address (e.g. "localhost" is not unrealistic).
+  * If given, `host` does not need to look like an IP address (e.g. "localhost" is not unrealistic).
 
-  - A `character` input for `port` is allowed if it is a string of digits.
+  * A `character` input for `port` is allowed if it is a string of digits.
 
-  - Now checks if `timezone` and `timezone_out` is an IANA time zone.
+  * Now checks if `timezone` and `timezone_out` is an IANA time zone.
 
 * `digest_to_checksum()` has improved performance on Microsoft SQL Server by use of the built-in `HashBytes` function (#97).
 
@@ -224,7 +224,7 @@
 
 * Added S3 method for `id.tbl_dbi()`, returning a `DBI::Id()` instance matching the table (#72).
 
-  - Calling `id()` on a `tbl_dbi` thus allows to retrieve a `schema` even when not initially given.
+  * Calling `id()` on a `tbl_dbi` thus allows to retrieve a `schema` even when not initially given.
 
 * Fixed `update_snapshot()` not working with a `DBI::Id()` instance as `db_table` argument (#72).
 
@@ -264,19 +264,19 @@
 ## New features
 
 * Package functions are now also tested with `RPostgres::Postgres()`, which is
-  therefore now *officially* supported (#31).
+  therefore now _officially_ supported (#31).
 
 * `get_connection()` shows a warning if an unsupported backend is used (#26).
 
 * Increased flexibility for the `Logger` object (#21 #24):
 
-  - A `Logger` instance may now be created with no arguments.
+  * A `Logger` instance may now be created with no arguments.
 
-  - Suppress console output with `output_to_console` (`TRUE` by default).
+  * Suppress console output with `output_to_console` (`TRUE` by default).
 
-  - If no `log_path` is set, `Logger` does not fail before trying to write to a file.
+  * If no `log_path` is set, `Logger` does not fail before trying to write to a file.
 
-  - `Logger\$log_realpath` gives the full path to log file being written.
+  * `Logger\$log_realpath` gives the full path to log file being written.
 
 ## Minor improvements and fixes
 
@@ -298,49 +298,49 @@
 
 * Functions to handle database connections:
 
-  - `get_connection()`, `close_connection()`, `id()`
+  * `get_connection()`, `close_connection()`, `id()`
 
 * Functions to interface with database:
 
-  - `get_tables()`, `table_exists()`, `get_schema()`, `schema_exists()`
+  * `get_tables()`, `table_exists()`, `get_schema()`, `schema_exists()`
 
 * Functions to create "historical" tables and logs:
 
-  - `create_table()`, `create_logs_if_missing()`
+  * `create_table()`, `create_logs_if_missing()`
 
 * Function to maintain "historical" tables:
 
-  - `update_snapshot()`
+  * `update_snapshot()`
 
 * Functions to interface with "historical" tables:
 
-  - `get_table()`, `slice_time()`, `is.historical()`
+  * `get_table()`, `slice_time()`, `is.historical()`
 
 * Functions to facilitate faster joins with NAs on SQL backends:
 
-  - `full_join()`, `inner_join()`, `left_join()`, `right_join()`
+  * `full_join()`, `inner_join()`, `left_join()`, `right_join()`
 
 * Functions to manipulate tables on SQL backends:
 
-  - `filter_keys()`, `unite.tbl_dbi()`, `interlace_sql()`
+  * `filter_keys()`, `unite.tbl_dbi()`, `interlace_sql()`
 
 * A logging object to facilitate logging:
 
-  - `Logger()`
+  * `Logger()`
 
 * Function to generate checksums:
 
-  - `digest_to_checksum()`
+  * `digest_to_checksum()`
 
 * Function to write timestamps to tables on SQL backends:
 
-  - `db_timestamp()`
+  * `db_timestamp()`
 
 * Helper functions:
 
-  - `nrow()` - database compliant `nrow()`
+  * `nrow()` - database compliant `nrow()`
 
-  - `%notin%` - negated `%in%`
+  * `%notin%` - negated `%in%`
 
 ## Testing
 
