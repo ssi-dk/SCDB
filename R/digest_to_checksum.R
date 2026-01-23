@@ -12,7 +12,7 @@
 #' @param exclude (`character()`)\cr
 #'   Columns to exclude from the checksum generation.
 #' @param warn (`logical(1)`)\cr
-#'   Warn if <col> exists in the input data?
+#'   Warn if `col` exists in the input data?
 #' @return
 #'   .data with a checksum column added.
 #' @examples
