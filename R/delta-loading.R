@@ -368,7 +368,7 @@ delta_load <- function(
       # Update the logs
       updates %>%
         purrr::pwalk(
-          \(ts, n_insertions, n_deactivations) {
+          function(ts, n_insertions, n_deactivations) {
             logger$set_timestamp(ts)
             logger$log_to_db(
               n_insertions = !!ifelse(is.na(n_insertions), 0, n_insertions),
