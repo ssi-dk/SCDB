@@ -3,8 +3,7 @@
 release_bullets <- function() {
   return(
     list(
-      "Update the benchmarks",
-      "Run `revdepcheck::revdep_check()`"
+      "Update the benchmarks"
     )
   )
 }
