@@ -160,10 +160,17 @@ for (conn in get_test_conns()) {
 
     # Re-build the table on another connection
     # (one with date-time (duckdb) and one without (sqlite))
-    source_conns <- list(
-      "SQLite" = get_connection(RSQLite::SQLite(), dbname = ":memory:"),
-      "DuckDB" = get_connection(duckdb::duckdb(), dbdir = ":memory:")
-    )
+    source_conns <- list()
+    if (rlang::is_installed("SQLite")) {
+      source_conns <- list("SQLite" = get_connection(RSQLite::SQLite(), dbname = ":memory:"))
+    }
+
+    if (rlang::is_installed("duckdb") && R.version$major >= "4") { # # DuckDB requires R >= 4.0.0 to run in memory
+      source_conns <- c(
+        source_conns,
+        "DuckDB" = get_connection(duckdb::duckdb(), dbdir = ":memory:")
+      )
+    }
 
     for (source_conn in source_conns) {
 
