@@ -30,8 +30,7 @@
 #' @param tic (`POSIXct(1)`)\cr
 #'   A timestamp when computation began. If not supplied, it will be created at call-time
 #'   (used to more accurately convey the runtime of the update process).
-#' @param logger (`Logger(1)`)\cr
-#'   A configured logging object. If none is given, one is initialized with default arguments.
+#' @template logger
 #' @param enforce_chronological_order (`logical(1)`)\cr
 #'   Are updates allowed if they are chronologically earlier than latest update?
 #' @param collapse_continuous_records (`logical(1)`)\cr
@@ -107,6 +106,8 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
       timestamp = timestamp,
       start_time = tic
     )
+  } else {
+    logger$set_timestamp(timestamp) # Set the timestamp being processed
   }
 
   logger$log_info("Started", tic = tic) # Use input time in log

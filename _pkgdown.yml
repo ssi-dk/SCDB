@@ -28,6 +28,8 @@ reference:
     - create_logs_if_missing
     - update_snapshot
     - filter_keys
+    - delta_export
+    - delta_load
     - Logger
     - LoggerNull
 

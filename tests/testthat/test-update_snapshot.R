@@ -22,7 +22,6 @@ test_that("update_snapshot() can handle first snapshot", {
 
     logger <- Logger$new(
       db_table = db_table,
-      timestamp = timestamp,
       log_path = log_path,
       log_table_id = "test.SCDB_logs",
       log_conn = conn,
@@ -117,7 +116,6 @@ test_that("update_snapshot() can add a new snapshot", {
 
     logger <- Logger$new(
       db_table = db_table,
-      timestamp = timestamp,
       log_path = NULL,
       log_table_id = "test.SCDB_logs",
       log_conn = conn,
@@ -187,7 +185,6 @@ test_that("update_snapshot() can update a snapshot on an existing date", {
 
     logger <- Logger$new(
       db_table = db_table,
-      timestamp = timestamp,
       log_path = NULL,
       log_table_id = "test.SCDB_logs",
       log_conn = conn,
@@ -491,23 +488,20 @@ test_that("update_snapshot() handles 'NULL' updates", {
     # This is a simple update where 23 rows are replaced with 23 new ones on the given date
     db_table <- "test.SCDB_tmp1"
 
-    create_logger <- function(timestamp) {
-      Logger$new(
-        db_table = db_table,
-        timestamp = timestamp,
-        log_path = NULL,
-        log_table_id = "test.SCDB_logs",
-        log_conn = conn,
-        output_to_console = FALSE
-      )
-    }
+    logger <- Logger$new(
+      db_table = db_table,
+      log_path = NULL,
+      log_table_id = "test.SCDB_logs",
+      log_conn = conn,
+      output_to_console = FALSE
+    )
 
     # Update the table with update_snapshot() and store the results
-    update_snapshot(.data, conn, db_table, "2022-10-03 09:00:00", logger = create_logger("2022-10-03 09:00:00"))
+    update_snapshot(.data, conn, db_table, "2022-10-03 09:00:00", logger = logger)
     target_data_1 <- get_table(conn, db_table, slice_ts = NULL) %>% dplyr::collect()
 
     # Update the table with the same data again update_snapshot() and store the results
-    update_snapshot(.data, conn, db_table, "2022-10-04 09:00:00", logger = create_logger("2022-10-04 09:00:00"))
+    update_snapshot(.data, conn, db_table, "2022-10-04 09:00:00", logger = logger)
     target_data_2 <- get_table(conn, db_table, slice_ts = NULL) %>% dplyr::collect()
 
     # Check that the two updates are identical
@@ -534,7 +528,6 @@ test_that("update_snapshot() works with Id objects", {
     target_table <- id("test.mtcars_modified", conn)
 
     logger <- Logger$new(output_to_console = FALSE,
-                         timestamp = Sys.time(),
                          db_table = "test.mtcars_modified",
                          log_conn = NULL,
                          log_table_id = NULL,

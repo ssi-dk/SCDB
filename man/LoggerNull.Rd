@@ -36,6 +36,7 @@ Errors and warnings are still produced.
 <li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_error"><a href='../../SCDB/html/Logger.html#method-Logger-log_error'><code>SCDB::Logger$log_error()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_info"><a href='../../SCDB/html/Logger.html#method-Logger-log_info'><code>SCDB::Logger$log_info()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_warn"><a href='../../SCDB/html/Logger.html#method-Logger-log_warn'><code>SCDB::Logger$log_warn()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="set_timestamp"><a href='../../SCDB/html/Logger.html#method-Logger-set_timestamp'><code>SCDB::Logger$set_timestamp()</code></a></span></li>
 </ul>
 </details>
 }}

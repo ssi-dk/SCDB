@@ -4,7 +4,7 @@
 \alias{digest_to_checksum}
 \title{Computes an checksum from columns}
 \usage{
-digest_to_checksum(.data, col = "checksum", exclude = NULL)
+digest_to_checksum(.data, col = "checksum", exclude = NULL, warn = TRUE)
 }
 \arguments{
 \item{.data}{(\code{data.frame(1)}, \code{tibble(1)}, \code{data.table(1)}, or \code{tbl_dbi(1)})\cr
@@ -15,6 +15,9 @@ Name of the column to put the checksums in. Will be generated if missing.}
 
 \item{exclude}{(\code{character()})\cr
 Columns to exclude from the checksum generation.}
+
+\item{warn}{(\code{logical(1)})\cr
+Warn if \if{html}{\out{<col>}} exists in the input data?}
 }
 \value{
 .data with a checksum column added.

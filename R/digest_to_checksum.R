@@ -11,19 +11,21 @@
 #'   Name of the column to put the checksums in. Will be generated if missing.
 #' @param exclude (`character()`)\cr
 #'   Columns to exclude from the checksum generation.
+#' @param warn (`logical(1)`)\cr
+#'   Warn if <col> exists in the input data?
 #' @return
 #'   .data with a checksum column added.
 #' @examples
 #'   digest_to_checksum(mtcars)
 #' @export
-digest_to_checksum <- function(.data, col = "checksum", exclude = NULL) {
+digest_to_checksum <- function(.data, col = "checksum", exclude = NULL, warn = TRUE) {
 
   # Check arguments
   assert_data_like(.data)
   checkmate::assert_character(col)
   checkmate::assert_character(exclude, null.ok = TRUE)
 
-  if (as.character(dplyr::ensym(col)) %in% colnames(.data)) {
+  if (warn && as.character(dplyr::ensym(col)) %in% colnames(.data)) {
     warning(
       glue::glue("Column {as.character(dplyr::ensym(col))} already exists in data and will be overwritten!"),
       call. = FALSE
@@ -35,9 +37,11 @@ digest_to_checksum <- function(.data, col = "checksum", exclude = NULL) {
 
 #' @export
 `digest_to_checksum.tbl_Microsoft SQL Server` <- function(
-    .data,
-    col = formals(digest_to_checksum)$col,
-    exclude = formals(digest_to_checksum)$exclude) {
+  .data,
+  col = formals(digest_to_checksum)$col,
+  exclude = formals(digest_to_checksum)$exclude,
+  ...
+) {
 
   hash_cols <- dbplyr::ident(setdiff(colnames(.data), c(col, exclude)))
 
@@ -53,9 +57,11 @@ digest_to_checksum <- function(.data, col = "checksum", exclude = NULL) {
 
 #' @export
 digest_to_checksum.default <- function(
-    .data,
-    col = formals(digest_to_checksum)$col,
-    exclude = formals(digest_to_checksum)$exclude) {
+  .data,
+  col = formals(digest_to_checksum)$col,
+  exclude = formals(digest_to_checksum)$exclude,
+  ...
+) {
 
   hash_cols <- setdiff(colnames(.data), c(col, exclude))
 
@@ -80,6 +86,7 @@ digest_to_checksum.default <- function(
 
   .data <- .data %>%
     dplyr::mutate(id__ = dplyr::row_number()) %>%
+    dplyr::select(!dplyr::any_of(col)) %>% # Remove checksum column if it already exists
     dplyr::left_join(checksums, by = "id__") %>%
     dplyr::select(!"id__") %>%
     dplyr::compute(unique_table_name("SCDB_digest_to_checksum"))
@@ -96,9 +103,11 @@ md5 <- openssl::md5
 # Some backends have native md5 support, these use this function.
 #' @noRd
 digest_to_checksum_native_md5 <- function(
-    .data,
-    col = formals(digest_to_checksum)$col,
-    exclude = formals(digest_to_checksum)$exclude) {
+  .data,
+  col = formals(digest_to_checksum)$col,
+  exclude = formals(digest_to_checksum)$exclude,
+  ...
+) {
 
   hash_cols <- setdiff(colnames(.data), c(col, exclude))
 

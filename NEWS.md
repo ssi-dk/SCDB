@@ -2,6 +2,10 @@
 
 ## Improvements and Fixes
 
+* `delta_export()` and `delta_import()` functions are added (#213)
+  These functions facilitate incremental backups and batch migration of a
+  historical table created with `update_snapshot()`.
+  
 * Bug fixes in `update_snapshot()`:
 
   * Fixed a bug records were being incorrectly deactivated (#214).
