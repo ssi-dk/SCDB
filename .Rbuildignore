@@ -20,3 +20,4 @@ man-roxygen/*
 ^tests/testthat/test-0_linters\.R$
 ^tests/testthat/test-0_rd_files\.R$
 ^dockerfile$
+^CRAN-SUBMISSION$

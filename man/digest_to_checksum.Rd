@@ -17,7 +17,7 @@ Name of the column to put the checksums in. Will be generated if missing.}
 Columns to exclude from the checksum generation.}
 
 \item{warn}{(\code{logical(1)})\cr
-Warn if \if{html}{\out{<col>}} exists in the input data?}
+Warn if \code{col} exists in the input data?}
 }
 \value{
 .data with a checksum column added.

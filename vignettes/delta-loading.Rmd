@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 library(SCDB)
 ```
 
-```{r setup, echo = FALSE, results = "hide", eval = rlang::is_installed("duckdb")}
+```{r setup, echo = FALSE, results = "hide", eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
 
 # Setup conn to be used for examples
 conn_primary <- get_connection(duckdb::duckdb())
@@ -69,7 +69,7 @@ conn_primary   <- get_connection(...)
 conn_secondary <- get_connection(...)
 ```
 
-```{r example_data_hidden, eval = rlang::is_installed("duckdb")}
+```{r example_data_hidden, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
 example_data <- dplyr::tbl(conn_primary, DBI::Id(table = "example_data"))
 example_data
 ```
@@ -77,7 +77,7 @@ example_data
 Imagine on Day 1, in this case January 1st, 2020, our currently available data is the first three records of
 the `example_data`.
 We then store this data in a table `mtcars` in our primary database.
-```{r example_1, eval = rlang::is_installed("duckdb")}
+```{r example_1, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
 data <- head(example_data, 3)
 
 update_snapshot(
@@ -91,7 +91,7 @@ update_snapshot(
 The following day, the current data is now the first five rows of our example data.
 We then store this data in the database using `update_snapshot()`:
 
-```{r example_2, eval = rlang::is_installed("duckdb")}
+```{r example_2, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
 # Let's say that the next day, our data set is now the first 5 of our example data
 data <- head(example_data, 5)
 
@@ -104,12 +104,12 @@ update_snapshot(
 ```
 
 The current state of the data is then as follows (see `vignette("SCDB")` for details on `get_table()`):
-```{r example_2_results_a, eval = rlang::is_installed("duckdb")}
+```{r example_2_results_a, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
 get_table(conn_primary, "mtcars", slice_ts = NULL)
 ```
 
 We now want to recreate this state is our secondary database and we export the changes in the form of a single "delta".
-```{r delta_1_export, eval = rlang::is_installed("duckdb")}
+```{r delta_1_export, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
 delta_1 <- delta_export(
   conn = conn_primary,
   db_table = "mtcars",
@@ -121,7 +121,7 @@ delta_1
 
 We then use `delta_load()` to apply these changes in the secondary database. Notice that we do not need to create the
 table as `delta_load()` will create the table as needed.
-```{r delta_1_load, eval = rlang::is_installed("duckdb")}
+```{r delta_1_load, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
 delta_load(
   conn = conn_secondary,
   db_table = "mtcars_firewalled",
@@ -134,7 +134,7 @@ get_table(conn_secondary, "mtcars_firewalled", slice_ts = NULL)
 
 On day 3, we imagine that we have the same 5 records, but one of them is altered
 
-```{r example_3, eval = rlang::is_installed("duckdb")}
+```{r example_3, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
 data <- head(example_data, 5) %>%
   dplyr::mutate(hp = ifelse(car == "Mazda RX4", hp / 2, hp))
 
@@ -148,7 +148,7 @@ update_snapshot(
 
 On day 4, we imagine that we have the first 7 records along with the above alterations.
 
-```{r example_4, eval = rlang::is_installed("duckdb")}
+```{r example_4, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
 data <- head(example_data, 7) %>%
   dplyr::mutate(hp = ifelse(car == "Mazda RX4", hp / 2, hp))
 
@@ -161,12 +161,12 @@ update_snapshot(
 ```
 
 Which brings us to the following state:
-```{r example_4_results_a, eval = rlang::is_installed("duckdb")}
+```{r example_4_results_a, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
 get_table(conn_primary, "mtcars", slice_ts = NULL)
 ```
 
 And again, we want to replay both of these changes in the secondary database.
-```{r delta_2_export, eval = rlang::is_installed("duckdb")}
+```{r delta_2_export, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
 delta_2 <- delta_export(
   conn = conn_primary,
   db_table = "mtcars",
@@ -177,7 +177,7 @@ delta_2
 ```
 
 We then use `delta_load()` to apply these changes in the secondary database.
-```{r delta_2_load, eval = rlang::is_installed("duckdb")}
+```{r delta_2_load, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
 delta_load(
   conn = conn_secondary,
   db_table = "mtcars_firewalled",
@@ -195,7 +195,7 @@ you want to mirror this time-versioned data in another database but a single tra
 In this case, we can export a number of smaller delta "batches" by utilising the `timestamp_until` argument.
 
 Starting from the state above on the "primary" database, we split the transfer in two batches.
-```{r delta_batch_export, eval = rlang::is_installed("duckdb")}
+```{r delta_batch_export, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
 delta_batch_1 <- delta_export(
   conn = conn_primary,
   db_table = "mtcars",
@@ -211,7 +211,7 @@ delta_batch_2 <- delta_export(
 ```
 
 We then use `delta_load()` to apply these changes in the secondary database.
-```{r delta_batch_load, eval = rlang::is_installed("duckdb")}
+```{r delta_batch_load, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
 delta_load(
   conn = conn_secondary,
   db_table = "mtcars_batch",
