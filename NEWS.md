@@ -1,5 +1,11 @@
 # SCDB (development version)
 
+## Improvements and Fixes
+
+* `delta_export` and `delta_load` now accepts `db_table_id` of class `Id`
+  without error.
+
+
 # SCDB 0.6.0
 
 ## Improvements and Fixes
