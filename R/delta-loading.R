@@ -88,7 +88,7 @@ delta_export <- function(
   # Check arguments
   coll <- checkmate::makeAssertCollection()
   checkmate::assert_class(conn, "DBIConnection", add = coll)
-  assert_dbtable_like(db_table, len = 1, add = coll)
+  assert_dbtable_like(db_table, add = coll)
   assert_timestamp_like(timestamp_from, len = 1, add = coll)
   assert_timestamp_like(timestamp_until, null.ok = TRUE, len = 1, add = coll)
   checkmate::reportAssertions(coll)
@@ -223,7 +223,7 @@ delta_load <- function(
   # Check arguments
   coll <- checkmate::makeAssertCollection()
   checkmate::assert_class(conn, "DBIConnection", add = coll)
-  assert_dbtable_like(db_table, len = 1, add = coll)
+  assert_dbtable_like(db_table, add = coll)
   checkmate::assert_multi_class(logger, "Logger", null.ok = TRUE, add = coll)
   checkmate::reportAssertions(coll)
 
