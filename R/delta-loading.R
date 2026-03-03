@@ -371,8 +371,8 @@ delta_load <- function(
           function(ts, n_insertions, n_deactivations) {
             logger$set_timestamp(ts)
             logger$log_to_db(
-              n_insertions = !!ifelse(is.na(n_insertions), 0, n_insertions),
-              n_deactivations = !!ifelse(is.na(n_deactivations), 0, n_deactivations),
+              n_insertions = !!ifelse(is.na(n_insertions), 0L, as.integer(n_insertions)),
+              n_deactivations = !!ifelse(is.na(n_deactivations), 0L, as.integer(n_deactivations)),
               message = !!glue::glue(
                 "Update via delta load (",
                 "timestamp_from = {attr(delta, \"timestamp_from\")}",
