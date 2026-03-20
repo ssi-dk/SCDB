@@ -136,7 +136,7 @@
     },
     {
       "package": "devtools",
-      "version": "2.4.6",
+      "version": "2.5.0",
       "binary": true
     },
     {
@@ -166,7 +166,7 @@
     },
     {
       "package": "duckdb",
-      "version": "1.4.4",
+      "version": "1.5.0",
       "binary": true
     },
     {
@@ -206,7 +206,7 @@
     },
     {
       "package": "fs",
-      "version": "1.6.6",
+      "version": "1.6.7",
       "binary": true
     },
     {
@@ -271,7 +271,7 @@
     },
     {
       "package": "highr",
-      "version": "0.11",
+      "version": "0.12",
       "binary": true
     },
     {
@@ -291,7 +291,7 @@
     },
     {
       "package": "httpuv",
-      "version": "1.6.16",
+      "version": "1.6.17",
       "binary": true
     },
     {
@@ -346,7 +346,7 @@
     },
     {
       "package": "later",
-      "version": "1.4.7",
+      "version": "1.4.8",
       "binary": true
     },
     {
@@ -491,7 +491,7 @@
     },
     {
       "package": "ragg",
-      "version": "1.5.0",
+      "version": "1.5.1",
       "binary": true
     },
     {
@@ -532,11 +532,6 @@
     {
       "package": "rematch2",
       "version": "2.1.2",
-      "binary": true
-    },
-    {
-      "package": "remotes",
-      "version": "2.5.0",
       "binary": true
     },
     {
@@ -656,7 +651,7 @@
     },
     {
       "package": "systemfonts",
-      "version": "1.3.1",
+      "version": "1.3.2",
       "binary": true
     },
     {
@@ -666,7 +661,7 @@
     },
     {
       "package": "textshaping",
-      "version": "1.0.4",
+      "version": "1.0.5",
       "binary": true
     },
     {
