@@ -1,7 +1,7 @@
 {
   "lockfile_version": 1,
-  "os": "Ubuntu 24.04.3 LTS",
-  "r_version": "R version 4.5.2 (2025-10-31)",
+  "os": "Ubuntu 24.04.4 LTS",
+  "r_version": "R version 4.5.3 (2026-03-11)",
   "platform": "x86_64-pc-linux-gnu",
   "packages": [
     {
