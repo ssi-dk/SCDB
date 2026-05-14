@@ -36,7 +36,7 @@ Depends:
 Imports:
     checkmate,
     DBI,
-    dbplyr (>= 2.4.0),
+    dbplyr (>= 2.5.0),
     dplyr,
     glue,
     lubridate,
