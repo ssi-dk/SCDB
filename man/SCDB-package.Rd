@@ -24,6 +24,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Rasmus Skytte Randløv \email{rske@ssi.dk} (\href{https://orcid.org/0000-0002-5860-3838}{ORCID}) [reviewer]
   \item Marcus Munch Grünewald (\href{https://orcid.org/0009-0006-8090-406X}{ORCID})
 }
 

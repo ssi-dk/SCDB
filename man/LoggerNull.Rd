@@ -19,93 +19,99 @@ Errors and warnings are still produced.
   try(logger$log_error("This is an error!"))
 }
 \section{Super class}{
-\code{\link[SCDB:Logger]{SCDB::Logger}} -> \code{LoggerNull}
+\code{\link[SCDB:Logger]{Logger}} -> \code{LoggerNull}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-LoggerNull-new}{\code{LoggerNull$new()}}
-\item \href{#method-LoggerNull-log_to_db}{\code{LoggerNull$log_to_db()}}
-\item \href{#method-LoggerNull-finalize_db_entry}{\code{LoggerNull$finalize_db_entry()}}
-\item \href{#method-LoggerNull-clone}{\code{LoggerNull$clone()}}
+  \itemize{
+    \item \href{#method-LoggerNull-initialize}{\code{LoggerNull$new()}}
+    \item \href{#method-LoggerNull-log_to_db}{\code{LoggerNull$log_to_db()}}
+    \item \href{#method-LoggerNull-finalize_db_entry}{\code{LoggerNull$finalize_db_entry()}}
+    \item \href{#method-LoggerNull-clone}{\code{LoggerNull$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details open><summary>Inherited methods</summary>
+\if{html}{\out{<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_error"><a href='../../SCDB/html/Logger.html#method-Logger-log_error'><code>SCDB::Logger$log_error()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_info"><a href='../../SCDB/html/Logger.html#method-Logger-log_info'><code>SCDB::Logger$log_info()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_warn"><a href='../../SCDB/html/Logger.html#method-Logger-log_warn'><code>SCDB::Logger$log_warn()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="set_timestamp"><a href='../../SCDB/html/Logger.html#method-Logger-set_timestamp'><code>SCDB::Logger$set_timestamp()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_error"><a href='../../SCDB/html/Logger.html#method-Logger-log_error'><code>Logger$log_error()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_info"><a href='../../SCDB/html/Logger.html#method-Logger-log_info'><code>Logger$log_info()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="log_warn"><a href='../../SCDB/html/Logger.html#method-Logger-log_warn'><code>Logger$log_warn()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="SCDB" data-topic="Logger" data-id="set_timestamp"><a href='../../SCDB/html/Logger.html#method-Logger-set_timestamp'><code>Logger$set_timestamp()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-LoggerNull-new"></a>}}
-\if{latex}{\out{\hypertarget{method-LoggerNull-new}{}}}
-\subsection{Method \code{new()}}{
-Create a new \code{LoggerNull} object
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{LoggerNull$new(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<a id="method-LoggerNull-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-LoggerNull-initialize}{}}}
+\subsection{\code{LoggerNull$new()}}{
+  Create a new \code{LoggerNull} object
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{LoggerNull$new(...)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{Captures arguments given, but does nothing}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{Captures arguments given, but does nothing}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-LoggerNull-log_to_db"></a>}}
 \if{latex}{\out{\hypertarget{method-LoggerNull-log_to_db}{}}}
-\subsection{Method \code{log_to_db()}}{
-Matches the signature of \code{Logger$log_to_db()}, but does nothing.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{LoggerNull$log_to_db(...)}\if{html}{\out{</div>}}
+\subsection{\code{LoggerNull$log_to_db()}}{
+  Matches the signature of \code{Logger$log_to_db()}, but does nothing.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{LoggerNull$log_to_db(...)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{Captures arguments given, but does nothing}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{Captures arguments given, but does nothing}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-LoggerNull-finalize_db_entry"></a>}}
 \if{latex}{\out{\hypertarget{method-LoggerNull-finalize_db_entry}{}}}
-\subsection{Method \code{finalize_db_entry()}}{
-Matches the signature of \code{Logger$finalize_db_entry()}, but does nothing.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{LoggerNull$finalize_db_entry(...)}\if{html}{\out{</div>}}
+\subsection{\code{LoggerNull$finalize_db_entry()}}{
+  Matches the signature of \code{Logger$finalize_db_entry()}, but does nothing.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{LoggerNull$finalize_db_entry(...)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{Captures arguments given, but does nothing}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{Captures arguments given, but does nothing}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-LoggerNull-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-LoggerNull-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{LoggerNull$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{LoggerNull$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{LoggerNull$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

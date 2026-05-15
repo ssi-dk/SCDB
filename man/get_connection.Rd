@@ -116,7 +116,7 @@ Certain drivers may use credentials stored in a file, such as ~/.pgpass (Postgre
 
 \link[RPostgres:Postgres]{RPostgres::Postgres}
 
-\link[odbc:dbConnect-OdbcDriver-method]{odbc::odbc}
+\link[odbc:odbc]{odbc::odbc}
 
 \link[duckdb:duckdb]{duckdb::duckdb}
 }
