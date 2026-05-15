@@ -110,9 +110,12 @@ id.tbl_dbi <- function(db_table, ...) {
     stop("Unknown table specification", call. = FALSE)
   }
 
-  catalog <- purrr::pluck(components, 1)
-  schema  <- purrr::pluck(components, 2)
-  table   <- purrr::pluck(components, 3)
+  # Reverse order (table, schema?, catalog?) to account for missing information
+  components <- components[rev(seq_along(components))]
+
+  table    <- purrr::pluck(components, 1)
+  schema   <- purrr::pluck(components, 2)
+  catalog  <- purrr::pluck(components, 3)
 
   # Match against known tables
   # In some cases, tables may have been added to the database that makes the id ambiguous.
