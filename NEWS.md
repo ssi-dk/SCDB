@@ -7,6 +7,9 @@
 
 * `delta_load` now always writes integer `n_insertions` and `n_deactivations` to the logs table (#221).
 
+* Compatibility with `dbplyr` 2.6.0 (#223, @hadley and #225).
+
+
 # SCDB 0.6.0
 
 ## Improvements and Fixes
