@@ -1,4 +1,4 @@
-# SCDB (development version)
+# SCDB 0.6.1
 
 ## Improvements and Fixes
 
