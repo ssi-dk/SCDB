@@ -26,7 +26,7 @@
     },
     {
       "package": "bit64",
-      "version": "4.8.0",
+      "version": "4.8.2",
       "binary": true
     },
     {
