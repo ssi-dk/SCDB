@@ -257,17 +257,9 @@ Logger <- R6::R6Class(                                                          
           dplyr::count() %>%
           dplyr::pull()
 
-        query <- dbplyr::build_sql(
-          "UPDATE ",
-          dbplyr::as.sql(id(self$log_tbl, conn = private$log_conn), con = private$log_conn),
-          " SET ",
-          dbplyr::ident("log_file"),
-          " = NULL WHERE ",
-          dbplyr::ident("log_file"),
-          " = '",
-          dplyr::sql(self$log_filename),
-          "'",
-          con = private$log_conn
+        query <- dbplyr::sql_glue2(
+          private$log_conn,
+          'UPDATE {.tbl private$log_table_id} SET {.id "log_file"} = NULL WHERE {.id "log_file"} = {self$log_filename}'
         )
 
         affected_rows <- DBI::dbExecute(private$log_conn, query)
