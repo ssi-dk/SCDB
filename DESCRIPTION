@@ -42,7 +42,6 @@ Imports:
     dplyr,
     glue,
     lubridate,
-    methods,
     openssl,
     parallelly,
     purrr,
@@ -51,7 +50,6 @@ Imports:
     stringr,
     tidyr,
     tidyselect,
-    utils,
     withr
 Suggests:
     callr,
