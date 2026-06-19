@@ -1,5 +1,10 @@
 # SCDB (development version)
 
+## BREAKING CHANGES
+
+* Checksum generation in `digest_to_checksum` has been updated to reduce collisions (#245).
+  This will require re-generation of existing checksums.
+
 
 # SCDB 0.6.2
 
