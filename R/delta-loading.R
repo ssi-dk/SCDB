@@ -150,7 +150,7 @@ delta_export <- function(
 
   # Starting from the full table,
   if (is.null(timestamp_until)) {
-    out <- get_table(conn, db_table, slice_ts = NULL) %>%
+    out <- get_table(conn, db_table, slice_ts = NULL) |>
       dplyr::filter(
         (
           # ..any data created within the interval gets exported
@@ -161,7 +161,7 @@ delta_export <- function(
         )
       )
   } else {
-    out <- get_table(conn, db_table, slice_ts = NULL) %>%
+    out <- get_table(conn, db_table, slice_ts = NULL) |>
       dplyr::filter(
         (
           # ..any data created within the interval gets exported
@@ -177,7 +177,7 @@ delta_export <- function(
 
   # Censor future until_ts values
   if (!is.null(timestamp_until)) {
-    out <- out %>%
+    out <- out |>
       dplyr::mutate(
         "until_ts" = dplyr::if_else(
           condition = !is.na(.data$until_ts) & !!db_timestamp(timestamp_until, conn) < .data$until_ts,
@@ -237,11 +237,11 @@ delta_load <- function(
     delta <- dplyr::collect(delta)
 
     # Ensure our time-keeping columns have the correct data type
-    posix_time_keeping <- delta %>%
-      utils::head(1) %>%
-      dplyr::select("from_ts", "until_ts") %>%
-      dplyr::collect() %>%
-      as.list() %>%
+    posix_time_keeping <- delta |>
+      utils::head(1) |>
+      dplyr::select("from_ts", "until_ts") |>
+      dplyr::collect() |>
+      as.list() |>
       purrr::map(~ inherits(., "POSIXct"))
 
     # If not correctly formatted, we need to convert locally
@@ -265,7 +265,7 @@ delta_load <- function(
 
     # Handle SQLite case
     if (inherits(conn, "SQLiteConnection")) {
-      delta <- delta %>%
+      delta <- delta |>
         dplyr::mutate(
           dplyr::across(
             .cols = c("from_ts", "until_ts"),
@@ -301,17 +301,17 @@ delta_load <- function(
     if (!table_exists(conn, db_table_id)) {
 
       # Create table if missing
-      delta_src %>%
-        utils::head(0) %>%
-        dplyr::collect() %>%
-        dplyr::select(!c("checksum", "from_ts", "until_ts")) %>%
+      delta_src |>
+        utils::head(0) |>
+        dplyr::collect() |>
+        dplyr::select(!c("checksum", "from_ts", "until_ts")) |>
         create_table(conn = conn, db_table = db_table_id)
 
     }
 
     # Identify existing records
-    existing <- dplyr::tbl(conn, db_table_id) %>%
-      dplyr::select(dplyr::all_of((c("checksum", "from_ts", "until_ts")))) %>%
+    existing <- dplyr::tbl(conn, db_table_id) |>
+      dplyr::select(dplyr::all_of((c("checksum", "from_ts", "until_ts")))) |>
       dplyr::compute(name = unique_table_name("SCDB_delta_existing"))
     defer_db_cleanup(existing)
 
@@ -351,22 +351,22 @@ delta_load <- function(
     if (!is.null(logger)) {
 
       # Compute insertions and deactivations
-      insertions <- insertions %>%
+      insertions <- insertions |>
         dplyr::count("ts" = .data$from_ts, name = "n_insertions")
 
-      deactivations <- deactivations %>%
-        dplyr::filter(!is.na(.data$until_ts)) %>%
+      deactivations <- deactivations |>
+        dplyr::filter(!is.na(.data$until_ts)) |>
         dplyr::count("ts" = .data$until_ts, name = "n_deactivations")
 
       updates <- dplyr::full_join(
         insertions,
         deactivations,
         by = "ts"
-      ) %>%
+      ) |>
         dplyr::collect()
 
       # Update the logs
-      updates %>%
+      updates |>
         purrr::pwalk(
           function(ts, n_insertions, n_deactivations) {
             logger$set_timestamp(ts)

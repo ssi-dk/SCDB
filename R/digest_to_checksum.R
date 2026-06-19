@@ -45,12 +45,12 @@ digest_to_checksum <- function(.data, col = "checksum", exclude = NULL, warn = T
 
   hash_cols <- dbplyr::ident(setdiff(colnames(.data), c(col, exclude)))
 
-  .data <- dplyr::mutate(
-    .data,
-    {{ col }} := !!dplyr::sql(
-      glue::glue("CONVERT(CHAR(64), HashBytes('SHA2_256', (SELECT {toString(hash_cols)} FOR XML RAW)), 2)")
+  .data <- .data |>
+    dplyr::mutate(
+      {{ col }} := !!dplyr::sql(
+        glue::glue("CONVERT(CHAR(64), HashBytes('SHA2_256', (SELECT {toString(hash_cols)} FOR XML RAW)), 2)")
+      )
     )
-  )
 
   return(.data)
 }
@@ -66,7 +66,7 @@ digest_to_checksum.default <- function(
   hash_cols <- setdiff(colnames(.data), c(col, exclude))
 
   # The md5 algorithm needs character inputs, so we convert the hash columns to character and concatenate
-  checksums <- .data %>%
+  checksums <- .data |>
     dplyr::mutate(dplyr::across(
       tidyselect::all_of(hash_cols),
       ~ dplyr::coalesce(as.character(.), ""),
@@ -74,21 +74,21 @@ digest_to_checksum.default <- function(
     ))
 
   # Compute checksums locally then join back onto original data
-  checksums <- checksums %>%
-    dplyr::collect() %>%
-    tidyr::unite(!!col, tidyselect::ends_with(".__chr"), remove = FALSE) %>%
+  checksums <- checksums |>
+    dplyr::collect() |>
+    tidyr::unite(!!col, tidyselect::ends_with(".__chr"), remove = FALSE) |>
     dplyr::transmute(
       id__ = dplyr::row_number(),
       dplyr::across(tidyselect::all_of(col), openssl::md5)
-    ) %>%
-    dplyr::copy_to(dbplyr::remote_con(.data), df = ., name = unique_table_name("SCDB_digest_to_checksum_helper"))
+    ) |>
+    dplyr::copy_to(dbplyr::remote_con(.data), df = _, name = unique_table_name("SCDB_digest_to_checksum_helper"))
   defer_db_cleanup(checksums)
 
-  .data <- .data %>%
-    dplyr::mutate(id__ = dplyr::row_number()) %>%
-    dplyr::select(!dplyr::any_of(col)) %>% # Remove checksum column if it already exists
-    dplyr::left_join(checksums, by = "id__") %>%
-    dplyr::select(!"id__") %>%
+  .data <- .data |>
+    dplyr::mutate(id__ = dplyr::row_number()) |>
+    dplyr::select(!dplyr::any_of(col)) |> # Remove checksum column if it already exists
+    dplyr::left_join(checksums, by = "id__") |>
+    dplyr::select(!"id__") |>
     dplyr::compute(unique_table_name("SCDB_digest_to_checksum"))
 
   return(.data)
@@ -112,13 +112,13 @@ digest_to_checksum_native_md5 <- function(
   hash_cols <- setdiff(colnames(.data), c(col, exclude))
 
   # The md5 algorithm needs character inputs, so we convert the hash columns to character and concatenate
-  .data <- .data %>%
+  .data <- .data |>
     dplyr::mutate(dplyr::across(
       tidyselect::all_of(hash_cols),
       ~ dplyr::coalesce(as.character(.), ""),
       .names = "{.col}.__chr"
-    )) %>%
-    tidyr::unite(!!col, tidyselect::ends_with(".__chr"), remove = TRUE) %>%
+    )) |>
+    tidyr::unite(!!col, tidyselect::ends_with(".__chr"), remove = TRUE) |>
     dplyr::mutate(dplyr::across(tidyselect::all_of(col), md5))
 
   return(.data)

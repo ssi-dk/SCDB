@@ -39,19 +39,35 @@ for (conn in get_test_conns()) {
 
 
   # Copy mtcars to conn
-  dplyr::copy_to(conn, mtcars %>% dplyr::mutate(name = rownames(mtcars)),
-                 name = id("test.mtcars", conn), temporary = FALSE, overwrite = TRUE)
+  dplyr::copy_to(
+    conn,
+    dplyr::mutate(mtcars, "name" = rownames(mtcars)),
+    name = id("test.mtcars", conn),
+    temporary = FALSE,
+    overwrite = TRUE
+  )
 
-  dplyr::copy_to(conn, mtcars %>% dplyr::mutate(name = rownames(mtcars)),
-                 name = id("__mtcars", conn), temporary = FALSE, overwrite = TRUE)
+  dplyr::copy_to(
+    conn,
+    dplyr::mutate(mtcars, "name" = rownames(mtcars)),
+    name = id("__mtcars", conn),
+    temporary = FALSE,
+    overwrite = TRUE
+  )
 
-  dplyr::copy_to(conn,
-                 mtcars %>%
-                   dplyr::mutate(name = rownames(mtcars)) %>%
-                   digest_to_checksum() %>%
-                   dplyr::mutate(from_ts = as.POSIXct("2020-01-01 09:00:00"),
-                                 until_ts = as.POSIXct(NA)),
-                 name = id("__mtcars_historical", conn), temporary = FALSE, overwrite = TRUE)
+  dplyr::copy_to(
+    conn,
+    mtcars |>
+      dplyr::mutate("name" = rownames(mtcars)) |>
+      digest_to_checksum() |>
+      dplyr::mutate(
+        "from_ts" = as.POSIXct("2020-01-01 09:00:00"),
+        "until_ts" = as.POSIXct(NA)
+      ),
+      name = id("__mtcars_historical", conn),
+      temporary = FALSE,
+      overwrite = TRUE
+    )
 
   DBI::dbDisconnect(conn)
 }
@@ -63,11 +79,11 @@ for (conn in get_test_conns()) {
 #' @template conn
 #' @return NULL (called for side effects)
 #' @import rlang .data
-#' @importFrom magrittr %>%
+#' @importFrom magrittr |>
 #' @noRd
 connection_clean_up <- function(conn) {
-  dbplyr_tables <- get_tables(conn, show_temporary = TRUE) %>%
-    dplyr::pull("table") %>%
+  dbplyr_tables <- get_tables(conn, show_temporary = TRUE) |>
+    dplyr::pull("table") |>
     purrr::keep(~ stringr::str_detect(., "^#?dbplyr_"))
 
   if (length(dbplyr_tables) > 0) {

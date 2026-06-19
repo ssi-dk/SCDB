@@ -31,7 +31,7 @@ License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE, r6 = TRUE)
 Depends:
-    R (>= 3.6.0)
+    R (>= 4.1.0)
 Imports:
     checkmate,
     DBI,
@@ -48,8 +48,7 @@ Imports:
     stringr,
     tidyr,
     tidyselect,
-    utils,
-    magrittr
+    utils
 Suggests:
     callr,
     conflicted,

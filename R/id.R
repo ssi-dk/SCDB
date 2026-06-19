@@ -119,7 +119,7 @@ id.tbl_dbi <- function(db_table, ...) {
 
   # Match against known tables
   # In some cases, tables may have been added to the database that makes the id ambiguous.
-  matches <- get_tables(dbplyr::remote_con(db_table), show_temporary = TRUE) %>%
+  matches <- get_tables(dbplyr::remote_con(db_table), show_temporary = TRUE) |>
     dplyr::filter(.data$table == !!table)
 
   if (!is.null(schema)) matches <- dplyr::filter(matches, .data$schema == !!schema)
@@ -177,14 +177,14 @@ id.data.frame <- function(db_table, ...) {
 #' @noRd
 as.character.Id <- function(x, explicit = FALSE, ...) {
 
-  info <- x@name %>%
+  info <- x@name |>
     purrr::discard(is.na)
 
   id_elements <- list(
     catalog = purrr::pluck(info, "catalog"),
     schema = purrr::pluck(info, "schema"),
     table = purrr::pluck(info, "table")
-  ) %>%
+  ) |>
     purrr::discard(is.null)
 
   if (explicit) id_elements <- purrr::map(id_elements, ~ paste0('"', ., '"'))

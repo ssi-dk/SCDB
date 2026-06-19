@@ -50,10 +50,9 @@ get_connection.SQLiteDriver <- function(
   bigint <- match.arg(bigint)
 
   # Store the given arguments
-  args <- as.list(rlang::current_env()) %>%
-    utils::modifyList(list(...)) %>%
+  args <- list(...) |>
+    append(as.list(rlang::current_env())) |>
     unlist()
-
   args <- args[match(unique(names(args)), names(args))]
 
   # Check arguments
@@ -99,8 +98,8 @@ get_connection.PqDriver <- function(
   bigint <- match.arg(bigint)
 
   # Store the given arguments
-  args <- as.list(rlang::current_env()) %>%
-    utils::modifyList(list(...)) %>%
+  args <- list(...) |>
+    append(as.list(rlang::current_env())) |>
     unlist()
   args <- args[match(unique(names(args)), names(args))]
 
@@ -144,8 +143,8 @@ get_connection.OdbcDriver <- function(
   bigint <- match.arg(bigint)
 
   # Store the given arguments
-  args <- as.list(rlang::current_env()) %>%
-    utils::modifyList(list(...)) %>%
+  args <- list(...) |>
+    append(as.list(rlang::current_env())) |>
     unlist()
   args <- args[match(unique(names(args)), names(args))]
 
@@ -187,8 +186,8 @@ get_connection.duckdb_driver <- function(
   bigint <- match.arg(bigint)
 
   # Store the given arguments
-  args <- as.list(rlang::current_env()) %>%
-    utils::modifyList(list(...)) %>%
+  args <- list(...) |>
+    append(as.list(rlang::current_env())) |>
     unlist()
   args <- args[match(unique(names(args)), names(args))]
 
@@ -209,12 +208,11 @@ get_connection.duckdb_driver <- function(
 
 #' @rdname get_connection
 #' @export
-#' @importFrom magrittr %>%
 get_connection.default <- function(drv, ...) {
 
   # Store the given arguments
-  args <- as.list(rlang::current_env()) %>%
-    utils::modifyList(list(...)) %>%
+  args <- list(...) |>
+    append(as.list(rlang::current_env())) |>
     unlist()
   args <- args[match(unique(names(args)), names(args))]
 

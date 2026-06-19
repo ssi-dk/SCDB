@@ -44,7 +44,7 @@ test_that("`db_timestamp()` maps identically for different inputs", {
     queries <- tidyr::expand_grid(
       type_1 = slice_tss,
       type_2 = slice_tss
-    ) %>%
+    ) |>
       purrr::pmap(
         ~ {
           DBI::SQL(
@@ -68,7 +68,7 @@ test_that("`db_timestamp()` maps identically for different inputs", {
     labels <- tidyr::expand_grid(
       type_1 = names(slice_tss),
       type_2 = names(slice_tss)
-    ) %>%
+    ) |>
       purrr::pmap_chr(~ glue::glue("{.x} / {.y}"))
 
     # All db_timestamps should map to the same value
