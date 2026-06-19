@@ -1,10 +1,12 @@
 # SCDB (development version)
 
+## BREAKING CHANGE
+
+* `SCDB` has reduced backwards compatibility to R >= 4.2 (#242).
+
 ## Improvements and Fixes
 
 * Compatibility with `dbplyr` 2.6.0 (#241).
-
-* `SCDB` has reduced backwards compatibility to R >= 4.1 (#242).
 
 
 # SCDB 0.6.1
