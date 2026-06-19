@@ -25,54 +25,52 @@ create_index <- function(conn, db_table, columns) {
 
 #' @export
 create_index.PqConnection <- function(conn, db_table, columns) {
-  db_table <- id(db_table, conn)
+  db_table_id <- id(db_table, conn)
 
-  DBI::dbExecute(
+  query <- dbplyr::sql_glue2(
     conn,
-    glue::glue(
-      "CREATE UNIQUE INDEX ON {as.character(db_table, explicit = TRUE)} ({toString(columns)})"
-    )
+    "CREATE UNIQUE INDEX ON {.tbl db_table_id} ({.id columns})"
   )
+
+  DBI::dbExecute(conn, query)
 }
 
 #' @export
 create_index.SQLiteConnection <- function(conn, db_table, columns) {
-  db_table <- id(db_table, conn)
+  db_table_id <- id(db_table, conn)
 
-  schema <- purrr::pluck(db_table, "name", "schema")
-  table  <- purrr::pluck(db_table, "name", "table")
+  schema <- purrr::pluck(db_table_id, "name", "schema")
+  table <- purrr::pluck(db_table_id, "name", "table")
 
-  if (schema %in% c("main", "temp")) schema <- NULL
+  has_schema <- !(schema %in% c("main", "temp"))
 
   # Generate index name
-  index <- paste(
-    purrr::map(
-      c(
-        schema,
-        paste(c(table, "scdb_index", columns), collapse = "_")
-      ),
-      shQuote
-    ),
-    collapse = "."
+  index_name <- paste(c(table, "scdb_index", columns), collapse = "_")
+
+  index_id <- if (has_schema) {
+    DBI::Id(schema = schema, table = index_name)
+  } else {
+    index_name
+  }
+
+  query <- dbplyr::sql_glue2(
+    conn,
+    "CREATE UNIQUE INDEX {.tbl index_id} ON {.id table} ({.id columns})"
   )
 
-  DBI::dbExecute(
-    conn,
-    glue::glue(
-      "CREATE UNIQUE INDEX {index} ON {shQuote(table)} ({toString(columns)})"
-    )
-  )
+  DBI::dbExecute(conn, query)
 }
 
 #' @export
 create_index.DBIConnection <- function(conn, db_table, columns) {
-  db_table <- id(db_table, conn)
+  db_table_id <- id(db_table, conn)
 
-  index <- glue::glue("{db_table}_scdb_index_{paste(columns, collapse = '_')}") |>
+  index <- glue::glue("{db_table}_scdb_index_{paste(columns, collapse = '_')}") %>%
     stringr::str_replace_all(stringr::fixed("."), "_")
 
-  query <- glue::glue(
-    "CREATE UNIQUE INDEX {index} ON {as.character(db_table, explicit = TRUE)} ({toString(columns)})"
+  query <- dbplyr::sql_glue2(
+    conn,
+    "CREATE UNIQUE INDEX {.id index} ON {.tbl db_table_id} ({.id columns})"
   )
 
   DBI::dbExecute(conn, query)
