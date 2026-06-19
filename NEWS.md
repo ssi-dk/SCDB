@@ -1,5 +1,10 @@
 # SCDB (development version)
 
+## Improvements and Fixes
+
+* Compatibility with `dbplyr` 2.6.0 (#241).
+
+
 # SCDB 0.6.1
 
 ## Improvements and Fixes

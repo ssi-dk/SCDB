@@ -126,7 +126,7 @@
     },
     {
       "package": "dbplyr",
-      "version": "2.5.2",
+      "version": "2.6.0",
       "binary": true
     },
     {
@@ -441,7 +441,7 @@
     },
     {
       "package": "pkgload",
-      "version": "1.5.2",
+      "version": "1.5.3",
       "binary": true
     },
     {
@@ -566,7 +566,7 @@
     },
     {
       "package": "RSQLite",
-      "version": "3.53.1",
+      "version": "3.53.2",
       "binary": true
     },
     {
@@ -686,7 +686,7 @@
     },
     {
       "package": "tinytex",
-      "version": "0.59",
+      "version": "0.60",
       "binary": true
     },
     {
