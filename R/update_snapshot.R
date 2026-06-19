@@ -275,7 +275,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
   sql_deactivate <- dbplyr::sql_query_update_from(
     con = conn,
-    table = dbplyr::as.sql(db_table_id, con = conn),
+    table = db_table_id,
     from = dbplyr::sql_render(records_to_deactivate),
     by = c("checksum", "from_ts"),
     update_values = c("until_ts" = slice_ts)
@@ -304,7 +304,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
   sql_insert <- dbplyr::sql_query_insert(
     con = conn,
-    table = dbplyr::as.sql(db_table_id, con = conn),
+    table = db_table_id,
     from = records_to_insert,
     insert_cols = c(colnames(snapshot), "from_ts", "until_ts"),
     by = c("checksum", "from_ts"),
@@ -360,7 +360,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
     } else {
       sql_fix_consecutive <- dbplyr::sql_query_upsert(
         con = conn,
-        table = dbplyr::as.sql(db_table_id, con = conn),
+        table = db_table_id,
         from = dbplyr::sql_render(consecutive_rows_fix),
         by =  c("checksum", "from_ts"),
         update_cols = "until_ts"
@@ -386,7 +386,7 @@ update_snapshot <- function(.data, conn, db_table, timestamp, filters = NULL, me
 
     sql_fix_redundant <- dbplyr::sql_query_delete(
       con = conn,
-      table = dbplyr::as.sql(db_table_id, con = conn),
+      table = db_table_id,
       from = dbplyr::sql_render(redundant_rows),
       by = c("checksum", "from_ts")
     )
