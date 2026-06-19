@@ -31,8 +31,8 @@ create_table <- function(.data, conn = NULL, db_table, ...) {                   
   .data <- dplyr::mutate(
     .data,
     "checksum" = NA_character_,
-    "from_ts"  = as.POSIXct(NA_real_),
-    "until_ts" = as.POSIXct(NA_real_),
+    "from_ts"  = as.POSIXct(NA_real_, origin = "1970-01-01"),
+    "until_ts" = as.POSIXct(NA_real_, origin = "1970-01-01"),
     .after = tidyselect::everything()
   )
 

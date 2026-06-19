@@ -33,7 +33,7 @@ test_that("`db_timestamp()` maps identically for different inputs", {
   slice_tss <- list(
     "Date" = Sys.Date(),
     "character Date" = as.character(Sys.Date()),
-    "Integer Date" = as.Date(as.integer(Sys.Date())),
+    "Integer Date" = as.Date(as.integer(Sys.Date()), origin = "1970-01-01"),
     "POSIXct" = lubridate::floor_date(Sys.time(), unit = "day"),
     "character timestamp" = format(lubridate::floor_date(Sys.time(), unit = "day"))
   )
