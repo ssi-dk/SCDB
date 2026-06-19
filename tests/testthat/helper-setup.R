@@ -114,7 +114,8 @@ get_test_conns <- function(skip_backends = NULL) {
       if (checkmate::test_multi_class(., purrr::pluck(skip_backends, .default = ""))) {
         DBI::dbDisconnect(.)
       }
-    }) |>
+    }
+  ) |>
     purrr::discard(\(conn) checkmate::test_multi_class(conn, purrr::pluck(skip_backends, .default = "")))
 
   # Run post_connect commands on the connections

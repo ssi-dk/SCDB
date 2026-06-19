@@ -64,10 +64,10 @@ for (conn in get_test_conns()) {
         "from_ts" = as.POSIXct("2020-01-01 09:00:00"),
         "until_ts" = as.POSIXct(NA)
       ),
-      name = id("__mtcars_historical", conn),
-      temporary = FALSE,
-      overwrite = TRUE
-    )
+    name = id("__mtcars_historical", conn),
+    temporary = FALSE,
+    overwrite = TRUE
+  )
 
   DBI::dbDisconnect(conn)
 }

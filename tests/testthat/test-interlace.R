@@ -34,7 +34,7 @@ test_that("interlace.tbl_sql() works", {
       t_ref |>
         dplyr::collect() |>
         dplyr::arrange(.data$key, .data$valid_from)
-      )
+    )
 
     # Order of columns will be different, so we only require a mapequal
     # .. but order of records can still be different
@@ -45,7 +45,7 @@ test_that("interlace.tbl_sql() works", {
       interlace(list(t2, t1), by = "key") |>
         dplyr::collect() |>
         dplyr::arrange(.data$key, .data$valid_from)
-      )
+    )
 
     connection_clean_up(conn)
   }

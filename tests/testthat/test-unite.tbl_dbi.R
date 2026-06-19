@@ -34,7 +34,7 @@ test_that("unite.tbl_dbi() works", {
         dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |>
         dplyr::collect() |>
         tidyr::unite("new_col", mpg, hp)
-      )
+    )
 
     col <- "new_col"
     expect_mapequal(
@@ -46,7 +46,7 @@ test_that("unite.tbl_dbi() works", {
         dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |>
         dplyr::collect() |>
         tidyr::unite(col, mpg, hp)
-      )
+    )
 
     expect_mapequal(
       get_table(conn, "__mtcars") |>
@@ -57,7 +57,7 @@ test_that("unite.tbl_dbi() works", {
         dplyr::mutate(dplyr::across(tidyselect::everything(), as.character)) |>
         dplyr::collect() |>
         tidyr::unite(!!col, mpg, hp)
-      )
+    )
 
     # Unite places cols in a particular way, lets be sure we match
     qq <- dplyr::mutate(q, dplyr::across(tidyselect::everything(), as.character)) # we convert to character since SQLite

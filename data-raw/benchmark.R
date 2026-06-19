@@ -1,5 +1,3 @@
-library(magrittr)
-
 withr::local_options("odbc.batch_rows" = 1000)
 
 # Install extra dependencies
