@@ -55,6 +55,26 @@ digest_to_checksum <- function(.data, col = "checksum", exclude = NULL, warn = T
   return(.data)
 }
 
+
+# The row serialization is length-prefixed and NA-aware:
+#   NA  -> "N:"                                                                                                         # nolint start: commented_code_linter
+#   ""  -> "V:0:"
+#   "a" -> "V:1:a"                                                                                                      # nolint end: commented_code_linter
+#
+# This avoids collisions such as NA vs "" and c("a_b", "c") vs c("a", "b_c").
+encode_checksum_columns <- function(.data, hash_cols) {
+  .data %>%
+    dplyr::mutate(dplyr::across(
+      tidyselect::all_of(hash_cols),
+      ~ dplyr::case_when(
+        is.na(as.character(.)) ~ "N:",
+        TRUE ~ paste0("V:", nchar(as.character(.)), ":", as.character(.))
+      ),
+      .names = paste0("{.col}", ".__SCDB_checksum_chr")
+    ))
+}
+
+
 #' @export
 digest_to_checksum.default <- function(
   .data,
@@ -64,24 +84,29 @@ digest_to_checksum.default <- function(
 ) {
 
   hash_cols <- setdiff(colnames(.data), c(col, exclude))
+  checksum_cols <- paste0(hash_cols, ".__SCDB_checksum_chr")
 
-  # The md5 algorithm needs character inputs, so we convert the hash columns to character and concatenate
+  # Compute checksums locally then join back onto original data.
+
   checksums <- .data |>
-    dplyr::mutate(dplyr::across(
-      tidyselect::all_of(hash_cols),
-      ~ dplyr::coalesce(as.character(.), ""),
-      .names = "{.col}.__chr"
-    ))
-
-  # Compute checksums locally then join back onto original data
-  checksums <- checksums |>
     dplyr::collect() |>
-    tidyr::unite(!!col, tidyselect::ends_with(".__chr"), remove = FALSE) |>
+    encode_checksum_columns(hash_cols) |>
+    tidyr::unite(
+      !!col,
+      tidyselect::all_of(checksum_cols),
+      sep = "",
+      remove = FALSE
+    ) |>
     dplyr::transmute(
       id__ = dplyr::row_number(),
       dplyr::across(tidyselect::all_of(col), openssl::md5)
     ) |>
-    dplyr::copy_to(dbplyr::remote_con(.data), df = _, name = unique_table_name("SCDB_digest_to_checksum_helper"))
+    dplyr::copy_to(
+      dbplyr::remote_con(.data),
+      df = _,
+      name = unique_table_name("SCDB_digest_to_checksum_helper")
+    )
+
   defer_db_cleanup(checksums)
 
   .data <- .data |>
@@ -110,15 +135,19 @@ digest_to_checksum_native_md5 <- function(
 ) {
 
   hash_cols <- setdiff(colnames(.data), c(col, exclude))
+  checksum_cols <- paste0(hash_cols, ".__SCDB_checksum_chr")
 
-  # The md5 algorithm needs character inputs, so we convert the hash columns to character and concatenate
+  # The md5 algorithm needs character inputs, so we encode each hash column
+  # before concatenation. The encoding is length-prefixed and NA-aware to avoid
+  # serialization collisions.
   .data <- .data |>
-    dplyr::mutate(dplyr::across(
-      tidyselect::all_of(hash_cols),
-      ~ dplyr::coalesce(as.character(.), ""),
-      .names = "{.col}.__chr"
-    )) |>
-    tidyr::unite(!!col, tidyselect::ends_with(".__chr"), remove = TRUE) |>
+    encode_checksum_columns(hash_cols) |>
+    tidyr::unite(
+      !!col,
+      tidyselect::all_of(checksum_cols),
+      sep = "",
+      remove = TRUE
+    ) |>
     dplyr::mutate(dplyr::across(tidyselect::all_of(col), md5))
 
   return(.data)
