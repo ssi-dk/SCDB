@@ -176,28 +176,30 @@ test_that("Logger: logging to database works", {
     timestamp <- "2022-04-01 09:00:00"
 
     # Create logger and test configuration
-    logger <- Logger$new(db_table = db_table,
-                         timestamp = timestamp,
-                         log_table_id = db_table,
-                         log_conn = conn,
-                         warn = FALSE)
+    logger <- Logger$new(
+      db_table = db_table,
+      timestamp = timestamp,
+      log_table_id = id(db_table, conn = conn),
+      log_conn = conn,
+      warn = FALSE
+    )
 
-    log_table_id <- dplyr::tbl(conn, id(db_table, conn))
-    expect_identical(logger$log_tbl, log_table_id)
+    log_table <- dplyr::tbl(conn, id(db_table, conn))
+    expect_identical(logger$log_tbl, log_table)
 
 
     # Test Logger has pre-filled some information in the logs
     db_table_id <- id(db_table, conn)
     expect_identical(
-      as.character(dplyr::pull(log_table_id, "date")),
+      as.character(dplyr::pull(log_table, "date")),
       timestamp,
       info = glue::glue("log_table$date not set correctly on on {class(conn)}")
     )
     if ("catalog" %in% purrr::pluck(db_table_id, "name", names)) {
-      expect_identical(dplyr::pull(log_table_id, "catalog"), purrr::pluck(db_table_id, "name", "catalog"))
+      expect_identical(dplyr::pull(log_table, "catalog"), purrr::pluck(db_table_id, "name", "catalog"))
     }
-    expect_identical(dplyr::pull(log_table_id, "schema"), purrr::pluck(db_table_id, "name", "schema"))
-    expect_identical(dplyr::pull(log_table_id, "table"), purrr::pluck(db_table_id, "name", "table"))
+    expect_identical(dplyr::pull(log_table, "schema"), purrr::pluck(db_table_id, "name", "schema"))
+    expect_identical(dplyr::pull(log_table, "table"), purrr::pluck(db_table_id, "name", "table"))
 
 
     # Transferring start_time to database can have some loss of information that we need to match
@@ -207,7 +209,7 @@ test_that("Logger: logging to database works", {
       fmt <- "%F %R:%OS"
     }
     expect_identical(
-      strftime(dplyr::pull(log_table_id, "start_time"), format = "fmt", digits = 6),
+      strftime(dplyr::pull(log_table, "start_time"), format = "fmt", digits = 6),
       strftime(logger$start_time, format = "fmt", digits = 6),
       info = glue::glue("log_table$start_time not set correctly on on {class(conn)}")
     )
@@ -215,12 +217,12 @@ test_that("Logger: logging to database works", {
 
     # Test logging to database writes to the correct fields
     logger$log_to_db(n_insertions = 42)
-    expect_identical(nrow(log_table_id), 1L)
-    expect_identical(dplyr::pull(log_table_id, "n_insertions"), 42L)
+    expect_identical(nrow(log_table), 1L)
+    expect_identical(dplyr::pull(log_table, "n_insertions"), 42L)
 
     logger$log_to_db(n_deactivations = 60)
-    expect_identical(nrow(log_table_id), 1L)
-    expect_identical(dplyr::pull(log_table_id, "n_deactivations"), 60L)
+    expect_identical(nrow(log_table), 1L)
+    expect_identical(dplyr::pull(log_table, "n_deactivations"), 60L)
 
 
     # Clean up
@@ -244,9 +246,9 @@ test_that("Logger: all logging simultaneously works", {
     logger <- Logger$new(db_table = db_table, timestamp = timestamp, log_path = log_path,
                          log_table_id = db_table, log_conn = conn, warn = FALSE)
 
-    log_table_id <- dplyr::tbl(conn, id(db_table, conn))
+    log_table <- dplyr::tbl(conn, id(db_table, conn))
     expect_identical(logger$log_path, log_path)
-    expect_identical(logger$log_tbl, log_table_id)
+    expect_identical(logger$log_tbl, log_table)
     expect_identical(
       logger$log_filename,
       glue::glue("{format(logger$start_time, '%Y%m%d.%H%M')}.",
@@ -284,12 +286,12 @@ test_that("Logger: all logging simultaneously works", {
 
     # Test logging to database writes to the correct fields
     logger$log_to_db(n_insertions = 13)
-    expect_identical(nrow(log_table_id), 2L)
-    expect_identical(dplyr::pull(log_table_id, "n_insertions"), c(42L, 13L))
+    expect_identical(nrow(log_table), 2L)
+    expect_identical(dplyr::pull(log_table, "n_insertions"), c(42L, 13L))
 
     logger$log_to_db(n_deactivations = 37)
-    expect_identical(nrow(log_table_id), 2L)
-    expect_identical(dplyr::pull(log_table_id, "n_deactivations"), c(60L, 37L))
+    expect_identical(nrow(log_table), 2L)
+    expect_identical(dplyr::pull(log_table, "n_deactivations"), c(60L, 37L))
 
 
     # Clean up
