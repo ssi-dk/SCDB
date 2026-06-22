@@ -1,5 +1,12 @@
 # SCDB (development version)
 
+
+# SCDB 0.6.2
+
+## BREAKING CHANGE
+
+* `SCDB` has reduced backwards compatibility to R >= 4.2 (#248).
+
 ## Improvements and Fixes
 
 * Compatibility with `dbplyr` 2.6.0 (#241).
@@ -275,7 +282,7 @@
 
 # SCDB 0.2
 
-## Breaking changes
+## BREAKING CHANGES
 
 * `update_snapshot()` now take a `Logger` object through the `logger` argument instead of `log_path` and `log_table_id` arguments (#24).
 
