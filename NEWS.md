@@ -279,7 +279,7 @@
 
 # SCDB 0.2
 
-## Breaking changes
+## BREAKING CHANGES
 
 * `update_snapshot()` now take a `Logger` object through the `logger` argument instead of `log_path` and `log_table_id` arguments (#24).
 
