@@ -107,5 +107,5 @@ If no \code{na_by} argument is given is given, the function defaults to using \v
 
 \link[dbplyr:join.tbl_sql]{dbplyr::join.tbl_sql} which this function wraps.
 
-\link[dplyr:explain]{dplyr::show_query}
+\link[dplyr:show_query]{dplyr::show_query}
 }

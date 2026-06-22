@@ -84,7 +84,7 @@ nolint_position_linter <- function(length = 80L) {
       nolint_info <- purrr::imap(nolint_info, ~ dplyr::mutate(as.data.frame(.x), line_number = .y)) |>
         purrr::reduce(rbind) |>
         dplyr::filter(!is.na(.data$start)) |>
-        dplyr::filter(.data$start <= length)
+        dplyr::filter(.data$start != (length + 1))
 
       purrr::pmap(
         nolint_info,
@@ -297,7 +297,9 @@ param_and_field_linter <- function() {
             filename = source_expression$filename,
             line_number = line_number,
             type = "style",
-            message = glue::glue("{general_msg} {rd_type} type not declared (rd-tag is missing backticks ` )"),
+            message = as.character(
+              glue::glue("{general_msg} {rd_type} type not declared (rd-tag is missing backticks ` )")
+            ),
             line = source_expression$file_lines[line_number]
           )
         }
@@ -310,7 +312,9 @@ param_and_field_linter <- function() {
             filename = source_expression$filename,
             line_number = line_number,
             type = "style",
-            message = glue::glue("{general_msg} {rd_type} is missing a carriage return (\\cr) after type-declaration"),
+            message = as.character(
+              glue::glue("{general_msg} {rd_type} is missing a carriage return (\\cr) after type-declaration")
+            ),
             line = source_expression$file_lines[line_number]
           )
         }

@@ -2,6 +2,8 @@
 #' @noRd
 release_bullets <- function() {
   return(
-    "Update the benchmarks"
+    list(
+      "Update the benchmarks"
+    )
   )
 }

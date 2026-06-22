@@ -30,8 +30,8 @@ this packages provides it, see `vignette("slowly-changing-dimension")`.
 install.packages("SCDB")
 
 # Alternatively, install the development version from github:
-# install.packages("devtools")
-devtools::install_github("ssi-dk/SCDB")
+# install.packages("pak")
+pak::pak("ssi-dk/SCDB")
 ```
 
 ## Usage

@@ -61,7 +61,7 @@ if (simple_rendering) {
 }
 ```
 
-```{r benchmark_preprocessing, echo = FALSE, eval = requireNamespace("here")}
+```{r benchmark_preprocessing, echo = FALSE, eval = rlang::is_installed("here")}
 benchmark_location <- c(
   system.file("extdata", "benchmarks.rds", package = "SCDB"),
   here::here("inst", "extdata", "benchmarks.rds")
@@ -113,7 +113,7 @@ mean_sd <- function(x) {
 }
 ```
 
-```{r benchmark_1, echo = FALSE, eval = requireNamespace("here")}
+```{r benchmark_1, echo = FALSE, eval = rlang::is_installed("here")}
 # Use data for benchmark 1
 benchmark_1 <- benchmarks %>%
   dplyr::filter(
@@ -181,7 +181,7 @@ line), where we compare the current development version of `SCDB` with the curre
 NOTE: There are reports of a superlinear complexity for very large data sets. If you experience such problems, consider
 batching the updates via the `filters` argument.
 
-```{r benchmark_2, echo = FALSE, eval = requireNamespace("here")}
+```{r benchmark_2, echo = FALSE, eval = rlang::is_installed("here")}
 # Use data for benchmark 2
 benchmark_2 <- benchmarks %>%
   dplyr::filter(

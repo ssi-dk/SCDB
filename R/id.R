@@ -104,36 +104,23 @@ id.tbl_dbi <- function(db_table, ...) {
   }
 
   table_ident <- dbplyr::remote_table(db_table)
+  components  <- dbplyr::table_path_components(table_ident, table_conn)[[1]]
 
-  if (inherits(table_ident, "dbplyr_table_path")) { # dbplyr >= 2.5.0
-    components <- dbplyr::table_path_components(table_ident, table_conn)[[1]]
-
-    components <- components[rev(seq_along(components))] # Reverse order (table, schema?, catalog?)
-
-    if (length(components) > 3) {
-      stop("Unknown table specification", call. = FALSE)
-    }
-
-    # Unquote table names for Oracle backend
-    if (inherits(table_conn, "OracleJdbc")) {
-      components <- stringr::str_remove_all(components, '\"')
-    }
-
-    table <- purrr::pluck(components, 1)
-    schema <- purrr::pluck(components, 2)
-    catalog <- purrr::pluck(components, 3)
-
-  } else {
-
-    table_ident <- table_ident %>%
-      unclass() %>%
-      purrr::discard(is.na)
-
-    catalog <- purrr::pluck(table_ident, "catalog")
-    schema <- purrr::pluck(table_ident, "schema")
-    table <- purrr::pluck(table_ident, "table")
-
+  if (length(components) > 3) {
+    stop("Unknown table specification", call. = FALSE)
   }
+
+  # Unquote table names for Oracle backend
+  if (inherits(table_conn, "OracleJdbc")) {
+    components <- stringr::str_remove_all(components, '\"')
+  }
+
+  # Reverse order (table, schema?, catalog?) to account for missing information
+  components <- components[rev(seq_along(components))]
+
+  table    <- purrr::pluck(components, 1)
+  schema   <- purrr::pluck(components, 2)
+  catalog  <- purrr::pluck(components, 3)
 
   # Match against known tables
   # In some cases, tables may have been added to the database that makes the id ambiguous.
