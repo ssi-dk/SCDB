@@ -1,7 +1,7 @@
 {
   "lockfile_version": 1,
-  "os": "Ubuntu 24.04.4 LTS",
-  "r_version": "R version 4.6.0 (2026-04-24)",
+  "os": "Ubuntu 24.04.3 LTS",
+  "r_version": "R version 4.5.2 (2025-10-31)",
   "platform": "x86_64-pc-linux-gnu",
   "packages": [
     {
@@ -126,7 +126,7 @@
     },
     {
       "package": "dbplyr",
-      "version": "2.5.2",
+      "version": "2.6.0",
       "binary": true
     },
     {
@@ -166,7 +166,7 @@
     },
     {
       "package": "duckdb",
-      "version": "1.5.2",
+      "version": "1.5.4",
       "binary": true
     },
     {
@@ -441,7 +441,7 @@
     },
     {
       "package": "pkgload",
-      "version": "1.5.2",
+      "version": "1.5.3",
       "binary": true
     },
     {
@@ -540,6 +540,16 @@
       "binary": true
     },
     {
+      "package": "rJava",
+      "version": "1.0-18",
+      "binary": true
+    },
+    {
+      "package": "RJDBC",
+      "version": "0.2-10",
+      "binary": true
+    },
+    {
       "package": "rlang",
       "version": "1.2.0",
       "binary": true
@@ -566,7 +576,7 @@
     },
     {
       "package": "RSQLite",
-      "version": "3.53.1",
+      "version": "3.53.2",
       "binary": true
     },
     {
@@ -616,7 +626,7 @@
     },
     {
       "package": "shiny",
-      "version": "1.13.0",
+      "version": "1.14.0",
       "binary": true
     },
     {
@@ -686,7 +696,7 @@
     },
     {
       "package": "tinytex",
-      "version": "0.59",
+      "version": "0.60",
       "binary": true
     },
     {
@@ -741,12 +751,12 @@
     },
     {
       "package": "withr",
-      "version": "3.0.2",
+      "version": "3.0.3",
       "binary": true
     },
     {
       "package": "xfun",
-      "version": "0.58",
+      "version": "0.59",
       "binary": true
     },
     {
@@ -786,8 +796,8 @@
     "version": "24.04",
     "url": {},
     "pre_install": "apt-get -y update",
-    "install_scripts": "apt-get -y install libx11-dev git libcurl4-openssl-dev libssl-dev xz-utils cmake make libuv1-dev libgit2-dev zlib1g-dev pandoc unixodbc-dev libfreetype6-dev libjpeg-dev libpng-dev libtiff-dev libwebp-dev libpq-dev libicu-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev libxml2-dev",
-    "post_install": {},
-    "packages": ["libx11-dev", "git", "libcurl4-openssl-dev", "libssl-dev", "xz-utils", "cmake", "make", "libuv1-dev", "libgit2-dev", "zlib1g-dev", "pandoc", "unixodbc-dev", "libfreetype6-dev", "libjpeg-dev", "libpng-dev", "libtiff-dev", "libwebp-dev", "libpq-dev", "libicu-dev", "libfontconfig1-dev", "libfribidi-dev", "libharfbuzz-dev", "libxml2-dev"]
+    "install_scripts": "apt-get -y install libx11-dev git libcurl4-openssl-dev libssl-dev xz-utils cmake make libuv1-dev libgit2-dev zlib1g-dev pandoc unixodbc-dev libfreetype6-dev libjpeg-dev libpng-dev libtiff-dev libwebp-dev default-jdk libpq-dev libicu-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev libxml2-dev",
+    "post_install": "R CMD javareconf",
+    "packages": ["libx11-dev", "git", "libcurl4-openssl-dev", "libssl-dev", "xz-utils", "cmake", "make", "libuv1-dev", "libgit2-dev", "zlib1g-dev", "pandoc", "unixodbc-dev", "libfreetype6-dev", "libjpeg-dev", "libpng-dev", "libtiff-dev", "libwebp-dev", "default-jdk", "libpq-dev", "libicu-dev", "libfontconfig1-dev", "libfribidi-dev", "libharfbuzz-dev", "libxml2-dev"]
   }
 }
