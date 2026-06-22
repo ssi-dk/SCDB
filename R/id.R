@@ -111,7 +111,7 @@ id.tbl_dbi <- function(db_table, ...) {
   }
 
   # Unquote table names for Oracle backend
-  if (inherits(table_conn, "OracleJdbc")) {
+  if (inherits(table_conn, "Oracle")) {
     components <- stringr::str_remove_all(components, '\"')
   }
 

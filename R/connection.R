@@ -260,14 +260,6 @@ get_connection.JDBCDriver <- function(
     call. = FALSE
   )
 
-  conn <- new(
-    "OracleJdbc",
-    jdbc_conn = conn,
-    jc = conn@jc,
-    servername = url,
-    options = list("fetch.lossy" = TRUE)
-  )
-
   return(conn)
 }
 
