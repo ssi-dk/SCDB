@@ -601,7 +601,7 @@
     },
     {
       "package": "SCDB",
-      "version": "0.6.2",
+      "version": "0.6.2.9000",
       "binary": false
     },
     {
