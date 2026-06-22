@@ -260,6 +260,8 @@ get_connection.JDBCDriver <- function(
     call. = FALSE
   )
 
+  stop(class(conn))
+
   return(conn)
 }
 
