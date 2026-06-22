@@ -1,7 +1,7 @@
 Package: SCDB
 Type: Package
 Title: Easily Access and Maintain Time-Based Versioned Data (Slowly-Changing-Dimension)
-Version: 0.6.1.9000
+Version: 0.6.2
 Authors@R:
     c(
         person(
