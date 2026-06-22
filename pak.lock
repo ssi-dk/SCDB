@@ -441,7 +441,7 @@
     },
     {
       "package": "pkgload",
-      "version": "1.5.3",
+      "version": "1.5.2",
       "binary": true
     },
     {
@@ -566,7 +566,7 @@
     },
     {
       "package": "RSQLite",
-      "version": "3.53.2",
+      "version": "3.53.1",
       "binary": true
     },
     {
@@ -601,7 +601,7 @@
     },
     {
       "package": "SCDB",
-      "version": "0.6.1.9000",
+      "version": "0.6.2.9000",
       "binary": false
     },
     {
@@ -686,7 +686,7 @@
     },
     {
       "package": "tinytex",
-      "version": "0.60",
+      "version": "0.59",
       "binary": true
     },
     {
