@@ -110,11 +110,6 @@ id.tbl_dbi <- function(db_table, ...) {
     stop("Unknown table specification", call. = FALSE)
   }
 
-  # Unquote table names for Oracle backend
-  if (inherits(table_conn, "JDBCConnection")) {
-    components <- stringr::str_remove_all(components, '\"')
-  }
-
   # Reverse order (table, schema?, catalog?) to account for missing information
   components <- components[rev(seq_along(components))]
 
