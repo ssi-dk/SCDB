@@ -1,8 +1,7 @@
 test_that("`defer_db_cleanup()` deletes tables", {
   for (conn in get_test_conns()) {
-    table <- dplyr::copy_to(conn, mtcars, "__mtcars_defer_db_cleanup")
+    table <- dplyr::copy_to(conn, mtcars, "__mtcars_defer_db_cleanup", temporary = FALSE)
     table_id <- id(table, conn)
-    stop(table_id)
 
     # Table exists
     expect_true(DBI::dbExistsTable(conn, "__mtcars_defer_db_cleanup"))
