@@ -164,8 +164,7 @@ methods::setMethod(
     ...,
     row.names = FALSE,
     field.types = NULL,
-    temporary = FALSE,
-    max.batch = 10000L
+    temporary = FALSE
   ) {
     overwrite <- isTRUE(overwrite)
     append <- isTRUE(append)
@@ -190,13 +189,31 @@ methods::setMethod(
     }
 
     if (exists && !append) {
-      rlang::abort(paste0("Table ", as.character(db_table_id), " already exists."))
+      rlang::abort(
+        paste0("Table ", as.character(db_table_id, explicit = TRUE), " already exists.")
+      )
     }
 
     if (!exists) {
-      fields <- DBI::dbDataType(conn, value)
+      fields <- stats::setNames(
+        DBI::dbDataType(conn, value),
+        names(value)
+      )
 
       if (!is.null(field.types)) {
+        checkmate::assert_character(field.types, names = "named")
+
+        unknown_fields <- setdiff(names(field.types), names(fields))
+
+        if (length(unknown_fields) > 0L) {
+          rlang::abort(
+            paste0(
+              "field.types contains unknown columns: ",
+              paste(unknown_fields, collapse = ", ")
+            )
+          )
+        }
+
         fields[names(field.types)] <- field.types
       }
 
@@ -211,9 +228,47 @@ methods::setMethod(
     DBI::dbAppendTable(
       conn = conn,
       name = db_table_id,
-      value = value,
-      max.batch = max.batch
+      value = value
     )
+
+    invisible(TRUE)
+  }
+)
+
+
+#' @importFrom DBI dbCreateTable
+#' @export
+methods::setMethod(
+  "dbCreateTable",
+  signature(conn = "JDBCConnection", name = "Id"),
+  function(conn, name, fields, ..., row.names = NULL, temporary = FALSE) {
+    if (!is.null(row.names)) {
+      rlang::abort("row.names must be NULL for Oracle/JDBC dbCreateTable().")
+    }
+
+    if (isTRUE(temporary)) {
+      rlang::abort("temporary = TRUE is not implemented for Oracle/JDBC dbCreateTable().")
+    }
+
+    if (inherits(fields, "data.frame")) {
+      fields <- stats::setNames(
+        DBI::dbDataType(conn, fields),
+        names(fields)
+      )
+    }
+
+    if (is.null(names(fields)) || any(names(fields) == "")) {
+      rlang::abort("Oracle/JDBC fields must be a named character vector.")
+    }
+
+    query <- DBI::sqlCreateTable(
+      con = conn,
+      table = name,
+      fields = fields,
+      temporary = FALSE
+    )
+
+    DBI::dbExecute(conn, query)
 
     invisible(TRUE)
   }
