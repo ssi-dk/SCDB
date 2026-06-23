@@ -78,3 +78,29 @@ create_index.DBIConnection <- function(conn, db_table, columns) {
 
   DBI::dbExecute(conn, query)
 }
+
+#' @export
+create_index.JDBCConnection <- function(conn, db_table, columns) {
+  db_table <- id(db_table, conn)
+
+  table <- purrr::pluck(db_table, "name", "table")
+
+  index <- paste(
+    table,
+    "scdb_index",
+    paste(columns, collapse = "_"),
+    sep = "_"
+  )
+
+  query <- paste0(
+    "CREATE UNIQUE INDEX ",
+    oracle_jdbc_quote_identifier(index),
+    " ON ",
+    oracle_jdbc_table_sql(conn, db_table),
+    " (",
+    oracle_jdbc_column_sql(columns),
+    ")"
+  )
+
+  oracle_jdbc_send_update(conn, query)
+}
