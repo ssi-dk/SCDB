@@ -46,6 +46,31 @@ db_timestamp.SQLiteConnection <- function(timestamp, conn) {
 }
 
 #' @export
+db_timestamp.JDBCConnection <- function(timestamp, conn) {
+  ts <- to_posix(timestamp)
+
+  if (is.na(ts)) {
+    return(dbplyr::sql("CAST(NULL AS TIMESTAMP(3))"))
+  }
+
+  ts <- format(
+    ts,
+    format = "%Y-%m-%d %H:%M:%OS3",
+    tz = Sys.timezone(),
+    usetz = FALSE
+  )
+
+  return(
+    dbplyr::build_sql(
+      "TO_TIMESTAMP(",
+      dbplyr::escape(ts, con = conn),
+      ", 'YYYY-MM-DD HH24:MI:SS.FF3')",
+      con = conn
+    )
+  )
+}
+
+#' @export
 db_timestamp.duckdb_connection <- function(timestamp, conn) {
   # Do not format before letting duckdb cast to DB
 
