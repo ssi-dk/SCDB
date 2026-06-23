@@ -9,7 +9,7 @@ test_that("`defer_db_cleanup()` deletes tables", {
     expect_true(DBI::dbExistsTable(conn, table_id))
 
     # Marking for deletion does not delete the table
-    defer_db_cleanup(table_id)
+    defer_db_cleanup(table)
     expect_true(DBI::dbExistsTable(conn, table_id))
 
     # Manually triggering deletion deletes the table
