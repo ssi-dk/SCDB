@@ -43,7 +43,7 @@ methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
     "duckdb_connection" = list(
       checksum = "char(32)"
     ),
-    "Oracle" = list(
+    "JDBCConnection" = list(
       checksum = "CHAR(32)"
     )
   )

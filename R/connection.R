@@ -260,8 +260,6 @@ get_connection.JDBCDriver <- function(
     call. = FALSE
   )
 
-  class(conn) <- c("OracleJDBCConnection") # Cast to our Oracle JDBC connection class
-
   return(conn)
 }
 
