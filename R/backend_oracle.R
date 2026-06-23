@@ -150,6 +150,7 @@ oracle_jdbc_send_update <- function(conn, statement, value = NULL, max.batch = 1
   }
 }
 
+#' @importFrom DBI dbWriteTable
 #' @export
 methods::setMethod(
   "dbWriteTable",
