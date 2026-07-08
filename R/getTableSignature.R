@@ -14,6 +14,8 @@ methods::setGeneric(
   signature = "conn"
 )
 
+#' @importMethodsFrom RJDBC dbDataType
+#' @importMethodsFrom odbc dbDataType
 #' @importClassesFrom DBI DBIConnection
 methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
 
@@ -40,6 +42,9 @@ methods::setMethod("getTableSignature", "DBIConnection", function(.data, conn) {
     ),
     "duckdb_connection" = list(
       checksum = "char(32)"
+    ),
+    "JDBCConnection" = list(
+      checksum = "CHAR(32)"
     )
   )
 

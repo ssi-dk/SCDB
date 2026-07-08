@@ -43,9 +43,12 @@ Imports:
     glue,
     lubridate,
     methods,
+    odbc,
     openssl,
     parallelly,
     purrr,
+    rJava,
+    RJDBC,
     rlang,
     R6,
     stringr,
@@ -64,11 +67,10 @@ Suggests:
     knitr,
     lintr,
     microbenchmark,
-    odbc,
     pak,
+    pkgdown,
     rmarkdown,
     roxygen2,
-    pkgdown,
     RPostgres,
     RSQLite,
     spelling,
@@ -82,3 +84,4 @@ Config/testthat/edition: 3
 BugReports: https://github.com/ssi-dk/SCDB/issues
 VignetteBuilder: knitr
 Config/roxygen2/version: 8.0.0
+RoxygenNote: 7.3.3
