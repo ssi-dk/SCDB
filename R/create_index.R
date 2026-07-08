@@ -25,7 +25,7 @@ create_index <- function(conn, db_table, columns) {
 
 #' @export
 create_index.PqConnection <- function(conn, db_table, columns) {
-  db_table_id <- id(db_table, conn)
+  db_table_id <- id(db_table, conn)                                                                                     # nolint: object_usage_linter
 
   query <- dbplyr::sql_glue2(
     conn,
@@ -47,7 +47,7 @@ create_index.SQLiteConnection <- function(conn, db_table, columns) {
   # Generate index name
   index_name <- paste(c(table, "scdb_index", columns), collapse = "_")
 
-  index_id <- if (has_schema) {
+  index_id <- if (has_schema) {                                                                                         # nolint: object_usage_linter
     DBI::Id(schema = schema, table = index_name)
   } else {
     index_name
@@ -63,9 +63,9 @@ create_index.SQLiteConnection <- function(conn, db_table, columns) {
 
 #' @export
 create_index.DBIConnection <- function(conn, db_table, columns) {
-  db_table_id <- id(db_table, conn)
+  db_table_id <- id(db_table, conn)                                                                                     # nolint: object_usage_linter
 
-  index <- glue::glue("{db_table}_scdb_index_{paste(columns, collapse = '_')}") %>%
+  index <- glue::glue("{db_table}_scdb_index_{paste(columns, collapse = '_')}") |>                                      # nolint: object_usage_linter
     stringr::str_replace_all(stringr::fixed("."), "_")
 
   query <- dbplyr::sql_glue2(

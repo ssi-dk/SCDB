@@ -34,7 +34,7 @@ test_that("create_index() quotes column identifiers", {
       regexp = ".+"
     )
 
-    expect_equal(
+    expect_identical(
       nrow(dplyr::tbl(conn, db_table)),
       2L
     )
