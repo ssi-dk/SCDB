@@ -1,5 +1,9 @@
 # SCDB (development version)
 
+## Improvements and Fixes
+
+* `withr` added as a dependency rather than a suggested package (#238).
+
 
 # SCDB 0.6.2
 
