@@ -9,6 +9,7 @@ birthdate
 birthdates
 bitemporal
 
+cadlag
 checksums
 CCW
 CoV
@@ -124,6 +125,7 @@ IDB
 ij
 ILI
 io
+Inc
 infty
 Institut
 int
@@ -230,6 +232,7 @@ ssi
 SSI
 Statens
 subplex
+summarisable
 sql
 SQLite
 SQLiteConnections
