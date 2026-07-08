@@ -166,7 +166,7 @@
     },
     {
       "package": "duckdb",
-      "version": "1.5.4",
+      "version": "1.5.2",
       "binary": true
     },
     {
@@ -616,7 +616,7 @@
     },
     {
       "package": "shiny",
-      "version": "1.14.0",
+      "version": "1.13.0",
       "binary": true
     },
     {
@@ -741,12 +741,12 @@
     },
     {
       "package": "withr",
-      "version": "3.0.3",
+      "version": "3.0.2",
       "binary": true
     },
     {
       "package": "xfun",
-      "version": "0.59",
+      "version": "0.58",
       "binary": true
     },
     {
@@ -779,15 +779,5 @@
       "version": "3.0.0",
       "binary": true
     }
-  ],
-  "sysreqs": {
-    "os": "linux",
-    "distribution": "ubuntu",
-    "version": "24.04",
-    "url": {},
-    "pre_install": "apt-get -y update",
-    "install_scripts": "apt-get -y install libx11-dev git libcurl4-openssl-dev libssl-dev xz-utils cmake make libuv1-dev libgit2-dev zlib1g-dev pandoc unixodbc-dev libfreetype6-dev libjpeg-dev libpng-dev libtiff-dev libwebp-dev libpq-dev libicu-dev libfontconfig1-dev libfribidi-dev libharfbuzz-dev libxml2-dev",
-    "post_install": {},
-    "packages": ["libx11-dev", "git", "libcurl4-openssl-dev", "libssl-dev", "xz-utils", "cmake", "make", "libuv1-dev", "libgit2-dev", "zlib1g-dev", "pandoc", "unixodbc-dev", "libfreetype6-dev", "libjpeg-dev", "libpng-dev", "libtiff-dev", "libwebp-dev", "libpq-dev", "libicu-dev", "libfontconfig1-dev", "libfribidi-dev", "libharfbuzz-dev", "libxml2-dev"]
-  }
+  ]
 }
