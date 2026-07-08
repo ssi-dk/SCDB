@@ -32,7 +32,7 @@
 get_connection <- function(drv, ...) {
   if (missing(drv)) {
     if (!rlang::is_installed("RSQLite")) {
-      stop("No `drv` provided to `get_connection` and `RSQLite` is not installed to act as default.")
+      stop("No `drv` provided to `get_connection` and `RSQLite` is not installed to act as default.", call. = FALSE)
     }
     get_connection(drv = RSQLite::SQLite(), ...)
   } else {
