@@ -78,7 +78,7 @@ test_that("digest_to_checksum() avoids serialization collisions", {
       dplyr::arrange(row_id) %>%
       dplyr::pull(checksum)
 
-    expect_equal(length(unique(checksums)), 2L)
+    expect_length(unique(checksums), 2L)
   }
 
   # Local data frames
