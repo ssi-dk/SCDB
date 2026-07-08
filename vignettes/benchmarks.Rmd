@@ -22,10 +22,6 @@ simple_rendering <- !pkgdown::in_pkgdown()
 # To re-run the benchmarks, run the "benchmark" workflow on GitHub
 ```
 
-```{r}
-library(magrittr)
-```
-
 To showcase the performance of `SCDB` on different database backends, we include this vignette that summarises a simple
 benchmark:
 A sample dataset is created based on the `datasets::iris` dataset. This data is repeated 10 times and given a unique ID
@@ -65,23 +61,23 @@ if (simple_rendering) {
 benchmark_location <- c(
   system.file("extdata", "benchmarks.rds", package = "SCDB"),
   here::here("inst", "extdata", "benchmarks.rds")
-) %>%
-  purrr::discard(~ identical(., "")) %>%
+) |>
+  purrr::discard(~ identical(., "")) |>
   purrr::pluck(1)
 
-benchmarks <- readRDS(benchmark_location) %>%
+benchmarks <- readRDS(benchmark_location) |>
   dplyr::mutate("version" = as.character(.data$version))
 
 # Determine if the SHA is on main
-sha <- benchmarks %>%
-  dplyr::distinct(.data$version) %>%
-  dplyr::filter(!startsWith(.data$version, "SCDB"), .data$version != "main") %>%
+sha <- benchmarks |>
+  dplyr::distinct(.data$version) |>
+  dplyr::filter(!startsWith(.data$version, "SCDB"), .data$version != "main") |>
   dplyr::pull("version")
 
 # Check local git history
 on_main <- tryCatch({
-  system(glue::glue("git branch main --contains {sha}"), intern = TRUE) %>%
-    stringr::str_detect(stringr::fixed("main")) %>%
+  system(glue::glue("git branch main --contains {sha}"), intern = TRUE) |>
+    stringr::str_detect(stringr::fixed("main")) |>
     isTRUE()
 }, warning = function(w) {
   # If on GitHub, git is not installed and we assume TRUE.
@@ -92,14 +88,14 @@ on_main <- tryCatch({
 # In the simple context we use the newest benchmark (version = sha)
 # This benchmark is then labelled with the newest version number of SCDB
 if (simple_rendering) {
-  benchmarks <- benchmarks %>%
-    dplyr::filter(.data$version == !!sha) %>%
+  benchmarks <- benchmarks |>
+    dplyr::filter(.data$version == !!sha) |>
     dplyr::mutate("version" = paste0("SCDB v", packageVersion("SCDB")))
 } else if (on_main) {
   # If the SHA has been merged, use as the "main" version and remove the other,
   # older, main version
-  benchmarks <- benchmarks %>%
-    dplyr::filter(.data$version != "main") %>%
+  benchmarks <- benchmarks |>
+    dplyr::filter(.data$version != "main") |>
     dplyr::mutate(
       "version" = dplyr::if_else(.data$version == sha, "development", .data$version)
     )
@@ -115,14 +111,14 @@ mean_sd <- function(x) {
 
 ```{r benchmark_1, echo = FALSE, eval = rlang::is_installed("here")}
 # Use data for benchmark 1
-benchmark_1 <- benchmarks %>%
+benchmark_1 <- benchmarks |>
   dplyr::filter(
     !stringr::str_ends(.data$benchmark_function, stringr::fixed("complexity"))
   )
 
 # Insert newline into database name to improve rendering of figures
 labeller <- ggplot2::as_labeller(
-  function(l) stringr::str_replace_all(l, stringr::fixed(" v"), "\nv")
+  \(l) stringr::str_replace_all(l, stringr::fixed(" v"), "\nv")
 )
 
 # Apply "dodging" to sub-groups to show graphically
@@ -183,13 +179,13 @@ batching the updates via the `filters` argument.
 
 ```{r benchmark_2, echo = FALSE, eval = rlang::is_installed("here")}
 # Use data for benchmark 2
-benchmark_2 <- benchmarks %>%
+benchmark_2 <- benchmarks |>
   dplyr::filter(
     stringr::str_ends(
       .data$benchmark_function,
       stringr::fixed("complexity")
     )
-  ) %>%
+  ) |>
   dplyr::mutate(
     "benchmark_function" = stringr::str_remove_all(
       benchmark_function,

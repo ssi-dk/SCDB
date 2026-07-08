@@ -166,7 +166,7 @@
     },
     {
       "package": "duckdb",
-      "version": "1.5.2",
+      "version": "1.5.4",
       "binary": true
     },
     {
@@ -441,7 +441,7 @@
     },
     {
       "package": "pkgload",
-      "version": "1.5.2",
+      "version": "1.5.3",
       "binary": true
     },
     {
@@ -566,7 +566,7 @@
     },
     {
       "package": "RSQLite",
-      "version": "3.53.1",
+      "version": "3.53.2",
       "binary": true
     },
     {
@@ -616,7 +616,7 @@
     },
     {
       "package": "shiny",
-      "version": "1.13.0",
+      "version": "1.14.0",
       "binary": true
     },
     {
@@ -686,7 +686,7 @@
     },
     {
       "package": "tinytex",
-      "version": "0.59",
+      "version": "0.60",
       "binary": true
     },
     {
@@ -741,12 +741,12 @@
     },
     {
       "package": "withr",
-      "version": "3.0.2",
+      "version": "3.0.3",
       "binary": true
     },
     {
       "package": "xfun",
-      "version": "0.58",
+      "version": "0.59",
       "binary": true
     },
     {

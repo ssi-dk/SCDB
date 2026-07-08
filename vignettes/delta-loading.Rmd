@@ -135,7 +135,7 @@ get_table(conn_secondary, "mtcars_firewalled", slice_ts = NULL)
 On day 3, we imagine that we have the same 5 records, but one of them is altered
 
 ```{r example_3, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
-data <- head(example_data, 5) %>%
+data <- head(example_data, 5) |>
   dplyr::mutate(hp = ifelse(car == "Mazda RX4", hp / 2, hp))
 
 update_snapshot(
@@ -149,7 +149,7 @@ update_snapshot(
 On day 4, we imagine that we have the first 7 records along with the above alterations.
 
 ```{r example_4, eval = rlang::is_installed("duckdb") && R.version$major >= "4"}
-data <- head(example_data, 7) %>%
+data <- head(example_data, 7) |>
   dplyr::mutate(hp = ifelse(car == "Mazda RX4", hp / 2, hp))
 
 update_snapshot(

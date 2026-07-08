@@ -46,11 +46,11 @@ for (conn in get_test_conns()) {
 
     # Check transfer success
     expect_identical(
-      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-        dplyr::collect() %>%
+      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) |>
+        dplyr::collect() |>
         dplyr::arrange(col1, col2, from_ts),
-      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-        dplyr::collect() %>%
+      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+        dplyr::collect() |>
         dplyr::arrange(col1, col2, from_ts)
     )
 
@@ -77,11 +77,11 @@ for (conn in get_test_conns()) {
 
     # Check transfer success
     expect_identical(
-      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-        dplyr::collect() %>%
+      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) |>
+        dplyr::collect() |>
         dplyr::arrange(col1, col2, from_ts),
-      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-        dplyr::collect() %>%
+      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+        dplyr::collect() |>
         dplyr::arrange(col1, col2, from_ts)
     )
 
@@ -108,11 +108,11 @@ for (conn in get_test_conns()) {
 
     # Check transfer success
     expect_identical(
-      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-        dplyr::collect() %>%
+      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) |>
+        dplyr::collect() |>
         dplyr::arrange(col1, col2, from_ts),
-      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-        dplyr::collect() %>%
+      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+        dplyr::collect() |>
         dplyr::arrange(col1, col2, from_ts)
     )
 
@@ -127,11 +127,11 @@ for (conn in get_test_conns()) {
 
     # Check transfer success
     expect_identical(
-      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-        dplyr::collect() %>%
+      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) |>
+        dplyr::collect() |>
         dplyr::arrange(col1, col2, from_ts),
-      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-        dplyr::collect() %>%
+      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+        dplyr::collect() |>
         dplyr::arrange(col1, col2, from_ts)
     )
 
@@ -146,11 +146,11 @@ for (conn in get_test_conns()) {
 
     # Check transfer success
     expect_identical(
-      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-        dplyr::collect() %>%
+      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) |>
+        dplyr::collect() |>
         dplyr::arrange(col1, col2, from_ts),
-      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-        dplyr::collect() %>%
+      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+        dplyr::collect() |>
         dplyr::arrange(col1, col2, from_ts)
     )
   })
@@ -240,11 +240,11 @@ for (conn in get_test_conns()) {
 
       # Check transfer success
       expect_identical(
-        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-          dplyr::collect() %>%
+        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+          dplyr::collect() |>
           dplyr::arrange(col1, col2, from_ts),
-        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-          dplyr::collect() %>%
+        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) |>
+          dplyr::collect() |>
           dplyr::arrange(col1, col2, from_ts)
       )
 
@@ -279,11 +279,11 @@ for (conn in get_test_conns()) {
 
       # Check transfer success
       expect_identical(
-        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-          dplyr::collect() %>%
+        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+          dplyr::collect() |>
           dplyr::arrange(col1, col2, from_ts),
-        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-          dplyr::collect() %>%
+        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) |>
+          dplyr::collect() |>
           dplyr::arrange(col1, col2, from_ts)
       )
 
@@ -300,11 +300,11 @@ for (conn in get_test_conns()) {
 
       # Check transfer success
       expect_identical(
-        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-          dplyr::collect() %>%
+        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+          dplyr::collect() |>
           dplyr::arrange(col1, col2, from_ts),
-        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-          dplyr::collect() %>%
+        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) |>
+          dplyr::collect() |>
           dplyr::arrange(col1, col2, from_ts)
       )
 
@@ -339,11 +339,11 @@ for (conn in get_test_conns()) {
 
       # Check transfer success (now until_ts should also match)
       expect_identical(
-        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-          dplyr::collect() %>%
+        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+          dplyr::collect() |>
           dplyr::arrange(col1, col2, from_ts),
-        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-          dplyr::collect() %>%
+        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) |>
+          dplyr::collect() |>
           dplyr::arrange(col1, col2, from_ts)
       )
 
@@ -373,11 +373,11 @@ for (conn in get_test_conns()) {
 
       # Check transfer success
       expect_identical(
-        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-          dplyr::collect() %>%
+        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+          dplyr::collect() |>
           dplyr::arrange(col1, col2, from_ts),
-        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-          dplyr::collect() %>%
+        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) |>
+          dplyr::collect() |>
           dplyr::arrange(col1, col2, from_ts)
       )
 
@@ -415,11 +415,11 @@ for (conn in get_test_conns()) {
 
       # Check transfer success
       expect_identical(
-        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-          dplyr::collect() %>%
+        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+          dplyr::collect() |>
           dplyr::arrange(col1, col2, from_ts),
-        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-          dplyr::collect() %>%
+        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) |>
+          dplyr::collect() |>
           dplyr::arrange(col1, col2, from_ts)
       )
 
@@ -456,11 +456,11 @@ for (conn in get_test_conns()) {
 
       # Check transfer success
       expect_identical(
-        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-          dplyr::collect() %>%
+        get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+          dplyr::collect() |>
           dplyr::arrange(col1, col2, from_ts),
-        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-          dplyr::collect() %>%
+        get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) |>
+          dplyr::collect() |>
           dplyr::arrange(col1, col2, from_ts)
       )
 
@@ -553,27 +553,27 @@ for (conn in get_test_conns()) {
 
     # Check transfer success
     expect_identical(
-      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) %>%
-        dplyr::collect() %>%
+      get_table(conn, "test.SCDB_tmp2", slice_ts = NULL) |>
+        dplyr::collect() |>
         dplyr::arrange(col1, col2, from_ts),
-      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-        dplyr::collect() %>%
+      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+        dplyr::collect() |>
         dplyr::arrange(col1, col2, from_ts)
     )
 
     # Check logs match insertions and deactivations
     expect_identical(
-      dplyr::tbl(conn, id("test.SCDB_logs", conn)) %>%
-        tidyr::unite("db_table_name", dplyr::any_of(c("catalog", "schema", "table")), sep = ".") %>%
-        dplyr::filter(.data$db_table_name == !!as.character(id("test.SCDB_tmp2", conn))) %>% # delta_load() logs
-        dplyr::select("date", "n_insertions", "n_deactivations") %>%
-        dplyr::collect() %>%
+      dplyr::tbl(conn, id("test.SCDB_logs", conn)) |>
+        tidyr::unite("db_table_name", dplyr::any_of(c("catalog", "schema", "table")), sep = ".") |>
+        dplyr::filter(.data$db_table_name == !!as.character(id("test.SCDB_tmp2", conn))) |> # delta_load() logs
+        dplyr::select("date", "n_insertions", "n_deactivations") |>
+        dplyr::collect() |>
         dplyr::arrange(.data$date),
-      dplyr::tbl(conn, id("test.SCDB_logs", conn)) %>%
-        tidyr::unite("db_table_name", dplyr::any_of(c("catalog", "schema", "table")), sep = ".") %>%
-        dplyr::filter(.data$db_table_name == !!as.character(id("test.SCDB_tmp1", conn))) %>% # update_snapshot() logs
-        dplyr::select("date", "n_insertions", "n_deactivations") %>%
-        dplyr::collect() %>%
+      dplyr::tbl(conn, id("test.SCDB_logs", conn)) |>
+        tidyr::unite("db_table_name", dplyr::any_of(c("catalog", "schema", "table")), sep = ".") |>
+        dplyr::filter(.data$db_table_name == !!as.character(id("test.SCDB_tmp1", conn))) |> # update_snapshot() logs
+        dplyr::select("date", "n_insertions", "n_deactivations") |>
+        dplyr::collect() |>
         dplyr::arrange(.data$date)
     )
   })

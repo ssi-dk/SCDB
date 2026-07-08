@@ -7,8 +7,8 @@ test_that("update_snapshot() can handle first snapshot", {
     expect_false(table_exists(conn, "test.SCDB_logs"))
 
     # Use unmodified mtcars as the initial snapshot
-    .data <- mtcars %>%
-      dplyr::copy_to(conn, df = ., name = unique_table_name())
+    .data <- mtcars |>
+      dplyr::copy_to(conn, df = _, name = unique_table_name())
 
     # Configure the logger for this update
     db_table <- "test.SCDB_tmp1"
@@ -16,8 +16,8 @@ test_that("update_snapshot() can handle first snapshot", {
     log_path <- tempdir()
 
     # Ensure all logs are removed
-    dir(log_path) %>%
-      purrr::keep(~ endsWith(., ".log")) %>%
+    dir(log_path) |>
+      purrr::keep(~ endsWith(., ".log")) |>
       purrr::walk(~ unlink(file.path(log_path, .)))
 
     logger <- Logger$new(
@@ -33,11 +33,11 @@ test_that("update_snapshot() can handle first snapshot", {
 
     # Confirm snapshot is transferred correctly
     expect_identical(
-      get_table(conn, db_table) %>%
-        dplyr::collect() %>%
+      get_table(conn, db_table) |>
+        dplyr::collect() |>
         dplyr::arrange(wt, qsec),
-      .data %>%
-        dplyr::collect() %>%
+      .data |>
+        dplyr::collect() |>
         dplyr::arrange(wt, qsec)
     )
 
@@ -50,12 +50,12 @@ test_that("update_snapshot() can handle first snapshot", {
     expect_gt(file.info(file.path(log_path, log_file))$size, 0)
     expect_identical(nrow(get_table(conn, "test.SCDB_logs")), 1L)
 
-    db_logs_with_log_file <- get_table(conn, "test.SCDB_logs") %>%
+    db_logs_with_log_file <- get_table(conn, "test.SCDB_logs") |>
       dplyr::filter(!is.na(.data$log_file))
     expect_identical(nrow(db_logs_with_log_file), 1L)
 
     # Check database log output
-    logs <- get_table(conn, "test.SCDB_logs") %>% dplyr::collect()
+    logs <- get_table(conn, "test.SCDB_logs") |> dplyr::collect()
 
     # The logs should have specified data types
     types <- c(
@@ -73,9 +73,9 @@ test_that("update_snapshot() can handle first snapshot", {
     )
 
     if (inherits(conn, "SQLiteConnection")) {
-      types <- types %>%
-        purrr::map_if(~ identical(., "POSIXct"), "character") %>% # SQLite does not support POSIXct
-        purrr::map_if(~ identical(., "logical"), "numeric") %>%  # SQLite does not support logical
+      types <- types |>
+        purrr::map_if(~ identical(., "POSIXct"), "character") |> # SQLite does not support POSIXct
+        purrr::map_if(~ identical(., "logical"), "numeric") |>  # SQLite does not support logical
         as.character()
     }
 
@@ -106,9 +106,9 @@ test_that("update_snapshot() can add a new snapshot", {
   for (conn in get_test_conns()) {
 
     # Modify snapshot and run update step
-    .data <- mtcars %>%
-      dplyr::mutate(hp = dplyr::if_else(hp > 130, hp - 10, hp)) %>%
-      dplyr::copy_to(conn, df = ., name = unique_table_name())
+    .data <- mtcars |>
+      dplyr::mutate(hp = dplyr::if_else(hp > 130, hp - 10, hp)) |>
+      dplyr::copy_to(conn, df = _, name = unique_table_name())
 
     # Configure the logger for this update
     db_table <- "test.SCDB_tmp1"
@@ -130,12 +130,12 @@ test_that("update_snapshot() can add a new snapshot", {
     # Check the snapshot has updated correctly
     target <- dplyr::tbl(conn, id(db_table, conn))
     expect_identical(
-      slice_time(target, "2022-10-01 09:00:00") %>%
-        dplyr::select(!c("from_ts", "until_ts", "checksum")) %>%
-        dplyr::collect() %>%
+      slice_time(target, "2022-10-01 09:00:00") |>
+        dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
+        dplyr::collect() |>
         dplyr::arrange(wt, qsec),
-      mtcars %>%
-        dplyr::arrange(wt, qsec) %>%
+      mtcars |>
+        dplyr::arrange(wt, qsec) |>
         tibble::as_tibble()
     )
     expect_identical(
@@ -144,12 +144,12 @@ test_that("update_snapshot() can add a new snapshot", {
     )
 
     expect_identical(
-      slice_time(target, "2022-10-03 09:00:00") %>%
-        dplyr::select(!c("from_ts", "until_ts", "checksum")) %>%
-        dplyr::collect() %>%
+      slice_time(target, "2022-10-03 09:00:00") |>
+        dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
+        dplyr::collect() |>
         dplyr::arrange(wt, qsec),
-      .data %>%
-        dplyr::collect() %>%
+      .data |>
+        dplyr::collect() |>
         dplyr::arrange(wt, qsec)
     )
     expect_identical(
@@ -159,8 +159,8 @@ test_that("update_snapshot() can add a new snapshot", {
 
 
     # Check database log output
-    logs <- get_table(conn, "test.SCDB_logs") %>%
-      dplyr::collect() %>%
+    logs <- get_table(conn, "test.SCDB_logs") |>
+      dplyr::collect() |>
       utils::tail(1)
 
     expect_identical(logs$n_insertions, 15L)
@@ -175,9 +175,9 @@ test_that("update_snapshot() can update a snapshot on an existing date", {
   for (conn in get_test_conns()) {
 
     # We now attempt to do another update on the same date
-    .data <- mtcars %>%
-      dplyr::mutate(hp = dplyr::if_else(hp > 100, hp - 10, hp)) %>%
-      dplyr::copy_to(conn, df = ., name = unique_table_name())
+    .data <- mtcars |>
+      dplyr::mutate(hp = dplyr::if_else(hp > 100, hp - 10, hp)) |>
+      dplyr::copy_to(conn, df = _, name = unique_table_name())
 
     # Configure the logger for this update
     db_table <- "test.SCDB_tmp1"
@@ -198,12 +198,12 @@ test_that("update_snapshot() can update a snapshot on an existing date", {
     # Even though we insert twice on the same date, we expect the data to be minimal (compacted)
     target <- dplyr::tbl(conn, id(db_table, conn))
     expect_identical(
-      slice_time(target, "2022-10-01 09:00:00") %>%
-        dplyr::select(!c("from_ts", "until_ts", "checksum")) %>%
-        dplyr::collect() %>%
+      slice_time(target, "2022-10-01 09:00:00") |>
+        dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
+        dplyr::collect() |>
         dplyr::arrange(wt, qsec),
-      mtcars %>%
-        dplyr::arrange(wt, qsec) %>%
+      mtcars |>
+        dplyr::arrange(wt, qsec) |>
         tibble::tibble()
     )
     expect_identical(
@@ -212,12 +212,12 @@ test_that("update_snapshot() can update a snapshot on an existing date", {
     )
 
     expect_identical(
-      slice_time(target, "2022-10-03 09:00:00") %>%
-        dplyr::select(!c("from_ts", "until_ts", "checksum")) %>%
-        dplyr::collect() %>%
+      slice_time(target, "2022-10-03 09:00:00") |>
+        dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
+        dplyr::collect() |>
         dplyr::arrange(wt, qsec),
-      .data %>%
-        dplyr::collect() %>%
+      .data |>
+        dplyr::collect() |>
         dplyr::arrange(wt, qsec)
     )
     expect_identical(
@@ -227,8 +227,8 @@ test_that("update_snapshot() can update a snapshot on an existing date", {
 
 
     # Check database log output
-    logs <- get_table(conn, "test.SCDB_logs") %>%
-      dplyr::collect() %>%
+    logs <- get_table(conn, "test.SCDB_logs") |>
+      dplyr::collect() |>
       utils::tail(1)
 
     expect_identical(logs$n_insertions, 8L)
@@ -243,9 +243,9 @@ test_that("update_snapshot() can insert a snapshot between existing dates", {
   for (conn in get_test_conns()) {
 
     # We now attempt to an update between these two updates
-    .data <- mtcars %>%
-      dplyr::mutate(hp = dplyr::if_else(hp > 150, hp - 10, hp)) %>%
-      dplyr::copy_to(conn, df = ., name = unique_table_name())
+    .data <- mtcars |>
+      dplyr::mutate(hp = dplyr::if_else(hp > 150, hp - 10, hp)) |>
+      dplyr::copy_to(conn, df = _, name = unique_table_name())
 
     # This should fail if we do not specify "enforce_chronological_order = FALSE"
     expect_error(
@@ -260,12 +260,12 @@ test_that("update_snapshot() can insert a snapshot between existing dates", {
 
     target <- dplyr::tbl(conn, id("test.SCDB_tmp1", conn))
     expect_identical(
-      slice_time(target, "2022-10-01 09:00:00") %>%
-        dplyr::select(!c("from_ts", "until_ts", "checksum")) %>%
-        dplyr::collect() %>%
+      slice_time(target, "2022-10-01 09:00:00") |>
+        dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
+        dplyr::collect() |>
         dplyr::arrange(wt, qsec),
-      mtcars %>%
-        dplyr::arrange(wt, qsec) %>%
+      mtcars |>
+        dplyr::arrange(wt, qsec) |>
         tibble::tibble()
     )
     expect_identical(
@@ -274,12 +274,12 @@ test_that("update_snapshot() can insert a snapshot between existing dates", {
     )
 
     expect_identical(
-      slice_time(target, "2022-10-02 09:00:00") %>%
-        dplyr::select(!c("from_ts", "until_ts", "checksum")) %>%
-        dplyr::collect() %>%
+      slice_time(target, "2022-10-02 09:00:00") |>
+        dplyr::select(!c("from_ts", "until_ts", "checksum")) |>
+        dplyr::collect() |>
         dplyr::arrange(wt, qsec),
-      .data %>%
-        dplyr::collect() %>%
+      .data |>
+        dplyr::collect() |>
         dplyr::arrange(wt, qsec)
     )
     expect_identical(
@@ -322,8 +322,8 @@ test_that("update_snapshot() correctly deactivates records", {
     update_snapshot(t3, conn, "test.SCDB_tmp1", "2030-01-01", logger = logger)
     update_snapshot(t4, conn, "test.SCDB_tmp1", "2040-01-01", logger = logger)
 
-    t <- get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-      dplyr::arrange(.data$from_ts) %>%
+    t <- get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+      dplyr::arrange(.data$from_ts) |>
       dplyr::collect()
 
     # If the updates have been applied correctly, the until_ts values should
@@ -367,8 +367,8 @@ test_that("update_snapshot() works (holistic test 1)", {
     logger <- LoggerNull$new()
     update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01 08:00:00", logger = logger)
     expect_identical(
-      dplyr::collect(t0) %>% dplyr::arrange(col1),
-      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1)
+      dplyr::arrange(dplyr::collect(t0), col1),
+      dplyr::arrange(dplyr::collect(get_table(conn, "test.SCDB_tmp1")), col1)
     )
 
     update_snapshot(
@@ -380,8 +380,8 @@ test_that("update_snapshot() works (holistic test 1)", {
       collapse_continuous_records = TRUE
     )
     expect_identical(
-      dplyr::collect(t1) %>% dplyr::arrange(col1),
-      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1)
+      dplyr::arrange(dplyr::collect(t1), col1),
+      dplyr::arrange(dplyr::collect(get_table(conn, "test.SCDB_tmp1")), col1)
     )
 
     update_snapshot(
@@ -393,21 +393,21 @@ test_that("update_snapshot() works (holistic test 1)", {
       collapse_continuous_records = TRUE
     )
     expect_identical(
-      dplyr::collect(t2) %>% dplyr::arrange(col1),
-      dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1)
+      dplyr::arrange(dplyr::collect(t2), col1),
+      dplyr::arrange(dplyr::collect(get_table(conn, "test.SCDB_tmp1")), col1)
     )
 
-    t <- list(t0, t1, t2) %>%
-      purrr::reduce(dplyr::union) %>%
-      dplyr::collect() %>%
-      dplyr::mutate(col2 = as.character(col2)) %>%
-      dplyr::arrange(col1, col2) %>%
+    t <- list(t0, t1, t2) |>
+      purrr::reduce(dplyr::union) |>
+      dplyr::collect() |>
+      dplyr::mutate(col2 = as.character(col2)) |>
+      dplyr::arrange(col1, col2) |>
       utils::head(5)
 
-    t_ref <- get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-      dplyr::select(!any_of(c("from_ts", "until_ts", "checksum"))) %>%
-      dplyr::collect() %>%
-      dplyr::mutate(col2 = as.character(col2)) %>%
+    t_ref <- get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+      dplyr::select(!any_of(c("from_ts", "until_ts", "checksum"))) |>
+      dplyr::collect() |>
+      dplyr::mutate(col2 = as.character(col2)) |>
       dplyr::arrange(col1, col2)
 
     expect_identical(t, t_ref)
@@ -437,18 +437,16 @@ test_that("update_snapshot() works (holistic test 2)", {
     # Check non-chronological insertion
     logger <- LoggerNull$new()
     update_snapshot(t0, conn, "test.SCDB_tmp1", "2022-01-01", logger = logger)
-    expect_identical(dplyr::collect(t0) %>% dplyr::arrange(col1),
-                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1))
+    expect_identical(dplyr::collect(t0) |> dplyr::arrange(col1),
+                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
     update_snapshot(t2, conn, "test.SCDB_tmp1", "2022-03-01", logger = logger)
-    expect_identical(dplyr::collect(t2) %>% dplyr::arrange(col1),
-                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) %>% dplyr::arrange(col1))
+    expect_identical(dplyr::collect(t2) |> dplyr::arrange(col1),
+                     dplyr::collect(get_table(conn, "test.SCDB_tmp1")) |> dplyr::arrange(col1))
 
     update_snapshot(t1, conn, "test.SCDB_tmp1", "2022-02-01", logger = logger, enforce_chronological_order = FALSE)
-    expect_identical(
-      dplyr::collect(t1) %>% dplyr::arrange(col1),
-      dplyr::collect(get_table(conn, "test.SCDB_tmp1", slice_ts = "2022-02-01")) %>% dplyr::arrange(col1)
-    )
+    expect_identical(dplyr::collect(t1) |> dplyr::arrange(col1),
+                     dplyr::collect(get_table(conn, "test.SCDB_tmp1", slice_ts = "2022-02-01")) |> dplyr::arrange(col1))
 
     t_ref <-
       tibble::tibble(col1     = c("A",          "B",          "A",          "C",          "B",          "C"),
@@ -457,13 +455,13 @@ test_that("update_snapshot() works (holistic test 2)", {
                      until_ts = c("2022-02-01", "2022-03-01", NA,           "2022-03-01", NA,           NA))
 
     expect_identical(
-      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) %>%
-        dplyr::select(!"checksum") %>%
-        dplyr::collect() %>%
+      get_table(conn, "test.SCDB_tmp1", slice_ts = NULL) |>
+        dplyr::select(!"checksum") |>
+        dplyr::collect() |>
         dplyr::mutate(from_ts  = strftime(from_ts),
-                      until_ts = strftime(until_ts)) %>%
+                      until_ts = strftime(until_ts)) |>
         dplyr::arrange(col1, from_ts),
-      t_ref %>%
+      t_ref |>
         dplyr::arrange(col1, from_ts)
     )
 
@@ -481,8 +479,8 @@ test_that("update_snapshot() handles 'NULL' updates", {
     if (DBI::dbExistsTable(conn, id("test.SCDB_logs", conn))) DBI::dbRemoveTable(conn, id("test.SCDB_logs", conn))
 
     # Use mtcars as the test data set
-    .data <- mtcars %>%
-      dplyr::copy_to(conn, df = ., name = unique_table_name())
+    .data <- mtcars |>
+      dplyr::copy_to(conn, df = _, name = unique_table_name())
     defer_db_cleanup(.data)
 
     # This is a simple update where 23 rows are replaced with 23 new ones on the given date
@@ -498,18 +496,18 @@ test_that("update_snapshot() handles 'NULL' updates", {
 
     # Update the table with update_snapshot() and store the results
     update_snapshot(.data, conn, db_table, "2022-10-03 09:00:00", logger = logger)
-    target_data_1 <- get_table(conn, db_table, slice_ts = NULL) %>% dplyr::collect()
+    target_data_1 <- get_table(conn, db_table, slice_ts = NULL) |> dplyr::collect()
 
     # Update the table with the same data again update_snapshot() and store the results
     update_snapshot(.data, conn, db_table, "2022-10-04 09:00:00", logger = logger)
-    target_data_2 <- get_table(conn, db_table, slice_ts = NULL) %>% dplyr::collect()
+    target_data_2 <- get_table(conn, db_table, slice_ts = NULL) |> dplyr::collect()
 
     # Check that the two updates are identical
     expect_identical(target_data_1, target_data_2)
 
     # Confirm with logs that no updates have been made
-    logs <- get_table(conn, id("test.SCDB_logs", conn)) %>%
-      dplyr::collect() %>%
+    logs <- get_table(conn, id("test.SCDB_logs", conn)) |>
+      dplyr::collect() |>
       dplyr::arrange(date)
 
     expect_identical(logs$n_insertions, c(nrow(mtcars), 0L))
@@ -534,9 +532,11 @@ test_that("update_snapshot() works with Id objects", {
                          warn = FALSE)
 
     expect_no_error(
-      mtcars %>%
-        dplyr::mutate(disp = sample(mtcars$disp, nrow(mtcars))) %>%
-        dplyr::copy_to(dest = conn, df = ., name = unique_table_name()) %>%
+      mtcars |>
+        dplyr::mutate(disp = sample(mtcars$disp, nrow(mtcars))) |>
+        dplyr::copy_to(dest = conn,
+                       df = _,
+                       name = unique_table_name()) |>
         update_snapshot(
           conn = conn,
           db_table = target_table,
@@ -606,7 +606,7 @@ test_that("update_snapshot() works with across connection", {
   source_conn <- DBI::dbConnect(RSQLite::SQLite())
 
   # Create a table for the tests
-  mtcars_modified <- mtcars %>%
+  mtcars_modified <- mtcars |>
     dplyr::mutate(name = rownames(mtcars))
 
   # Copy table to the source
@@ -632,9 +632,9 @@ test_that("update_snapshot() works with across connection", {
     )
 
     # Check that if we collect the table, the signature will match the original
-    table_signature <- get_table(target_conn, target_table) %>%
-      dplyr::collect() %>%
-      dplyr::summarise(dplyr::across(tidyselect::everything(), ~ class(.)[1])) %>%
+    table_signature <- get_table(target_conn, target_table) |>
+      dplyr::collect() |>
+      dplyr::summarise(dplyr::across(tidyselect::everything(), ~ class(.)[1])) |>
       as.data.frame()
 
     expect_identical(
@@ -678,9 +678,9 @@ test_that("update_snapshot() works with across connection", {
     )
 
     # Check that if we collect the table, the signature will match the original
-    table_signature <- get_table(target_conn, target_table) %>%
-      dplyr::collect() %>%
-      dplyr::summarise(dplyr::across(tidyselect::everything(), ~ class(.)[1])) %>%
+    table_signature <- get_table(target_conn, target_table) |>
+      dplyr::collect() |>
+      dplyr::summarise(dplyr::across(tidyselect::everything(), ~ class(.)[1])) |>
       as.data.frame()
 
     expect_identical(

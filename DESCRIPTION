@@ -51,8 +51,7 @@ Imports:
     stringr,
     tidyr,
     tidyselect,
-    utils,
-    magrittr
+    utils
 Suggests:
     callr,
     conflicted,
