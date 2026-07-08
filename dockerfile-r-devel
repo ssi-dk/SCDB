@@ -1,4 +1,4 @@
-FROM rocker/tidyverse
+FROM rocker/tidyverse:devel
 ENV TZ=Australia/Sydney
 RUN date
 
