@@ -44,17 +44,17 @@ get_test_conns <- function(skip_backends = NULL) {
   } else {
 
     # Use the connection configured by the remote
-    conn_list <- tibble::lst(!!Sys.getenv("BACKEND") := !!Sys.getenv("BACKEND_DRV"))                                    # nolint: object_name_linter
+    conn_list <- tibble::lst(!!Sys.getenv("BACKEND") := !!Sys.getenv("BACKEND_DRV"))
 
     # Use the connection configured by the remote
-    conn_args <- tibble::lst(!!Sys.getenv("BACKEND") := Sys.getenv("BACKEND_ARGS")) |>                                  # nolint: object_name_linter
-      purrr::discard(~ identical(., "")) |>
-      purrr::map(~ eval(parse(text = .)))
+    conn_args <- tibble::lst(!!Sys.getenv("BACKEND") := Sys.getenv("BACKEND_ARGS"))
+    conn_args <- purrr::discard(conn_args, ~ identical(., ""))
+    conn_args <- purrr::map(conn_args, ~ eval(parse(text = .)))
 
     # Use the connection configured by the remote
-    conn_post_connect <- tibble::lst(!!Sys.getenv("BACKEND") := Sys.getenv("BACKEND_POST_CONNECT")) |>                  # nolint: object_name_linter
-      purrr::discard(~ identical(., "")) |>
-      purrr::map(~ eval(parse(text = .)))
+    conn_post_connect <- tibble::lst(!!Sys.getenv("BACKEND") := Sys.getenv("BACKEND_POST_CONNECT"))
+    conn_post_connect <- purrr::discard(conn_post_connect, ~ identical(., ""))
+    conn_post_connect <- purrr::map(conn_post_connect, ~ eval(parse(text = .)))
 
   }
 
@@ -68,9 +68,8 @@ get_test_conns <- function(skip_backends = NULL) {
 
   # Combine all arguments
   backends <- unique(c(names(conn_list), names(conn_args), names(conn_args_json)))
-  conn_args <- backends |>
-    purrr::map(~ c(purrr::pluck(conn_args, .), purrr::pluck(conn_args_json, .))) |>
-    stats::setNames(backends)
+  conn_args <- purrr::map(backends, ~ c(purrr::pluck(conn_args, .), purrr::pluck(conn_args_json, .)))
+  names(conn_args) <- backends
 
 
   get_driver <- function(x = character(), ...) {                                                                        # nolint: object_usage_linter
@@ -97,15 +96,21 @@ get_test_conns <- function(skip_backends = NULL) {
   checkmate::assert_subset(names(conn_args), names(conn_list))
 
   # Open connections
-  drivers <- names(conn_list) |>
-    purrr::map(~ do.call(get_driver, list(x = purrr::pluck(conn_list, .)))) |>
-    stats::setNames(names(conn_list)) |>
-    purrr::discard(is.null)
+  drivers <- purrr::map(names(conn_list), ~ do.call(get_driver, list(x = purrr::pluck(conn_list, .))))
+  names(drivers) <- names(conn_list)
+  drivers <- purrr::discard(drivers, is.null)
 
-  test_conns <- names(drivers) |>
-    purrr::map(~ do.call(SCDB::get_connection, c(list(drv = purrr::pluck(drivers, .)), purrr::pluck(conn_args, .)))) |>
-    stats::setNames(names(drivers)) |>
-    purrr::discard(is.null)
+  test_conn_args <- purrr::map(
+    names(drivers),
+    ~ c(list("drv" = purrr::pluck(drivers, .)), purrr::pluck(conn_args, .))
+  )
+
+  test_conns <- purrr::map(
+    test_conn_args,
+    ~ do.call(SCDB::get_connection, args = .)
+  )
+  names(test_conns) <- names(drivers)
+  test_conns <- purrr::discard(test_conns, is.null)
 
   # Skip backends if given
   test_conns <- purrr::walk(
@@ -115,8 +120,11 @@ get_test_conns <- function(skip_backends = NULL) {
         DBI::dbDisconnect(.)
       }
     }
-  ) |>
-    purrr::discard(\(conn) checkmate::test_multi_class(conn, purrr::pluck(skip_backends, .default = "")))
+  )
+  test_conns <- purrr::discard(
+    test_conns,
+    ~ checkmate::test_multi_class(., purrr::pluck(skip_backends, .default = ""))
+  )
 
   # Run post_connect commands on the connections
   purrr::iwalk(
