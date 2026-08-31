@@ -57,3 +57,50 @@ test_that("digest_to_checksum() warns works correctly when overwriting", {
     connection_clean_up(conn)
   }
 })
+
+
+test_that("digest_to_checksum() avoids serialization collisions", {
+  collision_cases <- list(
+    tibble::tibble(
+      row_id = 1:2,
+      value = c(NA_character_, "")
+    ),
+    tibble::tibble(
+      row_id = 1:2,
+      col1 = c("a_b", "a"),
+      col2 = c("c", "b_c")
+    )
+  )
+
+  expect_distinct_checksums <- function(.data) {
+    checksums <- .data %>%
+      digest_to_checksum(exclude = "row_id") %>%
+      dplyr::arrange(row_id) %>%
+      dplyr::pull(checksum)
+
+    expect_length(unique(checksums), 2L)
+  }
+
+  # Local data frames
+  purrr::walk(collision_cases, expect_distinct_checksums)
+
+  # Remote tables
+  for (conn in get_test_conns()) {
+    purrr::walk(
+      collision_cases,
+      function(x) {
+        remote_x <- dplyr::copy_to(
+          conn,
+          x,
+          name = id("test.SCDB_tmp1", conn),
+          overwrite = TRUE,
+          temporary = FALSE
+        )
+
+        expect_distinct_checksums(remote_x)
+      }
+    )
+
+    connection_clean_up(conn)
+  }
+})
