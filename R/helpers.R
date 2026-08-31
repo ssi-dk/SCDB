@@ -41,7 +41,7 @@ is.historical <- function(.data) {                                              
   # Check arguments
   assert_data_like(.data)
 
-  return(any(c("checksum", "from_ts", "until_ts") %in% colnames(.data)))
+  return(all(c("checksum", "from_ts", "until_ts") %in% colnames(.data)))
 }
 
 

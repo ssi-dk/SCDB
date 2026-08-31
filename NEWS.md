@@ -1,5 +1,9 @@
 # SCDB (development version)
 
+## Improvements and Fixes
+
+* `is.historical()` now checks the presence of all columns instead of just any (#244).
+
 
 # SCDB 0.6.2
 
