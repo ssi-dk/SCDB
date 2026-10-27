@@ -1,0 +1,42 @@
+{
+  "image": "ghcr.io/ssi-dk/diseasy:main",
+  "overrideCommand": false,
+  "remoteUser": "rstudio",
+
+  "workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspaces/diseasyverse,type=bind",
+  "workspaceFolder": "/workspaces/diseasyverse/diseasy",
+
+  "mounts": [
+    "source=${localEnv:HOME}/.gitconfig,target=/home/rstudio/.gitconfig-host,type=bind,readonly"
+  ],
+
+  "remoteEnv": {
+    "GIT_CONFIG_GLOBAL": "/home/rstudio/.gitconfig-host",
+    "GIT_EDITOR": "code --wait"
+  },
+
+  "postCreateCommand": "if [ ! -d /home/rstudio/.bash_it ]; then git clone --depth=1 --branch v3.2.0 https://github.com/Bash-it/bash-it.git /home/rstudio/.bash_it; fi && (grep -qxF 'source /home/rstudio/.bash_it/bash_it.sh' /home/rstudio/.bashrc || echo 'source /home/rstudio/.bash_it/bash_it.sh' >> /home/rstudio/.bashrc)",
+
+  "containerEnv": {
+    "ROOT": "true"
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "REditorSupport.r",
+        "plohnensoftware.git-graph-libre"
+      ],
+      "settings": {
+        "r.executablePath": "/usr/local/bin/R",
+        "r.consolePath": "/usr/local/bin/arf",
+        "r.bracketedPaste": true,
+        "r.alwaysUseActiveTerminal": true,
+        "r.plot.backend": "httpgd",
+        "[r]": {
+          "editor.inlayHints.enabled": "off"
+        }
+      }
+    }
+  }
+}
