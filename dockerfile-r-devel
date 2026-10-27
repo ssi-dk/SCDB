@@ -20,11 +20,8 @@ RUN R -e 'install.packages("pak")'
 
 RUN R -e 'getwd(); dir()'
 
-# Remove dev package from pak.lock
-RUN R -e 'pak::pak("jsonlite"); d <- jsonlite::read_json("pak.lock"); d$packages <- Filter(\(x) x$package != "SCDB", d$packages); print(unlist(Map(\(x) x$package, d$packages))); jsonlite::write_json(d, "pak.lock", auto_unbox = TRUE)'
-
-# Install package dependencies
-RUN R -e 'pkgs <- jsonlite::fromJSON("pak.lock")$packages; pak::pak(paste0(pkgs$package, "@" ,pkgs$version))'
+# Install package dependencies compatible with R-devel
+RUN R -e 'pak::local_install_dev_deps()'
 
 # Install workflow dependencies
 RUN R -e 'pak::pak(c("jsonlite", "rcmdcheck", "devtools", "lintr", "covr", "roxygen2", "pkgdown", "rmarkdown", "styler"))'
