@@ -2,11 +2,29 @@ FROM rocker/tidyverse
 ENV TZ=Australia/Sydney
 RUN date
 
-# System dependencies (apt-get since r-base is debian based)
-RUN apt-get update
-RUN apt-get install -y libcurl4-gnutls-dev curl # curl files
-RUN apt-get install -y docker.io # docker interface
-RUN apt-get install -y gnupg2 # required to install odbc
+# System and development dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    docker.io \
+    git \
+    gnupg2 \
+    libcurl4-gnutls-dev \
+    openssh-client \
+    sudo \
+    xz-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install the latest stable arf release
+ARG ARF_VERSION=0.6.0
+ARG ARF_INSTALLER_SHA256=2bc9a643dc3a09022cac83d3340e0128f896886573af0ca3f871a9b73d3a24d6
+RUN curl --proto '=https' --tlsv1.2 -LsSf \
+      "https://github.com/eitsupi/arf/releases/download/v${ARF_VERSION}/arf-console-installer.sh" \
+      -o /tmp/arf-installer.sh \
+    && echo "${ARF_INSTALLER_SHA256}  /tmp/arf-installer.sh" | sha256sum -c - \
+    && CARGO_DIST_FORCE_INSTALL_DIR=/usr/local sh /tmp/arf-installer.sh \
+    && rm /tmp/arf-installer.sh \
+    && arf --version
 
 # Move pak.lock to the container
 COPY . /app/
@@ -26,8 +44,14 @@ RUN R -e 'pak::pak("jsonlite"); d <- jsonlite::read_json("pak.lock"); d$packages
 # Install package dependencies
 RUN R -e 'pkgs <- jsonlite::fromJSON("pak.lock")$packages; pak::pak(paste0(pkgs$package, "@" ,pkgs$version))'
 
-# Install workflow dependencies
-RUN R -e 'pak::pak(c("jsonlite", "rcmdcheck", "devtools", "lintr", "covr", "roxygen2", "pkgdown", "rmarkdown", "styler"))'
+# Install workflow and VS Code development dependencies
+RUN R -e 'pak::pak(c("jsonlite", "rcmdcheck", "devtools", "lintr", "covr", "roxygen2", "pkgdown", "rmarkdown", "styler", "languageserver", "httpgd"))'
 
 # Install the dev package
 RUN R -e 'devtools::install()'
+
+# Give the non-root Rocker user a writable personal package library
+# for packages installed interactively while using the dev container.
+RUN mkdir -p /home/rstudio/R/library \
+    && chown -R rstudio:rstudio /home/rstudio/R
+ENV R_LIBS_USER=/home/rstudio/R/library
