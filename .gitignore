@@ -6,6 +6,8 @@
 .quarto
 docs
 inst/doc
+/inst/extdata/benchmark-*.rds
+/installations/
 /doc/
 /Meta/
 revdep/checks
