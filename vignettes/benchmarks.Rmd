@@ -74,15 +74,25 @@ sha <- benchmarks |>
   dplyr::filter(!startsWith(.data$version, "SCDB"), .data$version != "main") |>
   dplyr::pull("version")
 
-# Check local git history
+# For releases, compare against the released commit.
+# Otherwise, compare against the current main branch.
+if (Sys.getenv("GITHUB_REF_TYPE") == "tag") {
+  reference <- "HEAD"
+} else {
+  reference <- "refs/remotes/origin/main"
+}
+
 on_main <- tryCatch({
-  system(glue::glue("git branch main --contains {sha}"), intern = TRUE) |>
-    stringr::str_detect(stringr::fixed("main")) |>
-    isTRUE()
-}, warning = function(w) {
-  # If on GitHub, git is not installed and we assume TRUE.
-  # This will render the vignette as it will look once merged onto main.
-  return(identical(Sys.getenv("CI"), "true"))
+  status <- system2(
+    "git",
+    args = c("merge-base", "--is-ancestor", sha, reference),
+    stdout = FALSE,
+    stderr = FALSE
+  )
+
+  identical(status, 0L)
+}, error = function(e) {
+  FALSE
 })
 
 # In the simple context we use the newest benchmark (version = sha)
