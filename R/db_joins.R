@@ -5,6 +5,7 @@
 #' @inheritParams left_join
 #' @return
 #'   A sql_on statement to join by such that "NA" are matched with "NA" given the columns listed in "by" and "na_by".
+#' @export
 #' @noRd
 join_na_sql <- function(x, by, na_by) {
   UseMethod("join_na_sql")
@@ -58,11 +59,13 @@ join_na_not_null <- function(by, na_by = NULL) {
   return(sql_on)
 }
 
+#' @export
 #' @noRd
 join_na_sql.tbl_dbi <- function(x, by, na_by) {
   return(join_na_not_distinct(by = by, na_by = na_by))
 }
 
+#' @export
 #' @noRd
 `join_na_sql.tbl_Microsoft SQL Server` <- function(x, by, na_by) {
   return(join_na_not_null(by = by, na_by = na_by))

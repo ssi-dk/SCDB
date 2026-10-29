@@ -22,7 +22,6 @@
 #'   try(logger$log_warn("This is a warning!"))
 #'   try(logger$log_error("This is an error!"))
 #' @export
-#' @importFrom R6 R6Class
 Logger <- R6::R6Class(                                                                                                  # nolint: object_name_linter
   classname  = "Logger",
 
@@ -488,7 +487,6 @@ Logger <- R6::R6Class(                                                          
 #'   try(logger$log_warn("This is a warning!"))
 #'   try(logger$log_error("This is an error!"))
 #' @export
-#' @importFrom R6 R6Class
 LoggerNull <- R6::R6Class(                                                                                              # nolint: object_name_linter
   classname  = "LoggerNull",
   inherit = Logger,
