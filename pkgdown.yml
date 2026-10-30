@@ -1,11 +1,12 @@
-pandoc: 3.1.11
-pkgdown: 2.1.1
+pandoc: 3.10.2
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   benchmarks: benchmarks.html
+  delta-loading: delta-loading.html
   SCDB: SCDB.html
   slowly-changing-dimension: slowly-changing-dimension.html
-last_built: 2025-02-27T13:10Z
+last_built: 2026-10-30T12:28Z
 urls:
   reference: https://ssi-dk.github.io/SCDB/reference
   article: https://ssi-dk.github.io/SCDB/articles
