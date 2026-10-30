@@ -14,9 +14,9 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-# Set a flag to determine if the vignette should be run in simple context (vignettes)
-# or in an extended context (pkgdown)
-simple_rendering <- !pkgdown::in_pkgdown()
+# Set a flag to determine if the vignette should be run in simple context
+# or in an extended context
+simple_rendering <- !pkgdown::in_pkgdown() || identical(Sys.getenv("GITHUB_EVENT_NAME"), "release")
 
 # NOTE:
 # To re-run the benchmarks, run the "benchmark" workflow on GitHub
