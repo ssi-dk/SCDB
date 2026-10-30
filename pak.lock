@@ -282,12 +282,12 @@
     },
     {
       "package": "googledrive",
-      "version": "2.1.2",
+      "version": "2.2.0",
       "_row": "googledrive"
     },
     {
       "package": "googlesheets4",
-      "version": "1.1.2",
+      "version": "1.1.3",
       "_row": "googlesheets4"
     },
     {
