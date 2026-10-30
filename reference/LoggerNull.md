@@ -104,7 +104,7 @@ The objects of this class are cloneable with this method.
   logger$log_info("This message will not print!")
   logger$log_to_db(message = "This message will no be written in database!")
   try(logger$log_warn("This is a warning!"))
-#> Warning: 2026-10-30 23:28:20.568 - rstudio - WARNING - This is a warning!
+#> Warning: 2026-10-31 00:32:07.495 - rstudio - WARNING - This is a warning!
   try(logger$log_error("This is an error!"))
-#> Error : 2026-10-30 23:28:20.569 - rstudio - ERROR - This is an error!
+#> Error : 2026-10-31 00:32:07.496 - rstudio - ERROR - This is an error!
 ```

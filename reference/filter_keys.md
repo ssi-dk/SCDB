@@ -1,11 +1,14 @@
 # Filters .data according to all records in the filter
 
 If `filters` is `NULL`, no filtering is done. Otherwise, the `.data`
-object is filtered via an `inner_join()` using all columns of the
-filter: `inner_join(.data, filter, by = colnames(filter))`
+object is filtered via an
+[`inner_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html)
+using all columns of the filter:
+`inner_join(.data, filter, by = colnames(filter))`
 
-`by` and `na_by` can overwrite the `inner_join()` columns used in the
-filtering.
+`by` and `na_by` can overwrite the
+[`inner_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html)
+columns used in the filtering.
 
 ## Usage
 
@@ -24,8 +27,9 @@ filter_keys(.data, filters, by = NULL, na_by = NULL, ...)
 
   (`data.frame(1)`, `tibble(1)`, `data.table(1)`, or `tbl_dbi(1)`)\
   A object subset data by. If filters is `NULL`, no filtering occurs.
-  Otherwise, an `inner_join()` is performed using all columns of the
-  filter object.
+  Otherwise, an
+  [`inner_join()`](https://dplyr.tidyverse.org/reference/mutate-joins.html)
+  is performed using all columns of the filter object.
 
 - by:
 

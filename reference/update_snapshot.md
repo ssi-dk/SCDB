@@ -103,10 +103,12 @@ case where you want to insert data that is not consecutive, you can set
 the `enforce_chronological_order` to `FALSE`. This will allow you to
 insert data that is earlier than the latest time stamp.
 
-If you have more updates in a single day and use `Date()` rather than
-`POSIXct()`, as your time stamp, you may end up with records where
-`from_ts` and `until_ts` are equal. These records not normally
-accessible with
+If you have more updates in a single day and use
+[`Date()`](https://lubridate.tidyverse.org/reference/date_utils.html)
+rather than
+[`POSIXct()`](https://lubridate.tidyverse.org/reference/posix_utils.html),
+as your time stamp, you may end up with records where `from_ts` and
+`until_ts` are equal. These records not normally accessible with
 [`get_table()`](https://ssi-dk.github.io/SCDB/reference/get_table.md)
 and you may want to prevent these records using
 `collapse_continuous_records = TRUE`.
@@ -131,15 +133,15 @@ filter_keys
   )
 #> Warning: `log_path` and `log_tbl` are both `NULL` and therefore NO file or database logging will be done.
 #> Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile
-#> 2026-10-30 23:28:25.420 - rstudio - INFO - Started
-#> 2026-10-30 23:28:25.420 - rstudio - INFO - Parsing data for table main.test.mtcars started
-#> 2026-10-30 23:28:25.420 - rstudio - INFO - Given timestamp for table is 2026-10-30 23:28:25.420413
-#> 2026-10-30 23:28:25.512 - rstudio - INFO - Calculated checksums
-#> 2026-10-30 23:28:25.569 - rstudio - INFO - Deactivating records
-#> 2026-10-30 23:28:25.604 - rstudio - INFO - Deactivate records count: 0
-#> 2026-10-30 23:28:25.604 - rstudio - INFO - Adding new records
-#> 2026-10-30 23:28:25.615 - rstudio - INFO - Insert records count: 3
-#> 2026-10-30 23:28:25.615 - rstudio - INFO - Finished processing for table main.test.mtcars
+#> 2026-10-31 00:32:11.831 - rstudio - INFO - Started
+#> 2026-10-31 00:32:11.831 - rstudio - INFO - Parsing data for table main.test.mtcars started
+#> 2026-10-31 00:32:11.831 - rstudio - INFO - Given timestamp for table is 2026-10-31 00:32:11.831397
+#> 2026-10-31 00:32:11.928 - rstudio - INFO - Calculated checksums
+#> 2026-10-31 00:32:11.991 - rstudio - INFO - Deactivating records
+#> 2026-10-31 00:32:12.024 - rstudio - INFO - Deactivate records count: 0
+#> 2026-10-31 00:32:12.024 - rstudio - INFO - Adding new records
+#> 2026-10-31 00:32:12.036 - rstudio - INFO - Insert records count: 3
+#> 2026-10-31 00:32:12.037 - rstudio - INFO - Finished processing for table main.test.mtcars
 #> NULL
 
   # Update with the first 5 records
@@ -151,15 +153,15 @@ filter_keys
   )
 #> Warning: `log_path` and `log_tbl` are both `NULL` and therefore NO file or database logging will be done.
 #> Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile
-#> 2026-10-30 23:28:25.623 - rstudio - INFO - Started
-#> 2026-10-30 23:28:25.623 - rstudio - INFO - Parsing data for table main.test.mtcars started
-#> 2026-10-30 23:28:25.623 - rstudio - INFO - Given timestamp for table is 2026-10-30 23:28:25.622969
-#> 2026-10-30 23:28:25.750 - rstudio - INFO - Calculated checksums
-#> 2026-10-30 23:28:25.912 - rstudio - INFO - Deactivating records
-#> 2026-10-30 23:28:25.942 - rstudio - INFO - Deactivate records count: 0
-#> 2026-10-30 23:28:25.943 - rstudio - INFO - Adding new records
-#> 2026-10-30 23:28:25.955 - rstudio - INFO - Insert records count: 2
-#> 2026-10-30 23:28:25.955 - rstudio - INFO - Finished processing for table main.test.mtcars
+#> 2026-10-31 00:32:12.046 - rstudio - INFO - Started
+#> 2026-10-31 00:32:12.046 - rstudio - INFO - Parsing data for table main.test.mtcars started
+#> 2026-10-31 00:32:12.046 - rstudio - INFO - Given timestamp for table is 2026-10-31 00:32:12.04655
+#> 2026-10-31 00:32:12.192 - rstudio - INFO - Calculated checksums
+#> 2026-10-31 00:32:12.252 - rstudio - INFO - Deactivating records
+#> 2026-10-31 00:32:12.286 - rstudio - INFO - Deactivate records count: 0
+#> 2026-10-31 00:32:12.286 - rstudio - INFO - Adding new records
+#> 2026-10-31 00:32:12.299 - rstudio - INFO - Insert records count: 2
+#> 2026-10-31 00:32:12.299 - rstudio - INFO - Finished processing for table main.test.mtcars
 #> NULL
 
   dplyr::tbl(conn, "test.mtcars")

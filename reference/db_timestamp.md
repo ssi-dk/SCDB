@@ -30,7 +30,7 @@ The given timestamp converted to a SQL-backend dependent timestamp.
   conn <- get_connection()
 
   db_timestamp(Sys.time(), conn)
-#> <SQL> '2026-10-30 23:28:21.526205'
+#> <SQL> '2026-10-31 00:32:08.214493'
 
   close_connection(conn)
 ```

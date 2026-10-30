@@ -311,11 +311,11 @@ The objects of this class are cloneable with this method.
 #> Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile
 
   logger$log_info("This is an info message")
-#> 2026-10-30 23:28:20.342 - rstudio - INFO - This is an info message
+#> 2026-10-31 00:32:07.277 - rstudio - INFO - This is an info message
   logger$log_to_db(message = "This is a message")
 
   try(logger$log_warn("This is a warning!"))
-#> Warning: 2026-10-30 23:28:20.343 - rstudio - WARNING - This is a warning!
+#> Warning: 2026-10-31 00:32:07.278 - rstudio - WARNING - This is a warning!
   try(logger$log_error("This is an error!"))
-#> Error : 2026-10-30 23:28:20.344 - rstudio - ERROR - This is an error!
+#> Error : 2026-10-31 00:32:07.278 - rstudio - ERROR - This is an error!
 ```

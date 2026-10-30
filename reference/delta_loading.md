@@ -100,15 +100,15 @@ update_snapshot
   )
 #> Warning: `log_path` and `log_tbl` are both `NULL` and therefore NO file or database logging will be done.
 #> Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile
-#> 2026-10-30 23:28:21.850 - rstudio - INFO - Started
-#> 2026-10-30 23:28:21.850 - rstudio - INFO - Parsing data for table main.test.mtcars started
-#> 2026-10-30 23:28:21.850 - rstudio - INFO - Given timestamp for table is 2020-01-01
-#> 2026-10-30 23:28:21.958 - rstudio - INFO - Calculated checksums
-#> 2026-10-30 23:28:22.011 - rstudio - INFO - Deactivating records
-#> 2026-10-30 23:28:22.047 - rstudio - INFO - Deactivate records count: 0
-#> 2026-10-30 23:28:22.048 - rstudio - INFO - Adding new records
-#> 2026-10-30 23:28:22.059 - rstudio - INFO - Insert records count: 3
-#> 2026-10-30 23:28:22.059 - rstudio - INFO - Finished processing for table main.test.mtcars
+#> 2026-10-31 00:32:08.428 - rstudio - INFO - Started
+#> 2026-10-31 00:32:08.428 - rstudio - INFO - Parsing data for table main.test.mtcars started
+#> 2026-10-31 00:32:08.428 - rstudio - INFO - Given timestamp for table is 2020-01-01
+#> 2026-10-31 00:32:08.530 - rstudio - INFO - Calculated checksums
+#> 2026-10-31 00:32:08.589 - rstudio - INFO - Deactivating records
+#> 2026-10-31 00:32:08.621 - rstudio - INFO - Deactivate records count: 0
+#> 2026-10-31 00:32:08.621 - rstudio - INFO - Adding new records
+#> 2026-10-31 00:32:08.632 - rstudio - INFO - Insert records count: 3
+#> 2026-10-31 00:32:08.632 - rstudio - INFO - Finished processing for table main.test.mtcars
 #> NULL
 
   # Create a delta with the current state
@@ -127,15 +127,15 @@ update_snapshot
   )
 #> Warning: `log_path` and `log_tbl` are both `NULL` and therefore NO file or database logging will be done.
 #> Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile
-#> 2026-10-30 23:28:22.090 - rstudio - INFO - Started
-#> 2026-10-30 23:28:22.090 - rstudio - INFO - Parsing data for table main.test.mtcars started
-#> 2026-10-30 23:28:22.090 - rstudio - INFO - Given timestamp for table is 2021-01-01
-#> 2026-10-30 23:28:22.216 - rstudio - INFO - Calculated checksums
-#> 2026-10-30 23:28:22.268 - rstudio - INFO - Deactivating records
-#> 2026-10-30 23:28:22.299 - rstudio - INFO - Deactivate records count: 0
-#> 2026-10-30 23:28:22.300 - rstudio - INFO - Adding new records
-#> 2026-10-30 23:28:22.310 - rstudio - INFO - Insert records count: 2
-#> 2026-10-30 23:28:22.310 - rstudio - INFO - Finished processing for table main.test.mtcars
+#> 2026-10-31 00:32:08.666 - rstudio - INFO - Started
+#> 2026-10-31 00:32:08.666 - rstudio - INFO - Parsing data for table main.test.mtcars started
+#> 2026-10-31 00:32:08.666 - rstudio - INFO - Given timestamp for table is 2021-01-01
+#> 2026-10-31 00:32:08.799 - rstudio - INFO - Calculated checksums
+#> 2026-10-31 00:32:08.856 - rstudio - INFO - Deactivating records
+#> 2026-10-31 00:32:08.888 - rstudio - INFO - Deactivate records count: 0
+#> 2026-10-31 00:32:08.889 - rstudio - INFO - Adding new records
+#> 2026-10-31 00:32:08.900 - rstudio - INFO - Insert records count: 2
+#> 2026-10-31 00:32:08.900 - rstudio - INFO - Finished processing for table main.test.mtcars
 #> NULL
 
   dplyr::tbl(conn, "test.mtcars")

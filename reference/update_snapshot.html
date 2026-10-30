@@ -142,7 +142,7 @@ Forced <code>TRUE</code> when <code>enforce_chronological_order</code> is <code>
 them. If you have a special case where you want to insert data that is not consecutive, you can set the
 <code>enforce_chronological_order</code> to <code>FALSE</code>. This will allow you to insert data that is earlier than the latest
 time stamp.</p>
-<p>If you have more updates in a single day and use <code>Date()</code> rather than <code>POSIXct()</code>, as your time stamp, you
+<p>If you have more updates in a single day and use <code><a href="https://lubridate.tidyverse.org/reference/date_utils.html" class="external-link">Date()</a></code> rather than <code><a href="https://lubridate.tidyverse.org/reference/posix_utils.html" class="external-link">POSIXct()</a></code>, as your time stamp, you
 may end up with records where <code>from_ts</code> and <code>until_ts</code> are equal. These records not normally accessible with
 <code><a href="get_table.html">get_table()</a></code> and you may want to prevent these records using <code>collapse_continuous_records = TRUE</code>.</p>
     </div>
@@ -166,15 +166,15 @@ may end up with records where <code>from_ts</code> and <code>until_ts</code> are
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`log_path` and `log_tbl` are both `NULL` and therefore NO file or database logging will be done.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.420 - rstudio - INFO - Started</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.420 - rstudio - INFO - Parsing data for table main.test.mtcars started</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.420 - rstudio - INFO - Given timestamp for table is 2026-10-30 23:28:25.420413</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.512 - rstudio - INFO - Calculated checksums</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.569 - rstudio - INFO - Deactivating records</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.604 - rstudio - INFO - Deactivate records count: 0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.604 - rstudio - INFO - Adding new records</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.615 - rstudio - INFO - Insert records count: 3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.615 - rstudio - INFO - Finished processing for table main.test.mtcars</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:11.831 - rstudio - INFO - Started</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:11.831 - rstudio - INFO - Parsing data for table main.test.mtcars started</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:11.831 - rstudio - INFO - Given timestamp for table is 2026-10-31 00:32:11.831397</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:11.928 - rstudio - INFO - Calculated checksums</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:11.991 - rstudio - INFO - Deactivating records</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:12.024 - rstudio - INFO - Deactivate records count: 0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:12.024 - rstudio - INFO - Adding new records</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:12.036 - rstudio - INFO - Insert records count: 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:12.037 - rstudio - INFO - Finished processing for table main.test.mtcars</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># Update with the first 5 records</span></span></span>
@@ -186,15 +186,15 @@ may end up with records where <code>from_ts</code> and <code>until_ts</code> are
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`log_path` and `log_tbl` are both `NULL` and therefore NO file or database logging will be done.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Consider adding options SCDB.log_table_id and/or SCDB.log_path to your .Rprofile</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.623 - rstudio - INFO - Started</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.623 - rstudio - INFO - Parsing data for table main.test.mtcars started</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.623 - rstudio - INFO - Given timestamp for table is 2026-10-30 23:28:25.622969</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.750 - rstudio - INFO - Calculated checksums</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.912 - rstudio - INFO - Deactivating records</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.942 - rstudio - INFO - Deactivate records count: 0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.943 - rstudio - INFO - Adding new records</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.955 - rstudio - INFO - Insert records count: 2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-30 23:28:25.955 - rstudio - INFO - Finished processing for table main.test.mtcars</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:12.046 - rstudio - INFO - Started</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:12.046 - rstudio - INFO - Parsing data for table main.test.mtcars started</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:12.046 - rstudio - INFO - Given timestamp for table is 2026-10-31 00:32:12.04655</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:12.192 - rstudio - INFO - Calculated checksums</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:12.252 - rstudio - INFO - Deactivating records</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:12.286 - rstudio - INFO - Deactivate records count: 0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:12.286 - rstudio - INFO - Adding new records</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:12.299 - rstudio - INFO - Insert records count: 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2026-10-31 00:32:12.299 - rstudio - INFO - Finished processing for table main.test.mtcars</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"test.mtcars"</span><span class="op">)</span></span></span>

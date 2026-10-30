@@ -105,29 +105,25 @@ which this function wraps.
   library(dbplyr, warn.conflicts = FALSE)
 
   band_db <- tbl_memdb(dplyr::band_members)
-#> Warning: `tbl_memdb()` was deprecated in dbplyr 2.6.0.
-#> ℹ Use `copy_to(memdb(), df)` instead
+#> Error in db_copy_to(dest$con, name, df, overwrite = overwrite, types = types,     temporary = temporary, unique_indexes = unique_indexes, indexes = indexes,     analyze = analyze, in_transaction = in_transaction, ...): Can't copy data to table `dplyr::band_members`.
+#> Caused by error in `dbplyr_write_table()`:
+#> ! Can't write table `dplyr::band_members`.
+#> Caused by error:
+#> ! Table `dplyr::band_members` exists in database, and both overwrite and append are FALSE
   instrument_db <- tbl_memdb(dplyr::band_instruments)
+#> Error in db_copy_to(dest$con, name, df, overwrite = overwrite, types = types,     temporary = temporary, unique_indexes = unique_indexes, indexes = indexes,     analyze = analyze, in_transaction = in_transaction, ...): Can't copy data to table `dplyr::band_instruments`.
+#> Caused by error in `dbplyr_write_table()`:
+#> ! Can't write table `dplyr::band_instruments`.
+#> Caused by error:
+#> ! Table `dplyr::band_instruments` exists in database, and both overwrite and append are FALSE
 
   left_join(band_db, instrument_db) |>
     show_query()
-#> Joining with `by = join_by(name)`
-#> <SQL>
-#> SELECT `dplyr::band_members`.*, `plays`
-#> FROM `dplyr::band_members`
-#> LEFT JOIN `dplyr::band_instruments`
-#>   ON (`dplyr::band_members`.`name` = `dplyr::band_instruments`.`name`)
+#> Error: object 'band_db' not found
 
   # Can join with local data frames by setting copy = TRUE
   left_join(band_db, dplyr::band_instruments, copy = TRUE)
-#> Joining with `by = join_by(name)`
-#> # A query:  ?? x 3
-#> # Database: sqlite 3.53.3 [:memory:]
-#>   name  band    plays 
-#>   <chr> <chr>   <chr> 
-#> 1 Mick  Stones  NA    
-#> 2 John  Beatles guitar
-#> 3 Paul  Beatles bass  
+#> Error: object 'band_db' not found
 
   # Unlike R, joins in SQL don't usually match NAs (NULLs)
   db <- memdb_frame(x = c(1, 2, NA))
@@ -159,14 +155,14 @@ which this function wraps.
   left_join(db1, db2) |> show_query()
 #> Joining with `by = join_by(x)`
 #> <SQL>
-#> SELECT `dbplyr_tmp_sBTMwgonEI`.`x` AS `x`, `y`
-#> FROM `dbplyr_tmp_sBTMwgonEI`
-#> LEFT JOIN `dbplyr_tmp_iWkasIVP4K`
-#>   ON (`dbplyr_tmp_sBTMwgonEI`.`x` = `dbplyr_tmp_iWkasIVP4K`.`x`)
+#> SELECT `dbplyr_tmp_WOj6CFIknj`.`x` AS `x`, `y`
+#> FROM `dbplyr_tmp_WOj6CFIknj`
+#> LEFT JOIN `dbplyr_tmp_syZIWa3Zvm`
+#>   ON (`dbplyr_tmp_WOj6CFIknj`.`x` = `dbplyr_tmp_syZIWa3Zvm`.`x`)
   left_join(db1, db2, sql_on = "LHS.x < RHS.x") |> show_query()
 #> <SQL>
 #> SELECT `LHS`.`x` AS `x.x`, `RHS`.`x` AS `x.y`, `y`
-#> FROM `dbplyr_tmp_sBTMwgonEI` AS `LHS`
-#> LEFT JOIN `dbplyr_tmp_iWkasIVP4K` AS `RHS`
+#> FROM `dbplyr_tmp_WOj6CFIknj` AS `LHS`
+#> LEFT JOIN `dbplyr_tmp_syZIWa3Zvm` AS `RHS`
 #>   ON (LHS.x < RHS.x)
 ```

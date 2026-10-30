@@ -47,9 +47,9 @@ by and na_by can overwrite the inner_join() columns used in the filtering."><met
 
     <div class="ref-description section level2">
     <p>If <code>filters</code> is <code>NULL</code>, no filtering is done.
-Otherwise, the <code>.data</code> object is filtered via an <code>inner_join()</code> using all columns of the filter:
+Otherwise, the <code>.data</code> object is filtered via an <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join()</a></code> using all columns of the filter:
 <code>inner_join(.data, filter, by = colnames(filter))</code></p>
-<p><code>by</code> and <code>na_by</code> can overwrite the <code>inner_join()</code> columns used in the filtering.</p>
+<p><code>by</code> and <code>na_by</code> can overwrite the <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join()</a></code> columns used in the filtering.</p>
     </div>
 
     <div class="section level2">
@@ -70,7 +70,7 @@ Data object.</p></dd>
 <dd><p>(<code>data.frame(1)</code>, <code>tibble(1)</code>, <code>data.table(1)</code>, or <code>tbl_dbi(1)</code>)<br>
 A object subset data by.
 If filters is <code>NULL</code>, no filtering occurs.
-Otherwise, an <code>inner_join()</code> is performed using all columns of the filter object.</p></dd>
+Otherwise, an <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join()</a></code> is performed using all columns of the filter object.</p></dd>
 
 
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>

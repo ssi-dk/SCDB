@@ -24,12 +24,12 @@ A character string for a table name based on the given scope parameter
 
 ``` r
   print(unique_table_name()) # SCDB_<10 alphanumerical letters>
-#> SCDB_B7zLD3BIiq
+#> SCDB_Z6V3rqsxvy
   print(unique_table_name()) # SCDB_<10 alphanumerical letters>
-#> SCDB_aL9yCmiWTL
+#> SCDB_zieCv7vGEg
 
   print(unique_table_name("test")) # test_<10 alphanumerical letters>
-#> test_PLikz7dxR8
+#> test_hBs6ES5zDj
   print(unique_table_name("test")) # test_<10 alphanumerical letters>
-#> test_lwgkewV8ek
+#> test_QPkYxdaMGd
 ```

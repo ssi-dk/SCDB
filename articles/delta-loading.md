@@ -3,7 +3,7 @@
 [`library`](https://rdrr.io/r/base/library.html)`(`[`SCDB`](https://github.com/ssi-dk/SCDB)`)`` ``#> `` ``#> Attaching package: 'SCDB'`` ``#> The following object is masked from 'package:base':`` ``#> `` ``#> nrow`
 
     #> duckdb keeps downloaded extensions and secrets in a temporary directory:
-    #> ℹ /tmp/Rtmpl7m2Z1/duckdb
+    #> ℹ /tmp/Rtmp0gi7NB/duckdb
     #> This is removed when the R session ends.
     #> • Extensions are re-downloaded each session.
     #> • Secrets are lost.
