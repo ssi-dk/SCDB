@@ -1,12 +1,17 @@
-#' Generate sql_on statement for na joins
-#'
+#' @title
+#'   Generate sql_on statements for na joins
+#' @name join_na_sql
 #' @description
 #'   This function generates a much faster SQL statement for NA join compared to dbplyr's _join with na_matches = "na".
-#' @inheritParams left_join
+#' @param x
+#'   A table or lazy SQL query.
+#' @param by
+#'   Columns for which NA values should not match (default join behavior).
+#' @param na_by
+#'   Columns for which NA values should match.
 #' @return
 #'   A sql_on statement to join by such that "NA" are matched with "NA" given the columns listed in "by" and "na_by".
 #' @export
-#' @noRd
 join_na_sql <- function(x, by, na_by) {
   UseMethod("join_na_sql")
 }
@@ -59,14 +64,14 @@ join_na_not_null <- function(by, na_by = NULL) {
   return(sql_on)
 }
 
+#' @rdname join_na_sql
 #' @export
-#' @noRd
 join_na_sql.tbl_dbi <- function(x, by, na_by) {
   return(join_na_not_distinct(by = by, na_by = na_by))
 }
 
+#' @rdname join_na_sql
 #' @export
-#' @noRd
 `join_na_sql.tbl_Microsoft SQL Server` <- function(x, by, na_by) {
   return(join_na_not_null(by = by, na_by = na_by))
 }
