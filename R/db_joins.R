@@ -3,14 +3,18 @@
 #' @name join_na_sql
 #' @description
 #'   This function generates a much faster SQL statement for NA join compared to dbplyr's _join with na_matches = "na".
-#' @param x
-#'   A table or lazy SQL query.
-#' @param by
+#' @param x (`lazy query`)\cr
+#'   The object to generate SQL for.
+#' @param by (`character()`)\cr
 #'   Columns for which NA values should not match (default join behavior).
-#' @param na_by
+#' @param na_by (`character()`)\cr
 #'   Columns for which NA values should match.
 #' @return
 #'   A sql_on statement to join by such that "NA" are matched with "NA" given the columns listed in "by" and "na_by".
+#' @examples
+#'   table <- dbplyr::tbl_lazy(mtcars, con = dbplyr::simulate_mssql()
+#'   join_na_sql(table, by = "cyl", na_by = NULL)
+#'   join_na_sql(table, by = NULL, na_by = "cyl")
 #' @export
 join_na_sql <- function(x, by, na_by) {
   UseMethod("join_na_sql")

@@ -13,15 +13,23 @@ join_na_sql(x, by, na_by)
 \method{join_na_sql}{`tbl_Microsoft SQL Server`}(x, by, na_by)
 }
 \arguments{
-\item{x}{A table or lazy SQL query.}
+\item{x}{(\verb{lazy query})\cr
+The object to generate SQL for.}
 
-\item{by}{Columns for which NA values should not match (default join behavior).}
+\item{by}{(\code{character()})\cr
+Columns for which NA values should not match (default join behavior).}
 
-\item{na_by}{Columns for which NA values should match.}
+\item{na_by}{(\code{character()})\cr
+Columns for which NA values should match.}
 }
 \value{
 A sql_on statement to join by such that "NA" are matched with "NA" given the columns listed in "by" and "na_by".
 }
 \description{
 This function generates a much faster SQL statement for NA join compared to dbplyr's _join with na_matches = "na".
+}
+\examples{
+  table <- dbplyr::tbl_lazy(mtcars, con = dbplyr::simulate_mssql()
+  join_na_sql(table, by = "cyl", na_by = NULL)
+  join_na_sql(table, by = NULL, na_by = "cyl")
 }
