@@ -6,7 +6,6 @@
 #'   we override the column types with backend-specific types.
 #' @template .data
 #' @template conn
-#' @importFrom methods setGeneric
 #' @noRd
 methods::setGeneric(
   "getTableSignature",                                                                                                  # nolint: object_name_linter
