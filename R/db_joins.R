@@ -12,7 +12,7 @@
 #' @return
 #'   A sql_on statement to join by such that "NA" are matched with "NA" given the columns listed in "by" and "na_by".
 #' @examples
-#'   table <- dbplyr::tbl_lazy(mtcars, con = dbplyr::simulate_mssql()
+#'   table <- dbplyr::tbl_lazy(mtcars, con = dbplyr::simulate_mssql())
 #'   join_na_sql(table, by = "cyl", na_by = NULL)
 #'   join_na_sql(table, by = NULL, na_by = "cyl")
 #' @export

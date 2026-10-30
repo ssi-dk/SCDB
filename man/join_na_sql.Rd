@@ -29,7 +29,7 @@ A sql_on statement to join by such that "NA" are matched with "NA" given the col
 This function generates a much faster SQL statement for NA join compared to dbplyr's _join with na_matches = "na".
 }
 \examples{
-  table <- dbplyr::tbl_lazy(mtcars, con = dbplyr::simulate_mssql()
+  table <- dbplyr::tbl_lazy(mtcars, con = dbplyr::simulate_mssql())
   join_na_sql(table, by = "cyl", na_by = NULL)
   join_na_sql(table, by = NULL, na_by = "cyl")
 }
