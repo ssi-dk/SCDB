@@ -82,18 +82,20 @@ if (Sys.getenv("GITHUB_REF_TYPE") == "tag") {
   reference <- "refs/remotes/origin/main"
 }
 
-on_main <- tryCatch({
-  status <- system2(
-    "git",
-    args = c("merge-base", "--is-ancestor", sha, reference),
-    stdout = FALSE,
-    stderr = FALSE
-  )
-
-  identical(status, 0L)
-}, error = function(e) {
-  FALSE
-})
+on_main <- identical(Sys.getenv("GITHUB_REF"), "refs/heads/main") ||
+  (pkgdown::in_pkgdown() &&
+     identical(Sys.getenv("GITHUB_EVENT_NAME"), "release")) ||
+  tryCatch({
+    branch <- system2(
+      "git",
+      args = c("branch", "--show-current"),
+      stdout = TRUE,
+      stderr = FALSE
+    )
+    identical(branch, "main")
+  }, error = function(e) {
+    FALSE
+  })
 
 # In the simple context we use the newest benchmark (version = sha)
 # This benchmark is then labelled with the newest version number of SCDB
