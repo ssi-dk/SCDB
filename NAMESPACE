@@ -87,6 +87,7 @@ export(unlock_table)
 export(update_snapshot)
 import(parallelly)
 importClassesFrom(DBI,DBIConnection)
+importFrom(R6,R6Class)
 importFrom(rlang,
   ":=",
   .data
