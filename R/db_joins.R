@@ -16,6 +16,7 @@
 #'   join_na_sql(table, by = "cyl", na_by = NULL)
 #'   join_na_sql(table, by = NULL, na_by = "cyl")
 #' @export
+#' @keywords internal
 join_na_sql <- function(x, by, na_by) {
   UseMethod("join_na_sql")
 }

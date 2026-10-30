@@ -33,3 +33,4 @@ This function generates a much faster SQL statement for NA join compared to dbpl
   join_na_sql(table, by = "cyl", na_by = NULL)
   join_na_sql(table, by = NULL, na_by = "cyl")
 }
+\keyword{internal}
