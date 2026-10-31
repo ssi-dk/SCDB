@@ -15,7 +15,7 @@
     "GIT_EDITOR": "code --wait"
   },
 
-  "postCreateCommand": "if [ ! -d /home/rstudio/.bash_it ]; then git clone --depth=1 --branch v3.2.0 https://github.com/Bash-it/bash-it.git /home/rstudio/.bash_it; fi && (grep -qxF 'source /home/rstudio/.bash_it/bash_it.sh' /home/rstudio/.bashrc || echo 'source /home/rstudio/.bash_it/bash_it.sh' >> /home/rstudio/.bashrc)",
+  "postCreateCommand": "sudo chmod -R g+rwX /usr/local/lib/R/site-library && if [ ! -d /home/rstudio/.bash_it ]; then git clone --depth=1 --branch v3.2.0 https://github.com/Bash-it/bash-it.git /home/rstudio/.bash_it; fi && (grep -qxF 'source /home/rstudio/.bash_it/bash_it.sh' /home/rstudio/.bashrc || echo 'source /home/rstudio/.bash_it/bash_it.sh' >> /home/rstudio/.bashrc)",
 
   "containerEnv": {
     "ROOT": "true"
