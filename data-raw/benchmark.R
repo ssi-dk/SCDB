@@ -5,7 +5,7 @@ if (!file.exists(file.path(root, "DESCRIPTION")) ||
 }
 
 # Install packages and dependencies
-pak::pkg_install(c("callr", "microbenchmark", "jsonlite"), ask = FALSE)
+pak::pkg_install(c("callr", "microbenchmark"), ask = FALSE)
 
 branch <- system("git symbolic-ref --short HEAD", intern = TRUE)
 git_sha <- system("git rev-parse HEAD", intern = TRUE)
