@@ -11,6 +11,7 @@
   ],
 
   "remoteEnv": {
+    "GITHUB_PAT": "${localEnv:GITHUB_PAT}",
     "GIT_CONFIG_GLOBAL": "/home/rstudio/.gitconfig-host",
     "GIT_EDITOR": "code --wait"
   },
