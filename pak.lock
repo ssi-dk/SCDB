@@ -162,7 +162,7 @@
     },
     {
       "package": "diffobj",
-      "version": "0.3.9",
+      "version": "0.3.10",
       "_row": "diffobj"
     },
     {
@@ -262,7 +262,7 @@
     },
     {
       "package": "ggplot2",
-      "version": "4.0.3",
+      "version": "4.0.4",
       "_row": "ggplot2"
     },
     {

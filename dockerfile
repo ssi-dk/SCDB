@@ -16,8 +16,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install the latest stable arf release
-ARG ARF_VERSION=0.6.0
-ARG ARF_INSTALLER_SHA256=2bc9a643dc3a09022cac83d3340e0128f896886573af0ca3f871a9b73d3a24d6
+ARG ARF_VERSION=0.7.1
+ARG ARF_INSTALLER_SHA256=8152db31c6cedd2bbbce69cd2ff8d9f40c47b63ed828d61216f31367bf0b2797
 RUN curl --proto '=https' --tlsv1.2 -LsSf \
       "https://github.com/eitsupi/arf/releases/download/v${ARF_VERSION}/arf-console-installer.sh" \
       -o /tmp/arf-installer.sh \
